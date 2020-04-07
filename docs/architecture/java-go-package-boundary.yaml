@@ -1,0 +1,81 @@
+# Java J1–J9 vs Go G1–G12 包归属（账户资金域）
+# 背景：域内由历史 Java 单体/多模块升级为 Java（产品/编排）+ Go（账/闸/托管引擎）双语言大仓；
+# 解决产品迭代与资金内核耦合、写路径围栏与发布半径过大等痛点。
+# Java 仓：产品、编排、Classic/UA API、运营台、规则批次
+# Go 仓：账本、充提、KYT 引擎、托管、gate worker、资金写路径
+
+java_modules:
+ J1_user_account:
+ host: user-account.kucoin.net
+ etcd_name: user-account-service
+ internal_packages: [userdir, subkey]
+ kcfund_routes: [/api/v1/user-info, /api/v2/user-info, /api/v1/user/api-key, /api/ua/v1/user/api-key]
+ J2_account_product:
+ host: account-product.kucoin.net
+ etcd_name: account-product-service
+ internal_packages: [listing]
+ kcfund_routes: [/api/v1/accounts/open-all, /v1/accounts/open-all, /api/v1/accounts/book]
+ J3_funding_bff:
+ host: funding-bff.kucoin.net
+ etcd_name: funding-bff-service
+ kcfund_routes: [/api/v1, /api/v2, /api/v3, /api/ua]
+ J4_fiat_orchestration:
+ host: fiat-orchestration.kucoin.net
+ etcd_name: fiat-orchestration-service
+ internal_packages: [fiatadd, fiatrail, fiatbreak]
+ note: fiatjnl 入账在 Go funding-ledger
+ J5_compliance_ops:
+ host: compliance-ops.kucoin.net
+ etcd_name: compliance-ops-service
+ internal_packages: [amldesk_portal, investigate_desk, dispute_desk]
+ note: kyt kytsvc compliance amlhold 筛查引擎在 Go risk-kyt
+ J6_margin_futures_account:
+ host: margin-futures-account.kucoin.net
+ etcd_name: margin-futures-account-service
+ kcfund_routes: [/api/v1/margin, /api/v1/isolated, /api/v1/futures, /api/ua/v1/margin]
+ J7_fee_vip_rebate:
+ host: fee-vip-rebate.kucoin.net
+ etcd_name: fee-vip-rebate-service
+ internal_packages: [rebate, rebatedup, recbuy, recguard]
+ note: feeeng vipfee 报价入账在 Go funding-ledger
+ J8_notify_activity:
+ host: notify-activity.kucoin.net
+ etcd_name: notify-activity-service
+ internal_packages: [redenvelope, envreclaim, notify_worker]
+ note: internal/notify 仍供出金挑战与入金 outbox
+ J9_config_policy_java:
+ host: config-policy.kucoin.net
+ etcd_name: config-policy-service
+ internal_packages: [fundpref_http]
+ note: policy limitgate 资金硬闸在 Go
+
+go_modules:
+ G1_account_book: [account, subacct, acctpol, acctlifegate, acctjob, earn, accrual, marginhook, kcfund_hop_mesh]
+ G2_funding_ledger: [ledger, ledgersvc, freeze, recon, occupbook, ledshard, feeeng, feecredit, liquidation]
+ G3_deposit_withdraw: [deposit, withdraw, wd, dep, fundint, fundmesh, attribrt]
+ G4_address: [address, addrpool, addrintel]
+ G5_custody: [custody, kms, signpipe, keyrotatefence, sweep]
+ G6_risk_kyt: [kyt, kytsvc, compliance, amlhold, travelvasp, cases, casestore, investigate_lib, opsauth_lib]
+ G7_query_gateway: [gateway, httpapi, fundmesh, fundread, platformjava]
+ G8_fund_surface: [fundsurf, tradepw, forbidgate]
+ G9_convert: [cvfund, cvquotelease, quotemultigate]
+ G10_statement_export: [exjob, stmt, auditchain]
+ G11_earn_accrual_exec: [accrual, earn]
+ G12_config_watch: [cfgcenter, cfgwatch, etcdx, svcboot]
+ gate_workers: suffix_gate_and_fence
+
+go_calls_java:
+ client: internal/platformjava
+ discovery: etcd + internal/svcdial
+ kcfund_gray:
+ env_enable: KCFUND_MESH_BFF=1
+ env_percent: KCFUND_MESH_BFF_PERCENT
+ env_force_uid: KCFUND_MESH_BFF_FORCE_UID
+ mesh: internal/fundmesh.FundingBFF
+ fallback: 本进程 kcfund 处理器（mesh 失败不伪装成功）
+ contract_ping:
+ catalog: internal/platformjava.Catalog
+ unit_test: internal/platformjava/ping_test.go
+ mesh_test: internal/fundmesh/gateway_bff_test.go
+ integration: test/integration/java_platform_contract_test.go
+ env: JAVA_PLATFORM_PING=1
