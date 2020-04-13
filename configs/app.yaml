@@ -1,0 +1,247 @@
+# 进程配置。限额、超时、手续费
+
+http_addr: ":18480"
+grpc_addr: ":18481"
+http_write_timeout: 8s
+
+seed_user_id: "user-10001"
+
+cache:
+  balance_ttl: 3s
+  ticker_ttl: 5s
+
+node_health:
+  fail_threshold: 3
+  retry_attempts: 3
+  retry_backoff: 50ms
+  probe_interval: 2s
+  query_timeout: 400ms
+  chain_rpc_timeout: 180ms
+  circuit_reset: 2s
+  hedge_reads: true
+
+risk:
+  max_single: "5000"
+  daily_limit: "20000"
+  daily_withdraw_limit: "15000"
+  daily_deposit_limit: "50000"
+  suspicious_amount: "3000"
+  suspicious_requires_advanced: true
+  min_amount: "0.00000001"
+  allowlist_enabled: true
+  max_velocity: 30
+  max_withdraw_velocity: 20
+  max_deposit_velocity: 40
+  velocity_window: 1m
+  first_destination_half_cap: true
+
+swap:
+  fee_bps: 10 # 0.10%
+  quote_ttl: 15s
+  slippage_bps: 50
+  quote_max_age: 2s
+
+transfer:
+  # 异步 worker 等链上确认的间隔。
+  mock_confirm_after: 400ms
+  lock_ttl: 12s
+  disable_drift_block: false
+  stuck_frozen: 15s
+  stuck_submitted: 30s
+  confirm_depth: 1 # 下限；实际按链表（BTC 3 / ETH 12 / L2 20+）
+  withdraw_cooling: 24h # 解冻后出金冷静期
+  pass_through_hold: 15m # 充值后大额原路出拦截
+  pass_through_bps: 8000 # 近期充值的 80% 及以上视为 pass-through
+  withdraw_fee_bps: 10 # 入账时切到 system.fee，链上实发为本金减费
+  earn_interest_bps: 100 # earn_redeem 利息从 system.bridge 出
+  hot_max:
+    USDT: "500000"
+    ETH: "500"
+    BTC: "50"
+
+spot:
+  fee_bps: 8 # 吃单手续费，相对最新成交价
+
+# 签名与解密通道。必须 pkcs11 或 cloud-kms。内部主机 kms-vault.kucoin.net；区域地址 SG 10.18.0.0/16、TYO 10.19.0.0/16。
+kms:
+  kind: cloud-kms
+  endpoint: ""
+  cluster_id: ""
+  timeout: 2s
+
+# 生产签章走云 KMS，不回落到仓内 configs/kms/kek.pem。
+key_source: kms
+
+# 闸门状态落 SQL。mem 只留给 APP_PROFILE=mem。
+storage: sql
+
+# 闪兑成交回调身份。mTLS 认 convert 目录主机；HMAC 仍由 CONVERT_FILL_HMAC_SECRET 注入，不把密钥写进仓库。
+convert_fill:
+  require_ident: true
+  mtls_cns:
+    - convert.kucoin.net
+
+# 资金页默认报价币与隐藏门槛。用户偏好（fundpref）按户覆盖。
+# KV kind 仅 fundpref.row / fundpref.audit，与 fundsurf 冻结键隔离。
+# 主写 SG 10.18.0.0/16，TYO 10.19.0.0/16 只读回放。
+funds:
+  hide_small: "1"
+  quote_currency: USDT
+
+# 内部库 pg-0.kucoin.net。DSN 用环境变量覆盖。
+postgres:
+  dsn: ""
+  max_open: 16
+  max_idle: 8
+  conn_max_lifetime: 5m
+  conn_max_idle: 2m
+
+# 版本化策略包。缺包失败即关。
+policy:
+  pack_dir: configs/policy
+  mode: enforce
+  fail_closed: true
+
+# 鉴权。
+auth:
+  enabled: true
+  allow_insecure: false
+  kind: iam
+  issuer: https://iam-gateway.kucoin.net
+  jwks_url: https://iam-gateway.kucoin.net/.well-known/jwks.json
+  audience: account-assets
+  max_skew: 5m
+  bearer_tokens: []
+
+travel:
+  origin_vasp: KC01
+  peer_vasp: PEER
+  # 旅行规则金额门槛（资产面值；稳定币可近似 USD）。未命中走廊回落 default_threshold。
+  default_threshold: "1000"
+  corridors:
+    - corridor: SG>US
+      asset: USDT
+      min_amount: "1000"
+    - corridor: SG>JP
+      asset: USDT
+      min_amount: "1000"
+    - corridor: DEFAULT
+      min_amount: "1000"
+
+# 出金筛查。
+kyt:
+  mode: vendor
+  vendor_url: ""
+  timeout: 2s
+  review_amount: "2500"
+  deny_amount: ""
+  deny_addresses: []
+  deny_chains: []
+
+# 各链节点与代币合约。
+chain_driver: rpc
+indexer:
+  url: ""
+  timeout: 2s
+chains:
+  ETH:
+    endpoints: ["https://cloudflare-eth.com", "https://rpc.ankr.com/eth"]
+    explorer: https://etherscan.io
+    tokens:
+      USDT:
+        contract: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+        decimals: 6
+  BTC:
+    endpoints: ["https://bitcoin.publicnode.com", "https://rpc.ankr.com/btc"]
+    explorer: https://mempool.space
+  SOL:
+    endpoints: ["https://api.mainnet-beta.solana.com", "https://rpc.ankr.com/solana"]
+    explorer: https://explorer.solana.com
+  TRON:
+    endpoints: ["https://api.trongrid.io/jsonrpc", "https://rpc.ankr.com/tron"]
+    explorer: https://tronscan.org
+    tokens:
+      USDT:
+        contract: "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+        decimals: 6
+  TON:
+    endpoints: ["https://toncenter.com/api/v2/jsonRPC"]
+    explorer: https://tonscan.org
+  XRP:
+    endpoints: ["https://xrplcluster.com", "https://xrpl.ws"]
+    explorer: https://xrpscan.com
+  XLM:
+    endpoints: ["https://horizon.stellar.org"]
+    explorer: https://stellarchain.io
+  ATOM:
+    endpoints: ["https://cosmos-rpc.publicnode.com"]
+    explorer: https://www.mintscan.io/cosmos
+  EOS:
+    endpoints: ["https://eos.greymass.com"]
+    explorer: https://bloks.io
+  POLYGON:
+    endpoints: ["https://polygon-rpc.com", "https://rpc.ankr.com/polygon"]
+    explorer: https://polygonscan.com
+    tokens:
+      USDT:
+        contract: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+        decimals: 6
+  ARBITRUM:
+    endpoints: ["https://arb1.arbitrum.io/rpc", "https://rpc.ankr.com/arbitrum"]
+    explorer: https://arbiscan.io
+    tokens:
+      USDT:
+        contract: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+        decimals: 6
+  OPTIMISM:
+    endpoints: ["https://mainnet.optimism.io", "https://rpc.ankr.com/optimism"]
+    explorer: https://optimistic.etherscan.io
+    tokens:
+      USDT:
+        contract: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58"
+        decimals: 6
+  BASE:
+    endpoints: ["https://mainnet.base.org", "https://rpc.ankr.com/base"]
+    explorer: https://basescan.org
+    tokens:
+      USDT:
+        contract: "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2"
+        decimals: 6
+
+pprof: true
+
+market:
+  tick_topic: "market.ticks"
+  kline_topic: "market.klines"
+  produce_interval: 800ms
+  lag_warn: 1s
+  kline_keep: 120
+
+# 连接池与 worker 并发。
+mysql:
+  max_open: 16
+  max_idle: 8
+  conn_max_lifetime: 5m
+
+redis:
+  pool_size: 8
+  min_idle_conns: 2
+
+worker:
+  confirm_concurrency: 8
+  scan_limit: 200
+  tick: 400ms
+  outbox_limit: 100
+  inspect_batch: 32
+
+# all | api | worker | market | wallet
+# api: HTTP/gRPC + consume ticks (no produce, no worker) so marketd/worker can run beside it.
+process_role: all
+
+etcd:
+  endpoints:
+    - http://etcd-0.kucoin.net:2379
+    - http://etcd-1.kucoin.net:2379
+    - http://etcd-2.kucoin.net:2379
+  namespace: account-assets
+  env: production
