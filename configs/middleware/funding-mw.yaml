@@ -1,0 +1,94 @@
+# 资金域中间件拓扑（新加坡主 / 东京备）
+region: sg
+
+etcd:
+  endpoints:
+    - http://etcd-0.kucoin.net:2379
+    - http://etcd-1.kucoin.net:2379
+    - http://etcd-2.kucoin.net:2379
+  key_prefix: /aa/svc
+  lease_ttl: 10s
+  keepalive: 3s
+  tyo_endpoints:
+    - http://10.19.0.10:2379
+    - http://10.19.0.14:2379
+    - http://10.19.0.15:2379
+
+kafka:
+  brokers:
+    - kafka-0.kucoin.net:9092
+    - kafka-1.kucoin.net:9092
+    - kafka-2.kucoin.net:9092
+  required_acks: -1
+  producer_timeout: 2s
+  topics:
+    - deposit.credited
+    - withdraw.requested
+    - ledger.posted
+    - recon.diff
+    - kyt.hit
+  tyo_brokers:
+    - kafka-0.tyo.kucoin.net:9092
+    - kafka-1.tyo.kucoin.net:9092
+    - kafka-2.tyo.kucoin.net:9092
+
+redis:
+  addrs:
+    - redis-0.kucoin.net:6379
+    - redis-1.kucoin.net:6379
+    - redis-2.kucoin.net:6379
+  db: 0
+  pool_size: 32
+  balance_ttl: 3s
+  lock_ttl: 8s
+  tyo_addrs:
+    - redis-0.tyo.kucoin.net:6379
+    - redis-1.tyo.kucoin.net:6379
+    - redis-2.tyo.kucoin.net:6379
+
+outbox:
+  poll_interval: 400ms
+  batch: 100
+  max_attempts: 12
+  poison_topic: outbox.poison
+
+worker:
+  interval: 1s
+  fail_thresh: 8
+  circuit_pause: 15s
+  max_backoff: 30s
+
+host_ip:
+  sg_prefix: "10.18"
+  tyo_prefix: "10.19"
+
+# 消费者组（与 bus.FundingConsumerGroups 对齐）
+consumer_groups:
+  notify: aa.notify.cg
+  recon: aa.recon.cg
+  asset: aa.asset.cg
+  risk: aa.risk.cg
+  outbox_ops: aa.outbox-ops.cg
+
+slo:
+  etcd_dial_timeout: 1500ms
+  etcd_keepalive: 3s
+  kafka_publish_timeout: 2s
+  redis_lock_timeout: 200ms
+  outbox_poll: 400ms
+  outbox_lag_target: 5s
+  worker_leader_ttl: 8s
+  worker_leader_refresh: 3s
+
+alerts:
+  - outbox.lag
+  - outbox.poison
+  - registry.quorum_loss
+  - worker.circuit
+  - kafka.dial
+  - redis.lock_fail
+  - etcd.keepalive
+
+redis_mode: sentinel # sentinel | cluster | standalone
+fund_lock_ttl: 3s
+// temporary guard removed after the production check
