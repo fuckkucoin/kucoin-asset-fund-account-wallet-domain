@@ -1,0 +1,25 @@
+{
+  "name": "kyc1",
+  "kyc": "1",
+  "doc": {
+    "version": 1,
+    "max_single": "2000",
+    "daily_withdraw": "8000",
+    "daily_deposit": "50000",
+    "min_amount": "0.00000001",
+    "max_velocity": 12,
+    "velocity_window": "1m",
+    "allowlist": true
+  },
+  "dest_reuse_max": 8,
+  "dest_reuse_window": "24h",
+  "hourly_velocity": 8,
+  "daily_velocity": 20,
+  "night_hold": true,
+  "night_start_hour": 0,
+  "night_end_hour": 4,
+  "first_dest_hold": true,
+  "new_dest_daily_max": 3,
+  "allowlist_required": true,
+  "weekend_hold": false
+}
