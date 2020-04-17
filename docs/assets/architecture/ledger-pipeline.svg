@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="480" viewBox="0 0 1100 480">
+  <rect width="1100" height="480" fill="#0f172a"/>
+  <text x="40" y="42" fill="#e2e8f0" font-size="24" font-family="Arial">资金账本管线（自研示意）</text>
+  <rect x="40" y="90" width="170" height="74" rx="10" fill="#38bdf8"/><text x="70" y="135" fill="#0f172a" font-size="18">入金观测</text>
+  <rect x="250" y="90" width="170" height="74" rx="10" fill="#34d399"/><text x="280" y="135" fill="#0f172a" font-size="18">贷记入账</text>
+  <rect x="460" y="90" width="170" height="74" rx="10" fill="#fbbf24"/><text x="490" y="135" fill="#0f172a" font-size="18">冻结占用</text>
+  <rect x="670" y="90" width="170" height="74" rx="10" fill="#f472b6"/><text x="695" y="135" fill="#0f172a" font-size="18">出金广播</text>
+  <rect x="880" y="90" width="170" height="74" rx="10" fill="#a3e635"/><text x="925" y="135" fill="#0f172a" font-size="18">对账闭环</text>
+  <rect x="40" y="220" width="1010" height="210" rx="12" fill="#1e293b"/>
+  <text x="60" y="265" fill="#cbd5e1" font-size="16">用途：架构评审、运维培训、合规演练附件。配套 PDF 样例见 docs/compliance/samples 与 docs/runbooks。</text>
+  <text x="60" y="300" fill="#94a3b8" font-size="15">硬约束：禁止资金双花双扣；冲突状态机必须可审计；不修改仓库内假域名。</text>
+  <text x="60" y="335" fill="#94a3b8" font-size="15">资产类型：PNG 流程图、SVG 管线、PDF 手册（内部 Sample，无真实用户数据）。</text>
+  <text x="60" y="370" fill="#94a3b8" font-size="15">对应目录：docs/assets/*、static/fund/icons/*、docs/compliance/samples/*。</text>
+</svg>

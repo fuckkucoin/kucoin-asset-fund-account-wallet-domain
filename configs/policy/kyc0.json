@@ -1,0 +1,29 @@
+{
+  "name": "kyc0",
+  "kyc": "0",
+  "doc": {
+    "version": 1,
+    "max_single": "200",
+    "daily_withdraw": "500",
+    "daily_deposit": "50000",
+    "min_amount": "0.00000001",
+    "max_velocity": 5,
+    "velocity_window": "1m",
+    "allowlist": true
+  },
+  "dest_reuse_max": 3,
+  "dest_reuse_window": "24h",
+  "hourly_velocity": 3,
+  "daily_velocity": 8,
+  "night_hold": true,
+  "night_start_hour": 22,
+  "night_end_hour": 6,
+  "first_dest_hold": true,
+  "new_dest_daily_max": 1,
+  "allowlist_required": true,
+  "weekend_hold": true,
+  "asset_max": {
+    "BTC": "0.05",
+    "ETH": "2"
+  }
+}
