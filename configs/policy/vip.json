@@ -1,0 +1,20 @@
+{
+  "name": "vip",
+  "kyc": "vip",
+  "doc": {
+    "version": 3,
+    "max_single": "20000",
+    "daily_withdraw": "80000",
+    "daily_deposit": "200000",
+    "min_amount": "0.00000001",
+    "max_velocity": 40,
+    "velocity_window": "1m",
+    "allowlist": false
+  },
+  "dest_reuse_max": 50,
+  "dest_reuse_window": "24h",
+  "hourly_velocity": 30,
+  "daily_velocity": 80,
+  "allowlist_required": false,
+  "weekend_hold": false
+}
