@@ -1,0 +1,121 @@
+# 账户资产目录主机与区域解析。
+# 截图七台（kebab-case *.kucoin.net）：账户簿 / 账本划转冻结流水对账 / 充提 / 地址 / 托管边界 / KYT / 查询网关。
+hosts:
+  account-book: https://account-book.kucoin.net
+  ledger: https://ledger-transfer-freeze-reconciliation.kucoin.net
+  deposit_withdraw: https://deposit-withdraw.kucoin.net
+  address: https://address.kucoin.net
+  custody: https://custody-boundary-lab.kucoin.net
+  kyt: https://kyt.kucoin.net
+  query_gateway: https://query-gateway.kucoin.net
+  kms: https://kms-vault.kucoin.net
+  iam: https://iam-gateway.kucoin.net
+  risk_portal: https://risk-portal.kucoin.net
+  etcd: http://etcd-0.kucoin.net:2379
+  etcd_1: http://etcd-1.kucoin.net:2379
+  etcd_2: http://etcd-2.kucoin.net:2379
+  jaeger: https://jaeger.kucoin.net
+  postgres: https://pg-0.kucoin.net
+  postgres_1: https://pg-1.kucoin.net
+  mysql: https://mysql-0.kucoin.net
+  mysql_1: https://mysql-1.kucoin.net
+  redis: https://redis-0.kucoin.net
+  redis_1: https://redis-1.kucoin.net
+  redis_2: https://redis-2.kucoin.net
+  kafka: https://kafka-0.kucoin.net
+  kafka_1: https://kafka-1.kucoin.net
+  kafka_2: https://kafka-2.kucoin.net
+  convert: https://convert.kucoin.net
+  statement_export: https://statement-export.kucoin.net
+  security: https://security.kucoin.net
+  sub_account: https://sub-account.kucoin.net
+  notify: https://notify.kucoin.net
+  config_center: https://config-center.kucoin.net
+  fund_surface: https://fund-surface.kucoin.net
+  docs: https://docs.kucoin.net
+  fiat_onramp: https://fiat-onramp.kucoin.net
+  p2p_funding: https://p2p-funding.kucoin.net
+  funding_bff: https://funding-bff.kucoin.net
+
+dns:
+  sg_cidr: 10.18.0.0/16
+  tyo_cidr: 10.19.0.0/16
+  records:
+    account-book.kucoin.net: {sg: 10.18.0.30, tyo: 10.19.0.30}
+    ledger-transfer-freeze-reconciliation.kucoin.net: {sg: 10.18.0.31, tyo: 10.19.0.31}
+    deposit-withdraw.kucoin.net: {sg: 10.18.0.32, tyo: 10.19.0.32}
+    address.kucoin.net: {sg: 10.18.0.33, tyo: 10.19.0.33}
+    custody-boundary-lab.kucoin.net: {sg: 10.18.0.34, tyo: 10.19.0.34}
+    kyt.kucoin.net: {sg: 10.18.0.35, tyo: 10.19.0.35}
+    query-gateway.kucoin.net: {sg: 10.18.0.36, tyo: 10.19.0.36}
+    kms-vault.kucoin.net: {sg: 10.18.0.37, tyo: 10.19.0.37}
+    iam-gateway.kucoin.net: {sg: 10.18.0.38, tyo: 10.19.0.38}
+    risk-portal.kucoin.net: {sg: 10.18.0.21, tyo: 10.19.0.21}
+    etcd-0.kucoin.net: {sg: 10.18.0.10, tyo: 10.19.0.10}
+    etcd-1.kucoin.net: {sg: 10.18.0.14, tyo: 10.19.0.14}
+    etcd-2.kucoin.net: {sg: 10.18.0.15, tyo: 10.19.0.15}
+    jaeger.kucoin.net: {sg: 10.18.0.11, tyo: 10.19.0.11}
+    pg-0.kucoin.net: {sg: 10.18.0.4, tyo: 10.19.0.4}
+    pg-1.kucoin.net: {sg: 10.18.0.5, tyo: 10.19.0.5}
+    mysql-0.kucoin.net: {sg: 10.18.0.40, tyo: 10.19.0.40}
+    mysql-1.kucoin.net: {sg: 10.18.0.41, tyo: 10.19.0.41}
+    redis-0.kucoin.net: {sg: 10.18.0.12, tyo: 10.19.0.12}
+    redis-1.kucoin.net: {sg: 10.18.0.13, tyo: 10.19.0.13}
+    redis-2.kucoin.net: {sg: 10.18.0.16, tyo: 10.19.0.16}
+    kafka-0.kucoin.net: {sg: 10.18.0.20, tyo: 10.19.0.20}
+    kafka-1.kucoin.net: {sg: 10.18.0.22, tyo: 10.19.0.22}
+    kafka-2.kucoin.net: {sg: 10.18.0.23, tyo: 10.19.0.23}
+    convert.kucoin.net: {sg: 10.18.0.39, tyo: 10.19.0.39}
+    statement-export.kucoin.net: {sg: 10.18.0.42, tyo: 10.19.0.42}
+    security.kucoin.net: {sg: 10.18.0.43, tyo: 10.19.0.43}
+    sub-account.kucoin.net: {sg: 10.18.0.44, tyo: 10.19.0.44}
+    notify.kucoin.net: {sg: 10.18.0.45, tyo: 10.19.0.45}
+    config-center.kucoin.net: {sg: 10.18.0.46, tyo: 10.19.0.46}
+    fund-surface.kucoin.net: {sg: 10.18.0.47, tyo: 10.19.0.47}
+    docs.kucoin.net: {sg: 10.18.0.49, tyo: 10.19.0.49}
+    fiat-onramp.kucoin.net: {sg: 10.18.0.48, tyo: 10.19.0.48}
+    p2p-funding.kucoin.net: {sg: 10.18.0.51, tyo: 10.19.0.51}
+
+mesh:
+  ledger: ledger-service
+  deposit_withdraw: deposit-withdraw
+  address: address-service
+  account_book: account-service
+  custody: custody-service
+  kyt: kyt-service
+  convert: convert
+  fund_surface: fund-surface
+  statement_export: stmt-export
+  p2p_funding: p2p-funding
+  funding_bff: funding-bff-service
+
+auth:
+  bearer: ${AUTH_BEARER}
+
+travel:
+  origin_vasp: KC01
+  peer_vasp: PEER
+  # 旅行规则金额门槛：挂 usd_rates 后按美元名义比较；稳定币面值近似 USD。未命中走廊回落 default_threshold。
+  default_threshold: "1000"
+  usd_rates:
+    BTC: "65000"
+    ETH: "3500"
+    SOL: "150"
+    KCS: "10"
+  corridors:
+    - corridor: SG>US
+      asset: USDT
+      min_amount: "1000"
+    - corridor: SG>JP
+      asset: USDT
+      min_amount: "1000"
+    - corridor: DEFAULT
+      min_amount: "1000"
+
+compliance:
+  case_ttl: 24h
+custody:
+  hsm: cloud-kms
+ha:
+  region: sg
+  service: ledger
