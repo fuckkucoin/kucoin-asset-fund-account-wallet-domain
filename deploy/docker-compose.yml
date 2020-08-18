@@ -1,0 +1,1305 @@
+# 内部主机用目录名。MySQL/Redis/Kafka 分别绑 mysql-0 / redis-0 / kafka-0。
+name: kucoin-account-assets
+
+x-app-env: &app-env
+  MYSQL_DSN: spotwallet:localdev@tcp(mysql-0.kucoin.net)/spotwallet?parseTime=true&charset=utf8mb4&multiStatements=true
+  REDIS_ADDR: redis-0.kucoin.net:6379
+  KAFKA_BROKERS: kafka-0.kucoin.net:9092
+  KAFKA_OPTIONAL: "true"
+  APP_PROFILE: mem
+  AUTH_KIND: mem
+  KMS_KIND: file
+  KYT_MODE: allow
+  CHAIN_DRIVER: rpc
+
+services:
+  mysql:
+    image: mysql:8.0.40
+    environment:
+      MYSQL_ROOT_PASSWORD: localdev
+      MYSQL_DATABASE: spotwallet
+      MYSQL_USER: spotwallet
+      MYSQL_PASSWORD: localdev
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--sql-mode=STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"]
+    ports:
+      - "13306:3306"
+    networks:
+      default:
+        aliases:
+          - mysql-0.kucoin.net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql-0.kucoin.net", "-plocaldev"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "16379:6379"
+    networks:
+      default:
+        aliases:
+          - redis-0.kucoin.net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redpanda:
+    image: redpandadata/redpanda:v24.2.18
+    command:
+      - redpanda
+      - start
+      - --kafka-addr
+      - internal://redpanda:9092,external://redpanda:19092
+      - --advertise-kafka-addr
+      - internal://redpanda:9092,external://kafka-0.kucoin.net:19092
+      - --pandaproxy-addr
+      - internal://redpanda:8082,external://redpanda:18082
+      - --advertise-pandaproxy-addr
+      - internal://redpanda:8082,external://kafka-0.kucoin.net:18082
+      - --smp
+      - "1"
+      - --memory
+      - 256M
+      - --mode
+      - dev-container
+      - --default-log-level
+      - warn
+    ports:
+      - "19092:19092"
+      - "18082:18082"
+    networks:
+      default:
+        aliases:
+          - kafka-0.kucoin.net
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy.+true'"]
+      interval: 8s
+      timeout: 5s
+      retries: 20
+
+  api:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: api
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18480"
+      GRPC_ADDR: ":18481"
+      PROCESS_ROLE: api
+    ports:
+      - "18480:18480"
+      - "18481:18481"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    working_dir: /app
+
+  walletd:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: walletd
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      GRPC_ADDR: ":18481"
+      PROCESS_ROLE: wallet
+    ports:
+      - "18581:18481"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  marketd:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: marketd
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      PROCESS_ROLE: market
+    depends_on:
+      - redis
+
+  worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      PROCESS_ROLE: worker
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  account-book:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: account-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18501"
+    ports:
+      - "18501:18501"
+    networks:
+      default:
+        aliases:
+          - account-book.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  ledger-transfer-freeze-reconciliation:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: ledger-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18502"
+    ports:
+      - "18502:18502"
+    networks:
+      default:
+        aliases:
+          - ledger-transfer-freeze-reconciliation.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  deposit-withdraw:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: deposit-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18503"
+    ports:
+      - "18503:18503"
+    networks:
+      default:
+        aliases:
+          - deposit-withdraw.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  withdraw-service:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: withdraw-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18504"
+    ports:
+      - "18504:18504"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  address:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: address-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18505"
+    ports:
+      - "18505:18505"
+    networks:
+      default:
+        aliases:
+          - address.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  custody-boundary:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: custody-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18506"
+    ports:
+      - "18506:18506"
+    networks:
+      default:
+        aliases:
+          - custody-boundary-lab.kucoin.net
+          - kms-vault.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  kyt:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: kyt-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18507"
+    ports:
+      - "18507:18507"
+    networks:
+      default:
+        aliases:
+          - kyt.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  query-gateway:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: query-gateway
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18508"
+    ports:
+      - "18508:18508"
+    networks:
+      default:
+        aliases:
+          - query-gateway.kucoin.net
+          - iam-gateway.kucoin.net
+          - fund-surface.kucoin.net
+          - security.kucoin.net
+          - convert.kucoin.net
+          - statement-export.kucoin.net
+          - sub-account.kucoin.net
+          - config-center.kucoin.net
+          - notify.kucoin.net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  asset-worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: asset-worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18509"
+      HA_SERVICE: ledger
+      REGION: a
+    ports:
+      - "18509:18509"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  snap-service:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: snap-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18510"
+    ports:
+      - "18510:18510"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  earn-service:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: earn-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18511"
+    ports:
+      - "18511:18511"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  fee-service:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: fee-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18512"
+    ports:
+      - "18512:18512"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  risk-worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: risk-worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18515"
+    ports:
+      - "18515:18515"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  recon-worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: recon-worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18516"
+    ports:
+      - "18516:18516"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  stmt-export:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: stmt-export
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18517"
+    ports:
+      - "18517:18517"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  chain-observe:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: chain-observe
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18518"
+    ports:
+      - "18518:18518"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  aml-desk:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: aml-desk
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18519"
+    ports:
+      - "18519:18519"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  treasury-worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: treasury-worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18520"
+    ports:
+      - "18520:18520"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  clearing-worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: clearing-worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18523"
+    ports:
+      - "18523:18523"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  oracle-feed:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: oracle-feed
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18524"
+    ports:
+      - "18524:18524"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  cfg-center:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: cfg-center
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18526"
+    ports:
+      - "18526:18526"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  float-desk:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: float-desk
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18527"
+    ports:
+      - "18527:18527"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  addr-intel:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: addr-intel
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18528"
+    ports:
+      - "18528:18528"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  por-service:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: por-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18529"
+    ports:
+      - "18529:18529"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  rate-guard:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: rate-guard
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18530"
+    ports:
+      - "18530:18530"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  backup-worker:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: backup-worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18531"
+    ports:
+      - "18531:18531"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  p2p-net:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: p2p-net
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18533"
+    ports:
+      - "18533:18533"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  airgap-cer:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: airgap-cer
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18534"
+    ports:
+      - "18534:18534"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  fund-dash:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: fund-dash
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18535"
+    ports:
+      - "18535:18535"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  loan-book:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: loan-book
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18536"
+    ports:
+      - "18536:18536"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  sweep-orch:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: sweep-orch
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18538"
+    ports:
+      - "18538:18538"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  broker-book:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: broker-book
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18540"
+    ports:
+      - "18540:18540"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  dust-conv:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: dust-conv
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18542"
+    ports:
+      - "18542:18542"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  travel-vasp:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: travel-vasp
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18543"
+    ports:
+      - "18543:18543"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  key-cer:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: key-cer
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18544"
+    ports:
+      - "18544:18544"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  stable-br:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: stable-br
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18547"
+    ports:
+      - "18547:18547"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  war-room:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: war-room
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18548"
+    ports:
+      - "18548:18548"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  bal-proof:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: bal-proof
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18549"
+    ports:
+      - "18549:18549"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  led-diff:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: led-diff
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18550"
+    ports:
+      - "18550:18550"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  wd-batch:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: wd-batch
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18551"
+    ports:
+      - "18551:18551"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  inv-check:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: inv-check
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18552"
+    ports:
+      - "18552:18552"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  led-batch:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: led-batch
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18553"
+    ports:
+      - "18553:18553"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  dep-batch:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: dep-batch
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18554"
+    ports:
+      - "18554:18554"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  risk-score:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: risk-score
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18555"
+    ports:
+      - "18555:18555"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  wd-guard:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: wd-guard
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18556"
+    ports:
+      - "18556:18556"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  fund-guard:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: fund-guard
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18557"
+    ports:
+      - "18557:18557"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  ha-sync:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: ha-sync
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18558"
+    ports:
+      - "18558:18558"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  fund-safe:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: fund-safe
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18559"
+    ports:
+      - "18559:18559"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  outbox-once:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: outbox-once
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18560"
+    ports:
+      - "18560:18560"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  inc-def:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: inc-def
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18561"
+    ports:
+      - "18561:18561"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  risk-gate:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: risk-gate
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18562"
+    ports:
+      - "18562:18562"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  rpc-allow:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: rpc-allow
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18563"
+    ports:
+      - "18563:18563"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  hmac-fence:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: hmac-fence
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18564"
+    ports:
+      - "18564:18564"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  saga-run:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: saga-run
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18565"
+    ports:
+      - "18565:18565"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  back-press:
+    profiles: ["apps"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: back-press
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18566"
+    ports:
+      - "18566:18566"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

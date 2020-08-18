@@ -1,0 +1,91 @@
+# Postgres / Redis / Kafka. SG 10.18.0.0/16, TYO 10.19.0.0/16. Hosts *.kucoin.net.
+name: account-assets-sql
+
+networks:
+  sg:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.18.0.0/16
+          gateway: 10.18.0.1
+  tyo:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.19.0.0/16
+          gateway: 10.19.0.1
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: spotwallet
+      POSTGRES_USER: spotwallet
+      POSTGRES_PASSWORD: localdev
+    ports:
+      - "15432:5432"
+    networks:
+      sg:
+        ipv4_address: 10.18.1.10
+        aliases:
+          - pg-0.kucoin.net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spotwallet -d spotwallet"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "16380:6379"
+    networks:
+      sg:
+        ipv4_address: 10.18.1.11
+        aliases:
+          - redis-0.kucoin.net
+
+  redpanda:
+    image: redpandadata/redpanda:v24.2.18
+    command:
+      - redpanda
+      - start
+      - --kafka-addr
+      - internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr
+      - internal://kafka-0.kucoin.net:9092,external://kafka-0.kucoin.net:19092
+      - --smp
+      - "1"
+      - --memory
+      - 256M
+      - --mode
+      - dev-container
+      - --default-log-level
+      - warn
+    ports:
+      - "19093:19092"
+    networks:
+      sg:
+        ipv4_address: 10.18.1.12
+        aliases:
+          - kafka-0.kucoin.net
+
+  postgres-tyo:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: spotwallet
+      POSTGRES_USER: spotwallet
+      POSTGRES_PASSWORD: localdev
+    ports:
+      - "15433:5432"
+    networks:
+      tyo:
+        ipv4_address: 10.19.1.10
+        aliases:
+          - pg-0.kucoin.net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spotwallet -d spotwallet"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
