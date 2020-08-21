@@ -1,0 +1,84 @@
+# 行业进程 Deployment / Service 说明级清单。目录主机 *.kucoin.net 不变。
+# 新加坡主写；东京热备。副本与反亲和见 docs/architecture/aa-k8s-topology.md。
+# 环境变量 ETCD_ENDPOINTS 指向 etcd-0,etcd-1,etcd-2:2379；空则 RefuseProduction。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aa-platform
+  namespace: account-assets
+data:
+  ETCD_ENDPOINTS: "http://etcd-0.kucoin.net:2379,http://etcd-1.kucoin.net:2379,http://etcd-2.kucoin.net:2379"
+  ETCD_NAMESPACE: account-assets
+  ETCD_ENV: production
+  IAM_ISSUER: https://iam-gateway.kucoin.net
+  IAM_JWKS_URL: https://iam-gateway.kucoin.net/.well-known/jwks.json
+  IAM_AUDIENCE: account-assets
+  KEY_SOURCE: kms
+  GATE_STORAGE: sql
+  CONVERT_FILL_REQUIRE_IDENT: "1"
+  CONVERT_FILL_MTLS_CNS: convert.kucoin.net
+  REGION: a
+---
+# 下列各服务共用镜像，BIN 不同。示例：gateway / account / ledger / deposit / withdraw / address / custody / kyt
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-gateway
+  namespace: account-assets
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: query-gateway
+  template:
+    metadata:
+      labels:
+        app: query-gateway
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: query-gateway
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: gateway
+          image: account-assets/funding:release
+          args: ["gateway"]
+          ports:
+            - containerPort: 18480
+              name: http
+          envFrom:
+            - configMapRef:
+                name: aa-platform
+          env:
+            - name: HTTP_ADDR
+              value: ":18480"
+            - name: HA_SERVICE
+              value: query
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-gateway
+  namespace: account-assets
+spec:
+  selector:
+    app: query-gateway
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
