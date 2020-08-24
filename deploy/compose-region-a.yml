@@ -1,0 +1,24 @@
+# Region A overlay. SG ap-southeast-1, 10.18.0.0/16. Hosts stay *.kucoin.net.
+# fundpref KV/SQL 主写本区；kind 仅 fundpref.row / fundpref.audit，不得占用 fundsurf 冻结键。
+services:
+  ledger-transfer-freeze-reconciliation:
+    environment:
+      REGION: a
+      HA_SERVICE: ledger
+      HA_CAMPAIGN: "1"
+  worker:
+    environment:
+      REGION: a
+      HA_SERVICE: worker
+  custody-boundary:
+    environment:
+      REGION: a
+      HA_SERVICE: custody
+  kyt:
+    environment:
+      REGION: a
+      HA_SERVICE: kyt
+  query-gateway:
+    environment:
+      REGION: a
+      HA_SERVICE: query

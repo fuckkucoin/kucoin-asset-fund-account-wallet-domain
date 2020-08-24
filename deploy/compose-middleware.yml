@@ -1,0 +1,259 @@
+# 中间件集群。目录主机：etcd-0/1/2、mysql-0/1、redis-0/1/2、kafka-0/1/2、pg-0/1。
+# 注册中心 etcd-0.kucoin.net:2379。新加坡 10.18.0.0/16 主写，东京 10.19.0.0/16 备。
+
+# 主题须平台预建：deposit.credited deposit.observed withdraw.requested withdraw.broadcast
+# withdraw.confirmed withdraw.cancelled ledger.posted ledger.drift_blocked recon.diff kyt.hit
+# outbox.poison ops.outbox.stuck ops.registry.quorum_loss ops.worker.circuit
+# 应用侧 bus.EnsureTopics 仅预检，不 CreateTopics。
+name: aa-middleware
+
+networks:
+  sg:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.18.0.0/16
+          gateway: 10.18.0.1
+
+services:
+  etcd-a:
+    image: quay.io/coreos/etcd:v3.5.16
+    command:
+      - etcd
+      - --name=etcd-a
+      - --data-dir=/etcd-data
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://etcd-0.kucoin.net:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://etcd-a:2380
+      - --initial-cluster=etcd-a=http://etcd-a:2380,etcd-b=http://etcd-b:2380,etcd-c=http://etcd-c:2380
+      - --initial-cluster-token=aa-etcd
+      - --initial-cluster-state=new
+    ports:
+      - "2379:2379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.10
+        aliases:
+          - etcd-0.kucoin.net
+
+  etcd-b:
+    image: quay.io/coreos/etcd:v3.5.16
+    command:
+      - etcd
+      - --name=etcd-b
+      - --data-dir=/etcd-data
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://etcd-1.kucoin.net:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://etcd-b:2380
+      - --initial-cluster=etcd-a=http://etcd-a:2380,etcd-b=http://etcd-b:2380,etcd-c=http://etcd-c:2380
+      - --initial-cluster-token=aa-etcd
+      - --initial-cluster-state=new
+    ports:
+      - "2479:2379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.14
+        aliases:
+          - etcd-1.kucoin.net
+
+  etcd-c:
+    image: quay.io/coreos/etcd:v3.5.16
+    command:
+      - etcd
+      - --name=etcd-c
+      - --data-dir=/etcd-data
+      - --listen-client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://etcd-2.kucoin.net:2379
+      - --listen-peer-urls=http://0.0.0.0:2380
+      - --initial-advertise-peer-urls=http://etcd-c:2380
+      - --initial-cluster=etcd-a=http://etcd-a:2380,etcd-b=http://etcd-b:2380,etcd-c=http://etcd-c:2380
+      - --initial-cluster-token=aa-etcd
+      - --initial-cluster-state=new
+    ports:
+      - "2579:2379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.15
+        aliases:
+          - etcd-2.kucoin.net
+
+  kafka-1:
+    image: bitnami/kafka:3.7
+    environment:
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-0.kucoin.net:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_KRAFT_CLUSTER_ID: 4L6g3nShT-eMCtK--X86sw
+    ports:
+      - "19092:9092"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.20
+        aliases:
+          - kafka-0.kucoin.net
+
+  kafka-2:
+    image: bitnami/kafka:3.7
+    environment:
+      KAFKA_CFG_NODE_ID: "2"
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1.kucoin.net:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_KRAFT_CLUSTER_ID: 4L6g3nShT-eMCtK--X86sw
+    ports:
+      - "19093:9092"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.22
+        aliases:
+          - kafka-1.kucoin.net
+
+  kafka-3:
+    image: bitnami/kafka:3.7
+    environment:
+      KAFKA_CFG_NODE_ID: "3"
+      KAFKA_CFG_PROCESS_ROLES: broker,controller
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2.kucoin.net:9092
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9093,2@kafka-2:9093,3@kafka-3:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_KRAFT_CLUSTER_ID: 4L6g3nShT-eMCtK--X86sw
+    ports:
+      - "19094:9092"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.23
+        aliases:
+          - kafka-2.kucoin.net
+
+  redis-master:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--port", "6379"]
+    ports:
+      - "16379:6379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.12
+        aliases:
+          - redis-0.kucoin.net
+
+  redis-replica-1:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--port", "6379", "--replicaof", "redis-0.kucoin.net", "6379"]
+    ports:
+      - "16380:6379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.13
+        aliases:
+          - redis-1.kucoin.net
+
+  redis-replica-2:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--port", "6379", "--replicaof", "redis-0.kucoin.net", "6379"]
+    ports:
+      - "16381:6379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.16
+        aliases:
+          - redis-2.kucoin.net
+
+  redis-sentinel-1:
+    image: redis:7.4-alpine
+    command: ["redis-sentinel", "/tmp/sentinel.conf"]
+    entrypoint: ["/bin/sh", "-c", "printf 'port 26379\\nsentinel monitor mymaster redis-0.kucoin.net 6379 2\\nsentinel down-after-milliseconds mymaster 5000\\nsentinel failover-timeout mymaster 10000\\n' > /tmp/sentinel.conf && exec redis-sentinel /tmp/sentinel.conf"]
+    ports:
+      - "26379:26379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.17
+
+  redis-sentinel-2:
+    image: redis:7.4-alpine
+    command: ["redis-sentinel", "/tmp/sentinel.conf"]
+    entrypoint: ["/bin/sh", "-c", "printf 'port 26379\\nsentinel monitor mymaster redis-0.kucoin.net 6379 2\\nsentinel down-after-milliseconds mymaster 5000\\nsentinel failover-timeout mymaster 10000\\n' > /tmp/sentinel.conf && exec redis-sentinel /tmp/sentinel.conf"]
+    ports:
+      - "26380:26379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.18
+
+  redis-sentinel-3:
+    image: redis:7.4-alpine
+    command: ["redis-sentinel", "/tmp/sentinel.conf"]
+    entrypoint: ["/bin/sh", "-c", "printf 'port 26379\\nsentinel monitor mymaster redis-0.kucoin.net 6379 2\\nsentinel down-after-milliseconds mymaster 5000\\nsentinel failover-timeout mymaster 10000\\n' > /tmp/sentinel.conf && exec redis-sentinel /tmp/sentinel.conf"]
+    ports:
+      - "26381:26379"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.19
+
+  mysql-primary:
+    image: mysql:8.0.40
+    environment:
+      MYSQL_ROOT_PASSWORD: localdev
+      MYSQL_DATABASE: spotwallet
+      MYSQL_USER: spotwallet
+      MYSQL_PASSWORD: localdev
+    command: ["--server-id=1", "--log-bin=mysql-bin", "--binlog-format=ROW"]
+    ports:
+      - "13306:3306"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.40
+        aliases:
+          - mysql-0.kucoin.net
+
+  mysql-replica:
+    image: mysql:8.0.40
+    environment:
+      MYSQL_ROOT_PASSWORD: localdev
+      MYSQL_DATABASE: spotwallet
+    command: ["--server-id=2", "--relay-log=relay-bin", "--read-only=ON"]
+    ports:
+      - "13307:3306"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.41
+        aliases:
+          - mysql-1.kucoin.net
+
+  postgres-primary:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: spotwallet
+      POSTGRES_USER: spotwallet
+      POSTGRES_PASSWORD: localdev
+    command: ["postgres", "-c", "wal_level=replica", "-c", "max_wal_senders=8"]
+    ports:
+      - "15432:5432"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.4
+        aliases:
+          - pg-0.kucoin.net
+
+  postgres-replica:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: spotwallet
+      POSTGRES_USER: spotwallet
+      POSTGRES_PASSWORD: localdev
+    ports:
+      - "15433:5432"
+    networks:
+      sg:
+        ipv4_address: 10.18.0.5
+        aliases:
+          - pg-1.kucoin.net

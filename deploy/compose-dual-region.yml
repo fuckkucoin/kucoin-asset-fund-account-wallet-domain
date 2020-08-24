@@ -1,0 +1,75 @@
+# SG + TYO 双区域叠加。目录主机 *.kucoin.net 不变。
+# 区域 a = SG 10.18.0.0/16；区域 b = TYO 10.19.0.0/16。
+# 中间件见 compose-middleware.yml；本文件只拉行业进程双区副本。
+name: aa-dual-region
+
+x-etcd: &etcd-env
+  ETCD_ENDPOINTS: http://etcd-0.kucoin.net:2379,http://etcd-1.kucoin.net:2379,http://etcd-2.kucoin.net:2379
+  ETCD_NAMESPACE: account-assets
+  ETCD_ENV: production
+
+x-app-sg: &app-sg
+  <<: *etcd-env
+  REGION: a
+  HA_CAMPAIGN: "1"
+  MYSQL_DSN: spotwallet:localdev@tcp(mysql-0.kucoin.net)/spotwallet?parseTime=true&charset=utf8mb4&multiStatements=true
+  REDIS_ADDR: redis-0.kucoin.net:6379
+  KAFKA_BROKERS: kafka-0.kucoin.net:9092
+  KAFKA_OPTIONAL: "true"
+
+x-app-tyo: &app-tyo
+  <<: *etcd-env
+  REGION: b
+  HA_CAMPAIGN: "1"
+  MYSQL_DSN: spotwallet:localdev@tcp(mysql-0.kucoin.net)/spotwallet?parseTime=true&charset=utf8mb4&multiStatements=true
+  REDIS_ADDR: redis-0.kucoin.net:6379
+  KAFKA_BROKERS: kafka-0.kucoin.net:9092
+  KAFKA_OPTIONAL: "true"
+
+services:
+  gateway-sg:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BIN: gateway } }
+    environment:
+      <<: *app-sg
+      HTTP_ADDR: ":18480"
+      HA_SERVICE: query
+    ports: ["18480:18480"]
+
+  account-sg:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BIN: account } }
+    environment:
+      <<: *app-sg
+      HTTP_ADDR: ":18482"
+      HA_SERVICE: account
+
+  ledger-sg:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BIN: ledger } }
+    environment:
+      <<: *app-sg
+      HTTP_ADDR: ":18483"
+      HA_SERVICE: ledger
+
+  gateway-tyo:
+    profiles: ["region-b"]
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BIN: gateway } }
+    environment:
+      <<: *app-tyo
+      HTTP_ADDR: ":18580"
+      HA_SERVICE: query
+    ports: ["18580:18580"]
+
+  account-tyo:
+    profiles: ["region-b"]
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BIN: account } }
+    environment:
+      <<: *app-tyo
+      HTTP_ADDR: ":18582"
+      HA_SERVICE: account
+
+  ledger-tyo:
+    profiles: ["region-b"]
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { BIN: ledger } }
+    environment:
+      <<: *app-tyo
+      HTTP_ADDR: ":18583"
+      HA_SERVICE: ledger

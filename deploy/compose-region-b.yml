@@ -1,0 +1,96 @@
+# Region B process copies. TYO ap-northeast-1, 10.19.0.0/16. Published ports only; catalog hosts unchanged.
+# fundpref 本区只读回放；与 SG 共用 fundpref.row / fundpref.audit，不写 fundsurf 冻结键。
+x-app-env: &app-env
+  MYSQL_DSN: spotwallet:localdev@tcp(mysql-0.kucoin.net)/spotwallet?parseTime=true&charset=utf8mb4&multiStatements=true
+  REDIS_ADDR: redis-0.kucoin.net:6379
+  KAFKA_BROKERS: kafka-0.kucoin.net:9092
+  KAFKA_OPTIONAL: "true"
+  APP_PROFILE: mem
+  AUTH_KIND: mem
+  KMS_KIND: file
+  KYT_MODE: allow
+  REGION: b
+  HA_CAMPAIGN: "1"
+
+services:
+  ledger-b:
+    profiles: ["region-b"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: ledger-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18512"
+      HA_SERVICE: ledger
+    ports:
+      - "18512:18512"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker-b:
+    profiles: ["region-b"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: worker
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      PROCESS_ROLE: worker
+      HA_SERVICE: worker
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  custody-b:
+    profiles: ["region-b"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: custody-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18516"
+      HA_SERVICE: custody
+    ports:
+      - "18516:18516"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  kyt-b:
+    profiles: ["region-b"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BIN: kyt-service
+    env_file:
+      - ../.env.example
+    environment:
+      <<: *app-env
+      HTTP_ADDR: ":18517"
+      HA_SERVICE: kyt
+    ports:
+      - "18517:18517"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
