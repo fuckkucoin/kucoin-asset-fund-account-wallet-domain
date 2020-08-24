@@ -1,0 +1,207 @@
+# Pair with GET /v1/ops/alerts and GET /v1/ledger/statement.
+groups:
+  - name: account-assets
+    rules:
+      - alert: ProcessReady
+        expr: up == 0
+        for: 0s
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /readyz then mysql/redis ping; wallet-core stays up if only chain RPCs are degraded"
+
+      - alert: AAReconcileMismatch
+        expr: aa_reconcile_mismatches > 0
+        for: 0s
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /v1/ledger/statement and GET /v1/ledger/reconcile; GET /v1/ledger/audit?entity_type=transfer"
+
+      - alert: AAChainSubmitSuccess
+        expr: |
+          sum(aa_chain_submit_total{result="ok"})
+          /
+          clamp_min(sum(aa_chain_submit_total), 1)
+          < 0.999
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /v1/wallet/nodes/health; check aa_chain_rpc_total and circuit-open endpoints"
+
+      - alert: AAMarketPushLag
+        expr: histogram_quantile(0.99, rate(aa_market_tick_lag_seconds_bucket[2m])) > 1
+        for: 1m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/market/lag; confirm marketd is producing and api is consuming market.ticks"
+
+      - alert: AAMarketStaleRate
+        expr: |
+          sum(rate(aa_market_stale_ticks_total[5m]))
+          /
+          clamp_min(sum(rate(aa_market_stale_ticks_total[5m])) + sum(rate(aa_market_ticks_applied_total[5m])), 1e-9)
+          > 0.005
+        for: 2m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/market/lag; dropped seq/lag ticks — not a second ticker book"
+
+      - alert: AAWalletQueryP99
+        expr: histogram_quantile(0.99, sum by (le) (rate(aa_wallet_query_seconds_bucket[5m]))) > 0.5
+        for: 2m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/wallet/nodes/health; L1/Redis cache and hedged reads sit under query_timeout"
+
+      - alert: AAHTTP5xxBudget
+        expr: |
+          sum(rate(aa_http_requests_total{status=~"5.."}[5m]))
+          /
+          clamp_min(sum(rate(aa_http_requests_total[5m])), 1e-9)
+          > 0.0005
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /metrics aa_http_requests_total; X-Trace-Id on 5xx logs then GET /v1/ledger/audit"
+
+      - alert: AAFundGateStore
+        expr: sum(aa_fund_gates_total{result="store"}) > 0
+        for: 0s
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /metrics aa_fund_gates_total{result=\"store\"}; SQL/allowlist faults fail closed"
+
+      - alert: AAReconBacklog
+        expr: aa_recon_backlog > 0
+        for: 0s
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /metrics aa_recon_backlog; open or acked discrepancy tickets"
+
+      - alert: AAAuditGaps
+        expr: sum(aa_audit_gaps_total{result!="ok"}) > 0
+        for: 0s
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /metrics aa_audit_gaps_total; completeness/cover/tamper is fail-closed"
+
+      - alert: AASGWriteCIDR
+        expr: aa_region_write_ok{region="sg"} == 0
+        for: 0s
+        labels:
+          severity: page
+        annotations:
+          hint: "SG write IP must be 10.18.0.0/16; GET /metrics aa_region_write_ok{region=\"sg\"}"
+
+      - alert: AATYOStandbyCIDR
+        expr: aa_region_write_ok{region="tyo"} == 0
+        for: 0s
+        labels:
+          severity: page
+        annotations:
+          hint: "TYO standby IP must be 10.19.0.0/16; GET /metrics aa_region_write_ok{region=\"tyo\"}"
+
+      - alert: AATravelFXStale
+        expr: aa_travel_fx_stale_count > 0
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/travel/thresholds/fx-health; aa_travel_fx_stale / aa_travel_fx_refresh_total; refresh Live FX — stale does not bypass missing-rate fail-closed"
+
+
+      - alert: AATravelFXVendorBurn
+        expr: aa_travel_fx_burn_rate >= 1 and (aa_travel_fx_vendor_total{result="ok"}+aa_travel_fx_vendor_total{result="fail"}) >= 20
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/travel/thresholds/fx-vendor-slo; aa_travel_fx_burn_rate — Live FX vendor error budget; PUT fx-severity to tune; missing-rate still fail-closed"
+
+      - alert: AAWDTrackHealth
+        expr: min(aa_wd_track_ok) < 1 or max(aa_wd_track_drift) > 0 or max(aa_wd_track_hydrate_err) > 0 or max(aa_wd_track_persist_err) > 0
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /v1/ops/admin/wd-track-health; aa_wd_track_* — fee-bump/broadcast hydrate/persist drift"
+
+      - alert: AAWDReorgSagaStuck
+        expr: max(aa_wd_reorg_saga_max_age_seconds{phase=~"reorged|resigning|resubmitting"}) >= 600
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/withdrawals/broadcast/sagas; aa_wd_reorg_saga_max_age_seconds — soft stuck ticket (10m+; still within 30m TickSagas timeout)"
+
+      - alert: AAWDReorgSagaOverTimeout
+        expr: max(aa_wd_reorg_saga_max_age_seconds{phase=~"reorged|resigning|resubmitting"}) >= 1800
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /v1/withdrawals/broadcast/sagas; max age past DefaultSagaTimeout — TickSagas not advancing; not a normal timeout-fail ticket"
+
+      - alert: AAWDReorgSagaTimeouts
+        expr: increase(aa_wd_reorg_saga_timeout_total[1h]) > 0
+        for: 0m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "aa_wd_reorg_saga_timeout_total — TickSagas timed out resigning/resubmitting; reopen manually, retain old_tx_hash"
+
+      - alert: AATravelFXVendorBurn5m
+        expr: aa_travel_fx_burn_rate_window{window="5m"} >= 1
+        for: 2m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/travel/thresholds/fx-vendor-slo; 5m burn window — short-window spike; missing-rate still fail-closed"
+
+      - alert: AATravelFXVendorBurnDual
+        expr: aa_travel_fx_burn_rate_window{window="5m"} >= 1 and aa_travel_fx_burn_rate_window{window="1h"} >= 1
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          hint: "GET /v1/travel/thresholds/fx-vendor-slo; 5m∧1h dual-fire → page; missing-rate still fail-closed"
+
+      - alert: AAEarnProductAudit
+        expr: aa_earn_product_audit_write_err >= 1 or aa_earn_product_audit_max_age_seconds >= 31536000
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          hint: "GET /v1/ops/earn/products/audit?format=csv; POST .../audit/archive (product shards); POST .../audit/purge — write_err or age past 365d; cold-archive before purge"
+
+
+# 资金域中间件告警（设计目标钩子，非对外 SLA）
+- name: aa_outbox_lag
+  expr: outbox_oldest_age_ms > 5000
+  severity: page
+  topic: ops.outbox.stuck
+- name: aa_registry_quorum_loss
+  expr: etcd_keepalive_fail_streak >= 3
+  severity: page
+  topic: ops.registry.quorum_loss
+- name: aa_worker_circuit
+  expr: worker_consecutive_fails >= 8
+  severity: ticket
+  topic: ops.worker.circuit
+- name: aa_kafka_dial
+  expr: kafka_dial_fail == 1
+  severity: page
+  topic: ops.kafka.unavailable
+- name: aa_redis_lock_fail
+  expr: redis_lock_fail_rate > 0.05
+  severity: ticket
+  topic: ops.redis.unavailable
