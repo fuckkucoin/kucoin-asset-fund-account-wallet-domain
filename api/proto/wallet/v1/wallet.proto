@@ -1,0 +1,280 @@
+syntax = "proto3";
+
+package wallet.v1;
+
+option go_package = "account-assets.kucoin.net/funding/api/proto/wallet/v1;walletv1";
+
+service WalletService {
+  rpc GetBalances(GetBalancesRequest) returns (GetBalancesResponse);
+  rpc GetTxHistory(GetTxHistoryRequest) returns (GetTxHistoryResponse);
+  rpc GetNodeHealth(GetNodeHealthRequest) returns (GetNodeHealthResponse);
+  rpc CreateWallet(CreateWalletRequest) returns (WalletView);
+  rpc ImportWallet(ImportWalletRequest) returns (WalletView);
+  rpc ListWallets(ListWalletsRequest) returns (ListWalletsResponse);
+  rpc CreateTransfer(CreateTransferRequest) returns (TransferView);
+  rpc GetTransfer(GetTransferRequest) returns (TransferView);
+  rpc ListTransfers(ListTransfersRequest) returns (ListTransfersResponse);
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse);
+  rpc QuoteSwap(QuoteSwapRequest) returns (QuoteView);
+  rpc ExecuteSwap(ExecuteSwapRequest) returns (SwapOrderView);
+  rpc GetSwapOrder(GetSwapOrderRequest) returns (SwapOrderView);
+  rpc ListSwapOrders(ListSwapOrdersRequest) returns (ListSwapOrdersResponse);
+  rpc ListAddressBook(ListAddressBookRequest) returns (ListAddressBookResponse);
+  rpc AddAddressBook(AddressBookEntry) returns (AddressBookEntry);
+  rpc RemoveAddressBook(RemoveAddressBookRequest) returns (OkReply);
+}
+
+message GetBalancesRequest {
+  string user_id = 1;
+  string chain = 2;
+}
+
+message AssetBalance {
+  string chain = 1;
+  string asset = 2;
+  string book = 3;
+  string available = 4;
+  string frozen = 5;
+  string chain_native = 6;
+}
+
+message GetBalancesResponse {
+  repeated AssetBalance balances = 1;
+}
+
+message GetTxHistoryRequest {
+  string user_id = 1;
+  string chain = 2;
+  int32 limit = 3;
+}
+
+message TxItem {
+  string chain = 1;
+  string tx_hash = 2;
+  string asset = 3;
+  string amount = 4;
+  string direction = 5;
+  string status = 6;
+}
+
+message GetTxHistoryResponse {
+  repeated TxItem items = 1;
+}
+
+message GetNodeHealthRequest {
+  string chain = 1;
+}
+
+message NodeEndpointHealth {
+  string chain = 1;
+  string endpoint = 2;
+  bool available = 3;
+  int64 latency_ms = 4;
+  int32 consecutive_failures = 5;
+}
+
+message GetNodeHealthResponse {
+  repeated NodeEndpointHealth endpoints = 1;
+}
+
+message CreateWalletRequest {
+  string user_id = 1;
+  string label = 2;
+}
+
+message ImportWalletRequest {
+  string user_id = 1;
+  string label = 2;
+  string mnemonic = 3;
+}
+
+message ChainAddress {
+  string chain = 1;
+  string address = 2;
+}
+
+message WalletView {
+  string id = 1;
+  string user_id = 2;
+  string label = 3;
+  string source = 4;
+  string mnemonic = 5;
+  repeated ChainAddress addresses = 6;
+}
+
+message ListWalletsRequest {
+  string user_id = 1;
+}
+
+message ListWalletsResponse {
+  repeated WalletView wallets = 1;
+}
+
+message CreateTransferRequest {
+  string user_id = 1;
+  string direction = 2;
+  string asset = 3;
+  string amount = 4;
+  string chain = 5;
+  string to_address = 6;
+  string tx_hash = 7;
+  string idempotency_key = 8;
+  bool wait = 9;
+}
+
+message GetTransferRequest {
+  string id = 1;
+}
+
+message ListTransfersRequest {
+  string user_id = 1;
+  int32 limit = 2;
+  string status = 3;
+  string direction = 4;
+  string state = 5;
+}
+
+message TransferView {
+  string id = 1;
+  string order_id = 2;
+  string client_oid = 3;
+  string movement_id = 4;
+  string user_id = 5;
+  string direction = 6;
+  string settlement = 7;
+  string asset = 8;
+  string amount = 9;
+  string filled_amount = 10;
+  string remain_amount = 11;
+  string chain = 12;
+  string tx_hash = 13;
+  string from_account = 14;
+  string to_account = 15;
+  string status = 16;
+  string status_desc = 17;
+  string state = 18;
+  string fail_reason = 19;
+  int64 created_at_ms = 20;
+}
+
+message ListTransfersResponse {
+  repeated TransferView transfers = 1;
+}
+
+message ListAccountsRequest {
+  string user_id = 1;
+}
+
+message AccountView {
+  string asset = 1;
+  string book = 2;
+  string subject = 3;
+  string available = 4;
+  string frozen = 5;
+  string total = 6;
+}
+
+message FeePaidView {
+  string asset = 1;
+  string amount = 2;
+  string subject = 3;
+}
+
+message ListAccountsResponse {
+  string user_id = 1;
+  repeated AccountView accounts = 2;
+  repeated FeePaidView fees_paid = 3;
+}
+
+message QuoteSwapRequest {
+  string from_asset = 1;
+  string to_asset = 2;
+  string amount = 3;
+}
+
+message QuoteView {
+  string from_asset = 1;
+  string to_asset = 2;
+  string from_amount = 3;
+  string rate = 4;
+  string to_amount = 5;
+  string fee_asset = 6;
+  string fee_amount = 7;
+  int64 expires_at = 8;
+  string source = 9;
+}
+
+message ExecuteSwapRequest {
+  string user_id = 1;
+  string from_asset = 2;
+  string to_asset = 3;
+  string amount = 4;
+  string idempotency_key = 5;
+  string fill_ratio = 6;
+  string chain = 7;
+  string quote_rate = 8;
+  bool wait = 9;
+}
+
+message GetSwapOrderRequest {
+  string id = 1;
+}
+
+message ListSwapOrdersRequest {
+  string user_id = 1;
+  string status = 2;
+}
+
+message SwapOrderView {
+  string id = 1;
+  string order_id = 2;
+  string client_oid = 3;
+  string movement_id = 4;
+  string user_id = 5;
+  string from_asset = 6;
+  string to_asset = 7;
+  string from_amount = 8;
+  string filled_amount = 9;
+  string remain_amount = 10;
+  string to_amount = 11;
+  string fee_asset = 12;
+  string fee_amount = 13;
+  string account = 14;
+  string status = 15;
+  string status_desc = 16;
+  string state = 17;
+  string chain = 18;
+  string tx_hash = 19;
+  string fail_reason = 20;
+  int64 created_at_ms = 21;
+}
+
+message ListSwapOrdersResponse {
+  repeated SwapOrderView orders = 1;
+}
+
+message ListAddressBookRequest {
+  string user_id = 1;
+}
+
+message AddressBookEntry {
+  string user_id = 1;
+  string chain = 2;
+  string address = 3;
+  string label = 4;
+  bool whitelist = 5;
+}
+
+message ListAddressBookResponse {
+  repeated AddressBookEntry entries = 1;
+}
+
+message RemoveAddressBookRequest {
+  string user_id = 1;
+  string chain = 2;
+  string address = 3;
+}
+
+message OkReply {
+  bool ok = 1;
+}
