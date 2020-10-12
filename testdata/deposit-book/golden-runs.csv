@@ -1,0 +1,6 @@
+id,chain,tx_hash,output_index,step,amount,transfer_id,user_id,asset
+run-a,BTC,tx-same,0,accepted,1.5,tr-a,user-1,BTC
+run-b,BTC,tx-same,1,confirmed,0.25,tr-b,user-1,BTC
+run-c,ETH,tx-term,0,credited,10,tr-c,user-2,USDT
+run-d,ETH,tx-fail,0,failed,3,tr-d,user-2,USDT
+run-e,TRON,tx-hold,0,held,8,tr-e,user-3,USDT
