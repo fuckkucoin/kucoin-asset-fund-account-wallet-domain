@@ -1,0 +1,60 @@
+{
+  "_comment": "黄金夹具：双出金同窗 CAS 互斥场景。两笔出金同租约提交；winner accepted，loser rejected，RaceProof 落库。",
+  "scenario": "double_withdraw_same_window",
+  "initial_state": {
+    "user_id": "u-dw-001",
+    "asset": "USDT",
+    "book": "spot",
+    "balance": "2000.000000000000000000",
+    "frozen": "200.000000000000000000",
+    "reserved": "0.000000000000000000",
+    "expected_available": "1800.000000000000000000"
+  },
+  "lease": {
+    "gen": 1,
+    "available": "1800.000000000000000000",
+    "state": "open",
+    "ttl_ms": 30000
+  },
+  "intents": [
+    {
+      "id": "intent-winner",
+      "idem_key": "wd:dw-winner",
+      "amount": "1000.000000000000000000",
+      "kind": "freeze",
+      "reason": "withdraw_freeze",
+      "expected_avail": "1800.000000000000000000",
+      "submitted_at_ms_offset": 0,
+      "expected_state": "accepted",
+      "expected_avail_after": "800.000000000000000000"
+    },
+    {
+      "id": "intent-loser",
+      "idem_key": "wd:dw-loser",
+      "amount": "900.000000000000000000",
+      "kind": "freeze",
+      "reason": "withdraw_freeze",
+      "expected_avail": "1800.000000000000000000",
+      "submitted_at_ms_offset": 5,
+      "expected_state": "rejected",
+      "expected_reject_code": "cas_conflict"
+    }
+  ],
+  "expected_race_proof": {
+    "user_id": "u-dw-001",
+    "asset": "USDT",
+    "book": "spot",
+    "winner_idem_key": "wd:dw-winner",
+    "loser_idem_key": "wd:dw-loser",
+    "avail_at_decision": "1800.000000000000000000",
+    "reject_code": "cas_conflict"
+  },
+  "invariants": [
+    "winner.state == accepted",
+    "loser.state == rejected",
+    "race_proof.winner_intent_id == winner.id",
+    "race_proof.loser_intent_id == loser.id",
+    "race_proof.reject_code == cas_conflict",
+    "lease.state == bound after winner accepted"
+  ]
+}
