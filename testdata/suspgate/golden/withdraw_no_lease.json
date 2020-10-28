@@ -1,0 +1,28 @@
+{
+  "case": "WithdrawAssert_NoLeaseAfterClear",
+  "description": "Clear 成功后未持 clearance_lease 且 require_lease=true 时出金必须拒绝",
+  "setup": {
+    "suspend": {
+      "case_id": "case-005",
+      "user_id": "user-oscar",
+      "asset": "USDC",
+      "actor": "ops-pat"
+    },
+    "clear": {
+      "actor_1": "ops-queen",
+      "actor_2": "ops-rex",
+      "gen_value": 1
+    }
+  },
+  "request": {
+    "user_id": "user-oscar",
+    "asset": "USDC",
+    "lease_id": "",
+    "require_lease": true
+  },
+  "expect": {
+    "allowed": false,
+    "error": "suspgate: clearance lease required but missing or expired",
+    "active_count": 0
+  }
+}
