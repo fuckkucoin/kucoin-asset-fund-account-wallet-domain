@@ -1,0 +1,14 @@
+{
+  "scenario": "force_second_transfer_proof",
+  "exec_ok": true,
+  "retry_ok": false,
+  "transfer_ok": true,
+  "idempotent": true,
+  "fence_state": "moved",
+  "proof_kinds": ["replay"],
+  "reject_reason": "double_move",
+  "src_balance": 900000,
+  "dst_balance": 200000,
+  "success_moves": 1,
+  "net_moved_once": true
+}

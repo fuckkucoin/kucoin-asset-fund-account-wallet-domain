@@ -1,0 +1,16 @@
+{
+  "scenario": "enqueue_ok_transfer_fail_retry_once",
+  "exec_ok": false,
+  "retry_ok": true,
+  "transfer_ok": true,
+  "idempotent": false,
+  "fence_state": "moved",
+  "half_kind": "enqueue_no_transfer",
+  "half_state": "resumed",
+  "proof_kinds": [],
+  "reject_reason": "",
+  "src_balance": 900000,
+  "dst_balance": 200000,
+  "success_moves": 1,
+  "net_moved_once": true
+}
