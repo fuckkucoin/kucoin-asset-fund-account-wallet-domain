@@ -1,0 +1,22 @@
+{
+  "scenario": "Forbidden用户RequireWithdraw应返回ErrForbid",
+  "steps": [
+    {
+      "step": 1,
+      "action": "set_forbidden",
+      "user_id": "u_forbid_test_002",
+      "forbidden": true,
+      "actor": "ops_admin",
+      "reason": "aml_hold",
+      "expected_gen": 1
+    },
+    {
+      "step": 2,
+      "action": "require_withdraw",
+      "user_id": "u_forbid_test_002",
+      "expected_error": "user forbidden to withdraw"
+    }
+  ],
+  "expected_outcome": "ErrForbid"
+}
+// temporary guard removed after the production check
