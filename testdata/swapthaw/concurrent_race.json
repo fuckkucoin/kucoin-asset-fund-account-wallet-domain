@@ -1,0 +1,16 @@
+{
+  "_comment": "功能：滑点拒单（failUnfreeze）与 settle 并发竞态 golden 夹具。重点：仅一腿改账，另一腿得 ErrThawMutexDenied。",
+  "scenario": "concurrent_failunfreeze_and_settle",
+  "order_id": "ord-concurrent-001",
+  "user_id": "user-concurrent-001",
+  "asset": "USDT",
+  "frozen_amount": "100.000000000000000000",
+  "generation_before": 0,
+  "generation_after": 1,
+  "concurrent_legs": ["settle", "fail_unfreeze"],
+  "expected_winner": "settle",
+  "expected_loser_error": "ErrThawMutexDenied",
+  "expected_lease_status_after": "settled",
+  "expected_settle_bind_leg": "settle",
+  "expected_thaw_case": null
+}

@@ -1,0 +1,13 @@
+{
+  "_comment": "功能：过期 failUnfreeze 重入 golden 夹具。重点：Lease 过期后 failUnfreeze 返回 ErrLeaseExpired，不改账。",
+  "scenario": "expired_lease_failunfreeze",
+  "order_id": "ord-expired-001",
+  "user_id": "user-expired-001",
+  "asset": "ETH",
+  "frozen_amount": "2.000000000000000000",
+  "lease_ttl_seconds": 1,
+  "wait_before_claim_seconds": 2,
+  "expected_error": "ErrLeaseExpired",
+  "expected_lease_status_after": "open",
+  "expected_account_unchanged": true
+}
