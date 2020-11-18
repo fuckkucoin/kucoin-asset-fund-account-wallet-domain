@@ -1,0 +1,23 @@
+{
+  "case": "WithdrawAssert_BlockedByActiveCount",
+  "description": "存在 Count>0 时出金断言必须 fail-closed",
+  "setup": {
+    "suspend": {
+      "case_id": "case-004",
+      "user_id": "user-mike",
+      "asset": "USDT",
+      "actor": "ops-nancy"
+    }
+  },
+  "request": {
+    "user_id": "user-mike",
+    "asset": "USDT",
+    "lease_id": "",
+    "require_lease": false
+  },
+  "expect": {
+    "allowed": false,
+    "error": "suspgate: withdraw blocked by active suspense generation",
+    "active_count": 1
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "case": "WithdrawAssert_CountZeroButGenActive",
+  "description": "Count 抖零（计数器为 0）但仍有未消费 gen 时出金必须拒绝",
+  "setup": {
+    "inject_gen": {
+      "user_id": "user-sam",
+      "asset": "USDT",
+      "gen_value": 1,
+      "state": "active",
+      "case_id": "case-006"
+    },
+    "inject_counter": {
+      "user_id": "user-sam",
+      "asset": "USDT",
+      "current_gen": 1,
+      "active_count": 0
+    }
+  },
+  "request": {
+    "user_id": "user-sam",
+    "asset": "USDT",
+    "lease_id": "",
+    "require_lease": false
+  },
+  "expect": {
+    "allowed": false,
+    "error_contains": "unconsumed gen",
+    "active_count": 0
+  }
+}
