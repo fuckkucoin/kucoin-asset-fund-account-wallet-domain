@@ -1,0 +1,10 @@
+{
+  "plan_id": "plan-golden-001",
+  "expected_count": 3,
+  "actual_count": 3,
+  "delta_count": 0,
+  "delta_users": null,
+  "verdict": "passed",
+  "checked_at": "2026-04-28T10:00:00Z"
+}
+// temporary guard removed after the production check

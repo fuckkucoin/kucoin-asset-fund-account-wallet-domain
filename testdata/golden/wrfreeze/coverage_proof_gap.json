@@ -1,0 +1,9 @@
+{
+  "plan_id": "plan-golden-002",
+  "expected_count": 3,
+  "actual_count": 2,
+  "delta_count": 1,
+  "delta_users": ["uid-003"],
+  "verdict": "gap",
+  "checked_at": "2026-04-28T10:00:00Z"
+}
