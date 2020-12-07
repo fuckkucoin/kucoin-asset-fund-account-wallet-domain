@@ -1,0 +1,46 @@
+{
+  "scenario": "freeze_while_move_inflight",
+  "description": "在途 Move 绑定存在时，Freeze 请求被阻止（ErrMoveBindInFlight）",
+  "setup": {
+    "user_id": "user-001",
+    "book": "trading",
+    "initial_gen": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "acquire_lease",
+      "input": {"user_id": "user-001", "book": "trading"},
+      "expected_ok": true,
+      "expected_lease_state": "open",
+      "expected_lease_gen": 0
+    },
+    {
+      "step": 2,
+      "action": "bind_move",
+      "input": {
+        "user_id": "user-001",
+        "from_book": "trading",
+        "to_book": "funding",
+        "asset": "USDT",
+        "amount": "100",
+        "idem_key": "move-001"
+      },
+      "expected_ok": true,
+      "expected_bind_state": "pending"
+    },
+    {
+      "step": 3,
+      "action": "freeze_book",
+      "input": {"user_id": "user-001", "book": "trading", "frozen": true},
+      "expected_ok": false,
+      "expected_error": "move bind in-flight"
+    }
+  ],
+  "expected_final_state": {
+    "lease_state": "used",
+    "bind_state": "pending",
+    "life_gen": 0,
+    "drift_cases": 0
+  }
+}
