@@ -1,0 +1,29 @@
+{
+  "name": "unfreeze_proof_required_before_clear",
+  "description": "全额补还后，必须出具有效 UnfreezeProof 才能清除 Frozen 位。缺少证明时冻结保持",
+  "loans": [
+    {
+      "id": "LOAN-003",
+      "user_id": "USER-C",
+      "state": "active",
+      "frozen": false,
+      "principal": "8000",
+      "interest": "400"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-003", "user_id": "USER-C"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-003", "user_id": "USER-C", "actor": "scanner"},
+    {"type": "clear_frozen", "loan_id": "LOAN-003", "actor": "ops", "expect_error": "unfreeze proof required"},
+    {"type": "submit_proof", "loan_id": "LOAN-003", "kind": "full_repay", "evidence_ref": "TX-0xABC123", "actor": "ops"},
+    {"type": "clear_frozen", "loan_id": "LOAN-003", "actor": "ops", "expect_error": "unfreeze proof required"},
+    {"type": "validate_proof", "loan_id": "LOAN-003", "actor": "validator"},
+    {"type": "clear_frozen", "loan_id": "LOAN-003", "actor": "ops"},
+    {"type": "check_state", "loan_id": "LOAN-003", "expect_race_state": "closed", "expect_frozen": false}
+  ],
+  "expected": {
+    "final_state": "closed",
+    "frozen": false,
+    "proof_valid": true
+  }
+}

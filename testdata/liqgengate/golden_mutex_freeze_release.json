@@ -1,0 +1,19 @@
+{
+  "_comment": "Freeze 占用互斥时 Release 必须失败；不得双释。",
+  "_scenario": "mutex_freeze_release",
+  "setup": {
+    "user_id": "u-liq-004",
+    "borrow_id": "br-liq-004",
+    "collateral_id": "col-liq-004",
+    "asset": "KCS",
+    "borrow_amt": "5000",
+    "collateral_amt": "6000",
+    "ltv_bps": 8300,
+    "cap_bps": 6500
+  },
+  "steps": [
+    {"step": 1, "action": "hold_mutex_freeze", "expect": {"mutex": true}},
+    {"step": 2, "action": "release", "liq_gen": 0, "has_gen": true, "expect": {"allowed": false, "reason": "mutex_held"}}
+  ],
+  "invariants": ["mutex", "no_double_release"]
+}
