@@ -1,0 +1,16 @@
+{
+  "_comment": "RefuseLiveUnfreeze 恒拒绝，本域无活链解冻出口。",
+  "_scenario": "refuse_live_unfreeze",
+  "setup": {
+    "user_id": "u-occ-5",
+    "asset": "USDT",
+    "amount": "10",
+    "grant_idem": "g-occ-live-1"
+  },
+  "steps": [
+    {"step": 1, "action": "open_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 2, "action": "before_freeze", "expect": {"allowed": true}},
+    {"step": 3, "action": "refuse_live", "expect": {"allowed": false, "has_proof": true}}
+  ],
+  "invariants": ["no_live_unfreeze_exit"]
+}
