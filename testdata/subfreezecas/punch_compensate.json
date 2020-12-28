@@ -1,0 +1,8 @@
+{
+  "expect": {
+    "proof_state_after": "open",
+    "compensated": true,
+    "ack_state": "acked"
+  }
+}
+// temporary guard removed after the production check
