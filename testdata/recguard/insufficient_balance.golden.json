@@ -1,0 +1,40 @@
+{
+  "_comment": "验收场景 3：余额不足——HalfDebitResidue 出现并可回滚；用户可用不出现静默缺口。",
+  "_scenario": "用户余额 50 USDT，tick 需 100 USDT；账本返回余额不足错误；RecordInsufficientResidue 产生 HalfDebitResidue(state=open)；回滚后 state=rolled_back；无静默可用缺口。",
+  "setup": {
+    "plan_id": "plan-insuff-001",
+    "user_id": "user-001",
+    "asset": "BTC",
+    "quote": "USDT",
+    "available_balance": "50",
+    "per_tick": "100",
+    "generation": 1
+  },
+  "tick_attempt": {
+    "tick_id": "tick-002",
+    "amount": "100",
+    "expected_ledger_error": "insufficient balance"
+  },
+  "expected_residue": {
+    "state": "open",
+    "cause": "insuff_balance",
+    "original_amount": "100",
+    "residue_amount": "0",
+    "ledger_entry_id": ""
+  },
+  "rollback_step": {
+    "action": "hang_residue",
+    "reason": "ledger entry not created, no rollback needed"
+  },
+  "expected_after_close": {
+    "residue_state": "hung",
+    "available_balance": "50",
+    "silent_gap": false
+  },
+  "invariants": [
+    "HalfDebitResidue recorded on insufficient balance",
+    "residue can be closed (hung when no ledger entry)",
+    "user available balance unchanged (no silent debit)",
+    "open residue prevents new CatchUpWindow for same plan"
+  ]
+}
