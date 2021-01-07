@@ -1,0 +1,21 @@
+{
+  "suite": "depth2-H",
+  "natural_key": ["chain", "tx_hash", "output_index"],
+  "fee": "N/A",
+  "cases": [
+    {"id": "H-T01", "profile": "prod", "mem": true, "sql_bound": false, "want": "ErrMemBook"},
+    {"id": "H-T02", "profile": "mem", "mem": true, "sql_bound": false, "want": "put_ok"},
+    {"id": "H-T03", "profile": "prod", "mem": false, "sql_bound": true, "want": "put_get_eq"},
+    {"id": "H-T04", "note": "two vouts same hash", "vouts": [0, 1], "want": "no_merge"},
+    {"id": "H-T05", "from": "credited", "to": "accepted", "want": "illegal"},
+    {"id": "H-T06", "steps": ["accepted", "credited", "unwound", "failed", "held"], "pending": ["accepted", "held"]},
+    {"id": "H-T07", "restart": true, "step": "accepted", "want": "survive"},
+    {"id": "H-T08", "restart": true, "step": "credited", "want": "not_pending"},
+    {"id": "H-T09", "claim": "other_user", "want": "ErrTaken"},
+    {"id": "H-T10", "claim": "same_user", "want": "idempotent"},
+    {"id": "H-T11", "vouts": [0, 1], "want": "two_rows"},
+    {"id": "H-T12", "indexes": ["idx_aa_dep_xfer", "idx_aa_dep_user_asset_created", "idx_aa_dep_step_updated"]},
+    {"id": "H-T13", "attach": "prod_unbound", "want": "not_healthy"},
+    {"id": "H-T14", "recover": "accepted", "want": "confirm_hook"}
+  ]
+}
