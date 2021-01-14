@@ -1,0 +1,40 @@
+{
+  "_comment": "夹具：并发 Debit 与 TransferIn，无静默成功",
+  "scenario": "concurrent_debit_vs_transfer",
+  "description": "Debit 持有互斥锁期间，同 Pair 的 TransferIn 裁决必须被 fail-closed 拒绝",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": { "user_id": "u002", "symbol": "ETH-USDT", "issued_by": "api-server" },
+      "expect": { "state": "fresh", "generation": 0 }
+    },
+    {
+      "step": 2,
+      "action": "lock_debit",
+      "input": { "user_id": "u002", "symbol": "ETH-USDT", "debit_txn_id": "txn-debit-002" },
+      "note": "获取 Debit 互斥锁， Debit 操作进行中"
+    },
+    {
+      "step": 3,
+      "action": "adjudicate_transfer_in",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "u002",
+        "symbol": "ETH-USDT",
+        "currency": "USDT",
+        "amount": "500",
+        "requested_by": "user-api"
+      },
+      "expect": {
+        "error_contains": "mutex conflict",
+        "gate_state": "rejected"
+      }
+    },
+    {
+      "step": 4,
+      "action": "unlock_debit",
+      "note": "释放互斥锁后，新租约应可正常裁决"
+    }
+  ]
+}
