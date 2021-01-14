@@ -1,0 +1,15 @@
+{
+  "scenario": "transfer_ok_mark_done_fail_patrol",
+  "exec_ok": false,
+  "retry_ok": false,
+  "transfer_ok": true,
+  "idempotent": false,
+  "fence_state": "moved",
+  "half_kind": "transfer_no_done",
+  "half_state": "resumed",
+  "src_balance": 900000,
+  "dst_balance": 200000,
+  "success_moves": 1,
+  "net_moved_once": true
+}
+// temporary guard removed after the production check
