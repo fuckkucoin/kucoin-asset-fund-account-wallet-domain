@@ -1,0 +1,24 @@
+{
+  "description": "换闸实现后旧租约复验失败",
+  "scenario": "check_then_swap_impl_then_send",
+  "steps": [
+    {
+      "step": 1,
+      "action": "CheckWithLease",
+      "expect_state": "gated",
+      "expect_impl": "fundint.GateFunc.v1"
+    },
+    {
+      "step": 2,
+      "action": "SwapGateImpl",
+      "next_impl": "fundint.GateFunc.v2-halt-aware"
+    },
+    {
+      "step": 3,
+      "action": "SendAssert",
+      "expect_error": "fundintgate: gate implementation swapped",
+      "expect_proof_kind": "impl_swap",
+      "expect_spot_send_calls": 0
+    }
+  ]
+}
