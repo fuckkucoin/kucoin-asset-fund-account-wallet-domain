@@ -1,0 +1,35 @@
+{
+  "_comment": "夹具：Debit 抬负债后旧 TransferIn 令牌失败",
+  "scenario": "debit_then_stale_transfer",
+  "description": "用户发起 Debit（增加 liability），旧 RatioLease 世代不符 → TransferIn 被拒",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": { "user_id": "u001", "symbol": "BTC-USDT", "issued_by": "api-server" },
+      "expect": { "state": "fresh", "generation": 0 }
+    },
+    {
+      "step": 2,
+      "action": "debit_and_bump",
+      "input": { "user_id": "u001", "symbol": "BTC-USDT", "source_txn_id": "txn-debit-001" },
+      "expect": { "generation": 1, "triggered_by": "debit" }
+    },
+    {
+      "step": 3,
+      "action": "adjudicate_transfer_in",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "u001",
+        "symbol": "BTC-USDT",
+        "currency": "USDT",
+        "amount": "100",
+        "requested_by": "user-api"
+      },
+      "expect": {
+        "state": "rejected",
+        "error_contains": "generation mismatch"
+      }
+    }
+  ]
+}

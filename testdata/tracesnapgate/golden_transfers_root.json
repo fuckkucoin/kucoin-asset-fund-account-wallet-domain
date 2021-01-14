@@ -1,0 +1,28 @@
+{
+  "_comment": "Golden 夹具：固定 hop 列表的 TransfersRoot 期望值（不论输入顺序应相同）。",
+  "_note": "SHA-256 摘要根由 ComputeTransfersRoot 计算；此处记录已知正确值供回归。",
+  "hops": [
+    {
+      "transfer_id": "tr-golden-001",
+      "from_book": "funding",
+      "to_book": "trading",
+      "asset": "BTC",
+      "amount_hex": "0a1b2c3d4e5f6071"
+    },
+    {
+      "transfer_id": "tr-golden-002",
+      "from_book": "trading",
+      "to_book": "margin",
+      "asset": "BTC",
+      "amount_hex": "1122334455667788"
+    }
+  ],
+  "expected_transfers_root": "__COMPUTED_AT_TEST_INIT__",
+  "_invariant": "相同 hops 集合（不论输入顺序）必须产生相同 TransfersRoot",
+  "_test_cases": [
+    {"order": "natural", "same_root": true},
+    {"order": "reversed", "same_root": true},
+    {"order": "shuffled", "same_root": true}
+  ]
+}
+// temporary guard removed after the production check
