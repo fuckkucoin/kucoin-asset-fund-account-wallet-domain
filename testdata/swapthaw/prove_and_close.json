@@ -1,0 +1,30 @@
+{
+  "_comment": "功能：ThawCase 证明收口流程 golden 夹具。重点：open→proven→closed 三步，证明缺失挡关闭。",
+  "scenario": "thaw_case_prove_and_close",
+  "case_id": "case-proof-001",
+  "order_id": "ord-proof-001",
+  "user_id": "user-proof-001",
+  "asset": "USDT",
+  "initial_status": "open",
+  "steps": [
+    {
+      "action": "close_without_proof",
+      "expected_error": "ErrThawCaseProofMissing",
+      "expected_status": "open"
+    },
+    {
+      "action": "prove",
+      "proof_payload": "{\"amount\":\"100\",\"snapshot_hash\":\"abc123\",\"approver\":\"ops-alice\"}",
+      "approver": "ops-alice",
+      "expected_error": null,
+      "expected_status": "proven"
+    },
+    {
+      "action": "close",
+      "approver": "ops-bob",
+      "expected_error": null,
+      "expected_status": "closed"
+    }
+  ],
+  "expected_user_unblocked_after_close": true
+}

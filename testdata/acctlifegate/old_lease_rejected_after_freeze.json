@@ -1,0 +1,41 @@
+{
+  "scenario": "old_lease_rejected_after_freeze",
+  "description": "Freeze 成功后，旧租约被吊销（revoked），携带旧租约的 Move 请求被拒绝",
+  "setup": {
+    "user_id": "user-002",
+    "book": "trading",
+    "initial_gen": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "acquire_lease",
+      "input": {"user_id": "user-002", "book": "trading"},
+      "expected_ok": true,
+      "expected_lease_state": "open",
+      "action": "freeze_book",
+      "input": {"user_id": "user-002", "book": "trading", "frozen": true},
+      "expected_ok": true,
+      "expected_life_gen": 1
+    },
+    {
+      "step": 3,
+      "action": "validate_lease",
+      "input": {"lease_id": "$lease_old", "user_id": "user-002", "book": "trading"},
+      "expected_ok": false,
+      "expected_error": "revoked"
+    },
+    {
+      "step": 4,
+      "action": "acquire_lease",
+      "input": {"user_id": "user-002", "book": "trading"},
+      "expected_ok": false,
+      "expected_error": "blocked"
+    }
+  ],
+  "expected_final_state": {
+    "lease_state": "revoked",
+    "life_gen": 1,
+    "drift_cases": 0
+  }
+}
