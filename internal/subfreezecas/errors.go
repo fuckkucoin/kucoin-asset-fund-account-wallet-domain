@@ -1,0 +1,32 @@
+package subfreezecas
+
+import "fmt"
+
+var (
+	ErrUnavailable = fmt.Errorf("subacct freeze-cas unavailable")
+	ErrInvalidInput = fmt.Errorf("subacct freeze-cas input invalid")
+	ErrParent      = fmt.Errorf("subacct freeze-cas parent invalid")
+	ErrChild       = fmt.Errorf("subacct freeze-cas child invalid")
+	ErrCASNotFound = fmt.Errorf("subacct freeze-cas not found")
+	ErrCASFrozen   = fmt.Errorf("subacct freeze-cas frozen")
+	ErrCASThawed = fmt.Errorf("subacct freeze-cas thawed")
+	ErrCASStale  = fmt.Errorf("subacct freeze-cas generation stale")
+	ErrCASMissing = fmt.Errorf("subacct freeze-cas id required")
+	ErrCASMismatch = fmt.Errorf("subacct freeze-cas id mismatch")
+	ErrFingerprint = fmt.Errorf("subacct freeze-cas child fingerprint mismatch")
+	ErrGateMisaligned  = fmt.Errorf("subacct freeze-cas parent frozen child gate misaligned")
+	ErrIllegalTransit  = fmt.Errorf("subacct freeze-cas illegal transition")
+	ErrVelocityRevoked = fmt.Errorf("subacct freeze-cas velocity window revoked")
+	ErrPunchDetected   = fmt.Errorf("subacct freeze-cas frozen spend punch")
+	ErrProofNotFound = fmt.Errorf("subacct freeze-cas spend proof not found")
+	ErrProofAcked    = fmt.Errorf("subacct freeze-cas spend proof already acked")
+	ErrUnfreezeChild = fmt.Errorf("subacct freeze-cas unfreeze child while parent frozen")
+	ErrClosed        = fmt.Errorf("subacct freeze-cas account closed")
+	ErrIdemConflict = fmt.Errorf("subacct freeze-cas idempotency conflict")
+	ErrCompensate   = fmt.Errorf("subacct freeze-cas compensate failed")
+	ErrActor  = fmt.Errorf("subacct freeze-cas actor invalid")
+	ErrAmount = fmt.Errorf("subacct freeze-cas amount invalid")
+	ErrAsset = fmt.Errorf("subacct freeze-cas asset invalid")
+	ErrRevokeNotFound = fmt.Errorf("subacct freeze-cas velocity revocation not found")
+	ErrBooks          = fmt.Errorf("subacct freeze-cas book refuse")
+)

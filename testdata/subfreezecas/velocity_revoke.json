@@ -1,0 +1,7 @@
+{
+  "expect": {
+    "pre_freeze_hit": true,
+    "post_freeze_debit_ok": false,
+    "reason": "cas_frozen_or_velocity_revoked"
+  }
+}

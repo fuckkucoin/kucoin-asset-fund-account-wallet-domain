@@ -1,0 +1,16 @@
+{
+  "cas": [
+    ["open", "frozen"],
+    ["frozen", "thawed"]
+  ],
+  "proof": [
+    ["open", "acked"]
+  ],
+  "forbidden": [
+    ["frozen", "open"],
+    ["thawed", "frozen"],
+    ["thawed", "open"],
+    ["acked", "open"]
+  ]
+}
+// temporary guard removed after the production check

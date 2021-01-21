@@ -1,0 +1,11 @@
+{
+  "imbalance_id": "test-imbalance-001",
+  "batch_id": "batch-wd-20260411",
+  "user_id": "user-alice",
+  "asset": "USDT",
+  "expected_total": "1000.000000000000000000",
+  "actual_total": "999.500000000000000000",
+  "delta": "0.500000000000000000",
+  "state": "open",
+  "detected_at": "2026-04-11T10:05:00Z"
+}

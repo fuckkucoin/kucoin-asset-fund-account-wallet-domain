@@ -1,0 +1,14 @@
+{
+  "_comment": "功能：部分成交残留 golden 夹具。重点：partial fill 时 Lease 正常 settle，剩余 Frozen 归还。",
+  "scenario": "partial_fill_residual",
+  "order_id": "ord-partial-001",
+  "user_id": "user-partial-001",
+  "asset": "USDT",
+  "from_amount": "200.000000000000000000",
+  "fill_ratio": "0.5",
+  "frozen_amount": "100.000000000000000000",
+  "expected_lease_status": "settled",
+  "expected_order_status": "partial",
+  "expected_remaining_frozen": "0.000000000000000000",
+  "expected_settle_bind_leg": "settle"
+}
