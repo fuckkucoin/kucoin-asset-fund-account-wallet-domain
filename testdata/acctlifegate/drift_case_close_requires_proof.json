@@ -1,0 +1,77 @@
+{
+  "scenario": "drift_case_close_requires_proof",
+  "description": "LifeDriftCase 必须经过 ProveDrift（双人确认）后才可 CloseDrift",
+  "setup": {
+    "user_id": "user-003",
+    "book": "trading",
+    "initial_gen": 2
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "report_drift",
+      "input": {
+        "user_id": "user-003",
+        "book": "trading",
+        "check_hop_at": "2026-04-28T10:00:00Z",
+        "move_attempt_at": "2026-04-28T10:00:05Z",
+        "status_at_check": "active",
+        "status_at_move": "frozen",
+        "lease_id": "lease-abc",
+        "move_idem_key": "lgm-user-003-trading-funding-USDT-50",
+        "life_gen_at_check": 1,
+        "life_gen_at_move": 2
+      },
+      "expected_ok": true,
+      "expected_case_state": "open",
+      "save_as": "case_id"
+    },
+    {
+      "step": 2,
+      "action": "check_debit_allowed",
+      "input": {"user_id": "user-003", "book": "trading"},
+      "expected_ok": false,
+      "expected_error": "debit blocked"
+    },
+    {
+      "step": 3,
+      "action": "close_drift",
+      "input": {"case_id": "$case_id", "close_note": "skip_proof"},
+      "expected_ok": false,
+      "expected_error": "not yet proven"
+    },
+    {
+      "step": 4,
+      "action": "prove_drift",
+      "input": {
+        "case_id": "$case_id",
+        "actor1": "ops-alice",
+        "actor2": "ops-bob",
+        "proof_note": "drift confirmed: freeze raced ahead of move at gen=2"
+      },
+      "expected_ok": true,
+      "expected_case_state": "proven"
+    },
+    {
+      "step": 5,
+      "action": "close_drift",
+      "input": {
+        "case_id": "$case_id",
+        "close_note": "manual fix applied, book re-enabled",
+        "closed_by": "ops-alice"
+      },
+      "expected_ok": true,
+      "expected_case_state": "closed"
+    },
+    {
+      "step": 6,
+      "action": "check_debit_allowed",
+      "input": {"user_id": "user-003", "book": "trading"},
+      "expected_ok": true
+    }
+  ],
+  "expected_final_state": {
+    "case_state": "closed",
+    "debit_blocked": false
+  }
+}

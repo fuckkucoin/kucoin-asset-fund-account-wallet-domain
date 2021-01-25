@@ -1,0 +1,57 @@
+{
+  "scenario": "close_book_blocked_by_inflight_move",
+  "description": "Close 时存在 pending MoveBind，Close 被阻止；MoveBind 完成后 Close 成功",
+  "setup": {
+    "user_id": "user-005",
+    "book": "earn",
+    "initial_gen": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "acquire_lease",
+      "input": {"user_id": "user-005", "book": "earn"},
+      "expected_ok": true,
+      "save_as": "lease_001"
+    },
+    {
+      "step": 2,
+      "action": "bind_move",
+      "input": {
+        "user_id": "user-005",
+        "from_book": "earn",
+        "to_book": "funding",
+        "asset": "BTC",
+        "amount": "0.5",
+        "idem_key": "move-earn-001"
+      },
+      "expected_ok": true,
+      "save_as": "bind_001"
+    },
+    {
+      "step": 3,
+      "action": "close_book",
+      "input": {"user_id": "user-005", "book": "earn"},
+      "expected_ok": false,
+      "expected_error": "move bind in-flight"
+    },
+    {
+      "step": 4,
+      "action": "release_move",
+      "input": {"bind_id": "$bind_001", "state": "completed"},
+      "expected_ok": true
+    },
+    {
+      "step": 5,
+      "action": "close_book",
+      "input": {"user_id": "user-005", "book": "earn"},
+      "expected_ok": true,
+      "expected_life_gen": 1
+    }
+  ],
+  "expected_final_state": {
+    "bind_state": "completed",
+    "life_gen": 1,
+    "drift_cases": 0
+  }
+}

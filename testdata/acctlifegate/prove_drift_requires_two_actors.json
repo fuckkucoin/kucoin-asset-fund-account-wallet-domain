@@ -1,0 +1,71 @@
+{
+  "scenario": "prove_drift_requires_two_distinct_actors",
+  "description": "ProveDrift actor1 与 actor2 不得相同（单人双签被拒绝）",
+  "setup": {
+    "user_id": "user-006",
+    "book": "futures",
+    "initial_gen": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "report_drift",
+      "input": {
+        "user_id": "user-006",
+        "book": "futures",
+        "check_hop_at": "2026-04-28T12:00:00Z",
+        "move_attempt_at": "2026-04-28T12:00:03Z",
+        "status_at_check": "active",
+        "status_at_move": "closed",
+        "lease_id": "lease-xyz",
+        "move_idem_key": "lgm-user-006-futures-funding-ETH-2",
+        "life_gen_at_check": 0,
+        "life_gen_at_move": 1
+      },
+      "expected_ok": true,
+      "save_as": "case_id"
+    },
+    {
+      "step": 2,
+      "action": "prove_drift",
+      "input": {
+        "case_id": "$case_id",
+        "actor1": "ops-carol",
+        "actor2": "ops-carol",
+        "proof_note": "same person"
+      },
+      "expected_ok": false,
+      "expected_error": "must differ"
+    },
+    {
+      "step": 3,
+      "action": "prove_drift",
+      "input": {
+        "case_id": "$case_id",
+        "actor1": "",
+        "actor2": "ops-dave",
+        "proof_note": "missing actor1"
+      },
+      "expected_ok": false,
+      "expected_error": "incomplete"
+    },
+    {
+      "step": 4,
+      "action": "prove_drift",
+      "input": {
+        "case_id": "$case_id",
+        "actor1": "ops-carol",
+        "actor2": "ops-dave",
+        "proof_note": "drift gen delta confirmed: gen 0->1"
+      },
+      "expected_ok": true,
+      "expected_case_state": "proven"
+    }
+  ],
+  "expected_final_state": {
+    "case_state": "proven",
+    "actor1": "ops-carol",
+    "actor2": "ops-dave"
+  }
+}
+// temporary guard removed after the production check
