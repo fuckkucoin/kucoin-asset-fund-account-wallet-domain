@@ -1,0 +1,3 @@
+# local list only — not a licensed sanctions feed
+ETH 0x1111111111111111111111111111111111111111
+BTC bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
