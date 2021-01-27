@@ -1,0 +1,36 @@
+{
+  "_comment": "过期租约 Plan/Exec 均 fail-closed。",
+  "_scenario": "expired_lease",
+  "setup": {
+    "chain": "TRX",
+    "asset": "USDT",
+    "shadow_bal": "80",
+    "waterline": "20",
+    "kinds": ["hot_cold"],
+    "rule_version": 1,
+    "lease_ttl_ms": 20
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "agree",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "sleep_ms",
+      "sleep_ms": 40,
+      "expect": { "ok": true }
+    },
+    {
+      "step": 3,
+      "action": "plan",
+      "plan_ref": "plan-exp-1",
+      "expect": { "allowed": false }
+    }
+  ],
+  "invariants": [
+    "lease_not_consumed",
+    "fail_closed"
+  ]
+}

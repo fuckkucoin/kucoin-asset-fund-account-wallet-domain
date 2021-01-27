@@ -1,0 +1,32 @@
+{
+  "_comment": "缺租约 Plan/Exec fail-closed。",
+  "_scenario": "no_lease_fail_closed",
+  "setup": {
+    "chain": "ETH",
+    "asset": "KCS",
+    "shadow_bal": "50",
+    "waterline": "10",
+    "kinds": ["hot_cold"],
+    "rule_version": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "plan",
+      "plan_ref": "plan-missing",
+      "agree_lease_id": "",
+      "expect": { "allowed": false, "has_proof": true }
+    },
+    {
+      "step": 2,
+      "action": "exec",
+      "exec_ref": "job-missing",
+      "agree_lease_id": "",
+      "expect": { "allowed": false }
+    }
+  ],
+  "invariants": [
+    "fail_closed",
+    "no_consumed_lease"
+  ]
+}
