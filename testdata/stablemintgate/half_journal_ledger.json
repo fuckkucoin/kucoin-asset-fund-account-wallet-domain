@@ -1,0 +1,12 @@
+{
+  "case": "journal_posted_ledger_fail",
+  "kind": "mint",
+  "asset": "USDT",
+  "idempotency_key": "idem-half-usdt-01",
+  "expect": {
+    "journal_status": "half",
+    "half_state": "open",
+    "replay_ok": false,
+    "double_mint": false
+  }
+}

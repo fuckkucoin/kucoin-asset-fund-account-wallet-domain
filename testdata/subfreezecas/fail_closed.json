@@ -1,0 +1,8 @@
+{
+  "cases": [
+    {"name": "missing_cas", "debit_ok": false},
+    {"name": "stale_generation", "debit_ok": false},
+    {"name": "parent_frozen_child_misaligned", "debit_ok": false}
+  ]
+}
+// temporary guard removed after the production check

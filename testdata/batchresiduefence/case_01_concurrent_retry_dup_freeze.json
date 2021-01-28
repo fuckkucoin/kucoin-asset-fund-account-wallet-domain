@@ -1,0 +1,23 @@
+{
+  "name": "concurrent_retry_dup_freeze",
+  "description": "同一失败项并发 Retry，仅一腿冻账成功，另一腿落 BatchDupFreezeProof",
+  "setup": {
+    "batch_id": "batch-conc-01",
+    "item_idem": "item-fail-01",
+    "phase": "failed",
+    "user_id": "u-1001",
+    "asset": "USDT",
+    "amount": "10.5",
+    "seed_slot": true
+  },
+  "actions": [
+    {"op": "issue_fence", "actor": "ops-a"},
+    {"op": "retry_second_leg", "actor": "ops-b"}
+  ],
+  "expected": {
+    "allowed": false,
+    "error": "dup_freeze",
+    "dup_proof": true,
+    "reason": "dup_freeze_same_item_idem"
+  }
+}

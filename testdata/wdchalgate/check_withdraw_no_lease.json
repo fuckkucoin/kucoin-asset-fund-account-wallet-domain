@@ -1,0 +1,14 @@
+{
+  "_comment": "验收夹具 1：无 chal_lease_id 的 CheckWithdraw 必须拒绝（ErrNoLease）。",
+  "scenario": "check_withdraw_no_lease",
+  "input": {
+    "lease_id": "",
+    "user_id": "user-002",
+    "factor": "totp",
+    "extra_key": "",
+    "dest_chain": "ETH",
+    "dest_addr": "0xdeadbeef0000000000000000000000000000dead"
+  },
+  "expected_error": "chal_lease_id required",
+  "expected_http_status": 400
+}

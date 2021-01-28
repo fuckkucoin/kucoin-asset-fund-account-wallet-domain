@@ -1,0 +1,7 @@
+{
+  "expect": {
+    "unfreeze_child_ok": false,
+    "audit_action": "unfreeze_child",
+    "audit_outcome": "denied"
+  }
+}

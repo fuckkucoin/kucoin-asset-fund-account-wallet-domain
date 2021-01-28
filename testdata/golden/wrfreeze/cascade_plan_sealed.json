@@ -1,0 +1,17 @@
+{
+  "id": "plan-golden-001",
+  "incident_ref": "INC-GOLDEN-001",
+  "scope": "user_set",
+  "asset": "",
+  "cohort_tag": "",
+  "user_set": ["uid-001", "uid-002", "uid-003"],
+  "status": "sealed",
+  "opened_by": "ops_alice",
+  "armed_by": "ops_bob",
+  "aborted_by": "",
+  "abort_reason": "",
+  "dual_req_id": "",
+  "expires_at": "2026-04-29T10:00:00Z",
+  "created_at": "2026-04-28T10:00:00Z",
+  "updated_at": "2026-04-28T11:00:00Z"
+}

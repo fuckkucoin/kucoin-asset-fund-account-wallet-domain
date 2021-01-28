@@ -1,0 +1,124 @@
+{
+  "_comment": "案例：抬档过程中存在在途出金冻额——系统行为追踪与预期证明摘要",
+  "_scenario": "用户 VIP → VIP+ 抬档时，存在活跃在途出金冻额（旧档 BPS=5）。降档互斥检查拦截，开立 DriftFreezeStale 漂移案；冻额释放后由 worker 推进租约至 switched。",
+  "_version": "R11-A",
+  "initial_state": {
+    "user_id": "u-freeze-scenario-001",
+    "current_tier": "vip",
+    "current_generation": 2,
+    "inflight_freeze": {
+      "freeze_id": "frz-00001",
+      "asset": "BTC",
+      "amount": "0.5",
+      "bps": 5,
+      "tier": "vip",
+      "generation": 2
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "event": "GatedDowngrade",
+      "trigger_kind": "clear_pin",
+      "from_tier": "vip",
+      "to_tier": "standard",
+      "expected_gen": 2,
+      "result": "ErrInflightFreeze",
+      "reason": "活跃在途冻额存在（freeze_id=frz-00001，尚未释放）"
+    },
+    {
+      "seq": 2,
+      "event": "DriftDetector.ScanFreezeForDrift",
+      "trigger": "worker DriftPatrol 定期扫描",
+      "detected_generation_mismatch": false,
+      "comment": "此时 generation 与冻额匹配（gen=2），无漂移"
+    },
+    {
+      "seq": 3,
+      "event": "GatedUpgrade",
+      "trigger_kind": "pin",
+      "from_tier": "vip",
+      "to_tier": "vip+",
+      "expected_gen": 2,
+      "result": "ok",
+      "new_generation": 3,
+      "lease_id": "lease-frz-scenario-001",
+      "lease_status": "bound",
+      "quotes_voided": 0,
+      "comment": "抬档 CAS 成功，世代 2→3；冻额仍在途（generation=2）"
+    },
+    {
+      "seq": 4,
+      "event": "DriftDetector.ScanFreezeForDrift",
+      "trigger": "worker DriftPatrol 扫描（抬档后）",
+      "detected_generation_mismatch": true,
+      "freeze_generation": 2,
+      "current_generation": 3,
+      "drift_case": {
+        "drift_case_id": "dc-frz-001",
+        "kind": "freeze_stale",
+        "observed_tier": "vip",
+        "expected_tier": "vip+",
+        "observed_bps": 5,
+        "expected_bps": 2,
+        "amount": "0.5",
+        "generation": 3,
+        "status": "open"
+      }
+    },
+    {
+      "seq": 5,
+      "event": "ReleaseFreeze",
+      "freeze_id": "frz-00001",
+      "result": "ok"
+    },
+    {
+      "seq": 6,
+      "event": "BuildAndVerifyProof",
+      "drift_case_id": "dc-frz-001",
+      "result": "ok",
+      "proof": {
+        "proof_id": "proof-dc-frz-001",
+        "observed_bps": 5,
+        "expected_bps": 2,
+        "status": "verified",
+        "digest_fields": ["dc-frz-001", "u-freeze-scenario-001", "BTC", "5", "2", "0.5", "", "lease-frz-scenario-001", "3"]
+      }
+    },
+    {
+      "seq": 7,
+      "event": "ConfirmDriftClose",
+      "drift_case_id": "dc-frz-001",
+      "operator": "ops-alice",
+      "result": "ok",
+      "new_status": "proven",
+      "comment": "第一操作员确认"
+    },
+    {
+      "seq": 8,
+      "event": "ConfirmDriftClose",
+      "drift_case_id": "dc-frz-001",
+      "operator": "ops-bob",
+      "result": "ok",
+      "new_status": "closed",
+      "comment": "第二操作员确认，案件关闭"
+    },
+    {
+      "seq": 9,
+      "event": "worker LeaseProgresser",
+      "lease_id": "lease-frz-scenario-001",
+      "action": "Switch bound→switched",
+      "result": "ok",
+      "comment": "旧世代 QuoteBind 均已过期/作废，租约推进至终态"
+    }
+  ],
+  "expected_final_state": {
+    "user_id": "u-freeze-scenario-001",
+    "generation": 3,
+    "last_tier": "vip+",
+    "drift_case_status": "closed",
+    "lease_status": "switched",
+    "settlement_blocked": false
+  }
+}
+// temporary guard removed after the production check

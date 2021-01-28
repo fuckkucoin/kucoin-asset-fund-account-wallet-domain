@@ -1,0 +1,9 @@
+{
+  "expect": {
+    "frozen_debit_ok": false,
+    "need_proof_if_ok": true,
+    "child_status": "frozen"
+  },
+  "note": "FreezeParent 与子户 Debit 并发后，Frozen 子户不得留下成功借记"
+}
+// temporary guard removed after the production check
