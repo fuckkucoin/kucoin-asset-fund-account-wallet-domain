@@ -1,0 +1,75 @@
+{
+  "name": "allow_then_decide_deny_submit_fail",
+  "description": "Gate Allow 签发租约后，另一审核人 Decide(deny) → 租约被撤销 → Submit 旧租约被拒并产出 AllowDriftProof",
+  "setup": {
+    "user_id": "USER-ALG-002",
+    "movement_id": "MVT-002",
+    "case_id": "CASE-002",
+    "asset": "BTC",
+    "chain": "BTC",
+    "to_address": "bc1qDenyTest002",
+    "amount": "1.50000000",
+    "policy_version": 5
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-002",
+      "user_id": "USER-ALG-002",
+      "case_id": "CASE-002",
+      "asset": "BTC",
+      "chain": "BTC",
+      "to_address": "bc1qDenyTest002",
+      "amount": "1.50000000",
+      "decision": "allow",
+      "policy_version": 5,
+      "expect": {
+        "state": "allowed",
+        "case_id": "CASE-002",
+        "has_lease_id": true
+      }
+    },
+    {
+      "type": "decide_case",
+      "case_id": "CASE-002",
+      "decision": "denied",
+      "actor": "reviewer-B",
+      "description": "另一审核人否决该案件"
+    },
+    {
+      "type": "patrol_cases",
+      "expect": {
+        "revoked_count_gte": 1,
+        "revoked_includes_lease": true,
+        "proofs_count_gte": 1
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-002",
+      "user_id": "USER-ALG-002",
+      "expect": {
+        "allowed": false,
+        "error": "allow_lease revoked; case denied or expired",
+        "has_proof": true,
+        "proof_drift_kind": "lease_revoked",
+        "proof_blocked": true,
+        "proof_sealed": true
+      }
+    }
+  ],
+  "expected": {
+    "final_lease_state": "revoked",
+    "revoke_reason_contains": "denied",
+    "drift_proof_exists": true,
+    "drift_proof_kind": "lease_revoked",
+    "broadcast_blocked": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "被否决案件的租约必须被撤销",
+    "撤销后 Submit 必须生成 AllowDriftProof",
+    "不产生资金双花"
+  ]
+}

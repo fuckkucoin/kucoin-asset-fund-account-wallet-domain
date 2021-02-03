@@ -1,0 +1,40 @@
+{
+  "name": "no_lease_broadcast_reject",
+  "description": "Submit 未携带 allow_lease → 直接拒绝并产出 AllowDriftProof，不得广播",
+  "setup": {
+    "user_id": "USER-ALG-003",
+    "movement_id": "MVT-003",
+    "asset": "ETH",
+    "chain": "ERC20",
+    "to_address": "0xNoLeaseTest003",
+    "amount": "10.00000000"
+  },
+  "actions": [
+    {
+      "type": "submit_check",
+      "lease_id": "",
+      "movement_id": "MVT-003",
+      "user_id": "USER-ALG-003",
+      "expect": {
+        "allowed": false,
+        "error": "no allow_lease; broadcast blocked",
+        "has_proof": true,
+        "proof_drift_kind": "no_lease",
+        "proof_blocked": true,
+        "proof_sealed": true
+      }
+    }
+  ],
+  "expected": {
+    "no_lease_issued": true,
+    "drift_proof_exists": true,
+    "drift_proof_kind": "no_lease",
+    "broadcast_blocked": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "无租约一律拒绝广播",
+    "AllowDriftProof 必须 sealed 且 blocked",
+    "不产生资金双花"
+  ]
+}

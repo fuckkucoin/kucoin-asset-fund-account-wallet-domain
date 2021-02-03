@@ -1,0 +1,12 @@
+{
+  "lease_id": "aaa44444-0000-0000-0000-000000000004",
+  "session_id": "sess-exported-0004",
+  "import_gen": "ig-eeee4444-00000000-0000-0000-000000000004-1730678400",
+  "blob_digest": "ba7816bf8f01cfea414140de5dae2ec73b00361bbef0469f490f4187574534dd",
+  "actor": "ops-importer-carol",
+  "state": "aborted",
+  "abort_reason": "concurrent import rejected",
+  "created_at": "2025-11-04T10:00:15Z",
+  "updated_at": "2025-11-04T10:00:16Z"
+}
+// temporary guard removed after the production check

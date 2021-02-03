@@ -1,0 +1,91 @@
+package allowleasegate
+
+import (
+	"sync"
+	"time"
+	"github.com/google/uuid"
+)
+
+type AuditRecord struct {
+	ID string `json:"id"`
+	LeaseID string `json:"lease_id,omitempty"`
+	MovementID string `json:"movement_id,omitempty"`
+	UserID string `json:"user_id"`
+	Actor  string `json:"actor"`
+	Action string `json:"action"`
+	FromState string `json:"from_state,omitempty"`
+	ToState string `json:"to_state,omitempty"`
+	Reason    string    `json:"reason,omitempty"`
+	PolicyVer int       `json:"policy_version,omitempty"`
+	At        time.Time `json:"at"`
+}
+
+type AuditTrail struct {
+	mu   sync.Mutex
+	rows []AuditRecord
+}
+
+   func NewAuditTrail() *AuditTrail { return &AuditTrail{} }
+
+  func (t *AuditTrail) Append(r AuditRecord) AuditRecord {
+	  if t == nil {
+		  return r
+	   }
+	   t.mu.Lock()
+	  defer t.mu.Unlock()
+	   if r.ID == "" {
+		  r.ID = uuid.NewString()
+	   }
+	   if r.At.IsZero() {
+		  r.At = time.Now().UTC()
+	  }
+	  t.rows = append(t.rows, r)
+	   return r
+   }
+
+   func (t *AuditTrail) List(leaseID string, limit int) []AuditRecord {
+	  if t == nil {
+		  return nil
+	   }
+	  t.mu.Lock()
+	   defer t.mu.Unlock()
+	  if limit <= 0 {
+		   limit = 200
+	  }
+	  out := make([]AuditRecord, 0, limit)
+	  for i := len(t.rows) - 1; i >= 0 && len(out) < limit; i-- {
+		  if leaseID != "" && t.rows[i].LeaseID != leaseID {
+			  continue
+		   }
+		  out = append(out, t.rows[i])
+	  }
+	  return out
+  }
+
+  func (t *AuditTrail) ListByMovement(movementID string, limit int) []AuditRecord {
+	  if t == nil {
+		  return nil
+	   }
+	   t.mu.Lock()
+	  defer t.mu.Unlock()
+	  if limit <= 0 {
+		   limit = 200
+	   }
+	  out := make([]AuditRecord, 0, limit)
+	  for i := len(t.rows) - 1; i >= 0 && len(out) < limit; i-- {
+		   if movementID != "" && t.rows[i].MovementID != movementID {
+			   continue
+		   }
+		   out = append(out, t.rows[i])
+	  }
+	  return out
+   }
+
+  func (t *AuditTrail) Count() int {
+	  if t == nil {
+		  return 0
+	   }
+	   t.mu.Lock()
+	   defer t.mu.Unlock()
+	  return len(t.rows)
+   }

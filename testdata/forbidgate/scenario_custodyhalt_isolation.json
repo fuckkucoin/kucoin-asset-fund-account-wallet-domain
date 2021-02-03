@@ -1,0 +1,45 @@
+{
+  "scenario": "与custodyhalt标志完全隔离（禁提世代不影响熔断；熔断不影响禁提世代）",
+  "isolation_boundary": {
+    "fundsurf_forbidden": {
+      "manages": ["forbid_gen", "WdPrefightBind", "ForbidDriftCase"],
+      "does_not_touch": ["custodyhalt.Gate", "custodyhalt.ClearForced", "warroom.FreezeScope"]
+    },
+    "custodyhalt": {
+      "manages": ["CustodyHaltState", "HaltLeases"],
+      "does_not_touch": ["forbid_gen", "ForbidLease", "WdPrefightBind"]
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "set_custodyhalt_active",
+      "note": "仅触发 custodyhalt，不影响 forbid_gen"
+    },
+    {
+      "step": 2,
+      "action": "read_forbid_gen",
+      "user_id": "u_forbid_test_005",
+      "expected_gen": 0,
+      "expected_state": "off",
+      "note": "custodyhalt 激活不改变 forbid_gen"
+    },
+    {
+      "step": 3,
+      "action": "set_forbidden",
+      "user_id": "u_forbid_test_005",
+      "forbidden": true,
+      "actor": "ops_admin",
+      "reason": "isolation_test",
+      "expected_gen": 1,
+      "note": "禁提世代抬升不影响 custodyhalt 状态"
+    },
+    {
+      "step": 4,
+      "action": "read_custodyhalt_state",
+      "expected_halt_unchanged": true,
+      "note": "禁提操作不写 custodyhalt 表"
+    }
+  ],
+  "expected_outcome": "fully_isolated"
+}
