@@ -1,0 +1,59 @@
+{
+  "name": "revoke_then_submit_reject",
+  "description": "手动 Revoke 租约后 Submit 被拒绝",
+  "setup": {
+    "user_id": "USER-ALG-008",
+    "movement_id": "MVT-008",
+    "asset": "ETH",
+    "chain": "ERC20",
+    "to_address": "0xRevokeTest008",
+    "amount": "3.00",
+    "policy_version": 2
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-008",
+      "user_id": "USER-ALG-008",
+      "asset": "ETH",
+      "chain": "ERC20",
+      "to_address": "0xRevokeTest008",
+      "amount": "3.00",
+      "decision": "allow",
+      "policy_version": 2,
+      "expect": {
+        "state": "allowed"
+      }
+    },
+    {
+      "type": "revoke",
+      "lease_id": "${lease_id}",
+      "reason": "ops manual revoke for suspicious activity",
+      "actor": "ops-admin",
+      "expect": {
+        "state": "revoked",
+        "revoke_reason": "ops manual revoke for suspicious activity"
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-008",
+      "user_id": "USER-ALG-008",
+      "expect": {
+        "allowed": false,
+        "error": "allow_lease revoked; case denied or expired",
+        "has_proof": true,
+        "proof_drift_kind": "lease_revoked"
+      }
+    }
+  ],
+  "expected": {
+    "final_lease_state": "revoked",
+    "broadcast_blocked": true
+  },
+  "invariants": [
+    "已撤销租约不得广播",
+    "AllowDriftProof 记录撤销原因"
+  ]
+}

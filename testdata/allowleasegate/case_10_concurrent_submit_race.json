@@ -1,0 +1,52 @@
+{
+  "name": "concurrent_submit_race",
+  "description": "并发 Submit 竞争：同一租约只有一次 Submit 可成功，后续全部拒绝",
+  "setup": {
+    "user_id": "USER-ALG-010",
+    "movement_id": "MVT-010",
+    "asset": "USDT",
+    "chain": "ERC20",
+    "to_address": "0xRaceTest010",
+    "amount": "1000.00",
+    "policy_version": 3,
+    "concurrent_submits": 5
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-010",
+      "user_id": "USER-ALG-010",
+      "asset": "USDT",
+      "chain": "ERC20",
+      "to_address": "0xRaceTest010",
+      "amount": "1000.00",
+      "decision": "allow",
+      "policy_version": 3,
+      "expect": {
+        "state": "allowed"
+      }
+    },
+    {
+      "type": "concurrent_submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-010",
+      "user_id": "USER-ALG-010",
+      "count": 5,
+      "expect": {
+        "exactly_one_allowed": true,
+        "rest_rejected": true,
+        "no_fund_double_spend": true
+      }
+    }
+  ],
+  "expected": {
+    "single_winner": true,
+    "no_fund_double_spend": true,
+    "concurrency_safe": true
+  },
+  "invariants": [
+    "同一租约并发 Submit 只有一次可成功",
+    "不产生资金双花",
+    "并发安全"
+  ]
+}
