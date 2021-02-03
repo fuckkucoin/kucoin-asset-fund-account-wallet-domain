@@ -1,0 +1,61 @@
+{
+  "name": "review_state_cannot_issue",
+  "description": "处于 review/deny/error 状态时不可签发 AllowLease，仅 allow 可签发",
+  "setup": {
+    "user_id": "USER-ALG-004",
+    "movement_id": "MVT-004",
+    "asset": "USDT",
+    "chain": "TRC20",
+    "to_address": "TAddr004ReviewBlock",
+    "amount": "200.00",
+    "policy_version": 2
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-004",
+      "user_id": "USER-ALG-004",
+      "asset": "USDT",
+      "decision": "review",
+      "policy_version": 2,
+      "expect": {
+        "error": "case state does not permit allow_lease issuance",
+        "no_lease_issued": true
+      }
+    },
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-004B",
+      "user_id": "USER-ALG-004",
+      "asset": "USDT",
+      "decision": "deny",
+      "policy_version": 2,
+      "expect": {
+        "error": "case state does not permit allow_lease issuance",
+        "no_lease_issued": true
+      }
+    },
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-004C",
+      "user_id": "USER-ALG-004",
+      "asset": "USDT",
+      "decision": "error",
+      "policy_version": 2,
+      "expect": {
+        "error": "case state does not permit allow_lease issuance",
+        "no_lease_issued": true
+      }
+    }
+  ],
+  "expected": {
+    "no_lease_issued_for_non_allow": true,
+    "fail_closed": true
+  },
+  "invariants": [
+    "review 状态不可签发租约",
+    "deny 状态不可签发租约",
+    "error 状态不可签发租约",
+    "仅 allow 可签发"
+  ]
+}

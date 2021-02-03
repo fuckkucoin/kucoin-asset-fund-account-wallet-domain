@@ -1,0 +1,73 @@
+{
+  "name": "allow_then_expire_submit_fail",
+  "description": "Gate Allow 签发租约后，ExpireStale 命中该案 → Submit 携带旧租约失败并产出 AllowDriftProof",
+  "setup": {
+    "user_id": "USER-ALG-001",
+    "movement_id": "MVT-001",
+    "asset": "USDT",
+    "chain": "TRC20",
+    "to_address": "TAddr001ExpireTest",
+    "amount": "500.00",
+    "policy_version": 3,
+    "lease_ttl": "2s"
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-001",
+      "user_id": "USER-ALG-001",
+      "asset": "USDT",
+      "chain": "TRC20",
+      "to_address": "TAddr001ExpireTest",
+      "amount": "500.00",
+      "decision": "allow",
+      "policy_version": 3,
+      "ttl": "2s",
+      "expect": {
+        "state": "allowed",
+        "policy_version": 3,
+        "has_lease_id": true,
+        "has_expires_at": true
+      }
+    },
+    {
+      "type": "wait",
+      "duration": "3s",
+      "description": "等待租约过期超时"
+    },
+    {
+      "type": "expire_stale",
+      "expect": {
+        "expired_count_gte": 1,
+        "expired_includes_lease": true
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-001",
+      "user_id": "USER-ALG-001",
+      "expect": {
+        "allowed": false,
+        "error": "allow_lease expired; withdraw stays fail-closed",
+        "has_proof": true,
+        "proof_drift_kind": "lease_expired",
+        "proof_blocked": true,
+        "proof_sealed": true
+      }
+    }
+  ],
+  "expected": {
+    "final_lease_state": "expired",
+    "drift_proof_exists": true,
+    "drift_proof_kind": "lease_expired",
+    "broadcast_blocked": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "过期租约不得放行广播",
+    "过期后 Submit 必须生成 AllowDriftProof",
+    "AllowDriftProof.sealed=true 且 blocked=true",
+    "不产生资金双花"
+  ]
+}
