@@ -1,0 +1,44 @@
+{
+  "_comment": "AgreeGate 通过后影子余额跌破规则水位，持旧租约的 Exec 必须失败并落证明。",
+  "_scenario": "bal_below_after_agree",
+  "setup": {
+    "chain": "ETH",
+    "asset": "USDT",
+    "shadow_bal": "100",
+    "waterline": "40",
+    "min_sweep": "1",
+    "min_retain": "10",
+    "kinds": ["hot_cold"],
+    "rule_version": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "agree",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "plan",
+      "plan_ref": "plan-bal-1",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 3,
+      "action": "put_bal",
+      "shadow_bal": "30",
+      "expect": { "ok": true }
+    },
+    {
+      "step": 4,
+      "action": "exec",
+      "exec_ref": "job-bal-1",
+      "expect": { "allowed": false, "has_proof": true }
+    }
+  ],
+  "invariants": [
+    "lease_not_consumed",
+    "has_drift_proof",
+    "no_double_spend"
+  ]
+}

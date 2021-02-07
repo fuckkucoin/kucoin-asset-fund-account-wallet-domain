@@ -1,0 +1,57 @@
+{
+  "name": "happy_path_issue_bind_consume",
+  "description": "正常路径：Issue → SubmitCheck(bind) → Consume，广播成功消费租约",
+  "setup": {
+    "user_id": "USER-ALG-005",
+    "movement_id": "MVT-005",
+    "asset": "USDT",
+    "chain": "TRC20",
+    "to_address": "TAddr005Happy",
+    "amount": "100.00",
+    "policy_version": 3
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-005",
+      "user_id": "USER-ALG-005",
+      "asset": "USDT",
+      "chain": "TRC20",
+      "to_address": "TAddr005Happy",
+      "amount": "100.00",
+      "decision": "allow",
+      "policy_version": 3,
+      "expect": {
+        "state": "allowed",
+        "has_lease_id": true
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-005",
+      "user_id": "USER-ALG-005",
+      "expect": {
+        "allowed": true,
+        "lease_state": "bound"
+      }
+    },
+    {
+      "type": "consume",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "consumed",
+        "has_consumed_at": true
+      }
+    }
+  ],
+  "expected": {
+    "final_lease_state": "consumed",
+    "no_drift_proof": true,
+    "broadcast_allowed": true
+  },
+  "invariants": [
+    "正常路径不产生 AllowDriftProof",
+    "consumed 是终态不可逆"
+  ]
+}

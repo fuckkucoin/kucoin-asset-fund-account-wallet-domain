@@ -1,0 +1,16 @@
+{
+  "conflict_id": "ddd33333-0000-0000-0000-000000000003",
+  "session_id": "sess-aborted-0003",
+  "conflict_kind": "import_vs_abort",
+  "state": "open",
+  "winner_op": "aborted",
+  "winner_actor": "",
+  "loser_op": "import",
+  "loser_actor": "ops-importer-bob",
+  "phase_at_conflict": "aborted",
+  "note": "phase mismatch detected during BeginImport",
+  "proven_at": null,
+  "closed_at": null,
+  "created_at": "2025-11-04T10:00:10Z",
+  "updated_at": "2025-11-04T10:00:10Z"
+}

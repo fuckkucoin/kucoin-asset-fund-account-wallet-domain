@@ -1,0 +1,48 @@
+{
+  "name": "movement_mismatch_reject",
+  "description": "Submit 携带的 lease 与请求 movement_id 不匹配 → 拒绝并产出 AllowDriftProof",
+  "setup": {
+    "user_id": "USER-ALG-006",
+    "movement_id_issue": "MVT-006A",
+    "movement_id_submit": "MVT-006B",
+    "asset": "ETH",
+    "chain": "ERC20",
+    "to_address": "0xMismatchTest006",
+    "amount": "5.00",
+    "policy_version": 4
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-006A",
+      "decision": "allow",
+      "policy_version": 4,
+      "expect": {
+        "state": "allowed",
+        "has_lease_id": true
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-006B",
+      "user_id": "USER-ALG-006",
+      "expect": {
+        "allowed": false,
+        "error": "lease movement_id mismatch",
+        "has_proof": true,
+        "proof_drift_kind": "movement_mismatch",
+        "proof_blocked": true
+      }
+    }
+  ],
+  "expected": {
+    "broadcast_blocked": true,
+    "drift_proof_exists": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "movement_id 不匹配一律拒绝",
+    "AllowDriftProof 记录拒绝原因"
+  ]
+}

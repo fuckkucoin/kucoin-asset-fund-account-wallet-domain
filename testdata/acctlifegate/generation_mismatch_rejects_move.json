@@ -1,0 +1,59 @@
+{
+  "scenario": "generation_mismatch_rejects_move",
+  "description": "Freeze 抬升了 life_gen，携带旧 generation 的 LifeLease 无法通过 ValidateLease",
+  "setup": {
+    "user_id": "user-004",
+    "book": "margin",
+    "initial_gen": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "acquire_lease",
+      "input": {"user_id": "user-004", "book": "margin"},
+      "expected_ok": true,
+      "expected_lease_gen": 0,
+      "save_as": "lease_gen0"
+    },
+    {
+      "step": 2,
+      "action": "freeze_book",
+      "input": {"user_id": "user-004", "book": "margin", "frozen": true},
+      "expected_ok": true,
+      "expected_life_gen": 1
+    },
+    {
+      "step": 3,
+      "action": "unfreeze_book",
+      "input": {"user_id": "user-004", "book": "margin", "frozen": false},
+      "expected_ok": true,
+      "expected_life_gen": 2
+    },
+    {
+      "step": 4,
+      "action": "acquire_lease",
+      "input": {"user_id": "user-004", "book": "margin"},
+      "expected_ok": true,
+      "expected_lease_gen": 2,
+      "save_as": "lease_gen2"
+    },
+    {
+      "step": 5,
+      "action": "validate_lease",
+      "input": {"lease_id": "$lease_gen0", "user_id": "user-004", "book": "margin"},
+      "expected_ok": false,
+      "expected_error": "revoked"
+    },
+    {
+      "step": 6,
+      "action": "validate_lease",
+      "input": {"lease_id": "$lease_gen2", "user_id": "user-004", "book": "margin"},
+      "expected_ok": true
+    }
+  ],
+  "expected_final_state": {
+    "life_gen": 2,
+    "valid_lease_gen": 2,
+    "drift_cases": 0
+  }
+}

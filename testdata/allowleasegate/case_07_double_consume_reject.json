@@ -1,0 +1,68 @@
+{
+  "name": "double_consume_reject",
+  "description": "已消费的租约再次 Submit → 拒绝，防止重播攻击",
+  "setup": {
+    "user_id": "USER-ALG-007",
+    "movement_id": "MVT-007",
+    "asset": "BTC",
+    "chain": "BTC",
+    "to_address": "bc1qDoubleConsume007",
+    "amount": "0.50000000",
+    "policy_version": 3
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-007",
+      "user_id": "USER-ALG-007",
+      "asset": "BTC",
+      "chain": "BTC",
+      "to_address": "bc1qDoubleConsume007",
+      "amount": "0.50000000",
+      "decision": "allow",
+      "policy_version": 3,
+      "expect": {
+        "state": "allowed"
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-007",
+      "user_id": "USER-ALG-007",
+      "expect": {
+        "allowed": true,
+        "lease_state": "bound"
+      }
+    },
+    {
+      "type": "consume",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "consumed"
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-007",
+      "user_id": "USER-ALG-007",
+      "expect": {
+        "allowed": false,
+        "error": "allow_lease already consumed",
+        "has_proof": true,
+        "proof_drift_kind": "lease_consumed"
+      }
+    }
+  ],
+  "expected": {
+    "final_lease_state": "consumed",
+    "second_submit_blocked": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "consumed 租约不可再次 Submit",
+    "防止重播攻击"
+  ]
+}
+// temporary guard removed after the production check

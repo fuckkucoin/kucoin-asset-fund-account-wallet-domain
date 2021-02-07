@@ -1,0 +1,63 @@
+{
+  "name": "case_expired_patrol_revoke",
+  "description": "案件过期后巡检 worker 自动撤销关联租约，后续 Submit 被拒",
+  "setup": {
+    "user_id": "USER-ALG-009",
+    "movement_id": "MVT-009",
+    "case_id": "CASE-009",
+    "asset": "USDT",
+    "chain": "TRC20",
+    "to_address": "TAddr009PatrolExpire",
+    "amount": "800.00",
+    "policy_version": 4
+  },
+  "actions": [
+    {
+      "type": "issue_lease",
+      "movement_id": "MVT-009",
+      "user_id": "USER-ALG-009",
+      "case_id": "CASE-009",
+      "asset": "USDT",
+      "chain": "TRC20",
+      "to_address": "TAddr009PatrolExpire",
+      "amount": "800.00",
+      "decision": "allow",
+      "policy_version": 4,
+      "expect": {
+        "state": "allowed"
+      }
+    },
+    {
+      "type": "expire_case",
+      "case_id": "CASE-009",
+      "description": "案件自然过期"
+    },
+    {
+      "type": "patrol_cases",
+      "expect": {
+        "revoked_count_gte": 1,
+        "proofs_count_gte": 1
+      }
+    },
+    {
+      "type": "submit_check",
+      "lease_id": "${lease_id}",
+      "movement_id": "MVT-009",
+      "user_id": "USER-ALG-009",
+      "expect": {
+        "allowed": false,
+        "has_proof": true
+      }
+    }
+  ],
+  "expected": {
+    "final_lease_state": "revoked",
+    "broadcast_blocked": true,
+    "patrol_detected": true
+  },
+  "invariants": [
+    "巡检 worker 必须检测案件过期",
+    "关联租约必须被撤销",
+    "Submit 必须被拒"
+  ]
+}
