@@ -1,0 +1,26 @@
+{
+  "description": "账本冻结位漂移缺口单 golden 夹具",
+  "scenarios": [
+    {
+      "name": "drift_on_open",
+      "description": "开启 hold 时账本未冻结 → 自动开缺口单",
+      "ledger_frozen": false,
+      "expected_gap": true,
+      "gap_reason": "ledger freeze bit absent while quarantine hold open"
+    },
+    {
+      "name": "drift_on_patrol",
+      "description": "巡检时发现账本已解冻但 hold 仍 open → 开缺口单 + 漂移证明",
+      "hold_status": "aging",
+      "ledger_frozen": false,
+      "expected_gap": true,
+      "expected_proof_kind": "drift"
+    },
+    {
+      "name": "no_drift",
+      "description": "账本冻结位正常 → 无缺口单",
+      "ledger_frozen": true,
+      "expected_gap": false
+    }
+  ]
+}

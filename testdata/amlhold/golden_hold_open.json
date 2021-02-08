@@ -1,0 +1,12 @@
+{
+  "case_id": "case-test-001",
+  "user_id": "user-aml-001",
+  "asset": "USDT",
+  "amount": "5000.00",
+  "status": "open",
+  "aging_tier": "none",
+  "opened_by": "ops-aml-agent",
+  "ledger_frozen_bit": true,
+  "sla_limit_sec": 86400,
+  "gap_ticket_id": ""
+}
