@@ -1,0 +1,45 @@
+{
+  "description": "完整老化升级序列 golden 夹具",
+  "hold": {
+    "case_id": "case-aging-001",
+    "user_id": "user-aml-002",
+    "asset": "BTC",
+    "amount": "0.5",
+    "sla_limit_sec": 86400
+  },
+  "aging_steps": [
+    {
+      "step": 1,
+      "age_sec": 86401,
+      "expected_status": "aging",
+      "expected_tier": "warn",
+      "description": "SLA 超时触发 warn"
+    },
+    {
+      "step": 2,
+      "age_sec": 129601,
+      "expected_status": "aging",
+      "expected_tier": "force_hold",
+      "description": "force_hold 阈值触发"
+    },
+    {
+      "step": 3,
+      "age_sec": 172801,
+      "expected_status": "escalated",
+      "expected_tier": "escalated",
+      "description": "升级到督查层"
+    },
+    {
+      "step": 4,
+      "age_sec": 259201,
+      "expected_status": "compel_review",
+      "expected_tier": "compel_review",
+      "description": "最终督查强制审查"
+    }
+  ],
+  "invariants": [
+    "每次升级后 case 状态不得变为 resolved",
+    "每次升级后 hold 仍为 open（非终态）",
+    "老化事件追加记录，不可修改"
+  ]
+}

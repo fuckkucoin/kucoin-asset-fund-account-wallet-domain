@@ -1,0 +1,19 @@
+{
+  "_comment": "功能：与 cvfund occupy_id 隔离 golden 夹具。重点：swap Lease 仅守闪兑订单冻额终态，cvfund 路径不受影响。",
+  "scenario": "cvfund_isolation",
+  "swap_order_id": "ord-isolation-swap-001",
+  "cvfund_occupy_id": "occ-cvfund-001",
+  "user_id": "user-isolation-001",
+  "asset": "USDT",
+  "swap_frozen_amount": "50.000000000000000000",
+  "cvfund_occupy_amount": "50.000000000000000000",
+  "swap_lease_id": "lease-swap-001",
+  "expected": {
+    "swap_terminal_leg": "settle",
+    "swap_lease_status": "settled",
+    "cvfund_occupy_unaffected": true,
+    "cvfund_table": "cvfund_path_occupancies",
+    "swap_thaw_table": "sw_settle_binds",
+    "no_cross_reference": true
+  }
+}

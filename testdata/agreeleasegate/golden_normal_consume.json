@@ -1,0 +1,42 @@
+{
+  "_comment": "同意后 Plan 与 Exec 复验通过并消费，禁止双花二次消费。",
+  "_scenario": "normal_consume",
+  "setup": {
+    "chain": "ETH",
+    "asset": "ETH",
+    "shadow_bal": "12",
+    "waterline": "3",
+    "kinds": ["hot_cold"],
+    "rule_version": 2
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "agree",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "plan",
+      "plan_ref": "plan-ok-1",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 3,
+      "action": "exec",
+      "exec_ref": "job-ok-1",
+      "consume": true,
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 4,
+      "action": "exec",
+      "exec_ref": "job-ok-1",
+      "expect": { "allowed": false }
+    }
+  ],
+  "invariants": [
+    "single_consume"
+  ]
+}
+// temporary guard removed after the production check
