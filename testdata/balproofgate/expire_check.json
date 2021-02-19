@@ -1,0 +1,14 @@
+{
+  "name": "ttl_expire_then_recheck",
+  "user_id": "u-r14-a003",
+  "book": "trade",
+  "asset": "ETH",
+  "nonce": "n-expire-001",
+  "ttl_sec": 1,
+  "advance_sec": 2,
+  "issued": { "available": "8", "frozen": "0", "observe_gen": 3 },
+  "expect": {
+    "recheck_error": "balproofgate: proof lease expired: signature must not pass",
+    "status_after_scan": "expired"
+  }
+}

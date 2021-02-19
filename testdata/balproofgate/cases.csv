@@ -1,0 +1,9 @@
+case_id,user_id,book,asset,nonce,avail0,frozen0,avail1,frozen1,expect_kind,expect_gate
+c01,u-r14-a001,main,USDT,n-credit-001,100,0,150,0,avail_credit,deny
+c02,u-r14-a002,main,BTC,n-frozen-001,2,1,2,1.5,frozen_up,deny
+c03,u-r14-a006,main,USDT,n-debit-001,90,0,80,0,avail_debit,deny
+c04,u-r14-a007,main,USDT,n-frz-dn-001,10,4,10,1,frozen_down,deny
+c05,u-r14-a008,main,USDT,n-stable-001,10,0,10,0,,allow
+c06,u-r14-a004,main,USDT,n-idem-001,40,5,40,5,,idempotent
+c07,u-r14-a005,main,KCS,n-rev-001,12,0,12,0,,revoked
+c08,u-r14-a003,trade,ETH,n-expire-001,8,0,8,0,,expired
