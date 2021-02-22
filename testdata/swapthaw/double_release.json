@@ -1,0 +1,19 @@
+{
+  "_comment": "功能：已 settle 订单再次 failUnfreeze → 双释事故 golden 夹具。重点：检测到双释，升 ThawCase，阻断用户新冻额。",
+  "scenario": "double_release_after_settle",
+  "order_id": "ord-double-release-001",
+  "user_id": "user-dr-001",
+  "asset": "BTC",
+  "frozen_amount": "0.500000000000000000",
+  "first_terminal_leg": "settle",
+  "second_terminal_leg": "fail_unfreeze",
+  "expected_first_leg_error": null,
+  "expected_second_leg_error": "ErrDoubleRelease",
+  "expected_thaw_case": {
+    "kind": "double_release",
+    "status": "open",
+    "detected_amount": "0.500000000000000000"
+  },
+  "expected_lease_status_after": "settled_or_blocked",
+  "expected_user_blocked": true
+}

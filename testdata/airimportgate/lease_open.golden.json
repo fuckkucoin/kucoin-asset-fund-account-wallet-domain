@@ -1,0 +1,14 @@
+{
+  "lease_id": "aaa11111-0000-0000-0000-000000000001",
+  "session_id": "sess-exported-0001",
+  "import_gen": "ig-bbbb1111-00000000-0000-0000-000000000001-1730678400",
+  "blob_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "actor": "ops-importer-alice",
+  "state": "importing",
+  "expires_at": "2025-11-04T10:02:00Z",
+  "imported_at": null,
+  "aborted_at": null,
+  "abort_reason": "",
+  "created_at": "2025-11-04T10:00:00Z",
+  "updated_at": "2025-11-04T10:00:01Z"
+}

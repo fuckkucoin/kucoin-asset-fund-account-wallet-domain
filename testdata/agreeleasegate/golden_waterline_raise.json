@@ -1,0 +1,42 @@
+{
+  "_comment": "水位参数抬升后旧租约复验失败。",
+  "_scenario": "waterline_raise",
+  "setup": {
+    "chain": "BSC",
+    "asset": "USDT",
+    "shadow_bal": "60",
+    "waterline": "10",
+    "kinds": ["hot_cold", "gas"],
+    "rule_version": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "agree",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "put_rule",
+      "waterline": "70",
+      "rule_version": 2,
+      "expect": { "ok": true }
+    },
+    {
+      "step": 3,
+      "action": "exec_skip_plan",
+      "exec_ref": "job-wl-1",
+      "expect": { "allowed": false }
+    },
+    {
+      "step": 4,
+      "action": "plan",
+      "plan_ref": "plan-wl-1",
+      "expect": { "allowed": false, "has_proof": true }
+    }
+  ],
+  "invariants": [
+    "lease_not_consumed",
+    "fail_closed"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "error": "airimportgate: quorum drift rejected",
+  "lease_id": "aaa22222-0000-0000-0000-000000000002",
+  "session_id": "sess-exported-0002",
+  "threshold": 3,
+  "actual_quorum": 2,
+  "quorum_passed": false,
+  "bind_gen": "ig-cccc2222-00000000-0000-0000-000000000002-1730678400"
+}

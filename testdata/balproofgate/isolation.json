@@ -1,0 +1,6 @@
+{
+  "name": "por_stmt_isolation",
+  "forbidden_fields": ["por_root", "stmt_manifest", "leddiff"],
+  "isolation_mark": "balproof-live-hmac;not-por-merkle;not-stmt-manifest;not-leddiff",
+  "scan_source": "balproof_lease_events"
+}

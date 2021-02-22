@@ -1,0 +1,36 @@
+{
+  "_comment": "规则版本抬升后旧租约复验失败。",
+  "_scenario": "rule_version_raise",
+  "setup": {
+    "chain": "ETH",
+    "asset": "BTC",
+    "shadow_bal": "20",
+    "waterline": "5",
+    "min_sweep": "0.1",
+    "kinds": ["hot_cold"],
+    "rule_version": 3
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "agree",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "bump_rule",
+      "waterline": "8",
+      "expect": { "ok": true }
+    },
+    {
+      "step": 3,
+      "action": "plan",
+      "plan_ref": "plan-rule-1",
+      "expect": { "allowed": false, "has_proof": true }
+    }
+  ],
+  "invariants": [
+    "lease_not_consumed",
+    "fail_closed"
+  ]
+}
