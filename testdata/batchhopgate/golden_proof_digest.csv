@@ -1,0 +1,7 @@
+proof_id,residual_case_id,before_root_prefix,partial_root_prefix,conserve_ok,digest_prefix,scenario
+proof-01-golden,case-01-golden,a1b2c3d4,f1e2d3c4,true,7a3f9b2e1c,batch_partial_fail_at_2_of_3
+proof-02-golden,case-02-golden,e5f6a7b8,c9d0e1f2,true,4b8c2d6e0f,concurrent_batch_blocked
+proof-03-golden,case-03-golden,aabbccdd,bbccddee,true,9f1a2b3c4d,token_reject_all_variants
+proof-04-golden,case-04-golden,cc11dd22,dd22ee33,true,2e5f8a0b1c,acctpol_isolation_verified
+proof-05-golden,case-05-golden,11223344,22334455,true,3d6e9f0a1b,idempotent_resume_no_double_exec
+proof-06-golden,case-06-golden,55667788,66778899,false,8c1d4e7f2a,conserve_fail_detected_but_stored
