@@ -1,0 +1,22 @@
+{
+  "name": "half_submit_resume_no_second_full",
+  "description": "Submit 半切中断后 Retry 必须围栏续冻，不得二次全额冻结",
+  "setup": {
+    "batch_id": "batch-half-03",
+    "item_idem": "item-half-03",
+    "phase": "failed",
+    "user_id": "u-1003",
+    "asset": "ETH",
+    "amount": "2.25"
+  },
+  "actions": [
+    {"op": "submit_half_cut", "actor": "ops-a", "freeze_ref": "frz-half-03"},
+    {"op": "retry_resume", "actor": "ops-b"}
+  ],
+  "expected": {
+    "allowed": true,
+    "resume_only": true,
+    "second_full_freeze": false,
+    "half_state": "resumed"
+  }
+}
