@@ -1,0 +1,41 @@
+{
+  "description": "Release↔Close 互斥协议 golden 夹具",
+  "scenarios": [
+    {
+      "name": "close_blocked_by_open_hold",
+      "description": "Case 下有 open hold 时试图结案 → 必须失败",
+      "hold_status": "open",
+      "close_actor": "reviewer-alice",
+      "expected_error": "aml case resolution blocked by open quarantine hold"
+    },
+    {
+      "name": "close_allowed_after_release",
+      "description": "hold released 后结案 → 必须成功",
+      "hold_status": "released",
+      "close_actor": "reviewer-alice",
+      "expected_error": null
+    },
+    {
+      "name": "same_actor_release_then_close",
+      "description": "同一 actor 申请解冻再发起结案 → 必须失败（互斥）",
+      "release_requester": "ops-bob",
+      "close_actor": "ops-bob",
+      "expected_error": "aml release/close mutex violation"
+    },
+    {
+      "name": "same_actor_four_eye_release",
+      "description": "解冻申请人不得同时审批自己的解冻申请（四眼）",
+      "requester": "ops-charlie",
+      "approver": "ops-charlie",
+      "expected_error": "four-eye"
+    },
+    {
+      "name": "different_actor_release_close",
+      "description": "不同 actor 分别申请解冻和结案 → 必须成功",
+      "release_requester": "ops-dave",
+      "release_approver": "reviewer-alice",
+      "close_actor": "reviewer-eve",
+      "expected_error": null
+    }
+  ]
+}

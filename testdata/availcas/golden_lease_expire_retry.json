@@ -1,0 +1,57 @@
+{
+  "_comment": "黄金夹具：租约过期后提交必须拒绝；申请新租约后可重试。",
+  "scenario": "lease_expire_then_retry",
+  "initial_state": {
+    "user_id": "u-le-001",
+    "asset": "ETH",
+    "book": "spot",
+    "balance": "10.000000000000000000",
+    "frozen": "0.000000000000000000",
+    "reserved": "0.000000000000000000",
+    "expected_available": "10.000000000000000000"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "ttl_ms": 1,
+      "note": "TTL=1ms，立即过期"
+    },
+    {
+      "step": 2,
+      "action": "wait_ms",
+      "wait_ms": 10
+    },
+    {
+      "step": 3,
+      "action": "submit_intent",
+      "amount": "5.000000000000000000",
+      "kind": "freeze",
+      "use_lease": "step1_lease",
+      "expected_state": "rejected",
+      "expected_reject_code": "lease_expired",
+      "note": "过期租约提交必须拒绝"
+    },
+    {
+      "step": 4,
+      "action": "issue_lease",
+      "ttl_ms": 30000,
+      "note": "申请新租约"
+    },
+    {
+      "step": 5,
+      "action": "submit_intent",
+      "amount": "5.000000000000000000",
+      "kind": "freeze",
+      "use_lease": "step4_lease",
+      "expected_state": "accepted",
+      "note": "新租约提交成功"
+    }
+  ],
+  "invariants": [
+    "expired_lease_intent.state == rejected",
+    "expired_lease_intent.reject_code == lease_expired",
+    "new_lease_intent.state == accepted",
+    "balance not decremented on expired lease rejection"
+  ]
+}

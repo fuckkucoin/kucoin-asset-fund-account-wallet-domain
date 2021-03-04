@@ -1,0 +1,48 @@
+{
+  "_comment": "黄金夹具：预留金占用后假可用场景。balance=1000，reserved=400，available 应为 600；提交 700 超提被拒。",
+  "scenario": "overdraw_after_reserved",
+  "initial_state": {
+    "user_id": "u-or-001",
+    "asset": "USDT",
+    "book": "spot",
+    "balance": "1000.000000000000000000",
+    "frozen": "0.000000000000000000",
+    "reserved": "400.000000000000000000",
+    "expected_available": "600.000000000000000000"
+  },
+  "lease": {
+    "gen": 1,
+    "available": "600.000000000000000000",
+    "state": "open",
+    "ttl_ms": 30000
+  },
+  "intents": [
+    {
+      "id": "intent-overdraw",
+      "idem_key": "wd:or-over",
+      "amount": "700.000000000000000000",
+      "kind": "freeze",
+      "reason": "withdraw_freeze",
+      "expected_avail": "600.000000000000000000",
+      "expected_state": "rejected",
+      "expected_reject_code": "insufficient_avail"
+    },
+    {
+      "id": "intent-exact",
+      "idem_key": "wd:or-exact",
+      "amount": "600.000000000000000000",
+      "kind": "freeze",
+      "reason": "withdraw_freeze",
+      "expected_avail": "600.000000000000000000",
+      "note": "使用新租约提交恰好等于可用额，应 accepted",
+      "new_lease_required": true,
+      "expected_state": "accepted"
+    }
+  ],
+  "invariants": [
+    "lease.available == balance - reserved == 600",
+    "intent_700_rejected: amount(700) > available(600)",
+    "intent_600_accepted: amount(600) == available(600)",
+    "reserved must not be ignored in fold calculation"
+  ]
+}
