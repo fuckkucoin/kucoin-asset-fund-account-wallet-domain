@@ -1,0 +1,51 @@
+{
+  "name": "max_repin_exceeded",
+  "description": "超过最大 re-pin 次数后拒绝继续 re-pin",
+  "setup": {
+    "user_id": "USER-BSG-007",
+    "asset": "USDT",
+    "max_repin": 2,
+    "initial_waterlines": {
+      "funding": {"waterline": "100.00", "observe_gen": 1, "checksum": "max001"},
+      "trading": {"waterline": "50.00", "observe_gen": 1, "checksum": "max002"}
+    }
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "expect": {"state": "pinned", "snap_gen": 1}
+    },
+    {
+      "type": "force_drift",
+      "description": "强制漂移"
+    },
+    {
+      "type": "repin",
+      "expect": {"state": "pinned", "repin_count": 1}
+    },
+    {
+      "type": "force_drift",
+      "description": "再次强制漂移"
+    },
+    {
+      "type": "repin",
+      "expect": {"state": "pinned", "repin_count": 2}
+    },
+    {
+      "type": "force_drift",
+      "description": "第三次强制漂移"
+    },
+    {
+      "type": "repin",
+      "expect": {
+        "error": "booksnapgate: max repin attempts exceeded",
+        "repin_rejected": true
+      }
+    }
+  ],
+  "expected": {
+    "final_repin_count": 2,
+    "repin_rejected_at": 3,
+    "state_remains": "drifted"
+  }
+}

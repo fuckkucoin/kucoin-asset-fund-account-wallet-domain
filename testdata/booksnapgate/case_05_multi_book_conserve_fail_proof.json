@@ -1,0 +1,56 @@
+{
+  "name": "multi_book_conserve_fail_proof",
+  "description": "多科目 Debit/Credit 不守恒时，产出 BookSnapDriftProof 并标记 drifted",
+  "setup": {
+    "user_id": "USER-BSG-005",
+    "asset": "USDT",
+    "books": ["funding", "trading", "margin"],
+    "initial_waterlines": {
+      "funding": {"waterline": "1000.00", "observe_gen": 1, "checksum": "con001"},
+      "trading": {"waterline": "500.00", "observe_gen": 1, "checksum": "con002"},
+      "margin": {"waterline": "200.00", "observe_gen": 1, "checksum": "con003"}
+    },
+    "bills": [
+      {"seq": 1, "book": "funding", "asset": "USDT", "debit": "100.00", "credit": "50.00"},
+      {"seq": 2, "book": "trading", "asset": "USDT", "debit": "50.00", "credit": "30.00"},
+      {"seq": 3, "book": "margin", "asset": "USDT", "debit": "20.00", "credit": "10.00"}
+    ]
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "user_id": "USER-BSG-005",
+      "asset": "USDT",
+      "expect": {
+        "state": "pinned",
+        "snap_gen": 1
+      }
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "drifted",
+        "conserved": false,
+        "drift_kind": "conserve_fail",
+        "drift_proof_has_delta": true,
+        "total_debit": "170.00",
+        "total_credit": "90.00",
+        "delta": "80.00"
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "drifted",
+    "drift_proof_exists": true,
+    "drift_proof_kind": "conserve_fail",
+    "conserve_failed": true,
+    "delta_recorded": true
+  },
+  "invariants": [
+    "不守恒时标记 drifted 而非 sealed",
+    "DriftProof 记录完整的 debit/credit/delta",
+    "不返回部分结果",
+    "不影响 stmt Export 或 balproof HMAC"
+  ]
+}

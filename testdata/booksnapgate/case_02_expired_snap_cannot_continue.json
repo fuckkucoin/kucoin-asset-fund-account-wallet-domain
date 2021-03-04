@@ -1,0 +1,57 @@
+{
+  "name": "expired_snap_cannot_continue",
+  "description": "已过期的 book_snap_id 不能继续组装，必须返回 ErrLeaseExpired",
+  "setup": {
+    "user_id": "USER-BSG-002",
+    "asset": "BTC",
+    "books": ["funding", "trading", "margin", "futures", "earn"],
+    "initial_waterlines": {
+      "funding": {"waterline": "1.5000", "observe_gen": 1, "checksum": "btc001"},
+      "trading": {"waterline": "0.2500", "observe_gen": 1, "checksum": "btc002"},
+      "margin": {"waterline": "0.0000", "observe_gen": 1, "checksum": "btc003"},
+      "futures": {"waterline": "0.1000", "observe_gen": 1, "checksum": "btc004"},
+      "earn": {"waterline": "0.0500", "observe_gen": 1, "checksum": "btc005"}
+    },
+    "pin_ttl": "1s"
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "user_id": "USER-BSG-002",
+      "asset": "BTC",
+      "ttl": "1s",
+      "expect": {
+        "state": "pinned",
+        "book_count": 5,
+        "snap_gen": 1
+      }
+    },
+    {
+      "type": "wait",
+      "duration": "2s",
+      "description": "等待快照租约过期"
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "error": "booksnapgate: snap lease expired",
+        "state_after": "expired",
+        "no_result": true
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "expired",
+    "drift_proof_exists": true,
+    "drift_proof_kind": "lease_expiry",
+    "assemble_rejected": true,
+    "no_sealed_result": true
+  },
+  "invariants": [
+    "过期租约不可继续组装",
+    "过期时产出 DriftProof 记录",
+    "不影响后续新 pin 请求",
+    "不影响 stmt Export 或 balproof HMAC"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "name": "repin_after_drift",
+  "description": "漂移后 re-pin 重新观测水线，重新组装直到成功封存",
+  "setup": {
+    "user_id": "USER-BSG-006",
+    "asset": "KCS",
+    "books": ["funding", "trading", "margin", "futures", "earn"],
+    "initial_waterlines": {
+      "funding": {"waterline": "5000.00", "observe_gen": 1, "checksum": "kcs001"},
+      "trading": {"waterline": "2000.00", "observe_gen": 1, "checksum": "kcs002"},
+      "margin": {"waterline": "1000.00", "observe_gen": 1, "checksum": "kcs003"},
+      "futures": {"waterline": "500.00", "observe_gen": 1, "checksum": "kcs004"},
+      "earn": {"waterline": "100.00", "observe_gen": 1, "checksum": "kcs005"}
+    }
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "user_id": "USER-BSG-006",
+      "asset": "KCS",
+      "expect": {
+        "state": "pinned",
+        "snap_gen": 1
+      "new_waterline": "5100.00",
+      "new_gen": 2
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "drifted",
+        "drift_detected": true
+      }
+    },
+    {
+      "type": "repin",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "pinned",
+        "snap_gen": 2,
+        "repin_count": 1
+      }
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "sealed",
+        "conserved": true
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "sealed",
+    "total_repin_count": 1,
+    "final_snap_gen": 2,
+    "sealed_result_exists": true
+  },
+  "invariants": [
+    "漂移后允许 re-pin",
+    "re-pin 后 snap_gen 递增",
+    "re-pin 后重新观测水线",
+    "不超过 max_repin 次数限制"
+  ]
+}
