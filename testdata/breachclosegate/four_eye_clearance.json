@@ -1,0 +1,26 @@
+{
+  "_comment": "BreachClearance golden fixture: 四眼清障流程 — 提议→批准→状态转为 cleared，但不自动放行出金。",
+  "scenario": "four_eye_clearance_no_auto_allow",
+  "breach_lease": {
+    "id":           "lease-001-cccccccccccccccccc",
+    "case_id":      "case-002-dddddddddddddddddd",
+    "movement_id":  "mvmt-002-eeeeeeeeeeeeeeeeee",
+    "user_id":      "user-002",
+    "breach_gen":   "1122334455667788991100aabbccddeeff1122334455667788991100aabbccdd",
+    "state":        "blocking"
+  },
+  "clearance_propose": {
+    "breach_lease_id": "lease-001-cccccccccccccccccc",
+    "proposer":        "ops-alice",
+    "reason":          "Manual review confirms breach; requesting clearance for compliance re-review."
+  },
+  "clearance_approve": {
+    "approver": "ops-bob"
+  },
+  "expected_clearance_state": "approved",
+  "expected_no_auto_allow":   true,
+  "expected_lease_state_after_clearance": "cleared",
+  "expected_proof_block_outcome":         "cleared_no_allow",
+  "expected_allow_after_clearance":       false,
+  "_note": "cleared_no_allow 证明必须落写；清障后出金仍须重入 reviewsla/compliance 路径，不得直接 allow。"
+}

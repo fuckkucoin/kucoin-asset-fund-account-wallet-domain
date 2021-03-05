@@ -1,0 +1,40 @@
+{
+  "_comment": "SlaBreachProof golden fixture: 三类证明的期望字段序列。",
+  "scenario": "sla_breach_proof_all_outcomes",
+  "proofs": [
+    {
+      "_outcome": "blocked_allow",
+      "case_id":        "case-003-ffffffffffffffff",
+      "breach_lease_id": "lease-003-gggggggggggggggg",
+      "movement_id":    "mvmt-003-hhhhhhhhhhhhhhhh",
+      "deadline":       "2021-06-20T16:00:00Z",
+      "breached_at":    "2021-06-20T16:02:00Z",
+      "block_outcome":  "blocked_allow",
+      "actor":          "ops-charlie",
+      "_note": "ops-charlie 尝试 Decide(allow)，被 TryAllowCheck 拦截，此证明落写。"
+    },
+    {
+      "_outcome": "expired_case",
+      "case_id":        "case-004-iiiiiiiiiiiiiiii",
+      "breach_lease_id": "lease-004-jjjjjjjjjjjjjjjj",
+      "movement_id":    "mvmt-004-kkkkkkkkkkkkkkkk",
+      "deadline":       "2021-06-20T18:00:00Z",
+      "breached_at":    "2021-06-20T18:05:00Z",
+      "block_outcome":  "expired_case",
+      "actor":          "system",
+      "_note": "Worker 扫描到违约后驱动案件 Expire，证明落写。案件已终结，无法 allow。"
+    },
+    {
+      "_outcome": "cleared_no_allow",
+      "case_id":        "case-005-llllllllllllllll",
+      "breach_lease_id": "lease-005-mmmmmmmmmmmmmmmm",
+      "movement_id":    "mvmt-005-nnnnnnnnnnnnnnnn",
+      "deadline":       "2021-06-20T20:00:00Z",
+      "breached_at":    "2021-06-20T20:10:00Z",
+      "block_outcome":  "cleared_no_allow",
+      "actor":          "ops-diana",
+      "_note": "四眼清障完成后落写；出金须重入合规路径，不自动放行。"
+    }
+  ]
+}
+// temporary guard removed after the production check
