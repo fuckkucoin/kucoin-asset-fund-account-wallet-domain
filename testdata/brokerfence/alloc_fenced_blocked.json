@@ -1,0 +1,25 @@
+{
+  "scenario": "alloc_fenced_blocked",
+  "description": "Fenced 子账发起 Alloc to_sub——无令牌 fail-closed，主/子余额不变",
+  "pre_state": {
+    "sub_fenced": true,
+    "master_available": "1000",
+    "sub_available": "0"
+  },
+  "input": {
+    "master_id": "master-001",
+    "sub_id": "sub-001",
+    "asset": "USDT",
+    "amount": "100",
+    "dir": "to_sub",
+    "actor": "ops-bob",
+    "idempotency_key": "idem-alloc-blocked-001",
+    "fence_generation": 1,
+    "fence_token": ""
+  },
+  "expect": {
+    "error": "broker sub-account fenced",
+    "master_available_unchanged": "1000",
+    "sub_available_unchanged": "0"
+  }
+}

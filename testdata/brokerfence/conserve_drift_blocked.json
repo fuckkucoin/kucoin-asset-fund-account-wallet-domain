@@ -1,0 +1,14 @@
+{
+  "scenario": "conserve_drift_blocked",
+  "description": "主子合计漂移（after≠before）：挡写，UnfenceRequest 返回 ErrConserveDrift",
+  "pre_state": {
+    "before_total": "1000",
+    "after_total": "1050",
+    "delta": "50",
+    "is_drifted": true
+  },
+  "expect": {
+    "error": "brokerfence: master-sub conserve proof drifted – write blocked",
+    "lease_state_unchanged": "active"
+  }
+}

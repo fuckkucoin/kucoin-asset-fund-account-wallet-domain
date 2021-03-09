@@ -1,0 +1,22 @@
+{
+  "scenario": "credit_master_bypass_case",
+  "description": "围栏窗口期 CreditMaster：产出 BypassCase，金额挂账，写入被挡",
+  "pre_state": {
+    "sub_fenced": true,
+    "master_available": "500",
+    "lease_state": "active"
+  },
+  "input": {
+    "master_id": "master-001",
+    "asset": "USDT",
+    "amount": "200"
+  },
+  "expect": {
+    "error": "broker sub-account fenced",
+    "bypass_case_created": true,
+    "bypass_kind": "credit_master",
+    "bypass_state": "open",
+    "hanging_amount": "200",
+    "master_available_unchanged": "500"
+  }
+}

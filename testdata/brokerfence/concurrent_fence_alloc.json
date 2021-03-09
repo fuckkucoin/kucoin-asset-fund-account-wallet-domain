@@ -1,0 +1,27 @@
+{
+  "scenario": "concurrent_fence_alloc",
+  "description": "并发 Fence 与 Alloc：世代 CAS 保证仅一方成功，无半划拨",
+  "goroutines": [
+    {
+      "op": "fence_activate",
+      "sub_id": "sub-001",
+      "master_id": "master-001",
+      "asset": "USDT",
+      "actor": "ops-alice"
+    },
+    {
+      "op": "alloc",
+      "master_id": "master-001",
+      "sub_id": "sub-001",
+      "asset": "USDT",
+      "amount": "100",
+      "dir": "to_sub",
+      "fence_generation": 0
+    }
+  ],
+  "expect": {
+    "exactly_one_success": true,
+    "no_partial_transfer": true,
+    "generation_monotonic": true
+  }
+}

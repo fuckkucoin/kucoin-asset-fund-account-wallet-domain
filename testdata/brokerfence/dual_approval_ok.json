@@ -1,0 +1,21 @@
+{
+  "scenario": "dual_approval_ok",
+  "description": "旁路案件双人确认流程：step=1 proven；step=2 closed；hanging_amount 清零",
+  "pre_state": {
+    "bypass_state": "open",
+    "hanging_amount": "200"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "approver": "reviewer-alice",
+      "expect_state": "proven"
+    },
+    {
+      "step": 2,
+      "approver": "reviewer-bob",
+      "expect_state": "closed",
+      "expect_hanging_amount": "0"
+    }
+  ]
+}
