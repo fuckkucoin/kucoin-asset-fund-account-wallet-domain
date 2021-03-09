@@ -1,0 +1,34 @@
+{
+  "winner_ticket": {
+    "id": "bc7fea93-cb99-4e96-819e-fb3ed05109ae",
+    "case_id": "case-001",
+    "movement_id": "mv-001",
+    "user_id": "user-001",
+    "decision": "approve",
+    "decided_by": "reviewer-A",
+    "policy_version": 3,
+    "fence_epoch": 2,
+    "fence_token": "token-2",
+    "state": "approved",
+    "ttl": "5m0s",
+    "issued_at": "2022-06-15T10:00:00Z",
+    "expires_at": "2022-06-15T10:05:00Z",
+    "created_at": "2022-06-15T10:00:00Z",
+    "updated_at": "2026-04-28T23:16:23.327072919Z"
+  },
+  "loser_proof": {
+    "id": "be9f2182-3a53-4da8-b271-fbed490b8d8f",
+    "case_id": "case-001",
+    "movement_id": "mv-001",
+    "winner_actor": "reviewer-A",
+    "winner_decision": "approved",
+    "loser_actor": "reviewer-B",
+    "loser_decision": "approve",
+    "fence_epoch": 2,
+    "winner_epoch": 2,
+    "loser_epoch": 1,
+    "sealed": true,
+    "sealed_at": "2022-06-15T10:00:00Z",
+    "created_at": "2022-06-15T10:00:00Z"
+  }
+}

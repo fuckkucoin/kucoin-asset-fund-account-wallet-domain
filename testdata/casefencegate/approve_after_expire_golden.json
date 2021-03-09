@@ -1,0 +1,19 @@
+{
+  "error": "stale case fence; concurrent decide race lost",
+  "proof": {
+    "id": "1324fef1-40a0-4582-bdd6-d26b00c0ef90",
+    "case_id": "case-exp-001",
+    "movement_id": "mv-exp-001",
+    "winner_actor": "",
+    "winner_decision": "expired",
+    "loser_actor": "reviewer-C",
+    "loser_decision": "approve",
+    "fence_epoch": 2,
+    "winner_epoch": 2,
+    "loser_epoch": 1,
+    "sealed": true,
+    "sealed_at": "2022-06-15T10:00:00Z",
+    "created_at": "2022-06-15T10:00:00Z"
+  },
+  "reason": "case expired; old fence epoch/token rejected"
+}
