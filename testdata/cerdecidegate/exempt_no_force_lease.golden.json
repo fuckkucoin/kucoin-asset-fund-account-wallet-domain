@@ -1,0 +1,19 @@
+{
+  "scenario": "exempt_cannot_mint_force_lease",
+  "batch_id": "batch-cdg-ex-003",
+  "asset": "USDT",
+  "chain": "TRON",
+  "amount": "100",
+  "dest": "Tcerdecidegate0003",
+  "required": false,
+  "policy_id": "pol-exempt-usdt",
+  "expected": {
+    "issue_error": "cerdecidegate: required=false pin refused for force lease",
+    "no_lease_exec_error": "cerdecidegate: exec requires decide_lease_id",
+    "proof_kind": "no_lease"
+  },
+  "invariants": [
+    "exempt decision is not a force-cold exec credential",
+    "missing lease is fail-closed"
+  ]
+}
