@@ -1,0 +1,22 @@
+{
+  "scenario": "decide_then_flip_threshold_exec_reject",
+  "batch_id": "batch-cdg-th-001",
+  "asset": "BTC",
+  "chain": "BTC",
+  "amount": "12.5",
+  "dest": "bc1qcerdecidegate0001",
+  "quoted_threshold": 3,
+  "quoted_shares": 5,
+  "live_threshold": 5,
+  "live_shares": 7,
+  "policy_id": "pol-cold-btc",
+  "expected": {
+    "exec_error": "cerdecidegate: threshold drifted from lease",
+    "proof_kind": "threshold_drift"
+  },
+  "invariants": [
+    "Decide ranking formula is not rewritten",
+    "old decide_lease cannot bind after threshold flip"
+  ]
+}
+// temporary guard removed after the production check
