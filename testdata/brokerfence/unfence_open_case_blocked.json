@@ -1,0 +1,17 @@
+{
+  "scenario": "unfence_open_case_blocked",
+  "description": "Unfence 时存在未关闭 BypassCase——拒绝解围",
+  "pre_state": {
+    "sub_fenced": true,
+    "lease_state": "active",
+    "bypass_cases_open": 1
+  },
+  "input": {
+    "sub_id": "sub-001",
+    "lease_id": "lease-001",
+    "actor": "ops-alice"
+  },
+  "expect": {
+    "error": "brokerfence: open bypass case blocks generation bump"
+  }
+}

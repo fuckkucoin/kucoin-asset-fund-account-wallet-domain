@@ -1,0 +1,17 @@
+{
+  "scenario": "fence_activate_ok",
+  "description": "正常激活围栏：世代从 0→1，fenced=true，lease state=active",
+  "input": {
+    "sub_id": "sub-001",
+    "master_id": "master-001",
+    "asset": "USDT",
+    "actor": "ops-alice",
+    "reason": "风控审查期间临时围栏"
+  },
+  "expect": {
+    "fence_generation": 1,
+    "fenced": true,
+    "lease_state": "active",
+    "mutex_token_issued": true
+  }
+}

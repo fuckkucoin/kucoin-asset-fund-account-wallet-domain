@@ -1,0 +1,27 @@
+{
+  "_comment": "BreachLease golden fixture: 违约后 BreachLease 处于 blocking 状态，出金挡写激活。",
+  "scenario": "sla_breach_creates_blocking_lease",
+  "ticket": {
+    "case_id":      "case-001-aaaaaaaaaaaaaaaaaa",
+    "movement_id":  "mvmt-001-bbbbbbbbbbbbbbbbbb",
+    "user_id":      "user-001",
+    "opened_at":    "2021-06-20T10:00:00Z",
+    "deadline":     "2021-06-20T14:00:00Z",
+    "breached_at":  "2021-06-20T14:01:00Z",
+    "breach_gen":   "aabbccddeeff00112233445566778899aabbccddeeff00112233445566778899",
+    "breached":     true,
+    "closed":       false,
+    "state":        "breached"
+  },
+  "expected_lease": {
+    "case_id":      "case-001-aaaaaaaaaaaaaaaaaa",
+    "movement_id":  "mvmt-001-bbbbbbbbbbbbbbbbbb",
+    "user_id":      "user-001",
+    "breach_gen":   "aabbccddeeff00112233445566778899aabbccddeeff00112233445566778899",
+    "deadline":     "2021-06-20T14:00:00Z",
+    "breached_at":  "2021-06-20T14:01:00Z",
+    "state":        "blocking"
+  },
+  "expected_allow_blocked": true,
+  "expected_submit_blocked": true
+}
