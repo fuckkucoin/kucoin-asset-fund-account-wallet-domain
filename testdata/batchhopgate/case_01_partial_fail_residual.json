@@ -1,0 +1,96 @@
+{
+  "_comment": "场景01：第3笔 hop 因目标科目非法失败，前2笔残留；BatchResidualCase 落库，占用证明构建，世代令牌颁发。",
+  "scenario": "batch_partial_fail_at_index_2",
+  "user_id": "u-batch-01",
+  "asset": "USDT",
+  "setup": {
+    "ledger_positions": [
+      {
+        "user_id": "u-batch-01",
+        "book": "funding",
+        "asset": "USDT",
+        "available": "10000.000000000000000000",
+        "frozen": "0"
+      },
+      {
+        "user_id": "u-batch-01",
+        "book": "trading",
+        "asset": "USDT",
+        "available": "0",
+        "frozen": "0"
+      },
+      {
+        "user_id": "u-batch-01",
+        "book": "earn",
+        "asset": "USDT",
+        "available": "0",
+        "frozen": "0"
+      }
+    ],
+    "batch_items": [
+      {
+        "index": 0,
+        "from": "funding",
+        "to": "trading",
+        "asset": "USDT",
+        "amount": "3000.000000000000000000",
+        "idempotency_key": "u-batch-01|hop|0|1726912800000"
+      },
+      {
+        "index": 1,
+        "from": "funding",
+        "to": "earn",
+        "asset": "USDT",
+        "amount": "2000.000000000000000000",
+        "idempotency_key": "u-batch-01|hop|1|1726912800000"
+      },
+      {
+        "index": 2,
+        "from": "trading",
+        "to": "futures",
+        "asset": "USDT",
+        "amount": "999999999.000000000000000000",
+        "idempotency_key": "u-batch-01|hop|2|1726912800000"
+      }
+    ]
+  },
+  "action": {
+    "type": "batch_hop",
+    "user_id": "u-batch-01"
+  },
+  "expected": {
+    "succeeded_count": 2,
+    "fail_index": 2,
+    "failed_reason_contains": "negative",
+    "residual_status": "proven",
+    "proof_conserve_ok": true,
+    "token_issued": true,
+    "batch_generation_status": "active",
+    "succeeded_hops": [
+      {
+        "index": 0,
+        "from": "funding",
+        "to": "trading",
+        "asset": "USDT",
+        "amount": "3000.000000000000000000"
+      },
+      {
+        "index": 1,
+        "from": "funding",
+        "to": "earn",
+        "asset": "USDT",
+        "amount": "2000.000000000000000000"
+      }
+    ],
+    "partial_ledger_state": {
+      "funding_available": "5000.000000000000000000",
+      "trading_available": "3000.000000000000000000",
+      "earn_available": "2000.000000000000000000"
+    },
+    "error_code": "batch_fail_at_item"
+  },
+  "proof_summary": {
+    "description": "BatchHop 在 index=2（trading→futures 超额扣款）失败。前2笔（funding→trading 3000 USDT；funding→earn 2000 USDT）已成功不回滚。BatchResidualCase 落库（status=open→proven）；HopOccupyProof 构建（ConserveOK=true，before_root 与 partial_root 差额 = 5000 USDT 科目移动）；颁发 GenToken（generation=1，TTL=30min）。",
+    "invariant": "1. item 2 失败必须落 ResidualCase；2. 已成功 hops 不回滚；3. BatchGeneration.status='active' 阻断同用户同资产并行 BatchHop；4. 返回体 Residual 与仓中记录一致。"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "scenario": "decide_then_dest_risk_raise",
+  "batch_id": "batch-cdg-risk-002",
+  "asset": "ETH",
+  "chain": "ETH",
+  "amount": "80",
+  "dest": "0xcerdecidegate0002",
+  "quoted_dest_risk": "medium",
+  "live_dest_risk": "critical",
+  "policy_id": "pol-cold-eth",
+  "quoted_threshold": 3,
+  "quoted_shares": 5,
+  "expected": {
+    "exec_error": "cerdecidegate: dest risk raised after decide",
+    "proof_kind": "risk_raise"
+  },
+  "invariants": [
+    "risk raise invalidates issued lease",
+    "ceremony bind FSM is not rewritten"
+  ]
+}

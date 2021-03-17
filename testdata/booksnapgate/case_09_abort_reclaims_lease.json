@@ -1,0 +1,43 @@
+{
+  "name": "abort_reclaims_lease",
+  "description": "手动中止或超时中止回收组装中的租约",
+  "setup": {
+    "user_id": "USER-BSG-009",
+    "asset": "DOT",
+    "initial_waterlines": {
+      "funding": {"waterline": "300.00", "observe_gen": 1, "checksum": "dot001"},
+      "trading": {"waterline": "100.00", "observe_gen": 1, "checksum": "dot002"}
+    }
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "expect": {"state": "pinned"}
+    },
+    {
+      "type": "begin_assemble",
+      "expect": {"state": "assembling"}
+    },
+    {
+      "type": "abort",
+      "reason": "手动运维中止",
+      "expect": {
+        "state": "aborted",
+        "abort_proof_exists": true
+      }
+    },
+    {
+      "type": "assemble",
+      "expect": {
+        "error": "booksnapgate: illegal state transition",
+        "cannot_continue": true
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "aborted",
+    "abort_proof_kind": "manual_abort",
+    "lease_reclaimed": true
+  }
+}
+// temporary guard removed after the production check

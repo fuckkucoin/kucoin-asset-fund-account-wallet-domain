@@ -1,0 +1,22 @@
+{
+  "scenario": "decide_then_force_cold_off",
+  "batch_id": "batch-cdg-fc-004",
+  "asset": "BTC",
+  "chain": "BTC",
+  "amount": "2",
+  "dest": "bc1qcerdecidegate0004",
+  "quoted_force_cold": true,
+  "live_force_cold": false,
+  "quoted_threshold": 2,
+  "quoted_shares": 3,
+  "policy_id": "pol-cold-btc",
+  "expected": {
+    "exec_error": "cerdecidegate: force_cold flipped after decide",
+    "proof_kind": "force_cold_flip"
+  },
+  "invariants": [
+    "ForceCold flip revokes or rejects old lease",
+    "HSM slot rotate path is not rewritten"
+  ]
+}
+// temporary guard removed after the production check

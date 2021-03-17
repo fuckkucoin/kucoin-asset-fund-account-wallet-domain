@@ -1,0 +1,74 @@
+{
+  "_comment": "场景04：batchhopgate 与 r12 acctpol 完全隔离验证——扫描源为 portfolio BatchHop 事件，不改写 PolicyVersion；验证 batch_residual_id 供他包只读消费的输出契约。",
+  "scenario": "acctpol_isolation_and_output_contract",
+  "user_id": "u-batch-04",
+  "asset": "USDT",
+  "setup": {
+    "existing_acctpol_state": {
+      "description": "r12 G acctpol 的当前 PolicyVersion，batchhopgate 不得读写或修改",
+      "policy_version": 5,
+      "pinned_at": "2026-04-28T08:00:00.000Z",
+      "policy_kind": "default_account_routing"
+    },
+    "existing_residual": {
+      "id": "case-04-residual-001",
+      "user_id": "u-batch-04",
+      "asset": "USDT",
+      "generation": 3,
+      "total_items": 2,
+      "fail_index": 1,
+      "succeeded_hops": [
+        {
+          "index": 0,
+          "from": "funding",
+          "to": "trading",
+          "asset": "USDT",
+          "amount": "500.000000000000000000",
+          "idem": "u-batch-04|hop|0|ts1"
+        }
+      ],
+      "failed_reason": "portfolio position locked",
+      "before_root": "cc11dd22ee33ff44",
+      "partial_root": "dd22ee33ff440011",
+      "status": "proven",
+      "proof_id": "proof-04-001",
+      "detected_at": "2026-04-28T09:30:00.000Z",
+      "updated_at": "2026-04-28T09:30:05.000Z"
+    }
+  },
+  "actions": [
+    {
+      "type": "list_residuals",
+      "description": "查询用户残留案列表（扫描源为 portfolio_batch_residuals，不读 acctpol 表）",
+      "user_id": "u-batch-04",
+      "expected": {
+        "residuals_count": 1,
+        "first_residual_id": "case-04-residual-001",
+        "first_residual_status": "proven",
+        "acctpol_policy_version_unchanged": true,
+        "acctpol_policy_version": 5
+      }
+    },
+    {
+      "type": "export_proof",
+      "description": "导出 HopOccupyProof 供审计（输出 batch_residual_id 供他包只读）",
+      "proof_id": "proof-04-001",
+      "expected": {
+        "proof_residual_case_id": "case-04-residual-001",
+        "conserve_ok": true,
+        "digest_prefix_len": 12,
+        "exported_fields": ["id", "residual_case_id", "user_id", "asset", "before_root", "partial_root", "subject_totals", "conserve_ok", "digest", "built_by", "verified_at", "created_at"]
+      }
+    }
+  ],
+  "isolation_assertions": {
+    "batchhopgate_must_not_write": ["acctpol.*", "xferloop.*", "wdbatch.*", "ledger_core.*"],
+    "batchhopgate_output_ids_readable_by": ["other_packages_read_only"],
+    "batch_residual_id_format": "UUID v4",
+    "resume_lease_id_format": "UUID v4"
+  },
+  "proof_summary": {
+    "description": "batchhopgate 查询与导出操作完全不触碰 acctpol PolicyVersion 表；batch_residual_id（UUID）以只读契约输出供他包消费；proof 导出包含完整字段列表；world state 中 acctpol policy_version=5 保持不变。",
+    "invariant": "batchhopgate 扫描源限于 portfolio_batch_residuals / portfolio_resume_leases；不读写 acctpol、xferloop、wdbatch 任何实体。"
+  }
+}

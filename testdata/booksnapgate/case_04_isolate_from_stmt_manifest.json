@@ -1,0 +1,50 @@
+{
+  "name": "isolate_from_stmt_manifest",
+  "description": "快照组装引擎与 stmt Export/Manifest 完全隔离，不修改导出流程",
+  "setup": {
+    "user_id": "USER-BSG-004",
+    "asset": "USDT",
+    "books": ["funding", "trading"],
+    "initial_waterlines": {
+      "funding": {"waterline": "500.00", "observe_gen": 1, "checksum": "iso001"},
+      "trading": {"waterline": "300.00", "observe_gen": 1, "checksum": "iso002"}
+    }
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "user_id": "USER-BSG-004",
+      "asset": "USDT",
+      "expect": {
+        "state": "pinned",
+        "no_stmt_export_call": true,
+        "no_manifest_modification": true,
+        "no_balproof_hmac_change": true
+      }
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "sealed",
+        "no_stmt_export_side_effect": true,
+        "no_leddiff_capture_call": true,
+        "no_ledger_listbills_kernel_change": true
+      }
+    }
+  ],
+  "expected": {
+    "stmt_export_untouched": true,
+    "manifest_untouched": true,
+    "balproof_hmac_untouched": true,
+    "leddiff_capture_untouched": true,
+    "ledger_listbills_unchanged": true
+  },
+  "invariants": [
+    "booksnapgate 不调用 stmt.Export",
+    "booksnapgate 不修改 stmt.Manifest",
+    "booksnapgate 不触碰 balproof HMAC",
+    "booksnapgate 不调用 leddiff.Capture",
+    "booksnapgate 不改写 ledger.ListBills 内核"
+  ]
+}

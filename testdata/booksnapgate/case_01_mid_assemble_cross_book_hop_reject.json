@@ -1,0 +1,65 @@
+{
+  "name": "mid_assemble_cross_book_hop_reject",
+  "description": "组装期间跨科目信用跳转必须拒绝或重新 pin，绝不返回虚假多科目守恒",
+  "setup": {
+    "user_id": "USER-BSG-001",
+    "asset": "USDT",
+    "books": ["funding", "trading", "margin", "futures", "earn"],
+    "initial_waterlines": {
+      "funding": {"waterline": "100.50", "observe_gen": 1, "checksum": "abc001"},
+      "trading": {"waterline": "200.00", "observe_gen": 1, "checksum": "abc002"},
+      "margin": {"waterline": "50.00", "observe_gen": 1, "checksum": "abc003"},
+      "futures": {"waterline": "75.25", "observe_gen": 1, "checksum": "abc004"},
+      "earn": {"waterline": "30.00", "observe_gen": 1, "checksum": "abc005"}
+    }
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "user_id": "USER-BSG-001",
+      "asset": "USDT",
+      "expect": {
+        "state": "pinned",
+        "book_count": 5,
+        "snap_gen": 1
+      }
+    },
+    {
+      "type": "simulate_cross_book_hop",
+      "source_book": "funding",
+      "target_book": "trading",
+      "amount": "10.00",
+      "description": "组装期间从 funding 向 trading 的跨科目划转",
+      "waterline_change": {
+        "funding": {"waterline": "90.50", "observe_gen": 2, "checksum": "def001"},
+        "trading": {"waterline": "210.00", "observe_gen": 2, "checksum": "def002"}
+      }
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "drifted",
+        "drift_detected": true,
+        "drift_kind": "waterline_shift",
+        "drift_book": "funding",
+        "conserve_returned": false,
+        "partial_totals_returned": false
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "drifted",
+    "drift_proof_exists": true,
+    "drift_proof_kind": "waterline_shift",
+    "no_partial_conserve": true,
+    "no_false_multi_conserve": true,
+    "repin_available": true
+  },
+  "invariants": [
+    "组装期间跨科目跳转必须被检测",
+    "绝不返回部分滚动合计",
+    "漂移后可 re-pin 重试",
+    "不影响 stmt Export 或 balproof HMAC"
+  ]
+}

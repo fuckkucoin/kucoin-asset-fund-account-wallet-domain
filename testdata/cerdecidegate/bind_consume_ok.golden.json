@@ -1,0 +1,21 @@
+{
+  "scenario": "decide_assert_consume_ok",
+  "batch_id": "batch-cdg-ok-005",
+  "asset": "ETH",
+  "chain": "ETH",
+  "amount": "12",
+  "dest": "0xcerdecidegate0005",
+  "dest_risk": "high",
+  "quoted_threshold": 3,
+  "quoted_shares": 5,
+  "policy_id": "pol-cold-eth",
+  "expected": {
+    "state_after_assert": "bound",
+    "state_after_consume": "consumed",
+    "proof_kind": "bind_ok"
+  },
+  "invariants": [
+    "same fingerprint binds once",
+    "consume is terminal"
+  ]
+}

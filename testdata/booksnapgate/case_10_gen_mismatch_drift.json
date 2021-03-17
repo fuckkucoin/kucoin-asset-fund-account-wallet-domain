@@ -1,0 +1,39 @@
+{
+  "name": "gen_mismatch_drift",
+  "description": "科目观测世代不匹配时检测为漂移",
+  "setup": {
+    "user_id": "USER-BSG-010",
+    "asset": "SOL",
+    "initial_waterlines": {
+      "funding": {"waterline": "50.00", "observe_gen": 5, "checksum": "sol001"},
+      "trading": {"waterline": "25.00", "observe_gen": 5, "checksum": "sol002"},
+      "futures": {"waterline": "10.00", "observe_gen": 5, "checksum": "sol003"}
+    }
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "expect": {"state": "pinned", "snap_gen": 1}
+    },
+    {
+      "type": "simulate_gen_change",
+      "book": "trading",
+      "old_gen": 5,
+      "new_gen": 6,
+      "waterline_unchanged": true
+    },
+    {
+      "type": "assemble",
+      "expect": {
+        "state": "drifted",
+        "drift_kind": "gen_mismatch",
+        "drift_book": "trading"
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "drifted",
+    "drift_proof_kind": "gen_mismatch",
+    "affected_book": "trading"
+  }
+}

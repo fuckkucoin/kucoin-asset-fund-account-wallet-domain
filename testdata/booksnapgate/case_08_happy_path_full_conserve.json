@@ -1,0 +1,53 @@
+{
+  "name": "happy_path_full_conserve",
+  "description": "无漂移、全科目守恒的正常组装流程",
+  "setup": {
+    "user_id": "USER-BSG-008",
+    "asset": "USDT",
+    "books": ["funding", "trading", "margin", "futures", "earn"],
+    "initial_waterlines": {
+      "funding": {"waterline": "10000.00", "observe_gen": 1, "checksum": "hap001"},
+      "trading": {"waterline": "5000.00", "observe_gen": 1, "checksum": "hap002"},
+      "margin": {"waterline": "2000.00", "observe_gen": 1, "checksum": "hap003"},
+      "futures": {"waterline": "1500.00", "observe_gen": 1, "checksum": "hap004"},
+      "earn": {"waterline": "500.00", "observe_gen": 1, "checksum": "hap005"}
+    },
+    "bills": [
+      {"seq": 1, "book": "funding", "asset": "USDT", "debit": "100.00", "credit": "100.00"},
+      {"seq": 2, "book": "trading", "asset": "USDT", "debit": "50.00", "credit": "50.00"},
+      {"seq": 3, "book": "margin", "asset": "USDT", "debit": "20.00", "credit": "20.00"},
+      {"seq": 4, "book": "futures", "asset": "USDT", "debit": "15.00", "credit": "15.00"},
+      {"seq": 5, "book": "earn", "asset": "USDT", "debit": "5.00", "credit": "5.00"}
+    ]
+  },
+  "actions": [
+    {
+      "type": "pin_snap",
+      "user_id": "USER-BSG-008",
+      "asset": "USDT",
+      "expect": {
+        "state": "pinned",
+        "snap_gen": 1,
+        "book_count": 5
+      }
+    },
+    {
+      "type": "assemble",
+      "lease_id": "${lease_id}",
+      "expect": {
+        "state": "sealed",
+        "conserved": true,
+        "total_debit": "190.00",
+        "total_credit": "190.00",
+        "delta": "0",
+        "book_count": 5
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "sealed",
+    "sealed_result_exists": true,
+    "conserved": true,
+    "no_drift_proof": true
+  }
+}

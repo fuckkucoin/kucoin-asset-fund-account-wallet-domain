@@ -1,0 +1,106 @@
+{
+  "_comment": "场景03：无令牌续跳拒绝；令牌世代不符拒绝；令牌过期拒绝。",
+  "scenario": "no_token_and_stale_token_reject",
+  "user_id": "u-batch-03",
+  "asset": "ETH",
+  "setup": {
+    "existing_residual": {
+      "id": "case-03-residual-001",
+      "user_id": "u-batch-03",
+      "asset": "ETH",
+      "generation": 2,
+      "total_items": 4,
+      "fail_index": 2,
+      "succeeded_hops": [
+        {
+          "index": 0,
+          "from": "funding",
+          "to": "trading",
+          "asset": "ETH",
+          "amount": "10.000000000000000000",
+          "idem": "u-batch-03|hop|0|ts1"
+        },
+        {
+          "index": 1,
+          "from": "funding",
+          "to": "earn",
+          "asset": "ETH",
+          "amount": "5.000000000000000000",
+          "idem": "u-batch-03|hop|1|ts1"
+        }
+      ],
+      "failed_reason": "portfolio book unavailable",
+      "before_root": "aabbccdd11223344",
+      "partial_root": "bbccddee22334455",
+      "status": "proven",
+      "proof_id": "proof-03-001",
+      "detected_at": "2026-04-28T09:00:00.000Z",
+      "updated_at": "2026-04-28T09:00:05.000Z"
+    }
+  },
+  "actions": [
+    {
+      "type": "resume_request_no_token",
+      "description": "续跳请求不携带令牌（token 为空值）",
+      "residual_case_id": "case-03-residual-001",
+      "token": {
+        "user_id": "",
+        "asset": "",
+        "generation": 0
+      },
+      "resume_from": 2,
+      "expected_error": "batchhopgate: no generation token provided for resume",
+      "expected_error_code": "ErrNoTokenProvided"
+    },
+    {
+      "type": "resume_request_stale_generation",
+      "description": "续跳令牌世代与残留案世代不符（token.generation=1, residual.generation=2）",
+      "residual_case_id": "case-03-residual-001",
+      "token": {
+        "user_id": "u-batch-03",
+        "asset": "ETH",
+        "generation": 1,
+        "issued_at": "2026-04-28T09:00:05.000Z",
+        "expires_at": "2026-04-28T09:30:05.000Z"
+      },
+      "resume_from": 2,
+      "expected_error": "batchhopgate: generation token mismatch",
+      "expected_error_code": "ErrTokenGenerationMismatch"
+    },
+    {
+      "type": "resume_request_expired_token",
+      "description": "续跳令牌已超过 TTL（expires_at 在当前时间之前）",
+      "residual_case_id": "case-03-residual-001",
+      "token": {
+        "user_id": "u-batch-03",
+        "asset": "ETH",
+        "generation": 2,
+        "issued_at": "2026-04-28T09:00:05.000Z",
+        "expires_at": "2026-04-28T09:01:00.000Z"
+      },
+      "simulated_now": "2026-04-28T10:00:00.000Z",
+      "resume_from": 2,
+      "expected_error": "batchhopgate: resume lease expired",
+      "expected_error_code": "ErrLeaseExpired"
+    },
+    {
+      "type": "resume_request_wrong_user",
+      "description": "续跳令牌 user_id 与残留案不符",
+      "residual_case_id": "case-03-residual-001",
+      "token": {
+        "user_id": "u-attacker-99",
+        "asset": "ETH",
+        "generation": 2,
+        "issued_at": "2026-04-28T09:00:05.000Z",
+        "expires_at": "2026-04-28T09:30:05.000Z"
+      },
+      "resume_from": 2,
+      "expected_error": "batchhopgate: generation token mismatch",
+      "expected_error_code": "ErrTokenGenerationMismatch"
+    }
+  ],
+  "proof_summary": {
+    "description": "无令牌（ErrNoTokenProvided）、旧世代令牌（ErrTokenGenerationMismatch）、过期令牌（ErrLeaseExpired）、错 user_id 令牌（ErrTokenGenerationMismatch）均被拒绝，残留案不会进入 resuming 状态，BatchGeneration 世代保持不变。",
+    "invariant": "续跳必须携带未过期、世代匹配、user_id/asset 匹配的 GenToken；四种异常均必须拒绝。"
+  }
+}

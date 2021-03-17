@@ -1,0 +1,59 @@
+{
+  "name": "idempotent_sealed_reuse",
+  "description": "相同 user/asset/snap_window 的幂等 Build 复用未过期封存结果",
+  "setup": {
+    "user_id": "USER-BSG-003",
+    "asset": "ETH",
+    "books": ["funding", "trading", "margin", "futures", "earn"],
+    "initial_waterlines": {
+      "funding": {"waterline": "10.0000", "observe_gen": 1, "checksum": "eth001"},
+      "trading": {"waterline": "5.0000", "observe_gen": 1, "checksum": "eth002"},
+      "margin": {"waterline": "2.0000", "observe_gen": 1, "checksum": "eth003"},
+      "futures": {"waterline": "1.0000", "observe_gen": 1, "checksum": "eth004"},
+      "earn": {"waterline": "3.0000", "observe_gen": 1, "checksum": "eth005"}
+    },
+    "snap_window": "USER-BSG-003|ETH|2021-11-22T10:00:00Z|2021-11-22T11:00:00Z",
+    "bills": [
+      {"seq": 1, "book": "funding", "asset": "ETH", "debit": "5.0000", "credit": "5.0000"},
+      {"seq": 2, "book": "trading", "asset": "ETH", "debit": "3.0000", "credit": "3.0000"}
+    ]
+  },
+  "actions": [
+    {
+      "type": "idempotent_build",
+      "user_id": "USER-BSG-003",
+      "asset": "ETH",
+      "window": "USER-BSG-003|ETH|2021-11-22T10:00:00Z|2021-11-22T11:00:00Z",
+      "expect": {
+        "state": "sealed",
+        "conserved": true,
+        "reused": false
+      }
+    },
+    {
+      "type": "idempotent_build",
+      "user_id": "USER-BSG-003",
+      "asset": "ETH",
+      "window": "USER-BSG-003|ETH|2021-11-22T10:00:00Z|2021-11-22T11:00:00Z",
+      "expect": {
+        "state": "sealed",
+        "conserved": true,
+        "reused": true,
+        "same_lease_id": true,
+        "same_snap_gen": true
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "sealed",
+    "reuse_count": 1,
+    "sealed_result_identical": true,
+    "no_duplicate_lease": true
+  },
+  "invariants": [
+    "幂等 Build 复用封存结果",
+    "第二次调用返回 reused=true",
+    "lease_id 和 snap_gen 完全一致",
+    "不影响 stmt Export 或 balproof HMAC"
+  ]
+}
