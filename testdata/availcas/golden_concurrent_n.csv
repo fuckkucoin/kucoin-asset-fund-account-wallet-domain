@@ -1,0 +1,8 @@
+scenario,goroutines,initial_available,amount_per_goroutine,expected_max_success,invariant_success_total_le_initial,invariant_final_avail_ge_zero
+concurrent_20_goroutines,20,500,50,10,true,true
+concurrent_50_goroutines,50,1000,100,10,true,true
+concurrent_100_goroutines,100,500,100,5,true,true
+concurrent_single,1,500,500,1,true,true
+concurrent_over_budget,10,300,100,3,true,true
+concurrent_tiny_amount,100,0.000000000000000100,0.000000000000000001,100,true,true
+concurrent_large_balance,20,999999999999999999,100000000000000000,9,true,true

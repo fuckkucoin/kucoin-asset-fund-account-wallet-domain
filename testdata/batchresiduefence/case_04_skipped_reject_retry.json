@@ -1,0 +1,21 @@
+{
+  "name": "skipped_reject_retry",
+  "description": "已跳过项禁止 Retry",
+  "setup": {
+    "batch_id": "batch-skip-04",
+    "item_idem": "item-skip-04",
+    "phase": "skipped",
+    "user_id": "u-1004",
+    "asset": "KCS",
+    "amount": "100"
+  },
+  "actions": [
+    {"op": "issue_fence", "actor": "ops-a"},
+    {"op": "retry", "actor": "ops-a"}
+  ],
+  "expected": {
+    "allowed": false,
+    "error": "skipped",
+    "reason": "item_already_skipped"
+  }
+}

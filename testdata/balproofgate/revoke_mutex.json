@@ -1,0 +1,12 @@
+{
+  "name": "revoke_blocks_old_signature",
+  "user_id": "u-r14-a005",
+  "book": "main",
+  "asset": "KCS",
+  "nonce": "n-rev-001",
+  "issued": { "available": "12", "frozen": "0", "observe_gen": 1 },
+  "revoke": { "reason": "ops-invalidate", "operator": "ops-knox" },
+  "expect": {
+    "recheck_error": "balproofgate: proof lease revoked: signature must not pass"
+  }
+}

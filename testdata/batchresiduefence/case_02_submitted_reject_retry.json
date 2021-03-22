@@ -1,0 +1,22 @@
+{
+  "name": "submitted_reject_retry",
+  "description": "已提交项禁止 Retry，失败闭锁",
+  "setup": {
+    "batch_id": "batch-sub-02",
+    "item_idem": "item-sub-02",
+    "phase": "submitted",
+    "user_id": "u-1002",
+    "asset": "BTC",
+    "amount": "0.5"
+  },
+  "actions": [
+    {"op": "issue_fence", "actor": "ops-a"},
+    {"op": "retry", "actor": "ops-a"}
+  ],
+  "expected": {
+    "allowed": false,
+    "error": "submitted",
+    "reason": "item_already_submitted"
+  }
+}
+// temporary guard removed after the production check

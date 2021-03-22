@@ -1,0 +1,13 @@
+{
+  "name": "same_nonce_no_double_sign",
+  "user_id": "u-r14-a004",
+  "book": "main",
+  "asset": "USDT",
+  "nonce": "n-idem-001",
+  "issued": { "available": "40", "frozen": "5", "observe_gen": 4 },
+  "expect": {
+    "same_proof_lease_id": true,
+    "same_signature": true,
+    "generation_bump_count": 1
+  }
+}

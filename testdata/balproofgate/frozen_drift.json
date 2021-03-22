@@ -1,0 +1,14 @@
+{
+  "name": "issue_then_frozen_up",
+  "user_id": "u-r14-a002",
+  "book": "main",
+  "asset": "BTC",
+  "nonce": "n-frozen-001",
+  "issued": { "available": "2", "frozen": "1", "observe_gen": 7 },
+  "after": { "available": "2", "frozen": "1.5", "observe_gen": 8 },
+  "expect": {
+    "recheck_error": "balproofgate: live balance drifted after issue",
+    "drift_kind": "frozen_up",
+    "consume_allowed": false
+  }
+}

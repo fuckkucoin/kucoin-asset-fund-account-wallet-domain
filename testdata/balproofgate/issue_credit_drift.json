@@ -1,0 +1,15 @@
+{
+  "name": "issue_then_credit_available",
+  "user_id": "u-r14-a001",
+  "book": "main",
+  "asset": "USDT",
+  "nonce": "n-credit-001",
+  "issued": { "available": "100", "frozen": "0", "observe_gen": 1 },
+  "after": { "available": "150", "frozen": "0", "observe_gen": 2 },
+  "expect": {
+    "recheck_error": "balproofgate: live balance drifted after issue",
+    "drift_kind": "avail_credit",
+    "drift_status": "proven",
+    "consume_allowed": false
+  }
+}
