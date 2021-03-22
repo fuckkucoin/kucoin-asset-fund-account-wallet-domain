@@ -1,0 +1,18 @@
+{
+  "_comment": "重开后旧 close_epoch 不得入新活户",
+  "_scenario": "reopen_stale_refuse",
+  "setup": {
+    "user_id": "u-reopen-01",
+    "book": "trading",
+    "asset": "BTC",
+    "amount": "0.15",
+    "tx_ref": "obs-tx-reopen"
+  },
+  "steps": [
+    {"step": 1, "action": "ensure", "expect": {"state": "open", "close_epoch": 1}},
+    {"step": 2, "action": "close", "expect": {"state": "closed", "close_epoch": 2}},
+    {"step": 3, "action": "reopen", "expect": {"state": "reopened", "close_epoch": 3}},
+    {"step": 4, "action": "assert_observe", "has_epoch": true, "close_epoch": 2, "expect": {"allowed": false, "decision": "reject", "reason": "stale_after_reopen", "has_proof": true}}
+  ],
+  "invariants": ["proof_required", "no_live_credit"]
+}
