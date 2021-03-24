@@ -1,0 +1,40 @@
+{
+  "description": "并发 Mark 与 Exec 竞态场景——仅一条腿胜出",
+  "cases": [
+    {
+      "id": "concurrent_mark_wins",
+      "asset": "USDT",
+      "initial_gen": 0,
+      "sequence": [
+        {"op": "mark",        "actor": "A", "window": "1h"},
+        {"op": "exec_verify", "actor": "B", "cool_gen": 1}
+      ],
+      "want_exec_allowed": false,
+      "want_breach_case": true
+    },
+    {
+      "id": "exec_then_mark_gen_mismatch",
+      "asset": "BTC",
+      "initial_gen": 1,
+      "sequence": [
+        {"op": "clear_cool",  "actor": "worker"},
+        {"op": "mark",        "actor": "A", "window": "1h"},
+        {"op": "exec_verify", "actor": "B", "cool_gen": 1}
+      ],
+      "want_exec_allowed": false,
+      "want_breach_case": true,
+      "want_error": "coolmarkgate: cool window is still active"
+    },
+    {
+      "id": "stale_gen_rejected",
+      "asset": "ETH",
+      "initial_gen": 2,
+      "sequence": [
+        {"op": "exec_verify", "actor": "B", "cool_gen": 1}
+      ],
+      "want_exec_allowed": false,
+      "want_breach_case": true,
+      "want_error": "coolmarkgate: cool generation mismatch"
+    }
+  ]
+}
