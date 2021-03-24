@@ -1,0 +1,30 @@
+{
+  "_comment": "golden: 过期租约上的 ApplyWithLease 必须 fail-closed，落 ProofExpiredLease。",
+  "scenario": "expired_lease_apply",
+  "item_id": "item-golden-el-001",
+  "batch_id": "batch-golden-el-001",
+  "user_id": "user-golden-003",
+  "asset": "USDT",
+  "amount": "1000.000000000000000000",
+  "lease_ttl_minutes": 10,
+  "time_advance_minutes": 11,
+  "release": {
+    "actor": "ops-golden",
+    "expected_lease_state": "issued",
+    "expected_expires_at_offset_minutes": 10
+  },
+  "apply_after_expiry": {
+    "actor": "ops-golden",
+    "expected_result": "fail",
+    "expected_error": "clrcreditgate: lease expired",
+    "expected_proof_kind": "expired_lease",
+    "credit_ledger_called": false
+  },
+  "invariants": [
+    "Apply on expired lease returns ErrLeaseExpired",
+    "No credit ledger entry created",
+    "ProofExpiredLease.ItemID = item_id",
+    "Lease.State transitions to expired (either by worker scan or by apply-time detection)",
+    "Worker.ScanExpiredLeases marks lease as expired when expires_at < now"
+  ]
+}

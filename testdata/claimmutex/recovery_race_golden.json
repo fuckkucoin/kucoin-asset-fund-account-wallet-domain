@@ -1,0 +1,45 @@
+{
+  "_comment": "Recovery 推进与 Claim 竞态 Golden 夹具",
+  "_scenario": "Claim 胜出后，Recovery 推进同输出须核验效果世代，世代不符则被拒",
+  "output_key": {
+    "chain": "SOL",
+    "tx_hash": "3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5d4c3b2a1f0e9d8c7b6a5d4c3b2a",
+    "output_index": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "AcquireLease",
+      "kind": "claim",
+      "actor_id": "user-eve",
+      "idem_key": "idem-eve-001",
+      "expected_result": "ok",
+      "note": "Claim 胜出，获得 lease_id 与 generation"
+    },
+    {
+      "step": 2,
+      "action": "GuardOutput",
+      "lease_id": "<from_step1>",
+      "generation": "<from_step1>",
+      "actor_id": "user-eve",
+      "kind": "claim",
+      "expected_result": "ok",
+      "note": "同一 actor，世代一致，GuardOutput 通过"
+    },
+    {
+      "step": 3,
+      "action": "GuardOutput",
+      "lease_id": "stale-lease-id-xxxx",
+      "generation": 0,
+      "actor_id": "recovery-worker",
+      "kind": "recovery",
+      "expected_result": "ErrGenerationMismatch",
+      "note": "Recovery 携带错误 lease_id，核验失败"
+    }
+  ],
+  "assertions": [
+    "步骤2：同一 lease_id + generation 通过 GuardOutput",
+    "步骤3：错误 lease_id 导致 ErrGenerationMismatch，Recovery 推进被拒",
+    "不写错链回收工单 FSM（r7 B 边界）"
+  ]
+}

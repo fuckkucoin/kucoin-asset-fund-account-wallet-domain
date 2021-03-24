@@ -1,0 +1,70 @@
+{
+  "_comment": "效果证明缺失不得标认领完成 Golden 夹具",
+  "_scenario": "CompleteClaim 在效果证明未 verified 时返回 ErrProofMissing",
+  "output_key": {
+    "chain": "TRX",
+    "tx_hash": "e3d2c1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5d4c3b2",
+    "output_index": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "AcquireLease",
+      "kind": "claim",
+      "actor_id": "user-dave",
+      "idem_key": "idem-dave-001",
+      "expected_result": "ok",
+      "expected_lease_state": "open"
+    },
+    {
+      "step": 2,
+      "action": "CompleteClaim",
+      "proof_id": "",
+      "expected_result": "ErrProofMissing",
+      "note": "proof_id 为空，直接拒绝"
+    },
+    {
+      "step": 3,
+      "action": "CompleteClaim",
+      "proof_id": "non-existent-proof-id",
+      "expected_result": "ErrProofMissing",
+      "note": "proof 不存在，拒绝"
+    },
+    {
+      "step": 4,
+      "action": "CreateProof",
+      "lease_id": "<from_step1>",
+      "claim_kind": "claim",
+      "actor_id": "user-dave",
+      "expected_result": "ok",
+      "expected_proof_state": "pending"
+    },
+    {
+      "step": 5,
+      "action": "CompleteClaim",
+      "proof_id": "<from_step4>",
+      "expected_result": "ErrProofMissing",
+      "note": "证明仍为 pending，未经 VerifyProof，拒绝完成"
+    },
+    {
+      "step": 6,
+      "action": "VerifyProof",
+      "proof_id": "<from_step4>",
+      "expected_result": "ok",
+      "expected_proof_state": "verified"
+    },
+    {
+      "step": 7,
+      "action": "CompleteClaim",
+      "proof_id": "<from_step4>",
+      "expected_result": "ok",
+      "expected_proof_state": "sealed",
+      "note": "证明已 verified，允许完成"
+    }
+  ],
+  "assertions": [
+    "步骤2/3/5：proof 缺失或未 verified 时 CompleteClaim 返回 ErrProofMissing",
+    "步骤6：VerifyProof 通过后 proof 状态变为 verified",
+    "步骤7：CompleteClaim 成功，proof 变为 sealed"
+  ]
+}
