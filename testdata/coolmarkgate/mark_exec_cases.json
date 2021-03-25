@@ -1,0 +1,60 @@
+{
+  "description": "Mark 后冷却窗活跃，Exec 必须被拒绝并落 CoolBreachCase",
+  "cases": [
+    {
+      "id": "mark_then_exec_blocked",
+      "mark_input": {
+        "asset": "USDT",
+        "reason": "hot over cap",
+        "window": "1h"
+      },
+      "exec_input": {
+        "asset": "USDT",
+        "cool_gen": 1,
+        "exec_id": "exec-001"
+      },
+      "clock_offset_after_mark": "0s",
+      "want_exec_allowed": false,
+      "want_error": "coolmarkgate: cool window is still active",
+      "want_breach_case": true,
+      "want_breach_decision": "blocked"
+    },
+    {
+      "id": "mark_window_expired_no_proof_blocked",
+      "mark_input": {
+        "asset": "BTC",
+        "reason": "rebalance trigger",
+        "window": "30m"
+      },
+      "exec_input": {
+        "asset": "BTC",
+        "cool_gen": 1,
+        "exec_id": "exec-002"
+      },
+      "clock_offset_after_mark": "31m",
+      "want_exec_allowed": false,
+      "want_error": "coolmarkgate: cool proof missing, exec blocked",
+      "want_breach_case": true,
+      "want_breach_decision": "blocked"
+    },
+    {
+      "id": "mark_cleared_exec_allowed",
+      "mark_input": {
+        "asset": "ETH",
+        "reason": "scheduled sweep",
+        "window": "30m"
+      },
+      "exec_input": {
+        "asset": "ETH",
+        "cool_gen": 1,
+        "exec_id": "exec-003"
+      },
+      "clock_offset_after_mark": "31m",
+      "clear_before_exec": true,
+      "want_exec_allowed": true,
+      "want_error": "",
+      "want_breach_case": false,
+      "want_breach_decision": ""
+    }
+  ]
+}
