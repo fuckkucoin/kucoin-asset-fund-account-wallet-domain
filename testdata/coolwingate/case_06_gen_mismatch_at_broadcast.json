@@ -1,0 +1,38 @@
+{
+  "name": "gen_mismatch_at_broadcast",
+  "description": "Preflight 绑定 gen=0 后发生 Mark bump gen=1，broadcast check 时 gen 不匹配导致撤回与 case",
+  "setup": {
+    "user_id": "USER-CWG-006",
+    "withdraw_id": "WD-CWG-006"
+  },
+  "actions": [
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-006",
+      "withdraw_id": "WD-CWG-006",
+      "expect": {
+        "state": "open",
+        "cool_gen": 0
+      }
+    },
+    {
+      "type": "mark_cool_down",
+      "user_id": "USER-CWG-006",
+      "reason": "login_password",
+      "expect": {
+        "cool_gen": 1
+      }
+    },
+    {
+      "type": "check_broadcast",
+      "user_id": "USER-CWG-006",
+      "withdraw_id": "WD-CWG-006",
+      "expect_error": "coolwingate broadcast blocked: bind revoked after mark"
+    }
+  ],
+  "expected": {
+    "bind_final_state": "revoked",
+    "case_kind": "mark_after_preflight",
+    "case_count": 1
+  }
+}
