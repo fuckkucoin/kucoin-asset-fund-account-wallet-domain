@@ -1,0 +1,16 @@
+{
+  "_comment": "无 close_epoch 指针不得贷记成功",
+  "_scenario": "missing_epoch_fail_closed",
+  "setup": {
+    "user_id": "u-miss-01",
+    "book": "trading",
+    "asset": "USDT",
+    "amount": "1.00",
+    "tx_ref": "miss-01"
+  },
+  "steps": [
+    {"step": 1, "action": "ensure", "expect": {"state": "open", "close_epoch": 1}},
+    {"step": 2, "action": "assert_observe", "has_epoch": false, "expect": {"allowed": false, "decision": "reject", "reason": "missing_epoch", "has_proof": true}}
+  ],
+  "invariants": ["fail_closed", "no_live_credit"]
+}

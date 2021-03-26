@@ -1,0 +1,20 @@
+{
+  "name": "no_fence_fail_closed",
+  "description": "无 residue_fence 不得重开失败项",
+  "setup": {
+    "batch_id": "batch-nf-05",
+    "item_idem": "item-nf-05",
+    "phase": "failed",
+    "user_id": "u-1005",
+    "asset": "USDT",
+    "amount": "3"
+  },
+  "actions": [
+    {"op": "retry_no_fence", "actor": "ops-a"}
+  ],
+  "expected": {
+    "allowed": false,
+    "error": "fail_closed",
+    "reason": "retry_without_residue_fence"
+  }
+}

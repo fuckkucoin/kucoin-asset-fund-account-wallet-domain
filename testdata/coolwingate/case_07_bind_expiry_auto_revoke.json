@@ -1,0 +1,33 @@
+{
+  "name": "bind_expiry_auto_revoke",
+  "description": "PreflightBind 过期后 broadcast check 自动撤回并返回 bind_expired",
+  "setup": {
+    "user_id": "USER-CWG-007",
+    "withdraw_id": "WD-CWG-007",
+    "bind_ttl_sec": 1
+  },
+  "actions": [
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-007",
+      "withdraw_id": "WD-CWG-007",
+      "expect": {
+        "state": "open"
+      }
+    },
+    {
+      "type": "advance_clock",
+      "seconds": 120
+    },
+    {
+      "type": "check_broadcast",
+      "user_id": "USER-CWG-007",
+      "withdraw_id": "WD-CWG-007",
+      "expect_error": "coolwingate preflight bind expired"
+    }
+  ],
+  "expected": {
+    "bind_final_state": "revoked",
+    "bind_revoke_reason": "bind_expired"
+  }
+}

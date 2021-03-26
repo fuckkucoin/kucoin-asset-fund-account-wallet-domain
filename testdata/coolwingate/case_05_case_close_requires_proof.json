@@ -1,0 +1,44 @@
+{
+  "name": "case_close_requires_proof",
+  "description": "CoolWindowCase 关闭须先 proof → proven → closed；无 proof 不可直接关闭",
+  "setup": {
+    "user_id": "USER-CWG-005",
+    "withdraw_id": "WD-CWG-005"
+  },
+  "actions": [
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-005",
+      "withdraw_id": "WD-CWG-005",
+      "expect": {
+        "state": "open"
+      }
+    },
+    {
+      "type": "mark_cool_down",
+      "user_id": "USER-CWG-005",
+      "reason": "passkey_delete",
+      "expect": {
+        "cool_gen": 1
+      }
+    },
+    {
+      "type": "case_confirm_no_proof",
+      "case_index": 0,
+      "expect_error": "coolwingate case must be proven before close"
+    },
+    {
+      "type": "case_confirm_with_proof",
+      "case_index": 0,
+      "expect": {
+        "state": "closed",
+        "has_proof_ids": true,
+        "has_resolution": true
+      }
+    }
+  ],
+  "expected": {
+    "case_final_state": "closed",
+    "proof_sealed_after_close": false
+  }
+}

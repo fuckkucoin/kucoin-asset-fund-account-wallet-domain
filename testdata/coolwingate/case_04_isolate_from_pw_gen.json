@@ -1,0 +1,42 @@
+{
+  "name": "isolate_from_pw_gen",
+  "description": "cool_gen 独立于交易密码 pw_gen；Mark 仅递增 cool_gen 不影响 tradepw hash/Change 流程",
+  "setup": {
+    "user_id": "USER-CWG-004",
+    "withdraw_id": "WD-CWG-004"
+  },
+  "actions": [
+    {
+      "type": "mark_cool_down",
+      "user_id": "USER-CWG-004",
+      "reason": "trading_password",
+      "expect": {
+        "state": "open",
+        "cool_gen": 1
+      }
+    },
+    {
+      "type": "mark_cool_down",
+      "user_id": "USER-CWG-004",
+      "reason": "email",
+      "expect": {
+        "state": "open",
+        "cool_gen": 2
+      }
+    },
+    {
+      "type": "cool_gen_query",
+      "user_id": "USER-CWG-004",
+      "expect": {
+        "current_gen": 2,
+        "reason": "email"
+      }
+    }
+  ],
+  "expected": {
+    "final_gen": 2,
+    "tradepw_hash_unchanged": true,
+    "tradepw_change_flow_untouched": true,
+    "destallow_list_untouched": true
+  }
+}

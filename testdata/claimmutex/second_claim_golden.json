@@ -1,0 +1,37 @@
+{
+  "_comment": "同 (chain,tx_hash,output_index) 二次认领事故轨迹 Golden 夹具",
+  "_scenario": "同输出第一次 Claim 胜出，第二次 Claim 被拒，无第二笔 ledger 贷记",
+  "output_key": {
+    "chain": "ETH",
+    "tx_hash": "0xabc123def456abc123def456abc123def456abc123def456abc123def456abcd",
+    "output_index": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "AcquireLease",
+      "kind": "claim",
+      "actor_id": "user-alice",
+      "idem_key": "idem-alice-001",
+      "expected_result": "ok",
+      "expected_lease_state": "open",
+      "expected_winner_kind": "claim",
+      "expected_winner_actor": "user-alice"
+    },
+    {
+      "step": 2,
+      "action": "AcquireLease",
+      "kind": "claim",
+      "actor_id": "user-bob",
+      "idem_key": "idem-bob-001",
+      "expected_result": "ErrSecondClaim",
+      "expected_no_ledger_credit": true,
+      "expected_no_new_lease": true
+    }
+  ],
+  "assertions": [
+    "第一次 AcquireLease 返回 ok，state=open，winner=user-alice",
+    "第二次 AcquireLease 返回 ErrSecondClaim，无新租约",
+    "无第二笔 ledger 贷记（store 中仍只有一条租约）"
+  ]
+}

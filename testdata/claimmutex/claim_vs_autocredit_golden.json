@@ -1,0 +1,48 @@
+{
+  "_comment": "Claim 与自动贷记并发竞态事故轨迹 Golden 夹具",
+  "_scenario": "Claim 抢先胜出，自动贷记腿被拒，产出 DupClaimCase（若已双落则双贷案件 open）",
+  "output_key": {
+    "chain": "BTC",
+    "tx_hash": "7b4d9a3c2e1f0a8b6d5e4c3b2a1f0e9d8c7b6a5d4c3b2a1f0e9d8c7b6a5d4c3",
+    "output_index": 2
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "RegisterAutoCredit",
+      "actor_id": "autocredit-worker",
+      "user_id": "user-carol",
+      "asset": "BTC",
+      "amount": "0.5",
+      "idem_key": "idem-autocredit-001",
+      "expected_result": "ok",
+      "expected_bind_state": "pending"
+    },
+    {
+      "step": 2,
+      "action": "AcquireLease",
+      "kind": "claim",
+      "actor_id": "user-carol",
+      "idem_key": "idem-claim-001",
+      "expected_result": "ok",
+      "expected_lease_state": "open",
+      "expected_winner_kind": "claim",
+      "expected_dup_case_opened": true,
+      "expected_auto_bind_rejected": true
+    },
+    {
+      "step": 3,
+      "action": "AdvanceLease",
+      "kind": "claim",
+      "actor_id": "user-carol",
+      "expected_result": "ok",
+      "expected_lease_state": "claimed"
+    }
+  ],
+  "assertions": [
+    "步骤1：RegisterAutoCredit 注册 pending 绑定",
+    "步骤2：Claim 抢占租约成功，发现 pending auto-bind，置 rejected，开 DupClaimCase",
+    "步骤3：AdvanceLease 将租约推进到 claimed",
+    "最终只有 Claim 腿入账，auto-credit 腿被互斥拒绝"
+  ]
+}

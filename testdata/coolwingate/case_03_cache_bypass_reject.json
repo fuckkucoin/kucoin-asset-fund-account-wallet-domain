@@ -1,0 +1,23 @@
+{
+  "name": "cache_bypass_reject",
+  "description": "本地缓存放行但 ledger 仍有锁窗口时，broadcast check 必须拒绝；禁止 local-cache allow",
+  "setup": {
+    "user_id": "USER-CWG-003",
+    "withdraw_id": "WD-CWG-003",
+    "ledger_lock_active": true,
+    "ledger_lock_reason": "phone"
+  },
+  "actions": [
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-003",
+      "withdraw_id": "WD-CWG-003",
+      "expect_error": "coolwingate withdraw lock window active"
+    }
+  ],
+  "expected": {
+    "bind_created": false,
+    "ledger_authoritative": true,
+    "local_cache_rejected": true
+  }
+}

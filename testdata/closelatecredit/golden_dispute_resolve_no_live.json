@@ -1,0 +1,19 @@
+{
+  "_comment": "争议人工放行升新证明，不得贷入新活户",
+  "_scenario": "dispute_resolve_no_live",
+  "setup": {
+    "user_id": "u-hold-01",
+    "book": "trading",
+    "asset": "USDT",
+    "amount": "20.00",
+    "tx_ref": "hold-01"
+  },
+  "steps": [
+    {"step": 1, "action": "ensure", "expect": {"state": "open", "close_epoch": 1}},
+    {"step": 2, "action": "close", "expect": {"state": "closed", "close_epoch": 2}},
+    {"step": 3, "action": "assert_observe", "has_epoch": true, "close_epoch": 2, "expect": {"allowed": false, "decision": "dispute", "has_hold": true}},
+    {"step": 4, "action": "resolve", "expect": {"allowed": false, "hold_state": "resolved", "no_live": true}}
+  ],
+  "invariants": ["no_live_credit", "proof_required"]
+}
+// temporary guard removed after the production check

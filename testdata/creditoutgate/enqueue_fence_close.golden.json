@@ -1,0 +1,63 @@
+{
+  "scenario": "EnqueueCredit 后关闭板卡护栏，持旧 epoch/token 的 DeliverCredit 必须失败并落 CreditFenceCase",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "ETH|USDT",
+        "credit_key": "ETH|0xabc123|user001|USDT",
+        "epoch": 1,
+        "token": "tok-enqueue-001",
+        "amount": "100.00"
+      },
+      "expect": {
+        "ok": true,
+        "replay": false,
+        "lease.state": "enqueued",
+        "lease.bind_world_gen": 1,
+        "lease.bind_lane_gen": 1
+      }
+    },
+    {
+      "step": 2,
+      "action": "CloseFence",
+      "input": {
+        "board_key": "ETH|USDT",
+        "operator": "ops-alice"
+      },
+      "expect": {
+        "ok": true,
+        "new_gen.world_gen": 2,
+        "new_gen.closed": true,
+        "revoked_count": 1,
+        "cases[0].kind": "fence_close",
+        "cases[0].credit_key": "ETH|0xabc123|user001|USDT",
+        "cases[0].bind_world_gen": 1,
+        "cases[0].current_world_gen": 2
+      }
+    },
+    {
+      "step": 3,
+      "action": "Deliver",
+      "input": {
+        "credit_key": "ETH|0xabc123|user001|USDT",
+        "epoch": 1,
+        "token": "tok-enqueue-001"
+      },
+      "expect": {
+        "ok": false,
+        "error": "creditoutgate lease revoked",
+        "revoked": true,
+        "case_appended": true,
+        "case.kind": "fence_close"
+      }
+    }
+  ],
+  "invariants": [
+    "护栏关闭后任何持旧 epoch/token 的 Deliver 必须失败",
+    "失败必须落 CreditFenceCase（kind=fence_close）",
+    "失败不产生 CreditProof",
+    "同一 credit_key 不得出现两条 CreditProof"
+  ]
+}

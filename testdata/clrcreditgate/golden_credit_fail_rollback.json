@@ -1,0 +1,34 @@
+{
+  "_comment": "golden: Credit 调用失败时，applied 标记回滚，Lease 标记 void，落 ProofCreditFail；Lease 可重新签发（重试语义）。",
+  "scenario": "credit_fail_rollback",
+  "item_id": "item-golden-cf-001",
+  "batch_id": "batch-golden-cf-001",
+  "user_id": "user-golden-004",
+  "asset": "BTC",
+  "amount": "0.100000000000000000",
+  "release": {
+    "actor": "ops-golden",
+    "expected_lease_state": "issued"
+  },
+  "apply_with_credit_fail": {
+    "actor": "ops-golden",
+    "credit_error": "ledger temporarily unavailable",
+    "expected_result": "fail",
+    "expected_lease_state_after": "void",
+    "expected_proof_kind": "credit_fail",
+    "expected_proof_detail_contains": "ledger temporarily unavailable",
+    "rollback_applied_called": true
+  },
+  "retry_release": {
+    "comment": "Credit 失败后可重新签发新 Lease（旧 Lease 已 void，新 issued Lease 允许写入）",
+    "expected_new_lease_state": "issued",
+    "expected_new_lease_id_differs": true
+  },
+  "invariants": [
+    "Lease.State = void after credit failure",
+    "ProofCreditFail.ItemID = item_id",
+    "RollbackApplied called exactly once",
+    "No net ledger change (debit-credit both rolled back)",
+    "New ReleaseWithLease after void lease succeeds (retryable)"
+  ]
+}

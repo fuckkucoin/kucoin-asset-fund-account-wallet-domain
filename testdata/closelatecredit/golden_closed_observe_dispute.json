@@ -1,0 +1,17 @@
+{
+  "_comment": "关户后链观察贷记进争议仓并落证明",
+  "_scenario": "closed_observe_dispute",
+  "setup": {
+    "user_id": "u-close-obs-01",
+    "book": "trading",
+    "asset": "USDT",
+    "amount": "12.50",
+    "tx_ref": "obs-tx-01"
+  },
+  "steps": [
+    {"step": 1, "action": "ensure", "expect": {"state": "open", "close_epoch": 1}},
+    {"step": 2, "action": "close", "expect": {"state": "closed", "close_epoch": 2}},
+    {"step": 3, "action": "assert_observe", "has_epoch": true, "close_epoch": 2, "expect": {"allowed": false, "decision": "dispute", "has_proof": true, "has_hold": true}}
+  ],
+  "invariants": ["proof_required", "no_live_credit", "not_addrpool", "not_memo"]
+}
