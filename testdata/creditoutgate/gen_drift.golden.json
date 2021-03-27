@@ -1,0 +1,59 @@
+{
+  "scenario": "EnqueueCredit 后护栏翻转（不关闭，仅抬升世代），持旧租约 Deliver 被拒绝",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "SOL|USDC",
+        "credit_key": "SOL|0xaaa111|user005|USDC",
+        "epoch": 1,
+        "token": "tok-gen-001",
+        "amount": "200.00"
+      },
+      "expect": {
+        "ok": true,
+        "lease.bind_world_gen": 1,
+        "lease.bind_lane_gen": 1
+      }
+    },
+    {
+      "step": 2,
+      "action": "FenceFlip",
+      "input": {
+        "board_key": "SOL|USDC",
+        "lane_flip": true,
+        "close": false,
+        "operator": "ops-bob"
+      },
+      "expect": {
+        "ok": true,
+        "new_gen.world_gen": 2,
+        "new_gen.lane_gen": 2,
+        "new_gen.closed": false,
+        "revoked_count": 1,
+        "cases[0].kind": "gen_drift"
+      }
+    },
+    {
+      "step": 3,
+      "action": "Deliver",
+      "input": {
+        "credit_key": "SOL|0xaaa111|user005|USDC",
+        "epoch": 1,
+        "token": "tok-gen-001"
+      },
+      "expect": {
+        "ok": false,
+        "error": "creditoutgate lease revoked",
+        "case.kind": "fence_close"
+      }
+    }
+  ],
+  "invariants": [
+    "世代翻转后在途租约须立即被吊销",
+    "吊销后的 Deliver 必须失败（ErrLeaseRevoked）",
+    "世代漂移必须落 CaseGenDrift 证明（翻转吊销时）",
+    "板卡未关闭时新 Enqueue 仍可继续"
+  ]
+}

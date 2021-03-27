@@ -1,0 +1,68 @@
+{
+  "scenario": "已 Deliver 的 key 重放 Deliver 必须幂等成功且不二次贷记",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "TRX|USDT",
+        "credit_key": "TRX|0x111222|user004|USDT",
+        "epoch": 1,
+        "token": "tok-idem-001",
+        "amount": "500.00"
+      },
+      "expect": {
+        "ok": true,
+        "replay": false,
+        "lease.state": "enqueued"
+      }
+    },
+    {
+      "step": 2,
+      "action": "Deliver",
+      "input": {
+        "credit_key": "TRX|0x111222|user004|USDT",
+        "epoch": 1,
+        "token": "tok-idem-001"
+      },
+      "expect": {
+        "ok": true,
+        "replay": false,
+        "proof.amount": "500.00",
+        "proof.world_gen": 1,
+        "lease.state_after": "delivered"
+      }
+    },
+    {
+      "step": 3,
+      "action": "Deliver",
+      "input": {
+        "credit_key": "TRX|0x111222|user004|USDT",
+        "epoch": 1,
+        "token": "tok-idem-001"
+      },
+      "expect": {
+        "ok": true,
+        "replay": true,
+        "proof_unchanged": true,
+        "no_new_case": true
+      }
+    },
+    {
+      "step": 4,
+      "action": "VerifyProofCount",
+      "input": {
+        "credit_key": "TRX|0x111222|user004|USDT"
+      },
+      "expect": {
+        "proof_count": 1
+      }
+    }
+  ],
+  "invariants": [
+    "已 Deliver 的 key 重放 Deliver 返回 replay=true",
+    "幂等成功不产生新 CreditProof（同 credit_key 全局至多一条 CreditProof）",
+    "幂等成功不产生 CreditFenceCase",
+    "原 CreditProof 内容不变"
+  ]
+}
