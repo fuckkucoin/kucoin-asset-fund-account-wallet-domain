@@ -1,0 +1,11 @@
+{
+  "name": "execute_without_lease_fail_closed",
+  "description": "Execute 不带 lease_id 必须 fail-closed 并出具 missing_lease",
+  "setup": {"user_id": "U-CVQ-005", "from": "BTC", "to": "USDT", "amount": "0.1", "book": "funding", "initial_rate": "42000"},
+  "actions": [
+    {"type": "mark_put", "from": "BTC", "to": "USDT", "rate": "42000"},
+    {"type": "quote"},
+    {"type": "execute", "omit_lease": true, "expect": {"filled": false, "proof_kind": "missing_lease"}}
+  ],
+  "expected": {"filled": false, "no_fund_double_spend": true}
+}
