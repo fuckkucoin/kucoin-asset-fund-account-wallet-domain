@@ -1,0 +1,29 @@
+{
+  "name": "seen_occupied_no_ledger_credit",
+  "description": "观察已占位但无账本贷记：残余非空，不可关闭直到解决",
+  "batch": {
+    "id": "BATCH-001",
+    "total_items": 3
+  },
+  "items": [
+    {"seq": 1, "chain": "ETH", "tx_hash": "0xaaa111", "asset": "USDT", "user_id": "U-001", "status": "submitted", "ledger_id": "LED-001"},
+    {"seq": 2, "chain": "ETH", "tx_hash": "0xbbb222", "asset": "USDT", "user_id": "U-002", "status": "submitted", "ledger_id": ""},
+    {"seq": 3, "chain": "ETH", "tx_hash": "0xccc333", "asset": "ETH",  "user_id": "U-003", "status": "submitted", "ledger_id": "LED-003"}
+  ],
+  "seen": [
+    {"chain": "ETH", "tx_hash": "0xaaa111", "occupied": true},
+    {"chain": "ETH", "tx_hash": "0xbbb222", "occupied": true},
+    {"chain": "ETH", "tx_hash": "0xccc333", "occupied": true}
+  ],
+  "ledger": [
+    {"chain": "ETH", "tx_hash": "0xaaa111", "ledger_id": "LED-001", "amount": "100.00", "credited": true},
+    {"chain": "ETH", "tx_hash": "0xccc333", "ledger_id": "LED-003", "amount": "0.5", "credited": true}
+  ],
+  "expected": {
+    "residue_count": 1,
+    "residue_kinds": ["seen_no_credit"],
+    "batch_state": "residue_open",
+    "can_close": false,
+    "open_residue_seq": [2]
+  }
+}

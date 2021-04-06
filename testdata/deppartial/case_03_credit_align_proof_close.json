@@ -1,0 +1,32 @@
+{
+  "name": "credit_align_proof_pass_batch_closed",
+  "description": "所有残余修复后对齐证明全部通过，批次可关闭",
+  "batch": {
+    "id": "BATCH-003",
+    "total_items": 2
+  },
+  "items": [
+    {"seq": 1, "chain": "TRX", "tx_hash": "0xfff666", "asset": "USDT", "user_id": "U-020", "status": "submitted", "ledger_id": ""},
+    {"seq": 2, "chain": "TRX", "tx_hash": "0xggg777", "asset": "USDT", "user_id": "U-021", "status": "submitted", "ledger_id": "LED-021"}
+  ],
+  "seen": [
+    {"chain": "TRX", "tx_hash": "0xfff666", "occupied": true},
+    {"chain": "TRX", "tx_hash": "0xggg777", "occupied": true}
+  ],
+  "ledger": [
+    {"chain": "TRX", "tx_hash": "0xggg777", "ledger_id": "LED-021", "amount": "200.00", "credited": true}
+  ],
+  "actions": [
+    {"type": "scan", "actor": "scanner"},
+    {"type": "reopen", "holder": "ops_A", "approver": "ops_B", "reason": "修复"},
+    {"type": "repair_credit", "residue_seq": 1, "actor": "ops_A", "ledger_id": "LED-020-NEW", "amount": "150.00"},
+    {"type": "check_align_batch", "checker": "auditor"},
+    {"type": "close", "actor": "closer"}
+  ],
+  "expected": {
+    "all_proofs_passed": true,
+    "final_state": "closed",
+    "can_close_before_proof": false
+  }
+}
+// temporary guard removed after the production check
