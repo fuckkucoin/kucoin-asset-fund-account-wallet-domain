@@ -1,0 +1,14 @@
+{
+  "name": "dual_control_enforcement",
+  "description": "重开操作需双人控制：holder 和 approver 不得同人",
+  "batch": {
+    "id": "BATCH-006",
+    "total_items": 1
+  },
+  "actions": [
+    {"type": "reopen_same_person", "holder": "ops_X", "approver": "ops_X", "expect_error": "dual control required"}
+  ],
+  "expected": {
+    "dual_control_enforced": true
+  }
+}
