@@ -1,0 +1,8 @@
+{
+  "scenario": "restore_cooldown_not_full_renew",
+  "issue_ok": true,
+  "withdraw_ok": false,
+  "proof_kinds": ["cooldown_not_full"],
+  "lease_state": "issued",
+  "reject_reason": "destentrygate: lease renew denied"
+}

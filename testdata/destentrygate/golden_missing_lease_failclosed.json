@@ -1,0 +1,8 @@
+{
+  "scenario": "whitelist_only_missing_lease",
+  "issue_ok": false,
+  "withdraw_ok": false,
+  "proof_kinds": ["no_lease"],
+  "lease_state": "",
+  "reject_reason": "destentrygate: whitelist-only requires dest_entry_lease"
+}

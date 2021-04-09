@@ -1,0 +1,8 @@
+{
+  "scenario": "breakglass_reclaim_rejects_withdraw",
+  "issue_ok": true,
+  "withdraw_ok": false,
+  "proof_kinds": ["breakglass_reclaim"],
+  "lease_state": "revoked",
+  "reject_reason": "destentrygate: dest_entry_lease revoked"
+}

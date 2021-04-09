@@ -1,0 +1,8 @@
+{
+  "scenario": "revoke_entry_gen_drift",
+  "issue_ok": true,
+  "withdraw_ok": false,
+  "proof_kinds": ["entry_revoke"],
+  "lease_state": "revoked",
+  "reject_reason": "destentrygate: dest_entry_lease revoked"
+}
