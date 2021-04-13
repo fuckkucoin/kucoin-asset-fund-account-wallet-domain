@@ -1,0 +1,26 @@
+{
+  "name": "lease_expiry_and_reclaim",
+  "description": "租约到期后自动回收，其他修复者可获取新租约",
+  "batch": {
+    "id": "BATCH-005",
+    "total_items": 1
+  },
+  "items": [
+    {"seq": 1, "chain": "ETH", "tx_hash": "0xiii999", "asset": "ETH", "user_id": "U-040", "status": "submitted", "ledger_id": ""}
+  ],
+  "seen": [
+    {"chain": "ETH", "tx_hash": "0xiii999", "occupied": true}
+  ],
+  "ledger": [],
+  "actions": [
+    {"type": "scan", "actor": "scanner"},
+    {"type": "reopen", "holder": "ops_E", "approver": "ops_F", "reason": "修复"},
+    {"type": "advance_clock", "duration": "60s"},
+    {"type": "expire_leases"},
+    {"type": "reopen_second", "holder": "ops_G", "approver": "ops_H", "reason": "接管修复", "expect_ok": true}
+  ],
+  "expected": {
+    "first_lease_expired": true,
+    "second_lease_acquired": true
+  }
+}

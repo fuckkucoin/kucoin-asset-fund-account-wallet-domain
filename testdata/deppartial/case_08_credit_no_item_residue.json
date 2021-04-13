@@ -1,0 +1,25 @@
+{
+  "name": "credit_exists_but_item_not_submitted",
+  "description": "账本已贷记但 item 状态非 submitted：检测为 credit_no_item 类型残余",
+  "batch": {
+    "id": "BATCH-008",
+    "total_items": 2
+  },
+  "items": [
+    {"seq": 1, "chain": "ETH", "tx_hash": "0xkkk111", "asset": "USDT", "user_id": "U-060", "status": "pending", "ledger_id": ""},
+    {"seq": 2, "chain": "ETH", "tx_hash": "0xlll222", "asset": "USDT", "user_id": "U-061", "status": "submitted", "ledger_id": "LED-061"}
+  ],
+  "seen": [
+    {"chain": "ETH", "tx_hash": "0xkkk111", "occupied": true},
+    {"chain": "ETH", "tx_hash": "0xlll222", "occupied": true}
+  ],
+  "ledger": [
+    {"chain": "ETH", "tx_hash": "0xkkk111", "ledger_id": "LED-060-PHANTOM", "amount": "75.00", "credited": true},
+    {"chain": "ETH", "tx_hash": "0xlll222", "ledger_id": "LED-061", "amount": "100.00", "credited": true}
+  ],
+  "expected": {
+    "residue_count": 1,
+    "residue_kinds": ["credit_no_item"],
+    "residue_seq": [1]
+  }
+}

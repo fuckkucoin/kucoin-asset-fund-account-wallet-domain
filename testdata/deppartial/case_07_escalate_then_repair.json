@@ -1,0 +1,25 @@
+{
+  "name": "escalate_then_credit_repair",
+  "description": "残余行先升级再修复贷记：escalated→credited 合法",
+  "batch": {
+    "id": "BATCH-007",
+    "total_items": 1
+  },
+  "items": [
+    {"seq": 1, "chain": "ETH", "tx_hash": "0xjjj000", "asset": "USDT", "user_id": "U-050", "status": "submitted", "ledger_id": ""}
+  ],
+  "seen": [
+    {"chain": "ETH", "tx_hash": "0xjjj000", "occupied": true}
+  ],
+  "ledger": [],
+  "actions": [
+    {"type": "scan", "actor": "scanner"},
+    {"type": "escalate", "residue_seq": 1, "actor": "ops_tier1", "reason": "需人工审核"},
+    {"type": "reopen", "holder": "ops_tier2", "approver": "mgr", "reason": "人工修复"},
+    {"type": "repair_credit", "residue_seq": 1, "actor": "ops_tier2", "ledger_id": "LED-050-NEW", "amount": "500.00"}
+  ],
+  "expected": {
+    "residue_final_state": "credited",
+    "escalate_to_credit_ok": true
+  }
+}

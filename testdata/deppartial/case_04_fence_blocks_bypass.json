@@ -1,0 +1,26 @@
+{
+  "name": "fence_blocks_observe_bypass",
+  "description": "围栏关闭后阻止绕过 Observe 再次操作同一 (chain, tx_hash)",
+  "batch": {
+    "id": "BATCH-004",
+    "total_items": 1
+  },
+  "items": [
+    {"seq": 1, "chain": "ETH", "tx_hash": "0xhhh888", "asset": "USDT", "user_id": "U-030", "status": "submitted", "ledger_id": ""}
+  ],
+  "seen": [
+    {"chain": "ETH", "tx_hash": "0xhhh888", "occupied": true}
+  ],
+  "ledger": [],
+  "actions": [
+    {"type": "scan", "actor": "scanner"},
+    {"type": "reopen", "holder": "ops_C", "approver": "ops_D", "reason": "修复围栏"},
+    {"type": "abandon", "residue_seq": 1, "actor": "ops_C", "reason": "无法恢复"},
+    {"type": "check_fence_closed", "chain": "ETH", "tx_hash": "0xhhh888"},
+    {"type": "must_not_fenced_fail", "chain": "ETH", "tx_hash": "0xhhh888"}
+  ],
+  "expected": {
+    "fence_closed_after_abandon": true,
+    "bypass_blocked": true
+  }
+}
