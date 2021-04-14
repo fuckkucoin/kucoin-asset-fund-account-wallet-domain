@@ -1,0 +1,21 @@
+{
+  "description": "Resolve(resolve) 后未持 pay_lease 的账本贷记必须失败",
+  "setup": {
+    "decision": "resolve",
+    "asset": "USDT",
+    "amount": "12.50"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "assert_pay_empty_lease",
+      "input": { "dispute_pay_lease_id": "" },
+      "expect": {
+        "allowed": false,
+        "reason": "blocked_no_lease",
+        "error": "disputepaygate: ledger credit requires dispute_pay_lease_id",
+        "proof_recorded": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "description": "Case+Lease 合法跃迁矩阵",
+  "allowed": [
+    ["resolved", "pay_issued"],
+    ["resolved", "claw_issued"],
+    ["resolved", "revoked"],
+    ["resolved", "expired"],
+    ["pay_issued", "pay_consumed"],
+    ["pay_issued", "revoked"],
+    ["pay_issued", "expired"],
+    ["claw_issued", "claw_consumed"],
+    ["claw_issued", "revoked"],
+    ["claw_issued", "expired"]
+  ],
+  "forbidden": [
+    ["pay_consumed", "pay_issued"],
+    ["claw_consumed", "claw_issued"],
+    ["expired", "pay_issued"],
+    ["revoked", "pay_consumed"]
+  ]
+}

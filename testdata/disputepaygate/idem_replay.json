@@ -1,0 +1,21 @@
+{
+  "description": "结案后再 Open 同幂等键不得二次放款",
+  "setup": {
+    "idempotency_key": "desk-idem-pay-001"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "resolve_with_pay_lease",
+      "expect": { "state": "pay_issued" }
+    },
+    {
+      "step": 2,
+      "action": "open_same_idem",
+      "expect": {
+        "error": "disputepaygate: idempotency replay blocked second payout",
+        "outcome": "blocked_replay"
+      }
+    }
+  ]
+}
