@@ -1,0 +1,21 @@
+{
+  "description": "同案二次 Resolve 必拒并落 DisputePayProof",
+  "setup": {
+    "decision": "uphold"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "resolve_with_pay_lease",
+      "expect": { "kind": "pay", "state": "pay_issued" }
+    },
+    {
+      "step": 2,
+      "action": "resolve_again",
+      "expect": {
+        "error": "disputepaygate: case already resolved with lease",
+        "outcome": "blocked_double_resolve"
+      }
+    }
+  ]
+}
