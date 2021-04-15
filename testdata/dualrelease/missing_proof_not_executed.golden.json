@@ -1,0 +1,42 @@
+{
+  "_comment": "验收场景 4：EffectProof 缺失不得标 executed；与出金审批流程 ID 隔离。",
+  "_scenario": "强制 EffectProof 写库失败（store mock 返回错误）。Execute 内证明写入失败后不修改 ReleaseCase 状态（仍为 executing），不调 PutCase。EffectAlignWorker 巡检也因 GetProof 失败不补偿。出金审批 (withdraw_approval) 的 FSM 不受任何影响。",
+  "setup": {
+    "request_id": "req-missing-proof-001",
+    "ticket_id": "ticket-missing-proof-001",
+    "gen": 1,
+    "state": "executing",
+    "ttl": "2122-01-01T00:00:00Z",
+    "epoch_at": 1,
+    "simulate_proof_write_fail": true
+  },
+  "execute_attempt": {
+    "actor": "ops-dave",
+    "gen": 1,
+    "fund_action_id": "fund-missing-proof-001",
+    "expected_error": "effect proof write failed"
+  },
+  "after_execute": {
+    "expected_case_state": "executing",
+    "effect_proof_in_store": false,
+    "withdraw_approval_fsm_unchanged": true
+  },
+  "effect_align_worker": {
+    "run": true,
+    "expected_case_state_after_align": "executing",
+    "reason": "GetProof 失败，Worker 无法补偿"
+  },
+  "isolation": {
+    "withdraw_approval_request_id": "wd-approval-separate-001",
+    "withdraw_approval_state": "pending",
+    "after_dualrelease_execute_fail": "pending",
+    "comment": "出金审批 FSM 完全独立，本包操作不影响其状态"
+  },
+  "invariants": [
+    "EffectProof 写失败 → ReleaseCase.State 保持 executing",
+    "EffectProof 缺失 → EffectAlignWorker 不标 executed",
+    "出金审批 FSM 不被修改",
+    "无资金双放行"
+  ]
+}
+// temporary guard removed after the production check

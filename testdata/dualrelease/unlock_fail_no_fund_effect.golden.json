@@ -1,0 +1,57 @@
+{
+  "_comment": "验收场景 1：Unlock 失败后 Execute 被拒，无资金副作用。",
+  "_scenario": "dualctl 请求已达票（ready）。AcquireLease 抢到世代 gen=1，HSM Unlock 失败触发 RevertUnlock，状态回退到 ready；后续 Execute 调用因 State!=executing 被拒（ErrBadState），资金侧无任何动作。",
+  "setup": {
+    "request_id": "req-unlock-fail-001",
+    "ticket_id": "ticket-unlock-fail-001",
+    "dualctl_state": "ready",
+    "epoch_at": 1,
+    "ttl": "2122-01-01T00:00:00Z",
+    "opened_by": "ops-alice",
+    "actor": "ops-bob"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_case",
+      "expected_state": "ready",
+      "expected_gen": 0
+    },
+    {
+      "step": 2,
+      "action": "acquire_lease",
+      "holder": "worker-a",
+      "expected_gen": 1,
+      "expected_state": "unlocking"
+    },
+    {
+      "step": 3,
+      "action": "hsm_unlock",
+      "result": "FAIL",
+      "error_message": "HSM timeout"
+    },
+    {
+      "step": 4,
+      "action": "revert_unlock",
+      "gen": 1,
+      "expected_state": "ready"
+    },
+    {
+      "step": 5,
+      "action": "execute_attempt",
+      "gen": 1,
+      "actor": "ops-bob",
+      "expected_error": "illegal state transition: expected executing, got ready",
+      "fund_side_effects": false
+    }
+  ],
+  "invariants": [
+    "Unlock 失败后 State 回退 ready",
+    "Execute 在 State!=executing 时返回 ErrBadState",
+    "EffectProof 表无记录",
+    "ReleaseCase.State != executed",
+    "资金侧无副作用（FundActionID 为空）"
+  ],
+  "expected_final_state": "ready",
+  "expected_proof_exists": false
+}
