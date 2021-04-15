@@ -1,0 +1,37 @@
+{
+  "_comment": "验收场景 3：epoch/TTL 过期票 Execute → ErrTicketExpired + 审计入库。",
+  "_scenario": "票证 TTL 设为过去时刻（已超期）。Execute 路径调 CheckTicket，发现 now >= TTL，写入 TicketExpiry 审计记录，将案例标 expired，返回 ErrTicketExpired。",
+  "setup": {
+    "request_id": "req-expired-ticket-001",
+    "ticket_id": "ticket-expired-001",
+    "gen": 1,
+    "state": "executing",
+    "ttl": "2020-01-01T00:00:00Z",
+    "epoch_at": 1,
+    "sim_now": "2026-04-28T20:00:00Z"
+  },
+  "execute_attempt": {
+    "actor": "ops-carol",
+    "gen": 1,
+    "fund_action_id": "fund-expired-001",
+    "expected_error": "ErrTicketExpired"
+  },
+  "expected_expiry_audit": {
+    "ticket_id": "ticket-expired-001",
+    "request_id": "req-expired-ticket-001",
+    "reason": "ttl_exceeded",
+    "actor": "ops-carol",
+    "audit_hash_non_empty": true
+  },
+  "invariants": [
+    "Execute 返回 ErrTicketExpired",
+    "TicketExpiry 审计记录入库（reason=ttl_exceeded）",
+    "ReleaseCase.State == expired（CheckTicket 尽力标记）",
+    "EffectProof 无记录",
+    "无资金副作用"
+  ],
+  "expected_final_state": "expired",
+  "expected_proof_exists": false,
+  "expected_expiry_count": 1
+}
+// temporary guard removed after the production check

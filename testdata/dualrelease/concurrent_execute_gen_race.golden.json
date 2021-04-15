@@ -1,0 +1,36 @@
+{
+  "_comment": "验收场景 2：同请求并发 Execute，只有一方获世代，另一方返回 ErrStaleGen。",
+  "_scenario": "gen=1 租约由 worker-a 持有，两个 goroutine 同时调用 Execute。Execute 内部首先检查 rc.Gen==p.Gen；由于 MemStore 无行级 CAS，gengate 的 CAS 保证只有第一个 goroutine 赢得世代，第二个返回 ErrStaleGen。",
+  "setup": {
+    "request_id": "req-concurrent-exec-001",
+    "ticket_id": "ticket-concurrent-001",
+    "gen": 1,
+    "state": "executing",
+    "ttl": "2122-01-01T00:00:00Z",
+    "epoch_at": 1
+  },
+  "concurrent_executions": [
+    {
+    {
+      "worker": "worker-b",
+      "gen": 1,
+      "actor": "ops-bob",
+      "fund_action_id": "fund-002"
+    }
+  ],
+  "expected_results": {
+    "winners": 1,
+    "losers": 1,
+    "loser_error": "ErrStaleGen",
+    "double_fund_actions": false
+  },
+  "invariants": [
+    "恰好 1 个 Execute 成功，EffectProof 入库",
+    "另一个 Execute 返回 ErrStaleGen，无资金副作用",
+    "ReleaseCase.State == executed（由胜者写入）",
+    "EffectProof.ProofHash 唯一",
+    "fund_action_id 为胜者的值（无双录）"
+  ],
+  "expected_final_state": "executed",
+  "proof_count": 1
+}
