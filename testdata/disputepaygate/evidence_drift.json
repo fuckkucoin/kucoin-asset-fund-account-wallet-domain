@@ -1,0 +1,26 @@
+{
+  "description": "Resolve 后证据根漂移，旧租约复验失败",
+  "setup": {
+    "decision": "resolve"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "resolve_with_pay_lease",
+      "expect": { "state": "pay_issued" }
+    },
+    {
+      "step": 2,
+      "action": "overlay_evidence_hash",
+      "expect": { "root_changed": true }
+    },
+    {
+      "step": 3,
+      "action": "assert_pay_old_lease",
+      "expect": {
+        "allowed": false,
+        "reason": "blocked_evidence_drift"
+      }
+    }
+  ]
+}
