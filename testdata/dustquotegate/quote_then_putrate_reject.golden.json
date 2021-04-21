@@ -1,0 +1,20 @@
+{
+  "scenario": "quote_then_put_rate_reject",
+  "user_id": "user-dqg-rate-001",
+  "asset": "BTC",
+  "amount": "0.00005",
+  "quote_rate": "60000",
+  "flipped_rate": "61000",
+  "expected": {
+    "quote_state": "quoted",
+    "convert_error": "dustquotegate: live rate drifted from lease",
+    "proof_kind": "rate_drift",
+    "ledger_partial_allowed": false
+  },
+  "invariants": [
+    "dust_quote_lease_id issued at quote",
+    "PutRate does not rewrite floor/cap formula",
+    "AssertLease after PutRate fails closed",
+    "DustQuoteDriftProof.kind = rate_drift"
+  ]
+}

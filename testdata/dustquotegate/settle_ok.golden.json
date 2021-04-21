@@ -1,0 +1,14 @@
+{
+  "scenario": "quote_assert_settle_ok",
+  "user_id": "user-dqg-ok-001",
+  "asset": "BTC",
+  "amount": "0.00005",
+  "rate": "60000",
+  "usdt_want": "3",
+  "expected": {
+    "quote_state": "quoted",
+    "bound_state": "bound",
+    "settle_state": "settled",
+    "proof_kinds": ["bind_ok", "settle_ok"]
+  }
+}
