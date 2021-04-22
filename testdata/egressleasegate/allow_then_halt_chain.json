@@ -1,0 +1,34 @@
+{
+  "_comment": "Allow 之后 HaltChain，持旧租约的广播必须失败并留下漂移证明",
+  "_scenario": "allow_then_halt_chain",
+  "setup": {
+    "lease_ttl_seconds": 60,
+    "tanks": [
+      {"chain": "ETH", "native": "ETH", "available": "10", "min": "2", "target": "8"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "100",
+      "idem_key": "allow-eth-usdt",
+      "expect": {"issued": true, "decision": "allow", "breach_level": "clear", "state": "issued"}
+    },
+    {"action": "halt_chain", "chain": "ETH"},
+    {
+      "action": "broadcast",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "100",
+      "broadcast_ref": "bc-halt-chain-1",
+      "expect": {"accepted": false, "reject": "halt_chain", "state": "revoked", "drift_type": "halt_chain", "proof_state": "open"}
+    }
+  ],
+  "invariants": [
+    "门控 Allow 不直接授权广播",
+    "链停仓后旧租约不得消费",
+    "拒绝必须留下 halt_chain 漂移证明"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "_comment": "超过有效期的租约不得广播成功",
+  "_scenario": "expired_lease",
+  "setup": {
+    "lease_ttl_seconds": 30,
+    "tanks": [
+      {"chain": "ETH", "native": "ETH", "available": "10", "min": "2", "target": "8"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "8",
+      "expect": {"issued": true, "state": "issued"}
+    },
+    {"action": "advance", "seconds": 31},
+    {
+      "action": "broadcast",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "8",
+      "broadcast_ref": "bc-exp-1",
+      "expect": {"accepted": false, "reject": "expired", "state": "expired", "drift_type": "expired"}
+    }
+  ],
+  "invariants": [
+    "过期租约不得消费"
+  ]
+}
