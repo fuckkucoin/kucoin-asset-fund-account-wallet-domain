@@ -1,0 +1,22 @@
+{
+  "_comment": "缺租约广播 fail-closed，并落 missing_lease 证明。",
+  "_scenario": "no_lease_fail_closed",
+  "setup": {
+    "chain": "BTC",
+    "asset": "BTC",
+    "hot_available": "8"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "broadcast",
+      "egress_lease_id": "",
+      "broadcast_ref": "wd-no-lease",
+      "expect": { "allowed": false, "error": "egress_lease_id required", "has_proof": true }
+    }
+  ],
+  "invariants": [
+    "fail_closed",
+    "no_consumed_lease"
+  ]
+}

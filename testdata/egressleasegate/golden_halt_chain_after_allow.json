@@ -1,0 +1,35 @@
+{
+  "_comment": "CheckEgress Allow 后 HaltChain，持旧租约广播必须失败并落漂移证明。",
+  "_scenario": "halt_chain_after_allow",
+  "setup": {
+    "chain": "ETH",
+    "asset": "USDT",
+    "hot_available": "80000",
+    "from_tank": false,
+    "allow_warn_lease": false
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue",
+      "expect": { "allowed": true, "state": "issued" }
+    },
+    {
+      "step": 2,
+      "action": "halt_chain",
+      "chain": "ETH",
+      "expect": { "halted": true }
+    },
+    {
+      "step": 3,
+      "action": "broadcast",
+      "broadcast_ref": "wd-batch-halt-1",
+      "expect": { "allowed": false, "has_proof": true }
+    }
+  ],
+  "invariants": [
+    "lease_not_consumed",
+    "proof_open_or_present",
+    "no_double_spend"
+  ]
+}

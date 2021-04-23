@@ -1,0 +1,23 @@
+{
+  "_comment": "没有租约的广播不得成功",
+  "_scenario": "missing_lease",
+  "setup": {
+    "tanks": [
+      {"chain": "ETH", "native": "ETH", "available": "10", "min": "2", "target": "8"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "broadcast",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "10",
+      "broadcast_ref": "bc-missing-1",
+      "use_lease": false,
+      "expect": {"accepted": false, "reject": "missing_lease", "drift_type": "missing_lease"}
+    }
+  ],
+  "invariants": [
+    "无租约不得进入广播成功路径"
+  ]
+}
