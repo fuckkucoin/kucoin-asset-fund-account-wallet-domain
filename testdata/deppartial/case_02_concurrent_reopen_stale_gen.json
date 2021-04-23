@@ -1,0 +1,30 @@
+{
+  "name": "concurrent_reopen_stale_generation",
+  "description": "并发重开：只有一方持有租约成功修复贷记，另一方 ErrStaleGen；同一 tx_hash 不出现双重账本贷记",
+  "batch": {
+    "id": "BATCH-002",
+    "total_items": 2
+  },
+  "items": [
+    {"seq": 1, "chain": "BTC", "tx_hash": "0xddd444", "asset": "BTC", "user_id": "U-010", "status": "submitted", "ledger_id": ""},
+    {"seq": 2, "chain": "BTC", "tx_hash": "0xeee555", "asset": "BTC", "user_id": "U-011", "status": "submitted", "ledger_id": ""}
+  ],
+  "seen": [
+    {"chain": "BTC", "tx_hash": "0xddd444", "occupied": true},
+    {"chain": "BTC", "tx_hash": "0xeee555", "occupied": true}
+  ],
+  "ledger": [],
+  "actions": [
+    {"type": "scan", "actor": "scanner_A"},
+    {"type": "reopen", "holder": "repair_A", "approver": "approver_X", "reason": "修复贷记"},
+    {"type": "repair_credit", "residue_seq": 1, "actor": "repair_A", "ledger_id": "LED-NEW-001", "amount": "0.01"},
+    {"type": "reopen_second", "holder": "repair_B", "approver": "approver_Y", "expect_error": "lease already held"},
+    {"type": "repair_credit_stale", "residue_seq": 1, "actor": "repair_B", "generation": 1, "expect_error": "duplicate credit blocked"}
+  ],
+  "expected": {
+    "first_repair_ok": true,
+    "second_reopen_blocked": true,
+    "dual_credit_blocked": true,
+    "final_ledger_count_for_tx": 1
+  }
+}

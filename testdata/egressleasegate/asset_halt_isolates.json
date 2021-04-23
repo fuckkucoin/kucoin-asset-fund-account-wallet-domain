@@ -1,0 +1,51 @@
+{
+  "_comment": "只停 USDT 时，同链 BTC 租约仍可广播",
+  "_scenario": "asset_halt_isolates",
+  "setup": {
+    "tanks": [
+      {"chain": "ETH", "native": "ETH", "available": "12", "min": "2", "target": "8"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "3",
+      "idem_key": "usdt",
+      "expect": {"issued": true}
+    },
+    {
+      "action": "check_lease",
+      "chain": "ETH",
+      "asset": "ETH",
+      "amount": "0.1",
+      "idem_key": "eth",
+      "expect": {"issued": true}
+    },
+    {"action": "halt_asset", "asset": "USDT"},
+    {"action": "observe_halt", "expect": {"revoked_min": 1}},
+    {
+      "action": "broadcast",
+      "idem_key": "usdt",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "3",
+      "broadcast_ref": "bc-usdt-halt",
+      "expect": {"accepted": false, "reject": "halt_asset", "state": "revoked"}
+    },
+    {
+      "action": "broadcast",
+      "idem_key": "eth",
+      "chain": "ETH",
+      "asset": "ETH",
+      "amount": "0.1",
+      "broadcast_ref": "bc-eth-ok",
+      "expect": {"accepted": true, "state": "consumed"}
+    }
+  ],
+  "invariants": [
+    "资产停仓只吊销该资产的未消费租约",
+    "同链其他资产的租约在复验通过后仍可广播"
+  ]
+}
