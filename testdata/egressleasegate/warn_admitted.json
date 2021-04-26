@@ -1,0 +1,30 @@
+{
+  "_comment": "水位处于 watch 且策略允许时签发预警租约，同档内可以广播",
+  "_scenario": "warn_admitted",
+  "setup": {
+    "tanks": [
+      {"chain": "BTC", "native": "BTC", "available": "0.2", "min": "0.05", "target": "0.4"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "BTC",
+      "asset": "BTC",
+      "amount": "0.01",
+      "expect": {"issued": true, "decision": "warn", "breach_level": "watch", "state": "issued"}
+    },
+    {
+      "action": "broadcast",
+      "chain": "BTC",
+      "asset": "BTC",
+      "amount": "0.01",
+      "broadcast_ref": "bc-warn-1",
+      "expect": {"accepted": true, "state": "consumed"}
+    }
+  ],
+  "invariants": [
+    "Warn 在策略允许时签发租约",
+    "复验时水位档未变则可以消费"
+  ]
+}
