@@ -1,0 +1,39 @@
+{
+  "_comment": "水位从 clear 跌入 halt 后，未消费租约复验失败",
+  "_scenario": "waterline_drop",
+  "setup": {
+    "lease_ttl_seconds": 60,
+    "tanks": [
+      {"chain": "ETH", "native": "ETH", "available": "10", "min": "2", "target": "8"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "25",
+      "expect": {"issued": true, "decision": "allow", "state": "issued"}
+    },
+    {
+      "action": "put_tank",
+      "chain": "ETH",
+      "native": "ETH",
+      "available": "1",
+      "min": "2",
+      "target": "8"
+    },
+    {
+      "action": "broadcast",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "25",
+      "broadcast_ref": "bc-water-1",
+      "expect": {"accepted": false, "reject": "waterline", "state": "revoked", "drift_type": "waterline"}
+    }
+  ],
+  "invariants": [
+    "水位跌破下限后旧租约立即不能广播",
+    "证明类型为 waterline"
+  ]
+}
