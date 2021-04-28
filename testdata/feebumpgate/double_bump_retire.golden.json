@@ -1,0 +1,22 @@
+{
+  "scenario": "double_bump_retire",
+  "transfer_id": "wd-rbf-001",
+  "chain": "BTC",
+  "to": "bc1qfeebumpgate0001",
+  "amount": "0.25000000",
+  "asset": "BTC",
+  "first_fee": "0.00010000",
+  "second_fee": "0.00025000",
+  "destination_tag": "",
+  "actor": "ops.eco",
+  "expected": {
+    "old_broadcast_error": "feebumpgate: stale gen cannot broadcast",
+    "held_after_second": 1,
+    "latest_broadcast_ok": true
+  },
+  "invariants": [
+    "second bump retires first occupancy",
+    "only latest gen may broadcast",
+    "held occupancy count is one"
+  ]
+}
