@@ -1,0 +1,8 @@
+{
+  "scenario": "temp_expire_old_lease_withdraw",
+  "issue_ok": true,
+  "withdraw_ok": false,
+  "proof_kinds": ["temp_expire"],
+  "lease_state": "revoked",
+  "reject_reason": "destentrygate: dest_entry_lease revoked"
+}

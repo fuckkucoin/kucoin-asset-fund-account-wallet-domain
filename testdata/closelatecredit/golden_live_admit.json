@@ -1,0 +1,16 @@
+{
+  "_comment": "活户且世代匹配允许贷记意图（本包不写账）",
+  "_scenario": "live_admit",
+  "setup": {
+    "user_id": "u-live-01",
+    "book": "trading",
+    "asset": "KCS",
+    "amount": "8.00",
+    "tx_ref": "live-01"
+  },
+  "steps": [
+    {"step": 1, "action": "ensure", "expect": {"state": "open", "close_epoch": 1}},
+    {"step": 2, "action": "assert_observe", "has_epoch": true, "close_epoch": 1, "expect": {"allowed": true, "decision": "admit"}}
+  ],
+  "invariants": ["epoch_bound"]
+}

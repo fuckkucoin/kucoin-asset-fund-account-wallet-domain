@@ -1,0 +1,38 @@
+{
+  "name": "concurrent_require_vs_mark",
+  "description": "RequireWithdraw 在锁窗口期间必须失败并返回剩余时间；Mark 后 RequireWithdraw 返回 remain",
+  "setup": {
+    "user_id": "USER-CWG-002",
+    "lock_until_offset_sec": 3600
+  },
+  "actions": [
+    {
+      "type": "mark_cool_down",
+      "user_id": "USER-CWG-002",
+      "reason": "google_2fa",
+      "expect": {
+        "state": "open",
+        "cool_gen": 1
+      }
+    },
+    {
+      "type": "require_withdraw",
+      "user_id": "USER-CWG-002",
+      "expect": {
+        "allowed": false,
+        "reason_contains": "google_2fa",
+        "has_remain": true
+      }
+    },
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-002",
+      "withdraw_id": "WD-CWG-002",
+      "expect_error": "coolwingate withdraw lock window active"
+    }
+  ],
+  "expected": {
+    "lock_window_active": true,
+    "gen_after_mark": 1
+  }
+}

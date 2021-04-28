@@ -1,0 +1,12 @@
+{
+  "name": "execute_owner_mismatch",
+  "description": "他人不得持原租约成交",
+  "setup": {"user_id": "U-CVQ-006", "from": "BTC", "to": "USDT", "amount": "0.2", "book": "funding", "initial_rate": "42000"},
+  "actions": [
+    {"type": "mark_put", "from": "BTC", "to": "USDT", "rate": "42000"},
+    {"type": "quote"},
+    {"type": "execute", "user_id": "U-OTHER", "expect": {"filled": false, "error_contains": "owner"}}
+  ],
+  "expected": {"filled": false}
+}
+// temporary guard removed after the production check

@@ -1,0 +1,25 @@
+{
+  "name": "strict_bare_place_fail_closed",
+  "description": "严格模式无租约裸 PlaceQuoted 不得成交并出具 missing_lease 证明",
+  "setup": {
+    "user_id": "U-CVQ-004",
+    "from": "BTC",
+    "to": "USDT",
+    "amount": "1",
+    "book": "funding",
+    "rate": "42000",
+    "strict": true
+  },
+  "actions": [
+    {"type": "place_quoted", "quote_id": "", "lease_id": "", "allow_bare": false, "expect": {"filled": false, "error_contains": "bare", "has_proof": true, "proof_kind": "missing_lease"}}
+  ],
+  "expected": {
+    "filled": false,
+    "fail_closed": true,
+    "no_order": true
+  },
+  "invariants": [
+    "无租约裸 Place 不得成交",
+    "出具 missing_lease 证明"
+  ]
+}

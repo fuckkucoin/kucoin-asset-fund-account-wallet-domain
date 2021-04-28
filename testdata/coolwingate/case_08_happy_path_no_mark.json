@@ -1,0 +1,33 @@
+{
+  "name": "happy_path_no_mark",
+  "description": "无安全变更的正常出金流程：preflight bind → broadcast check → consumed",
+  "setup": {
+    "user_id": "USER-CWG-008",
+    "withdraw_id": "WD-CWG-008"
+  },
+  "actions": [
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-008",
+      "withdraw_id": "WD-CWG-008",
+      "expect": {
+        "state": "open",
+        "cool_gen": 0,
+        "has_token": true
+      }
+    },
+    {
+      "type": "check_broadcast",
+      "user_id": "USER-CWG-008",
+      "withdraw_id": "WD-CWG-008",
+      "expect": {
+        "allowed": true
+      }
+    }
+  ],
+  "expected": {
+    "bind_final_state": "consumed",
+    "case_count": 0,
+    "proof_count": 0
+  }
+}

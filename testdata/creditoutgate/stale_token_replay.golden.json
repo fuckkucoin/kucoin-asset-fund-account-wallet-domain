@@ -1,0 +1,60 @@
+{
+  "scenario": "旧 epoch/token 重放 Deliver 被拒绝，产生 CaseStaleReplay 证明",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "BTC|BTC",
+        "credit_key": "BTC|0xdef456|user002|BTC",
+        "epoch": 1,
+        "token": "tok-fresh-001",
+        "amount": "0.5"
+      },
+      "expect": {
+        "ok": true,
+        "lease.state": "enqueued",
+        "lease.epoch": 1,
+        "lease.token": "tok-fresh-001"
+      }
+    },
+    {
+      "step": 2,
+      "action": "Deliver",
+      "input": {
+        "credit_key": "BTC|0xdef456|user002|BTC",
+        "epoch": 99,
+        "token": "tok-stale-999"
+      },
+      "expect": {
+        "ok": false,
+        "error": "creditoutgate epoch token mismatch",
+        "case_appended": true,
+        "case.kind": "stale_replay",
+        "case.epoch": 99
+      }
+    },
+    {
+      "step": 3,
+      "action": "Deliver",
+      "input": {
+        "credit_key": "BTC|0xdef456|user002|BTC",
+        "epoch": 1,
+        "token": "tok-fresh-001"
+      },
+      "expect": {
+        "ok": true,
+        "replay": false,
+        "proof.epoch": 1,
+        "proof.amount": "0.5"
+      }
+    }
+  ],
+  "invariants": [
+    "旧 epoch/token 必须被拒绝",
+    "拒绝必须落 CaseStaleReplay 证明",
+    "正确 epoch/token 在同一租约上仍可成功 Deliver",
+    "stale replay 不产生 CreditProof"
+  ]
+}
+// temporary guard removed after the production check

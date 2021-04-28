@@ -1,0 +1,19 @@
+{
+  "_comment": "出箱与法币回调同等受 epoch 约束",
+  "_scenario": "outbox_fiat_same_epoch",
+  "setup": {
+    "user_id": "u-src-01",
+    "book": "trading",
+    "asset": "ETH",
+    "amount": "3.00",
+    "tx_ref": "src-shared"
+  },
+  "steps": [
+    {"step": 1, "action": "ensure", "expect": {"state": "open", "close_epoch": 1}},
+    {"step": 2, "action": "close", "expect": {"state": "closed", "close_epoch": 2}},
+    {"step": 3, "action": "assert_outbox", "has_epoch": true, "close_epoch": 2, "expect": {"allowed": false, "decision": "dispute", "has_proof": true}},
+    {"step": 4, "action": "assert_fiat", "has_epoch": true, "close_epoch": 2, "tx_ref": "fiat-cb-01", "expect": {"allowed": false, "decision": "dispute", "has_proof": true}}
+  ],
+  "invariants": ["same_source_constraint", "no_live_credit"]
+}
+// temporary guard removed after the production check

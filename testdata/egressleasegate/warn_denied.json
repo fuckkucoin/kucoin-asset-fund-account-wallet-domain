@@ -1,0 +1,22 @@
+{
+  "_comment": "策略不允许 Warn 时不签发租约",
+  "_scenario": "warn_denied",
+  "setup": {
+    "deny_warn": true,
+    "tanks": [
+      {"chain": "BTC", "native": "BTC", "available": "0.2", "min": "0.05", "target": "0.4"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "BTC",
+      "asset": "BTC",
+      "amount": "0.01",
+      "expect": {"issued": false, "decision": "warn", "reject": "warn_policy"}
+    }
+  ],
+  "invariants": [
+    "Warn 被策略关闭时不得签发"
+  ]
+}

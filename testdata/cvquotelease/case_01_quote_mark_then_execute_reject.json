@@ -1,0 +1,30 @@
+{
+  "name": "quote_then_mark_change_then_execute_reject",
+  "description": "Quote 成功后更新 MarkSource 牌价，旧租约 Execute 必须失败并出具 CvQuoteDriftProof",
+  "setup": {
+    "user_id": "U-CVQ-001",
+    "from": "BTC",
+    "to": "USDT",
+    "amount": "0.5",
+    "book": "funding",
+    "initial_rate": "42000",
+    "updated_rate": "43000",
+    "ttl": "2m"
+  },
+  "actions": [
+    {"type": "mark_put", "from": "BTC", "to": "USDT", "rate": "42000"},
+    {"type": "quote", "user_id": "U-CVQ-001", "from": "BTC", "to": "USDT", "amount": "0.5", "book": "funding", "expect": {"has_lease_id": true, "used": false}},
+    {"type": "mark_put", "from": "BTC", "to": "USDT", "rate": "43000", "expect": {"mark_gen_gt": 1, "revoked_gte": 1}},
+    {"type": "execute", "use_old_lease": true, "expect": {"filled": false, "error_contains": "mark_gen", "has_proof": true, "proof_kind": "revoked"}}
+  ],
+  "expected": {
+    "filled": false,
+    "drift_proof_exists": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "报价后 Mark 漂移不得按旧牌价成交",
+    "必须出具 CvQuoteDriftProof",
+    "不产生资金双花"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "description": "幂等性场景——相同操作重复执行结果一致",
+  "cases": [
+    {
+      "id": "double_mark_same_asset_reuses",
+      "asset": "USDT",
+      "operations": [
+        {"op": "mark", "window": "1h", "want_reused": false, "want_gen": 1},
+        {"op": "mark", "window": "1h", "want_reused": true,  "want_gen": 1}
+      ]
+    },
+    {
+      "id": "double_clear_idempotent",
+      "asset": "BTC",
+      "operations": [
+        {"op": "mark",       "window": "1m"},
+        {"op": "advance_clock", "offset": "2m"},
+        {"op": "clear_cool", "want_proof_created": true},
+        {"op": "clear_cool", "want_proof_created": false, "want_reuse_existing": true}
+      ]
+    }
+  ]
+}

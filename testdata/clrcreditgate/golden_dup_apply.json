@@ -1,0 +1,35 @@
+{
+  "_comment": "golden: 同一 Item 并发两次 ApplyWithLease，仅一次贷记成功；第二次落 ProofDupApply。",
+  "scenario": "duplicate_apply",
+  "item_id": "item-golden-da-001",
+  "batch_id": "batch-golden-da-001",
+  "user_id": "user-golden-001",
+  "asset": "BTC",
+  "amount": "0.500000000000000000",
+  "release": {
+    "actor": "ops-golden",
+    "expected_lease_state": "issued",
+    "expected_lease_ttl_minutes": 10
+  },
+  "apply_first": {
+    "actor": "ops-golden",
+    "expected_result": "ok",
+    "expected_lease_state": "consumed",
+    "expected_proof_kind": "credit_ok"
+  },
+  "apply_second": {
+    "actor": "ops-golden",
+    "expected_result": "dup",
+    "expected_error": "clrcreditgate: lease already consumed",
+    "expected_proof_kind": "dup_apply",
+    "ledger_double_credit_allowed": false
+  },
+  "invariants": [
+    "lease.State = consumed after first apply",
+    "ClearingCreditProof[kind=credit_ok].ItemID = item_id (exactly one)",
+    "second apply returns ErrLeaseConsumed, not nil",
+    "no second credit ledger entry",
+    "ProofDupApply.LeaseID = first lease_id"
+  ]
+}
+// temporary guard removed after the production check

@@ -1,0 +1,61 @@
+{
+  "scenario": "同 key 不同 amount 的 Enqueue 必须冲突失败并追加 CaseAmountConflict",
+  "steps": [
+    {
+      "step": 1,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "ETH|ETH",
+        "credit_key": "ETH|0xfed789|user003|ETH",
+        "epoch": 1,
+        "token": "tok-first-001",
+        "amount": "10.00"
+      },
+      "expect": {
+        "ok": true,
+        "replay": false,
+        "lease.amount": "10.00"
+      }
+    },
+    {
+      "step": 2,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "ETH|ETH",
+        "credit_key": "ETH|0xfed789|user003|ETH",
+        "epoch": 2,
+        "token": "tok-second-002",
+        "amount": "99.99"
+      },
+      "expect": {
+        "ok": false,
+        "error": "creditoutgate amount conflict",
+        "case_appended": true,
+        "case.kind": "amount_conflict",
+        "case.credit_key": "ETH|0xfed789|user003|ETH"
+      }
+    },
+    {
+      "step": 3,
+      "action": "Enqueue",
+      "input": {
+        "board_key": "ETH|ETH",
+        "credit_key": "ETH|0xfed789|user003|ETH",
+        "epoch": 1,
+        "token": "tok-first-001",
+        "amount": "10.00"
+      },
+      "expect": {
+        "ok": true,
+        "replay": true,
+        "lease.amount": "10.00"
+      }
+    }
+  ],
+  "invariants": [
+    "同 key 不同金额必须返回 ErrAmountConflict",
+    "冲突必须落 CaseAmountConflict 证明",
+    "同 key 同金额幂等返回不产生新案例",
+    "冲突后原租约状态不变（仍为 enqueued）"
+  ]
+}

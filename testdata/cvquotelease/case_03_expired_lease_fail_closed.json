@@ -1,0 +1,31 @@
+{
+  "name": "expired_quote_cannot_revive",
+  "description": "过期 Quote 扫描后 Execute 失败；Used=false 不得复活重入",
+  "setup": {
+    "user_id": "U-CVQ-003",
+    "from": "KCS",
+    "to": "USDT",
+    "amount": "10",
+    "book": "trading",
+    "initial_rate": "12.5",
+    "ttl": "1ms"
+  },
+  "actions": [
+    {"type": "mark_put", "from": "KCS", "to": "USDT", "rate": "12.5"},
+    {"type": "quote", "ttl": "1ms"},
+    {"type": "wait", "duration": "5ms"},
+    {"type": "scan_expired", "expect": {"expired_gte": 1}},
+    {"type": "execute", "expect": {"filled": false, "error_contains": "expired", "has_proof": true, "proof_kind": "expired"}}
+  ],
+  "expected": {
+    "final_lease_state": "expired",
+    "quote_used_pinned": true,
+    "revive_forbidden": true
+  },
+  "invariants": [
+    "过期租约不得成交",
+    "Used 钉死后禁止复活",
+    "必须出具 expired 证明"
+  ]
+}
+// temporary guard removed after the production check

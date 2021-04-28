@@ -1,0 +1,12 @@
+{
+  "scenario": "conserve_fail_closed_no_partial",
+  "user_id": "user-dqg-cons-001",
+  "asset": "BTC",
+  "amount": "0.00005",
+  "usdt_tamper": "3.1",
+  "expected": {
+    "error": "dustquotegate: conserved check failed, fail-closed",
+    "proof_kind": "conserve_fail",
+    "lease_not_settled": true
+  }
+}

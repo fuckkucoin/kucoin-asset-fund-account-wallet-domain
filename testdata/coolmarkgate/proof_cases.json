@@ -1,0 +1,30 @@
+{
+  "description": "CoolProof 校验场景——缺失证明不得放行",
+  "cases": [
+    {
+      "id": "no_proof_blocks_exec",
+      "asset": "USDT",
+      "setup": "mark_and_expire_without_clear",
+      "exec_input": {"cool_gen": 1, "exec_id": "exec-no-proof"},
+      "want_exec_allowed": false,
+      "want_error": "coolmarkgate: cool proof missing, exec blocked"
+    },
+    {
+      "id": "proof_present_allows_exec",
+      "asset": "BTC",
+      "setup": "mark_expire_clear",
+      "exec_input": {"cool_gen": 1, "exec_id": "exec-with-proof"},
+      "want_exec_allowed": true,
+      "want_error": ""
+    },
+    {
+      "id": "wrong_gen_proof_blocks",
+      "asset": "ETH",
+      "setup": "mark_expire_clear_then_remark",
+      "exec_input": {"cool_gen": 1, "exec_id": "exec-old-gen"},
+      "want_exec_allowed": false,
+      "want_error": "coolmarkgate: cool generation mismatch"
+    }
+  ]
+}
+// temporary guard removed after the production check

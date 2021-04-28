@@ -1,0 +1,28 @@
+{
+  "_comment": "golden: Release 后未 Apply 即 CloseBatch，必须失败并进入 draining，不得静默关批。",
+  "scenario": "close_batch_with_unconsumed_lease",
+  "batch_id": "batch-golden-cb-001",
+  "item_id": "item-golden-cb-001",
+  "user_id": "user-golden-002",
+  "asset": "ETH",
+  "amount": "2.000000000000000000",
+  "release": {
+    "actor": "ops-golden",
+    "expected_lease_state": "issued"
+  },
+  "close_batch_guard": {
+    "actor": "ops-golden",
+    "expected_allowed": false,
+    "expected_error": "clrcreditgate: close batch blocked by unconsumed leases",
+    "expected_drain_status": "draining",
+    "expected_unconsumed_leases": 1,
+    "expected_in_flight_applies": 0
+  },
+  "invariants": [
+    "CloseBatchGuard returns ErrDrainBlocked when any issued lease exists",
+    "BatchDrainState.Status transitions from pending to draining",
+    "DrainTimeoutAt is set to DrainStartedAt + DrainTimeout",
+    "released item credit obligation is preserved (no silent loss)",
+    "after all leases consumed or expired, CloseBatchGuard returns Allowed=true"
+  ]
+}

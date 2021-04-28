@@ -1,0 +1,29 @@
+{
+  "name": "same_quote_concurrent_dual_execute",
+  "description": "同一 quote_id 并发双 Execute：仅一笔成交，Used 与租约消费原子",
+  "setup": {
+    "user_id": "U-CVQ-002",
+    "from": "ETH",
+    "to": "USDT",
+    "amount": "2",
+    "book": "funding",
+    "initial_rate": "3000",
+    "ttl": "2m"
+  },
+  "actions": [
+    {"type": "mark_put", "from": "ETH", "to": "USDT", "rate": "3000"},
+    {"type": "quote", "user_id": "U-CVQ-002", "from": "ETH", "to": "USDT", "amount": "2", "book": "funding"},
+    {"type": "dual_execute", "expect": {"filled_count": 1, "used": true, "state": "consumed"}}
+  ],
+  "expected": {
+    "single_fill": true,
+    "lease_consumed": true,
+    "quote_used": true,
+    "no_fund_double_spend": true
+  },
+  "invariants": [
+    "并发双成交只放行一笔",
+    "Used 与 lease consume 原子",
+    "不产生资金双花"
+  ]
+}

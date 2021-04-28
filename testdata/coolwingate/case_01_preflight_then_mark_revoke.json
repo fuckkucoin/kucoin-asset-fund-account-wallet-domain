@@ -1,0 +1,44 @@
+{
+  "name": "preflight_then_mark_revoke",
+  "description": "Preflight 通过后 MarkTradingPassword 触发：撤回未消费 PreflightBind，后续 broadcast 被拒绝，生成 CoolWindowCase",
+  "setup": {
+    "user_id": "USER-CWG-001",
+    "withdraw_id": "WD-CWG-001"
+  },
+  "actions": [
+    {
+      "type": "bind_preflight",
+      "user_id": "USER-CWG-001",
+      "withdraw_id": "WD-CWG-001",
+      "expect": {
+        "state": "open",
+        "cool_gen": 0
+      }
+    },
+    {
+      "type": "mark_cool_down",
+      "user_id": "USER-CWG-001",
+      "reason": "trading_password",
+      "expect": {
+        "state": "open",
+        "cool_gen": 1
+      }
+    },
+    {
+      "type": "check_broadcast",
+      "user_id": "USER-CWG-001",
+      "withdraw_id": "WD-CWG-001",
+      "expect_error": "coolwingate broadcast blocked: bind revoked after mark"
+    }
+  ],
+  "expected": {
+    "bind_final_state": "revoked",
+    "bind_revoke_reason": "mark_after_preflight:trading_password",
+    "case_count": 1,
+    "case_kind": "mark_after_preflight",
+    "case_state": "open",
+    "proof_count": 1,
+    "proof_preflight_gen": 0,
+    "proof_mark_gen": 1
+  }
+}
