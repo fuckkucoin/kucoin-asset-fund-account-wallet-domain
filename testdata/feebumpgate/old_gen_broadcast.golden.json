@@ -1,0 +1,22 @@
+{
+  "scenario": "old_gen_broadcast",
+  "transfer_id": "wd-rbf-004",
+  "chain": "BTC",
+  "to": "bc1qfeebumpgate0004",
+  "amount": "0.08000000",
+  "asset": "BTC",
+  "first_fee": "0.00005000",
+  "second_fee": "0.00009000",
+  "destination_tag": "memo-4",
+  "actor": "ops.eco",
+  "expected": {
+    "old_broadcast_error": "feebumpgate: stale gen cannot broadcast",
+    "held_after_second": 1,
+    "proof_kind": "old_gen_broadcast",
+    "latest_broadcast_ok": true
+  },
+  "invariants": [
+    "old gen broadcast refused and proven",
+    "latest gen still broadcastable"
+  ]
+}

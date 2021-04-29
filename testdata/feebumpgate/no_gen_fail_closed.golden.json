@@ -1,0 +1,19 @@
+{
+  "scenario": "no_gen_fail_closed",
+  "transfer_id": "wd-rbf-005",
+  "chain": "BTC",
+  "to": "bc1qfeebumpgate0005",
+  "amount": "0.01000000",
+  "asset": "BTC",
+  "first_fee": "0.00001000",
+  "second_fee": "0.00002000",
+  "destination_tag": "",
+  "actor": "ops.eco",
+  "expected": {
+    "second_error": "feebumpgate: replace broadcast requires feebump_gen",
+    "proof_kind": "no_gen"
+  },
+  "invariants": [
+    "broadcast without gen fail-closed"
+  ]
+}

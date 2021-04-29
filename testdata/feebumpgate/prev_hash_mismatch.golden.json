@@ -1,0 +1,24 @@
+{
+  "scenario": "prev_hash_mismatch",
+  "transfer_id": "wd-rbf-002",
+  "chain": "BTC",
+  "to": "bc1qfeebumpgate0002",
+  "amount": "1.00000000",
+  "asset": "BTC",
+  "first_fee": "0.00008000",
+  "second_fee": "0.00018000",
+  "destination_tag": "tag-a",
+  "quoted_prev_hash": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+  "actor": "ops.eco",
+  "expected": {
+    "second_error": "feebumpgate: prev_broadcast_hash mismatch",
+    "held_after_second": 1,
+    "proof_kind": "prev_hash_mismatch",
+    "latest_broadcast_ok": false
+  },
+  "invariants": [
+    "mismatch fail-closed",
+    "first occupancy remains held",
+    "proof recorded"
+  ]
+}

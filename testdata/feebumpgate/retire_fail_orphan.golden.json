@@ -1,0 +1,24 @@
+{
+  "scenario": "retire_fail_orphan",
+  "transfer_id": "wd-rbf-003",
+  "chain": "ETH",
+  "to": "0xfee0000000000000000000000000000000000003",
+  "amount": "12.50000000",
+  "asset": "ETH",
+  "first_fee": "0.00200000",
+  "second_fee": "0.00400000",
+  "destination_tag": "",
+  "actor": "ops.eco",
+  "inject_retire_fail": true,
+  "expected": {
+    "second_error": "feebumpgate: occupancy retire failed",
+    "proof_kind": "retire_fail",
+    "blocks_further_sign": true
+  },
+  "invariants": [
+    "sign success with retire fail opens orphan",
+    "further bump blocked",
+    "no silent dual occupancy success path"
+  ]
+}
+// temporary guard removed after the production check
