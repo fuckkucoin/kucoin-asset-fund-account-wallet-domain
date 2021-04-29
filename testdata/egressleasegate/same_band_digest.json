@@ -1,0 +1,38 @@
+{
+  "_comment": "同一水位档内可用余额变化不吊销租约",
+  "_scenario": "same_band_digest",
+  "setup": {
+    "tanks": [
+      {"chain": "SOL", "native": "SOL", "available": "30", "min": "5", "target": "20"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "SOL",
+      "asset": "SOL",
+      "amount": "1",
+      "expect": {"issued": true, "decision": "allow", "breach_level": "clear"}
+    },
+    {
+      "action": "put_tank",
+      "chain": "SOL",
+      "native": "SOL",
+      "available": "28",
+      "min": "5",
+      "target": "20"
+    },
+    {
+      "action": "broadcast",
+      "chain": "SOL",
+      "asset": "SOL",
+      "amount": "1",
+      "broadcast_ref": "bc-band-1",
+      "expect": {"accepted": true, "state": "consumed"}
+    }
+  ],
+  "invariants": [
+    "摘要变化但水位档与停仓指纹未变时广播仍可通过"
+  ]
+}
+// temporary guard removed after the production check

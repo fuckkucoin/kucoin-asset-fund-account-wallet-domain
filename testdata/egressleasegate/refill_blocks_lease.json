@@ -1,0 +1,23 @@
+{
+  "_comment": "补仓进行中拒绝新的出金租约",
+  "_scenario": "refill_blocks_lease",
+  "setup": {
+    "tanks": [
+      {"chain": "ETH", "native": "ETH", "available": "10", "min": "2", "target": "8"}
+    ]
+  },
+  "steps": [
+    {"action": "refill", "chain": "ETH", "native": "ETH", "active": true},
+    {
+      "action": "check_lease",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "5",
+      "expect": {"issued": false, "reject": "refill_active", "decision": "allow"}
+    }
+  ],
+  "invariants": [
+    "补仓进行中默认不签发新租约",
+    "不在本模块计算补仓数量"
+  ]
+}
