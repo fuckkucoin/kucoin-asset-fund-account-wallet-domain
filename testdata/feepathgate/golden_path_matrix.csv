@@ -1,0 +1,16 @@
+case_id,description,biz_key,idem_key,kind_seq,asset,gross_take,fee_take,net_take,gross_rebate,fee_rebate,net_rebate,rebate_ledger_id,expected_conflict,expected_dual_hit,expected_proof_status,expected_leases_status,severity
+pg-gold-001,正常 Take 单路径落账无 Rebate,user100|USDT|g001,g001:take,take,USDT,1000.00,5.00,995.00,,,,,false,false,N/A,take=settled,
+pg-gold-002,正常 Take+Rebate 顺序落账对冲平衡,user101|USDT|g002,g002,take+rebate,USDT,1000.00,5.00,995.00,5.00,5.00,0.00,ledger-g002-r,false,false,verified,take=settled;rebate=settled,
+pg-gold-003,Take 已 open 时 Rebate 被拒 ErrPathConflict,user102|USDT|g003,g003,take+rebate,USDT,500.00,2.50,497.50,500.00,2.50,497.50,ledger-g003-r,true,false,N/A,take=open;rebate=conflict,high
+pg-gold-004,Rebate 已 bound 时 Take 被拒 ErrPathConflict,user103|BTC|g004,g004,rebate+take,BTC,0.01,0.00005,0.00995,0.01,0.00005,0.00995,ledger-g004-r,true,false,N/A,rebate=bound;take=conflict,high
+pg-gold-005,并发 Take+Rebate 仅一方获得世代锁,user104|ETH|g005,g005,concurrent,ETH,2.00,0.01,1.99,2.00,0.01,1.99,ledger-g005-r,true,false,N/A,one=open;other=stale_gen,high
+pg-gold-006,Take+Rebate 均落账后扫描发现 DualHit,user105|USDT|g006,g006,take_then_rebate_bypass,USDT,200.00,1.00,199.00,200.00,1.00,199.00,ledger-g006-r,false,true,N/A,both=conflicted,high
+pg-gold-007,DualHit severity=low 极小 fee,user106|USDT|g007,g007,take+rebate_tiny_fee,USDT,100.00,0.0000001,99.9999999,100.00,0.0000001,99.9999999,ledger-g007-r,false,true,N/A,both=conflicted,low
+pg-gold-008,对冲失衡 fee_take ≠ fee_rebate 拒绝证明,user107|USDT|g008,g008,take+rebate_imbalanced,USDT,100.00,5.00,95.00,100.00,4.99,95.01,ledger-g008-r,false,false,N/A,both=bound;proof=rejected,
+pg-gold-009,Rebate 无 LedgerID 时 Build 证明失败,user108|USDT|g009,g009,take+rebate_no_ledger,USDT,100.00,5.00,95.00,100.00,5.00,95.00,,false,false,N/A,rebate=bound;proof=missing,
+pg-gold-010,同 idem_key 异 Kind 重放被 ReplayBlock 封堵,user109|USDT|g010,g010,replay_cross_kind,USDT,300.00,1.50,298.50,300.00,1.50,298.50,ledger-g010-r,false,false,N/A,take=open;rebate=replay_blocked,
+pg-gold-011,Worker 扫描触发 DualHit 并升级告警,user110|USDT|g011,g011,worker_scan_escalate,USDT,500.00,2.50,497.50,500.00,2.50,497.50,ledger-g011-r,false,true,N/A,both=conflicted;alert=fired,high
+pg-gold-012,证明 Export API 在线验签通过,user111|USDT|g012,g012,export_verify,USDT,1000.00,5.00,995.00,5.00,5.00,0.00,ledger-g012-r,false,false,verified,both=settled;digest_verified=true,
+pg-gold-013,单笔 Rebate 无 Take 对应（合法场景），不触发双贷,user112|BTC|g013,g013:rebate,rebate_only,BTC,,,,,0.005,0.005,0.000,ledger-g013-r,false,false,N/A,rebate=settled,
+pg-gold-014,幂等重放后世代号不变，不创建新租约,user113|USDT|g014,g014:take,take_idem_replay,USDT,100.00,0.50,99.50,,,,,false,false,N/A,take=open;gen=1,
+pg-gold-015,证明固化后 settled 租约的 ProofID 被填写,user114|USDT|g015,g015,full_lifecycle,USDT,200.00,1.00,199.00,1.00,1.00,0.00,ledger-g015-r,false,false,verified,take.proof_id=not_empty;rebate.proof_id=not_empty,

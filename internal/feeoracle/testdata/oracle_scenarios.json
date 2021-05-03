@@ -1,0 +1,96 @@
+{
+  "stale": {
+    "desc": "所有源都超过 stale 阈值，GetAggregated 必须返回 ErrStale",
+    "stale_sec": 60,
+    "sources": [
+      {"id": "src-a", "chain": "ETH", "family": "evm", "weight": 1, "enabled": true}
+    ],
+    "ticks": [
+      {
+        "source_id": "src-a",
+        "age_sec": 90,
+        "native_amount": "0.002"
+      }
+    ],
+    "want_error": "fee oracle tick stale"
+  },
+  "single_fresh": {
+    "desc": "单源新鲜 tick，直接聚合返回该源 native_amount",
+    "stale_sec": 120,
+    "sources": [
+      {"id": "src-a", "chain": "ETH", "family": "evm", "weight": 1, "enabled": true}
+    ],
+    "ticks": [
+      {
+        "source_id": "src-a",
+        "age_sec": 10,
+        "native_amount": "0.002145"
+      }
+    ],
+    "want_native_amount": "0.002145",
+    "want_error": ""
+  },
+  "two_sources_weighted": {
+    "desc": "两个源，权重 2:1，加权平均后结果更靠近权重大的源",
+    "stale_sec": 120,
+    "sources": [
+      {"id": "src-a", "chain": "BTC", "family": "utxo", "weight": 2, "enabled": true},
+      {"id": "src-b", "chain": "BTC", "family": "utxo", "weight": 1, "enabled": true}
+    ],
+    "ticks": [
+      {"source_id": "src-a", "age_sec": 5, "native_amount": "0.00003"},
+      {"source_id": "src-b", "age_sec": 8, "native_amount": "0.00006"}
+    ],
+    "want_native_amount": "0.00004",
+    "want_error": ""
+  },
+  "deviation_exceeded": {
+    "desc": "两个源偏差超过 500 BPS（5%），熔断返回 ErrDeviation",
+    "stale_sec": 120,
+    "deviation_bps": 500,
+    "sources": [
+      {"id": "src-a", "chain": "ETH", "family": "evm", "weight": 1, "enabled": true},
+      {"id": "src-b", "chain": "ETH", "family": "evm", "weight": 1, "enabled": true}
+    ],
+    "ticks": [
+      {"source_id": "src-a", "age_sec": 5, "native_amount": "0.002"},
+      {"source_id": "src-b", "age_sec": 5, "native_amount": "0.003"}
+    ],
+    "want_error": "fee oracle source deviation exceeded threshold"
+  },
+  "deviation_within_threshold": {
+    "desc": "两个源偏差 400 BPS（4% < 5%），通过不熔断",
+    "stale_sec": 120,
+    "deviation_bps": 500,
+    "sources": [
+      {"id": "src-a", "chain": "ETH", "family": "evm", "weight": 1, "enabled": true},
+      {"id": "src-b", "chain": "ETH", "family": "evm", "weight": 1, "enabled": true}
+    ],
+    "ticks": [
+      {"source_id": "src-a", "age_sec": 5, "native_amount": "0.002"},
+      {"source_id": "src-b", "age_sec": 5, "native_amount": "0.00208"}
+    ],
+    "want_error": ""
+  },
+  "one_stale_one_fresh": {
+    "desc": "一源 stale 一源 fresh，stale 源被排除，聚合用 fresh 源的值",
+    "stale_sec": 60,
+    "sources": [
+      {"id": "src-a", "chain": "BTC", "family": "utxo", "weight": 1, "enabled": true},
+      {"id": "src-b", "chain": "BTC", "family": "utxo", "weight": 1, "enabled": true}
+    ],
+    "ticks": [
+      {"source_id": "src-a", "age_sec": 90, "native_amount": "0.0001"},
+      {"source_id": "src-b", "age_sec": 10, "native_amount": "0.00002115"}
+    ],
+    "want_native_amount": "0.00002115",
+    "want_error": ""
+  },
+  "no_sources_registered": {
+    "desc": "没有为该链注册任何源，GetAggregated 返回 ErrNoSources",
+    "stale_sec": 120,
+    "sources": [],
+    "ticks": [],
+    "want_error": "fee oracle no active sources for chain"
+  }
+}
