@@ -1,0 +1,15 @@
+{
+  "scenario": "convert_scan_halt_on_mid_flip",
+  "user_id": "user-dqg-scan-001",
+  "batch_id": "scan-batch-golden-001",
+  "first_asset": "BTC",
+  "first_amount": "0.00005",
+  "second_asset": "ETH",
+  "second_amount": "0.0004",
+  "expected": {
+    "settled_before_flip_kept": true,
+    "subsequent_convert_forbidden": true,
+    "halt_proof_kind": "scan_halt",
+    "cursor_halted": true
+  }
+}

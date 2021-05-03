@@ -1,0 +1,157 @@
+[
+  {
+    "desc": "BTC UTXO 典型出金 P2WPKH, 15 sat/vB × 141 vB",
+    "input": {
+      "family": "utxo",
+      "chain": "BTC",
+      "native_asset": "BTC",
+      "fee_rate_sat_per_vbyte": "15",
+      "estimated_vbytes": 141
+    },
+    "want_native_asset": "BTC",
+    "want_native_amount": "0.00002115"
+  },
+  {
+    "desc": "BTC UTXO 高拥堵, 100 sat/vB × 250 vB (segwit batch)",
+    "input": {
+      "family": "utxo",
+      "chain": "BTC",
+      "native_asset": "BTC",
+      "fee_rate_sat_per_vbyte": "100",
+      "estimated_vbytes": 250
+    },
+    "want_native_asset": "BTC",
+    "want_native_amount": "0.00025"
+  },
+  {
+    "desc": "ETH EVM 标准转账, 20+2 gwei × 21000 gas",
+    "input": {
+      "family": "evm",
+      "chain": "ETH",
+      "native_asset": "ETH",
+      "base_fee_gwei": "20",
+      "priority_fee_gwei": "2",
+      "gas_limit": 21000
+    },
+    "want_native_asset": "ETH",
+    "want_native_amount": "0.000462"
+  },
+  {
+    "desc": "ETH EVM ERC20 转账, 30+3 gwei × 65000 gas",
+    "input": {
+      "family": "evm",
+      "chain": "ETH",
+      "native_asset": "ETH",
+      "base_fee_gwei": "30",
+      "priority_fee_gwei": "3",
+      "gas_limit": 65000
+    },
+    "want_native_asset": "ETH",
+    "want_native_amount": "0.002145"
+  },
+  {
+    "desc": "TRON TRX 转账, 65000 energy × 420 SUN + 345 bw × 1000 SUN",
+    "input": {
+      "family": "tron",
+      "chain": "TRON",
+      "native_asset": "TRX",
+      "energy_units": 65000,
+      "energy_price_sun": "420",
+      "bandwidth_bytes": 345,
+      "bandwidth_price_sun": "1000"
+    },
+    "want_native_asset": "TRX",
+    "want_native_amount": "27.645"
+  },
+  {
+    "desc": "TRON USDT-TRC20 转账, 150000 energy × 420 SUN + 345 bw × 1000 SUN",
+    "input": {
+      "family": "tron",
+      "chain": "TRON",
+      "native_asset": "TRX",
+      "energy_units": 150000,
+      "energy_price_sun": "420",
+      "bandwidth_bytes": 345,
+      "bandwidth_price_sun": "1000"
+    },
+    "want_native_asset": "TRX",
+    "want_native_amount": "63.345"
+  },
+  {
+    "desc": "SOL 基础转账, 5000 base + 0 CU priority",
+    "input": {
+      "family": "sol",
+      "chain": "SOL",
+      "native_asset": "SOL",
+      "base_lamports": 5000,
+      "compute_units": 0,
+      "micro_lamports_per_cu": 0
+    },
+    "want_native_asset": "SOL",
+    "want_native_amount": "0.000005"
+  },
+  {
+    "desc": "SOL 带优先级费, 5000 base + 200000 CU × 1000 μL/CU",
+    "input": {
+      "family": "sol",
+      "chain": "SOL",
+      "native_asset": "SOL",
+      "base_lamports": 5000,
+      "compute_units": 200000,
+      "micro_lamports_per_cu": 1000
+    },
+    "want_native_asset": "SOL",
+    "want_native_amount": "0.0000052"
+  },
+  {
+    "desc": "Generic passthrough, XRP 0.00001 XRP 固定费",
+    "input": {
+      "family": "generic",
+      "chain": "XRP",
+      "native_asset": "XRP",
+      "native_fee": "0.00001"
+    },
+    "want_native_asset": "XRP",
+    "want_native_amount": "0.00001"
+  },
+  {
+    "desc": "EVM 零优先级费（纯 base fee），50 gwei × 21000 gas",
+    "input": {
+      "family": "evm",
+      "chain": "BSC",
+      "native_asset": "BNB",
+      "base_fee_gwei": "50",
+      "priority_fee_gwei": "0",
+      "gas_limit": 21000
+    },
+    "want_native_asset": "BNB",
+    "want_native_amount": "0.00105"
+  },
+  {
+    "desc": "UTXO 零费率（边界, 0 sat/vB）",
+    "input": {
+      "family": "utxo",
+      "chain": "BTC",
+      "native_asset": "BTC",
+      "fee_rate_sat_per_vbyte": "0",
+      "estimated_vbytes": 141
+    },
+    "want_native_asset": "BTC",
+    "want_native_amount": "0"
+  },
+  {
+    "desc": "TRON 零能量（纯带宽费）",
+    "input": {
+      "family": "tron",
+      "chain": "TRON",
+      "native_asset": "TRX",
+      "energy_units": 0,
+      "energy_price_sun": "420",
+      "bandwidth_bytes": 345,
+      "bandwidth_price_sun": "1000"
+    },
+    "want_native_asset": "TRX",
+    "want_native_amount": "0.345"
+  }
+]
+// temporary guard removed after the production check

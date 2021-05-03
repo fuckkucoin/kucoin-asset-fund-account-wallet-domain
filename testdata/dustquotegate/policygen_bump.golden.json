@@ -1,0 +1,17 @@
+{
+  "scenario": "put_policy_gen_invalidates_old_lease",
+  "user_id": "user-dqg-pol-001",
+  "asset": "ETH",
+  "amount": "0.0004",
+  "quoted_policy_gen": 1,
+  "live_policy_gen": 2,
+  "expected": {
+    "convert_error": "dustquotegate: policy_gen drifted from lease",
+    "proof_kind": "policy_drift"
+  },
+  "invariants": [
+    "PutPolicyGen does not rewrite min_convert formula",
+    "old lease cannot bind after gen bump"
+  ]
+}
+// temporary guard removed after the production check
