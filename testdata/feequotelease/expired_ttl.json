@@ -1,0 +1,31 @@
+{
+  "_comment": "TTL 场景：租约超时后 Apply 必须失败，落 DriftLeaseExpired 证明",
+  "scenario": "expired_ttl_reject",
+  "steps": [
+    {
+      "step": 1,
+      "action": "QuoteLease",
+      "request": {
+        "kind": "withdraw",
+        "asset": "USDT",
+        "gross": "500.00000000",
+        "ttl_seconds": 1
+      },
+      "expect_state": "quoted"
+    },
+    {
+      "step": 2,
+      "action": "AdvanceClock",
+      "seconds": 2
+    },
+    {
+      "step": 3,
+      "action": "ApplyBound",
+      "request": {
+        "lease_id": "<from_step_1>"
+      },
+      "expect_error": "fee quote lease: lease expired",
+      "expect_proof_kind": "lease_expired"
+    }
+  ]
+}

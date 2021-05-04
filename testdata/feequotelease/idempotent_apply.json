@@ -1,0 +1,38 @@
+{
+  "_comment": "幂等场景：合法 lease Apply 成功后重复 Apply 必须幂等，不得双扣",
+  "scenario": "idempotent_apply",
+  "steps": [
+    {
+      "step": 1,
+      "action": "QuoteLease",
+      "request": {
+        "kind": "withdraw",
+        "asset": "BTC",
+        "gross": "1.00000000",
+        "ttl_seconds": 300,
+        "idempotency_key": "idem-quote-001"
+      },
+      "expect_state": "quoted"
+    },
+    {
+      "step": 2,
+      "action": "ApplyBound",
+      "request": {
+        "lease_id": "<from_step_1>",
+        "idempotency_key": "idem-apply-001"
+      },
+      "expect_state": "applied",
+      "expect_idempotent": false
+    },
+    {
+      "step": 3,
+      "action": "ApplyBound",
+      "request": {
+        "lease_id": "<from_step_1>",
+        "idempotency_key": "idem-apply-001"
+      },
+      "expect_error": "fee quote lease: lease already applied",
+      "expect_proof_kind": "lease_consumed"
+    }
+  ]
+}
