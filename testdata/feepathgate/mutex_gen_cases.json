@@ -1,0 +1,111 @@
+[
+  {
+    "case": "take_acquires_first",
+    "description": "Take 路径在 Rebate 之前成功获取世代锁；世代从 0 推进至 1",
+    "input": {
+      "business_key": "user001|USDT|base-idem-001",
+      "idem_key": "base-idem-001:take",
+      "kind": "take",
+      "asset": "USDT",
+      "gross": "1000.00",
+      "worker_id": "worker-A:1001:go1"
+    },
+    "expected": {
+      "lease_status": "open",
+      "generation": 1,
+      "acquire_ok": true,
+      "err": ""
+    }
+  },
+  {
+    "case": "rebate_blocked_by_take",
+    "description": "Take 租约已在 open 状态，Rebate 尝试 Acquire 同一 biz_key 必须返回 ErrPathConflict",
+    "precondition": "take_acquires_first",
+    "input": {
+      "business_key": "user001|USDT|base-idem-001",
+      "idem_key": "base-idem-001:rebate",
+      "kind": "rebate",
+      "asset": "USDT",
+      "gross": "1000.00",
+      "worker_id": "worker-B:1002:go2"
+    },
+    "expected": {
+      "acquire_ok": false,
+      "err": "feepathgate: path conflict — same business_key bound to opposite Kind"
+    }
+  },
+  {
+    "case": "take_blocked_by_rebate",
+    "description": "Rebate 租约已在 bound 状态，Take 尝试 Acquire 同一 biz_key 必须返回 ErrPathConflict",
+    "precondition": "rebate_acquires_first_and_binds",
+    "input": {
+      "business_key": "user002|BTC|base-idem-002",
+      "idem_key": "base-idem-002:take",
+      "kind": "take",
+      "asset": "BTC",
+      "gross": "0.5",
+      "worker_id": "worker-A:1003:go3"
+    },
+    "expected": {
+      "acquire_ok": false,
+      "err": "feepathgate: path conflict — same business_key bound to opposite Kind"
+    }
+  },
+  {
+    "case": "concurrent_same_kind_stale_gen",
+    "description": "两个 goroutine 同时 Acquire 同一 biz_key 同 Kind；第二个 CAS 失败返回 ErrStaleGen",
+    "input": {
+      "business_key": "user003|ETH|base-idem-003",
+      "concurrent_workers": ["worker-C:1", "worker-D:2"],
+      "kind": "take",
+      "asset": "ETH",
+      "gross": "2.0"
+    },
+    "expected": {
+      "one_acquires": true,
+      "one_stale_gen": true,
+      "no_dual_credit": true
+    }
+  },
+  {
+    "case": "idem_idempotent_take_replay",
+    "description": "同一 (idem_key, kind=take, asset, gross) 重放，返回已有租约，不创建新世代",
+    "precondition": "take_acquires_first",
+    "input": {
+      "business_key": "user001|USDT|base-idem-001",
+      "idem_key": "base-idem-001:take",
+      "kind": "take",
+      "asset": "USDT",
+      "gross": "1000.00",
+      "worker_id": "worker-A:1001:go1"
+    },
+    "expected": {
+      "acquire_ok": true,
+      "duplicate": true,
+      "generation_unchanged": true
+    }
+  },
+  {
+    "case": "cross_kind_idem_replay_conflict",
+    "description": "同一 idem_key 首次 take 注册，再以 rebate 重放 → ErrReplayConflict",
+    "input": {
+      "business_key": "user004|USDT|shared-idem",
+      "steps": [
+        {
+          "idem_key": "shared-idem",
+          "kind": "take",
+          "asset": "USDT",
+          "gross": "500.00",
+          "expect_ok": true
+        },
+        {
+          "idem_key": "shared-idem",
+          "kind": "rebate",
+          "asset": "USDT",
+          "gross": "500.00",
+          "expect_err": "feepathgate: replay conflict — Kind/Asset/Gross mismatch"
+        }
+      ]
+    }
+  }
+]
