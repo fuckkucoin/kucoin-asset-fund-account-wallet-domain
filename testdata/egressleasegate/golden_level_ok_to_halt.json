@@ -1,0 +1,42 @@
+{
+  "_comment": "水位从 OK 跌至 Halt 后，未消费租约复验失败。",
+  "_scenario": "level_ok_to_halt",
+  "setup": {
+    "chain": "ETH",
+    "asset": "ETH",
+    "from_tank": true,
+    "tank_avail": "10",
+    "tank_min": "2",
+    "tank_target": "8",
+    "tank_native": "ETH"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "put_tank",
+      "tank_avail": "10",
+      "expect": { "ok": true }
+    },
+    {
+      "step": 2,
+      "action": "issue",
+      "expect": { "allowed": true, "breach": "ok" }
+    },
+    {
+      "step": 3,
+      "action": "put_tank",
+      "tank_avail": "1",
+      "expect": { "ok": true }
+    },
+    {
+      "step": 4,
+      "action": "broadcast",
+      "broadcast_ref": "wd-batch-level-1",
+      "expect": { "allowed": false, "has_proof": true }
+    }
+  ],
+  "invariants": [
+    "lease_not_consumed",
+    "breach_now_halt"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_comment": "全站停仓后旧租约广播失败",
+  "_scenario": "halt_all",
+  "setup": {
+    "tanks": [
+      {"chain": "TRON", "native": "TRX", "available": "900", "min": "200", "target": "800"}
+    ]
+  },
+  "steps": [
+    {
+      "action": "check_lease",
+      "chain": "TRON",
+      "asset": "USDT",
+      "amount": "50",
+      "expect": {"issued": true, "decision": "allow"}
+    },
+    {"action": "halt_all"},
+    {
+      "action": "observe_halt",
+      "expect": {"revoked_min": 1}
+    },
+    {
+      "action": "broadcast",
+      "chain": "TRON",
+      "asset": "USDT",
+      "amount": "50",
+      "broadcast_ref": "bc-halt-all-1",
+      "expect": {"accepted": false, "reject": "halt_all", "state": "revoked"}
+    }
+  ],
+  "invariants": [
+    "全站停仓由巡检立即吊销未消费租约",
+    "随后的广播不得成功"
+  ]
+}

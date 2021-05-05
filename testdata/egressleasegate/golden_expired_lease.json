@@ -1,0 +1,31 @@
+{
+  "_comment": "过期租约不得进入广播成功路径。",
+  "_scenario": "expired_lease",
+  "setup": {
+    "chain": "SOL",
+    "asset": "SOL",
+    "hot_available": "200",
+    "lease_ttl_ms": 1
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "sleep_ms",
+      "sleep_ms": 5
+    },
+    {
+      "step": 3,
+      "action": "broadcast",
+      "broadcast_ref": "wd-expired",
+      "expect": { "allowed": false }
+    }
+  ],
+  "invariants": [
+    "not_consumed"
+  ]
+}

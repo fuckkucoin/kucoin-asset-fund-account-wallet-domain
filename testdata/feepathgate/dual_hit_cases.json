@@ -1,0 +1,144 @@
+[
+  {
+    "case": "dual_hit_both_ledger_ids",
+    "description": "Take+Rebate 均已 bound 且有 LedgerID → 发现 DualHit，severity=high",
+    "input": {
+      "take_lease": {
+        "id": "lease-take-001",
+        "business_key": "user010|USDT|dh-idem-001",
+        "kind": "take",
+        "asset": "USDT",
+        "gross": "1000.00",
+        "fee": "5.00",
+        "net": "995.00",
+        "credit_id": "credit-take-001",
+        "ledger_id": "ledger-take-001",
+        "status": "bound"
+      },
+      "rebate_lease": {
+        "id": "lease-rebate-001",
+        "business_key": "user010|USDT|dh-idem-001",
+        "kind": "rebate",
+        "asset": "USDT",
+        "gross": "5.00",
+        "fee": "5.00",
+        "net": "0.00",
+        "credit_id": "credit-rebate-001",
+        "ledger_id": "ledger-rebate-001",
+        "status": "bound"
+      }
+    },
+    "expected": {
+      "dual_hit_created": true,
+      "severity": "high",
+      "status": "open",
+      "both_leases_conflicted": true
+    }
+  },
+  {
+    "case": "dual_hit_no_rebate_ledger",
+    "description": "Take 已 bound 有 LedgerID，Rebate 无 LedgerID → 不产生 DualHit（贷记未落）",
+    "input": {
+      "take_lease": {
+        "id": "lease-take-002",
+        "business_key": "user011|BTC|dh-idem-002",
+        "kind": "take",
+        "asset": "BTC",
+        "ledger_id": "ledger-take-002",
+        "status": "bound"
+      },
+      "rebate_lease": {
+        "id": "lease-rebate-002",
+        "business_key": "user011|BTC|dh-idem-002",
+        "kind": "rebate",
+        "asset": "BTC",
+        "ledger_id": "",
+        "status": "bound"
+      }
+    },
+    "expected": {
+      "dual_hit_created": false
+    }
+  },
+  {
+    "case": "dual_hit_tiny_fee_low_severity",
+    "description": "两侧 fee 均极小（<0.000001）→ DualHit severity=low",
+    "input": {
+      "take_lease": {
+        "id": "lease-take-003",
+        "business_key": "user012|USDT|dh-idem-003",
+        "kind": "take",
+        "fee": "0.0000001",
+        "ledger_id": "ledger-take-003",
+        "status": "bound"
+      },
+      "rebate_lease": {
+        "id": "lease-rebate-003",
+        "business_key": "user012|USDT|dh-idem-003",
+        "kind": "rebate",
+        "fee": "0.0000001",
+        "ledger_id": "ledger-rebate-003",
+        "status": "bound"
+      }
+    },
+    "expected": {
+      "dual_hit_created": true,
+      "severity": "low"
+    }
+  },
+  {
+    "case": "dual_hit_partial_proof_medium_severity",
+    "description": "Take 侧已有 ProofID，Rebate 无 → severity=medium",
+    "input": {
+      "take_lease": {
+        "id": "lease-take-004",
+        "business_key": "user013|ETH|dh-idem-004",
+        "kind": "take",
+        "fee": "0.01",
+        "proof_id": "proof-existing-001",
+        "ledger_id": "ledger-take-004",
+        "status": "settled"
+      },
+      "rebate_lease": {
+        "id": "lease-rebate-004",
+        "business_key": "user013|ETH|dh-idem-004",
+        "kind": "rebate",
+        "fee": "0.01",
+        "proof_id": "",
+        "ledger_id": "ledger-rebate-004",
+        "status": "bound"
+      }
+    },
+    "expected": {
+      "dual_hit_created": true,
+      "severity": "medium"
+    }
+  },
+  {
+    "case": "dual_hit_idempotent_rescan",
+    "description": "同一 biz_key 第二次 Scan → 返回已有 DualHit，不创建新记录",
+    "precondition": "dual_hit_both_ledger_ids",
+    "input": {
+      "business_key": "user010|USDT|dh-idem-001"
+    },
+    "expected": {
+      "dual_hit_id": "same as first scan",
+      "no_duplicate_created": true
+    }
+  },
+  {
+    "case": "dual_hit_resolve_closes",
+    "description": "ops 双人确认 → DualHit status=closed，business_key 不再有活跃命中",
+    "precondition": "dual_hit_both_ledger_ids",
+    "input": {
+      "dual_hit_id": "from precondition",
+      "resolved_by": "ops-alice@kucoin.net",
+      "note": "调查确认为数据，双方金额已手动对冲"
+    },
+    "expected": {
+      "status": "closed",
+      "resolved_by": "ops-alice@kucoin.net",
+      "biz_key_active_hit": false
+    }
+  }
+]

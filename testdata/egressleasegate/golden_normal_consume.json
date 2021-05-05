@@ -1,0 +1,31 @@
+{
+  "_comment": "Allow 后未翻转，广播复验通过并消费租约。",
+  "_scenario": "normal_consume",
+  "setup": {
+    "chain": "ETH",
+    "asset": "USDT",
+    "hot_available": "90000"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue",
+      "expect": { "allowed": true }
+    },
+    {
+      "step": 2,
+      "action": "broadcast",
+      "broadcast_ref": "wd-ok-1",
+      "expect": { "allowed": true, "state": "consumed" }
+    },
+    {
+      "step": 3,
+      "action": "broadcast",
+      "broadcast_ref": "wd-ok-2",
+      "expect": { "allowed": false, "reuse": true }
+    }
+  ],
+  "invariants": [
+    "single_consume"
+  ]
+}

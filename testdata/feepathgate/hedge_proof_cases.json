@@ -1,0 +1,132 @@
+[
+  {
+    "case": "proof_build_balanced_ok",
+    "description": "fee_take == fee_rebate，两侧均有 LedgerID → Build 成功，Digest 可复现",
+    "input": {
+      "take_lease": {
+        "id": "lease-t-hp-001",
+        "business_key": "user020|USDT|hp-idem-001",
+        "kind": "take",
+        "asset": "USDT",
+        "gross": "1000.00",
+        "fee": "5.00",
+        "net": "995.00",
+        "ledger_id": "",
+        "status": "bound"
+      },
+      "rebate_lease": {
+        "id": "lease-r-hp-001",
+        "business_key": "user020|USDT|hp-idem-001",
+        "kind": "rebate",
+        "asset": "USDT",
+        "gross": "5.00",
+        "fee": "5.00",
+        "net": "0.00",
+        "ledger_id": "ledger-rebate-hp-001",
+        "status": "bound"
+      }
+    },
+    "expected": {
+      "proof_created": true,
+      "status": "pending",
+      "fee_take_equals_fee_rebate": true,
+      "digest_length": 64,
+      "ledger_ids_count": 1
+    }
+  },
+  {
+    "case": "proof_verify_ok",
+    "description": "pending 证明验证通过 → status=verified，digest 与重算一致",
+    "precondition": "proof_build_balanced_ok",
+    "input": {
+      "proof_id": "from precondition"
+    },
+    "expected": {
+      "status": "verified",
+      "verified_at_not_nil": true,
+      "digest_matches": true
+    }
+  },
+  {
+    "case": "proof_build_imbalanced",
+    "description": "fee_take ≠ fee_rebate → Build 返回 ErrHedgeImbalance",
+    "input": {
+      "take_lease": {
+        "id": "lease-t-hp-002",
+        "business_key": "user021|USDT|hp-idem-002",
+        "kind": "take",
+        "asset": "USDT",
+        "fee": "5.00",
+        "ledger_id": "",
+        "status": "bound"
+      },
+      "rebate_lease": {
+        "id": "lease-r-hp-002",
+        "business_key": "user021|USDT|hp-idem-002",
+        "kind": "rebate",
+        "asset": "USDT",
+        "fee": "4.99",
+        "ledger_id": "ledger-rebate-hp-002",
+        "status": "bound"
+      }
+    },
+    "expected": {
+      "proof_created": false,
+      "err": "feepathgate: hedge imbalance — fee/rebate amounts do not balance"
+    }
+  },
+  {
+    "case": "proof_missing_rebate_ledger_id",
+    "description": "Rebate 侧 LedgerID 为空 → Build 返回 ErrHedgeImbalance",
+    "input": {
+      "take_lease": {
+        "fee": "5.00",
+        "ledger_id": ""
+      },
+      "rebate_lease": {
+        "fee": "5.00",
+        "ledger_id": ""
+      }
+    },
+    "expected": {
+      "proof_created": false,
+      "err_contains": "rebate ledger_id missing"
+    }
+  },
+  {
+    "case": "proof_settle_requires_verified",
+    "description": "只有 HedgeProof status=verified 后，PathLease 才可推进至 settled",
+    "input": {
+      "proof_status": "pending"
+    },
+    "expected": {
+      "can_settle": false,
+      "err": "feepathgate: hedge proof missing — cannot settle without proof"
+    }
+  },
+  {
+    "case": "proof_build_idempotent",
+    "description": "同一对 (take_lease_id, rebate_lease_id) 重复调用 Build → 返回已有证明",
+    "precondition": "proof_build_balanced_ok",
+    "input": {
+      "take_lease_id": "lease-t-hp-001",
+      "rebate_lease_id": "lease-r-hp-001"
+    },
+    "expected": {
+      "same_proof_id": true,
+      "no_duplicate": true
+    }
+  },
+  {
+    "case": "proof_export_online_verify",
+    "description": "Export API 重新计算 Digest，digest_verified=true 表示证明完整",
+    "precondition": "proof_verify_ok",
+    "input": {
+      "proof_id": "from precondition"
+    },
+    "expected": {
+      "digest_verified": true,
+      "http_status": 200
+    }
+  }
+]

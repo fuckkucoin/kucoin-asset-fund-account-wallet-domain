@@ -1,0 +1,124 @@
+[
+  {
+    "case": "first_register_ok",
+    "description": "idem_key 首次注册，任意 Kind/Asset/Gross 均通过",
+    "input": {
+      "idem_key": "rf-idem-001",
+      "business_key": "user030|USDT|rf-idem-001",
+      "kind": "take",
+      "asset": "USDT",
+      "gross": "500.00"
+    },
+    "expected": {
+      "duplicate": false,
+      "err": ""
+    }
+  },
+  {
+    "case": "same_triple_replay_ok",
+    "description": "同一 idem_key 以完全相同三元组重放 → duplicate=true（幂等重放允许）",
+    "precondition": "first_register_ok",
+    "input": {
+      "idem_key": "rf-idem-001",
+      "business_key": "user030|USDT|rf-idem-001",
+      "kind": "take",
+      "asset": "USDT",
+      "gross": "500.00"
+    },
+    "expected": {
+      "duplicate": true,
+      "err": ""
+    }
+  },
+  {
+    "case": "cross_kind_replay_blocked",
+    "description": "同一 idem_key 首次 take 注册，再以 rebate 重放 → ErrReplayConflict",
+    "precondition": "first_register_ok",
+    "input": {
+      "idem_key": "rf-idem-001",
+      "business_key": "user030|USDT|rf-idem-001",
+      "kind": "rebate",
+      "asset": "USDT",
+      "gross": "500.00"
+    },
+    "expected": {
+      "duplicate": false,
+      "err": "feepathgate: replay conflict — Kind/Asset/Gross mismatch",
+      "block_recorded": true
+    }
+  },
+  {
+    "case": "different_gross_replay_blocked",
+    "description": "同 idem_key 同 Kind，但 Gross 不同 → ErrReplayConflict",
+    "input": {
+      "steps": [
+        {
+          "idem_key": "rf-idem-002",
+          "kind": "take",
+          "asset": "USDT",
+          "gross": "100.00",
+          "expect_duplicate": false,
+          "expect_err": ""
+        },
+        {
+          "idem_key": "rf-idem-002",
+          "kind": "take",
+          "asset": "USDT",
+          "gross": "200.00",
+          "expect_duplicate": false,
+          "expect_err": "feepathgate: replay conflict — Kind/Asset/Gross mismatch"
+        }
+      ]
+    }
+  },
+  {
+    "case": "different_asset_replay_blocked",
+    "description": "同 idem_key，Asset 从 USDT 变为 BTC → ErrReplayConflict",
+    "input": {
+      "steps": [
+        {
+          "idem_key": "rf-idem-003",
+          "kind": "rebate",
+          "asset": "USDT",
+          "gross": "50.00",
+          "expect_err": ""
+        },
+        {
+          "idem_key": "rf-idem-003",
+          "kind": "rebate",
+          "asset": "BTC",
+          "gross": "50.00",
+          "expect_err": "feepathgate: replay conflict — Kind/Asset/Gross mismatch"
+        }
+      ]
+    }
+  },
+  {
+    "case": "empty_idem_skip",
+    "description": "idem_key 为空时 ReplayFence 跳过检查（由上层负责）",
+    "input": {
+      "idem_key": "",
+      "kind": "take",
+      "asset": "USDT",
+      "gross": "100.00"
+    },
+    "expected": {
+      "duplicate": false,
+      "err": ""
+    }
+  },
+  {
+    "case": "replay_block_queryable",
+    "description": "ReplayBlock 写入后，GetBlock 可按 idem_key 查询审计记录",
+    "precondition": "cross_kind_replay_blocked",
+    "input": {
+      "idem_key": "rf-idem-001"
+    },
+    "expected": {
+      "block_found": true,
+      "orig_kind": "take",
+      "req_kind": "rebate",
+      "orig_gross": "500.00"
+    }
+  }
+]

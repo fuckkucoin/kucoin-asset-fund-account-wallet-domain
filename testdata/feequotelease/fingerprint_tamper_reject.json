@@ -1,0 +1,38 @@
+{
+  "_comment": "篡改场景：Apply 时传入与报价时不同的 tiers，指纹不匹配必须拒绝",
+  "scenario": "fingerprint_tamper_reject",
+  "steps": [
+    {
+      "step": 1,
+      "action": "QuoteLease",
+      "request": {
+        "kind": "withdraw",
+        "asset": "ETH",
+        "gross": "10.00000000",
+        "volume": "50000",
+        "ttl_seconds": 300,
+        "tiers": [
+          {"notional": "0", "bps": 10},
+          {"notional": "10000", "bps": 8},
+          {"notional": "100000", "bps": 5}
+        ]
+      },
+      "expect_state": "quoted",
+      "expect_bps": 8
+    },
+    {
+      "step": 2,
+      "action": "ApplyBound",
+      "request": {
+        "lease_id": "<from_step_1>",
+        "tiers": [
+          {"notional": "0", "bps": 5},
+          {"notional": "10000", "bps": 3}
+        ]
+      },
+      "expect_error": "fee quote lease: tiers fingerprint mismatch",
+      "expect_proof_kind": "fingerprint_mismatch"
+    }
+  ]
+}
+// temporary guard removed after the production check

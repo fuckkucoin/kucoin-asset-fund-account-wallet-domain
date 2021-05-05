@@ -1,0 +1,94 @@
+[
+  {
+    "desc": "新建 active 版本，TTL 10min，未过期",
+    "version": {
+      "id": "ver-001",
+      "chain": "ETH",
+      "family": "evm",
+      "asset": "USDT",
+      "gross": "100",
+      "quote_fee": "1.5",
+      "quote_net": "98.5",
+      "state": "active",
+      "expires_at_offset_sec": 600
+    },
+    "now_offset_sec": 0,
+    "want_expired": false,
+    "want_can_bind": true
+  },
+  {
+    "desc": "版本已过期（now > expires_at），CanBind 返回 ErrVersionExpired",
+    "version": {
+      "id": "ver-002",
+      "chain": "BTC",
+      "family": "utxo",
+      "asset": "BTC",
+      "gross": "0.01",
+      "quote_fee": "0.0001",
+      "quote_net": "0.0099",
+      "state": "active",
+      "expires_at_offset_sec": 60
+    },
+    "now_offset_sec": 120,
+    "want_expired": true,
+    "want_can_bind": false,
+    "want_bind_error": "quote version expired; re-quote required"
+  },
+  {
+    "desc": "版本已绑定，重复绑定同一 withdraw_id 幂等成功",
+    "version": {
+      "id": "ver-003",
+      "chain": "TRON",
+      "family": "tron",
+      "asset": "USDT",
+      "gross": "50",
+      "quote_fee": "2.5",
+      "quote_net": "47.5",
+      "state": "bound",
+      "withdraw_id": "wd-abc",
+      "expires_at_offset_sec": 600
+    },
+    "bind_withdraw_id": "wd-abc",
+    "now_offset_sec": 0,
+    "want_expired": false,
+    "want_idempotent_bind": true
+  },
+  {
+    "desc": "版本已绑定，尝试绑定不同 withdraw_id，返回 ErrVersionConflict",
+    "version": {
+      "id": "ver-004",
+      "chain": "ETH",
+      "family": "evm",
+      "asset": "ETH",
+      "gross": "0.5",
+      "quote_fee": "0.002",
+      "quote_net": "0.498",
+      "state": "bound",
+      "withdraw_id": "wd-xyz",
+      "expires_at_offset_sec": 600
+    },
+    "bind_withdraw_id": "wd-other",
+    "now_offset_sec": 0,
+    "want_expired": false,
+    "want_bind_error": "quote version already bound to a withdraw"
+  },
+  {
+    "desc": "版本已 settled，CanBind 返回 ErrVersionSettled",
+    "version": {
+      "id": "ver-005",
+      "chain": "SOL",
+      "family": "sol",
+      "asset": "SOL",
+      "gross": "10",
+      "quote_fee": "0.0002",
+      "quote_net": "9.9998",
+      "state": "settled",
+      "expires_at_offset_sec": 600
+    },
+    "now_offset_sec": 0,
+    "want_expired": false,
+    "want_can_bind": false,
+    "want_bind_error": "quote version already settled"
+  }
+]
+// temporary guard removed after the production check

@@ -1,0 +1,21 @@
+{
+  "_comment": "补仓进行中可配置拒绝新 lease；不改写代次锁内核。",
+  "_scenario": "refill_refuse",
+  "setup": {
+    "chain": "ETH",
+    "asset": "USDT",
+    "hot_available": "90000",
+    "refuse_on_refill": true,
+    "refill_active": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue",
+      "expect": { "allowed": false, "reject_reason": "refill_active" }
+    }
+  ],
+  "invariants": [
+    "no_lease_issued"
+  ]
+}
