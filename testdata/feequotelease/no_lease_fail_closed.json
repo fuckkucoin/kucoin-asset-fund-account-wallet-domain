@@ -1,0 +1,16 @@
+{
+  "_comment": "安全场景：无 lease 的 Apply 必须 fail-closed，落 DriftNoLease 证明",
+  "scenario": "no_lease_fail_closed",
+  "steps": [
+    {
+      "step": 1,
+      "action": "ApplyBound",
+      "request": {
+        "lease_id": ""
+      },
+      "expect_error": "fee quote lease: apply requires a valid lease (fail-closed)",
+      "expect_proof_kind": "no_lease",
+      "expect_http_status": 403
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "_comment": "事故场景：Quote 后 Put 降低 BPS，持旧 lease 的 Apply 必须失败并落 FeeQuoteDriftProof",
+  "scenario": "quote_then_put_lower_bps_drift",
+  "steps": [
+    {
+      "step": 1,
+      "action": "QuoteLease",
+      "request": {
+        "kind": "withdraw",
+        "asset": "USDT",
+        "gross": "1000.00000000",
+        "ttl_seconds": 300
+      },
+      "expect_state": "quoted",
+      "expect_bps": 10,
+      "expect_sch_gen": 1
+    },
+    {
+      "step": 2,
+      "action": "PutSchedule",
+      "request": {
+        "kind": "withdraw",
+        "asset": "USDT",
+        "bps": 5,
+        "active": true,
+        "put_by": "ops"
+      },
+      "expect_new_gen": 2,
+      "expect_revoked_count": 1
+    },
+    {
+      "step": 3,
+      "action": "ApplyBound",
+      "request": {
+        "lease_id": "<from_step_1>"
+      },
+      "expect_error": "fee quote lease: lease revoked",
+      "expect_proof_kind": "lease_revoked"
+    }
+  ]
+}
