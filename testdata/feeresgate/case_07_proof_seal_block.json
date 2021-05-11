@@ -1,0 +1,45 @@
+{
+  "name": "proof_seal_block",
+  "description": "证明封口后该笔出金被 block，不允许再做任何 fee-reserve 写操作",
+  "setup": {
+    "withdraw_id": "WD-SEAL-007",
+    "user_id": "USER-F",
+    "asset": "ETH",
+    "reserved_fee": "0.01"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-SEAL-007",
+      "user_id": "USER-F",
+      "asset": "ETH",
+      "fee": "0.01"
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-SEAL-007",
+      "actual_fee": "0.006",
+      "voucher_id": "VCH-SEAL-007"
+    },
+    {
+      "type": "seal_proof",
+      "withdraw_id": "WD-SEAL-007",
+      "expect": {
+        "sealed": true
+      }
+    },
+    {
+      "type": "check_lease",
+      "withdraw_id": "WD-SEAL-007",
+      "expect": {
+        "state": "blocked",
+        "block_reason_contains": "proof_sealed"
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "blocked",
+    "proof_sealed": true,
+    "further_writes_blocked": true
+  }
+}

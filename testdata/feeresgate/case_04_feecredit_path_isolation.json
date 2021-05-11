@@ -1,0 +1,74 @@
+{
+  "name": "feecredit_path_isolation",
+  "description": "feeresgate 引擎的 reserve/settle/release 路径与 feecredit Take/Rebate 路径完全隔离。不同 lease_id 的操作不互相影响。不写 Take/Rebate 事件，不写 VIP tier 事件",
+  "setup": {
+    "withdraws": [
+      {
+        "withdraw_id": "WD-ISO-A",
+        "user_id": "USER-X",
+        "asset": "USDT",
+        "reserved_fee": "5.0"
+      },
+      {
+        "withdraw_id": "WD-ISO-B",
+        "user_id": "USER-Y",
+        "asset": "BTC",
+        "reserved_fee": "0.0001"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-ISO-A",
+      "user_id": "USER-X",
+      "asset": "USDT",
+      "fee": "5.0",
+      "expect": {
+        "state": "reserved"
+      }
+    },
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-ISO-B",
+      "user_id": "USER-Y",
+      "asset": "BTC",
+      "fee": "0.0001",
+      "expect": {
+        "state": "reserved"
+      }
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-ISO-A",
+      "actual_fee": "5.0",
+      "voucher_id": "VCH-ISO-A",
+      "expect": {
+        "state": "settled"
+      }
+    },
+    {
+      "type": "release",
+      "withdraw_id": "WD-ISO-B",
+      "voucher_id": "VCH-ISO-B",
+      "expect": {
+        "state": "released"
+      }
+    },
+    {
+      "type": "check_isolation",
+      "description": "WD-ISO-A settled 不影响 WD-ISO-B released；无 Take/Rebate/VIP 事件",
+      "expect": {
+        "wd_a_state": "settled",
+        "wd_b_state": "released",
+        "take_rebate_events": 0,
+        "vip_tier_events": 0
+      }
+    }
+  ],
+  "expected": {
+    "isolation_verified": true,
+    "no_take_rebate": true,
+    "no_vip_tier": true
+  }
+}

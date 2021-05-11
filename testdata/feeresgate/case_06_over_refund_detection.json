@@ -1,0 +1,43 @@
+{
+  "name": "over_refund_detection",
+  "description": "结算时 actual_fee > reserved_fee 产生 over_refund delta，引擎自动生成 DeltaProof 和 ReserveCase",
+  "setup": {
+    "withdraw_id": "WD-OVER-006",
+    "user_id": "USER-E",
+    "asset": "USDT",
+    "reserved_fee": "5.0"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-OVER-006",
+      "user_id": "USER-E",
+      "asset": "USDT",
+      "fee": "5.0"
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-OVER-006",
+      "actual_fee": "7.5",
+      "voucher_id": "VCH-OVER-006",
+      "expect": {
+        "state": "settled",
+        "actual_fee": "7.5"
+      }
+    },
+    {
+      "type": "check_proofs",
+      "withdraw_id": "WD-OVER-006",
+      "expect": {
+        "count": 1,
+        "delta_sign": "over_refund",
+        "delta_amt": "2.5"
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "settled",
+    "proof_count": 1,
+    "case_kind": "over_refund"
+  }
+}
