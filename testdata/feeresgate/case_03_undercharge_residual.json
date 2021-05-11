@@ -1,0 +1,58 @@
+{
+  "name": "undercharge_residual",
+  "description": "结算时 actual_fee < reserved_fee 产生 undercharge delta，引擎自动生成 DeltaProof 和 ReserveCase。undercharge recovery 失败时案例保持 open，不得静默标记 settled complete",
+  "setup": {
+    "withdraw_id": "WD-UNDER-003",
+    "user_id": "USER-C",
+    "asset": "ETH",
+    "reserved_fee": "0.005"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-UNDER-003",
+      "user_id": "USER-C",
+      "asset": "ETH",
+      "fee": "0.005",
+      "expect": {
+        "state": "reserved",
+        "generation": 1
+      }
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-UNDER-003",
+      "actual_fee": "0.003",
+      "voucher_id": "VCH-SETTLE-003",
+      "expect": {
+        "state": "settled",
+        "actual_fee": "0.003"
+      }
+    },
+    {
+      "type": "check_proofs",
+      "withdraw_id": "WD-UNDER-003",
+      "expect": {
+        "count": 1,
+        "delta_sign": "undercharge",
+        "delta_amt": "0.002"
+      }
+    },
+    {
+      "type": "check_cases",
+      "withdraw_id": "WD-UNDER-003",
+      "expect": {
+        "count": 1,
+        "case_kind": "undercharge",
+        "case_state": "open"
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "settled",
+    "proof_count": 1,
+    "case_open": true,
+    "case_kind": "undercharge",
+    "never_silent_complete": true
+  }
+}

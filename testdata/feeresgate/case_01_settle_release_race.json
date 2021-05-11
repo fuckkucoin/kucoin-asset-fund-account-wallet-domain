@@ -1,0 +1,47 @@
+{
+  "name": "settle_release_race",
+  "description": "同一 WithdrawID 并发 Settle 与 Release：只有先到的一方能绑定终态、修改租约并发 voucher，后到的一方收到 ErrTerminalConflict 并生成 ReserveCase",
+  "setup": {
+    "withdraw_id": "WD-RACE-001",
+    "user_id": "USER-A",
+    "asset": "USDT",
+    "reserved_fee": "10.5"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-RACE-001",
+      "user_id": "USER-A",
+      "asset": "USDT",
+      "fee": "10.5",
+      "expect": {
+        "state": "reserved",
+        "generation": 1
+      }
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-RACE-001",
+      "actual_fee": "10.5",
+      "voucher_id": "VCH-SETTLE-001",
+      "expect": {
+        "state": "settled",
+        "terminal_leg": "settle"
+      }
+    },
+    {
+      "type": "release",
+      "withdraw_id": "WD-RACE-001",
+      "voucher_id": "VCH-RELEASE-001",
+      "expect_error": "fee reserve terminal conflict: settle XOR release"
+    }
+  ],
+  "expected": {
+    "final_state": "settled",
+    "terminal_leg": "settle",
+    "voucher_id": "VCH-SETTLE-001",
+    "cases_created": 1,
+    "case_kind": "dual_voucher",
+    "release_blocked": true
+  }
+}
