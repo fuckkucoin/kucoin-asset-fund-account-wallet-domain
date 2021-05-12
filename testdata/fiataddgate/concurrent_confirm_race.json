@@ -1,0 +1,24 @@
+{
+  "name": "concurrent_confirm_race",
+  "description": "两路并发 Confirm 同一 Session：第一路成功，第二路幂等回放；仅一笔 CreditEffect",
+  "input": {
+    "session": {
+      "id": "sess-race-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "50.00",
+      "status": "pending",
+      "confirm_gen": 0
+    },
+    "concurrent_confirmers": 2,
+    "sign_key": "test-key-race"
+  },
+  "expected": {
+    "session_status": "credited",
+    "confirm_gen": 1,
+    "credit_effect_count": 1,
+    "fork_case_open": false,
+    "consistent": true,
+    "second_result": "idempotent_replay"
+  }
+}
