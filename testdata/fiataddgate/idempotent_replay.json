@@ -1,0 +1,29 @@
+{
+  "name": "idempotent_replay",
+  "description": "同一 Session 已 credited，再次调用 GateConfirm 返回幂等结果，不触发第二次贷记",
+  "input": {
+    "session": {
+      "id": "sess-idem-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "150.00",
+      "status": "credited",
+      "confirm_gen": 1,
+      "credit_id": "tr-idem-001"
+    },
+    "existing_effect": {
+      "effect_id": "ce-idem-001",
+      "session_id": "sess-idem-001",
+      "confirm_gen": 1,
+      "credit_id": "tr-idem-001"
+    },
+    "sign_key": "test-key-idem"
+  },
+  "expected": {
+    "gate_confirm_error": null,
+    "session_status": "credited",
+    "confirm_gen": 1,
+    "credit_effect_count": 1,
+    "effect_id": "ce-idem-001"
+  }
+}

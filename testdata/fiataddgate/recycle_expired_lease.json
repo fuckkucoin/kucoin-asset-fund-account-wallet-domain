@@ -1,0 +1,27 @@
+{
+  "name": "recycle_expired_lease",
+  "description": "PendingConfirmingRecycler 回收已过期、无 ledger 贷记的 confirming 租约",
+  "input": {
+    "session": {
+      "id": "sess-recycle-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "50.00",
+      "status": "confirming",
+      "confirm_gen": 1
+    },
+    "lease": {
+      "lease_id": "cl-recycle-001",
+      "session_id": "sess-recycle-001",
+      "confirm_gen": 1,
+      "state": "issued",
+      "expires_at_offset_seconds": -120
+    },
+    "ledger_credit_exists": false
+  },
+  "expected": {
+    "lease_state_after_recycle": "expired",
+    "session_status": "confirming",
+    "fork_case_open": false
+  }
+}

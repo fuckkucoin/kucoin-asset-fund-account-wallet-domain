@@ -1,0 +1,28 @@
+{
+  "name": "fork_close_and_retry",
+  "description": "四眼收口 ForkCase 后，Session 仍在 forked 状态（须人工补录），新 Open 可开新 Session",
+  "input": {
+    "session": {
+      "id": "sess-close-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "300.00",
+      "status": "forked",
+      "confirm_gen": 1
+    },
+    "fork_case": {
+      "case_id": "fc-close-test-001",
+      "state": "open",
+      "kind": "ledger_credited_session_pending"
+    },
+    "close_request": {
+      "closed_by": "ops-admin-001",
+      "resolution": "confirmed idempotent: ledger transfer tr-001 is the authoritative credit; session marked forked is consistent"
+    }
+  },
+  "expected": {
+    "fork_case_state": "closed",
+    "fork_case_closed_by": "ops-admin-001",
+    "subsequent_confirm_error": null
+  }
+}
