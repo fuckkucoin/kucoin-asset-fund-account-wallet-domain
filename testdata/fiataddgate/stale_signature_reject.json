@@ -1,0 +1,31 @@
+{
+  "name": "stale_signature_reject",
+  "description": "confirm_gen 抬升后，旧世代签名不得再贷记；提交 gen=1 的签名在 gen=2 下被拒",
+  "input": {
+    "session": {
+      "id": "sess-stale-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "75.00",
+      "status": "pending",
+      "confirm_gen": 0
+    },
+    "sign_key": "test-key-stale",
+    "steps": [
+      {
+        "action": "bump_gen_without_confirm",
+        "new_gen": 1
+      },
+      {
+        "action": "gate_confirm_with_stale_sig",
+        "sig_gen": 0
+      }
+    ]
+  },
+  "expected": {
+    "gate_confirm_error": "fiat add signature bound to older generation",
+    "session_status": "forked",
+    "fork_case_open": true,
+    "fork_case_reason": "signature bound to stale or invalid generation"
+  }
+}

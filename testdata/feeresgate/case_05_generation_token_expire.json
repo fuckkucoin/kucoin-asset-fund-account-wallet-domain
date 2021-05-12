@@ -1,0 +1,54 @@
+{
+  "name": "generation_token_expire",
+  "description": "reserve 多次 bump generation 后，旧 generation+token 的 settle/release 请求被拒绝。过期 lease 被拒绝",
+  "setup": {
+    "withdraw_id": "WD-GEN-005",
+    "user_id": "USER-D",
+    "asset": "USDT",
+    "reserved_fee": "8.0"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-GEN-005",
+      "user_id": "USER-D",
+      "asset": "USDT",
+      "fee": "8.0",
+      "expect": {
+        "generation": 1
+      }
+    },
+    {
+      "type": "reserve_again",
+      "withdraw_id": "WD-GEN-005",
+      "user_id": "USER-D",
+      "asset": "USDT",
+      "fee": "9.0",
+      "expect": {
+        "generation": 2,
+        "reserved_fee": "9.0"
+      }
+    },
+    {
+      "type": "settle_stale_generation",
+      "withdraw_id": "WD-GEN-005",
+      "generation": 1,
+      "token": "stale-token",
+      "actual_fee": "8.0",
+      "voucher_id": "VCH-STALE",
+      "expect_error": "fee reserve lease generation mismatch"
+    },
+    {
+      "type": "settle_expired",
+      "withdraw_id": "WD-GEN-005",
+      "description": "过期后结算被拒",
+      "expect_error": "fee reserve lease expired"
+    }
+  ],
+  "expected": {
+    "final_state": "reserved",
+    "generation": 2,
+    "stale_settle_rejected": true,
+    "expired_settle_rejected": true
+  }
+}

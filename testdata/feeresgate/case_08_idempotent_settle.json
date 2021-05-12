@@ -1,0 +1,41 @@
+{
+  "name": "idempotent_settle",
+  "description": "相同 WithdrawID+VoucherID 重复 Settle 幂等返回，不产生新案例。相同 Release 同理",
+  "setup": {
+    "withdraw_id": "WD-IDEM-008",
+    "user_id": "USER-G",
+    "asset": "USDT",
+    "reserved_fee": "3.0"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-IDEM-008",
+      "user_id": "USER-G",
+      "asset": "USDT",
+      "fee": "3.0"
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-IDEM-008",
+      "actual_fee": "3.0",
+      "voucher_id": "VCH-IDEM-008"
+    },
+    {
+      "type": "settle_repeat",
+      "withdraw_id": "WD-IDEM-008",
+      "actual_fee": "3.0",
+      "voucher_id": "VCH-IDEM-008",
+      "expect": {
+        "state": "settled",
+        "idempotent": true,
+        "no_new_case": true
+      }
+    }
+  ],
+  "expected": {
+    "final_state": "settled",
+    "cases_created": 0,
+    "idempotent_pass": true
+  }
+}

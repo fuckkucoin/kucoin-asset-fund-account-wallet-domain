@@ -1,0 +1,24 @@
+{
+  "name": "happy_path",
+  "description": "正常路径：单次 GateConfirm，pending→confirming→credited，产出 ConfirmLease(credited) 与 CreditEffect",
+  "input": {
+    "session": {
+      "id": "sess-happy-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "100.00",
+      "status": "pending",
+      "confirm_gen": 0
+    },
+    "signature_type": "bound",
+    "sign_key": "test-key-happy"
+  },
+  "expected": {
+    "session_status": "credited",
+    "confirm_gen": 1,
+    "lease_state": "credited",
+    "effect_found": true,
+    "fork_case_open": false,
+    "consistent": true
+  }
+}
