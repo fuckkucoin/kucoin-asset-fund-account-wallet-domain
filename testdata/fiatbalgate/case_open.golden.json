@@ -1,0 +1,20 @@
+{
+  "case_id": "c1000000-0000-0000-0000-000000000001",
+  "asset": "USDT",
+  "scan_gen_seq": 1,
+  "detected_entry_id": "entry-001",
+  "sum_debit": "100.000000000000000000",
+  "sum_credit": "90.000000000000000000",
+  "imbalance_kind": "balanced_mismatch",
+  "state": "open",
+  "scanner_id": "scanner-golden-01",
+  "opened_at": "2025-11-08T10:00:00Z",
+  "blocking_at": null,
+  "cleared_at": null,
+  "cleared_by": "",
+  "clear_note": "",
+  "proof_id": "",
+  "created_at": "2025-11-08T10:00:00Z",
+  "updated_at": "2025-11-08T10:00:00Z",
+  "_comment": "凭证借贷差额 10 USDT，触发不平衡开案（open 状态），尚未推进到 blocking"
+}
