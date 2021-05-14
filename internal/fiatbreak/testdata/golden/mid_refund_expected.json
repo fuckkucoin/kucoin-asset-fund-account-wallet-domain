@@ -1,0 +1,32 @@
+{
+  "scenario": "mid_refund",
+  "has_break": true,
+  "break": {
+    "booking_id": "bk-midrefund-001",
+    "kind": "mid_refund",
+    "state": "open",
+    "psp_receipt_id": "rcpt-midrefund-001",
+    "psp_amount": "150.00000000",
+    "book_amount": "150.00000000",
+    "delta": "0.00000000",
+    "currency": "USD"
+  },
+  "suspense": {
+    "booking_id": "bk-midrefund-001",
+    "reason": "mid_refund",
+    "state": "open",
+    "asset": "USDT",
+    "currency": "USD"
+  },
+  "proof": {
+    "booking_id": "bk-midrefund-001",
+    "sealed": false
+  },
+  "assertions": [
+    "break.kind == mid_refund",
+    "break.delta == 0 (金额无差异，但 PSP 状态与账本状态不符)",
+    "suspense.reason == mid_refund",
+    "账本 settled 状态不变（不因 PSP refunded 自动回滚）",
+    "需人工介入：确认退款是否需要账本冲销"
+  ]
+}

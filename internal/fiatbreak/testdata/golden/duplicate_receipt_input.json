@@ -1,0 +1,32 @@
+{
+  "scenario": "duplicate_receipt",
+  "description": "同一账本预约收到两次 PSP 收款通知，第二次不得二次入账，断裂记录重复收据证据",
+  "booking": {
+    "id": "bk-dup-001",
+    "user_id": "user-003",
+    "kind": "onramp",
+    "asset": "USDT",
+    "amount": "200",
+    "currency": "USD",
+    "state": "settled",
+    "ledger_id": "led-dup-001"
+  },
+  "detect_reqs": [
+    {
+      "booking_id": "bk-dup-001",
+      "psp_receipt_id": "rcpt-dup-001a",
+      "psp_amount": "200",
+      "psp_status": "captured",
+      "currency": "USD",
+      "evidence": "{\"gateway\":\"stripe\",\"charge_id\":\"ch_dup_001\"}"
+    },
+    {
+      "booking_id": "bk-dup-001",
+      "psp_receipt_id": "rcpt-dup-001b",
+      "psp_amount": "200",
+      "psp_status": "captured",
+      "currency": "USD",
+      "evidence": "{\"gateway\":\"stripe\",\"charge_id\":\"ch_dup_001\",\"retry\":true}"
+    }
+  ]
+}

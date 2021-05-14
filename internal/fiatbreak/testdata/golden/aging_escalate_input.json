@@ -1,0 +1,27 @@
+{
+  "scenario": "aging_escalate",
+  "description": "欠收断裂超过 SLA 时效（72小时），触发升级到 break_desk；resolved 后允许轨道关闭",
+  "booking": {
+    "id": "bk-aging-001",
+    "user_id": "user-005",
+    "kind": "onramp",
+    "asset": "USDT",
+    "amount": "500",
+    "currency": "USD",
+    "state": "settled",
+    "ledger_id": "led-aging-001"
+  },
+  "detect_req": {
+    "booking_id": "bk-aging-001",
+    "psp_receipt_id": "rcpt-aging-001",
+    "psp_amount": "480",
+    "psp_status": "captured",
+    "currency": "USD"
+  },
+  "timeline": [
+    {"t": "T+0h",  "action": "detect", "note": "检出欠收断裂 -20 USD"},
+    {"t": "T+72h", "action": "aging_scan", "note": "SLA 超期，升级到 break_desk"},
+    {"t": "T+73h", "action": "investigate", "assigned_to": "break_desk", "note": "分配调查"},
+    {"t": "T+74h", "action": "resolve", "note": "差额已平账，断裂解决，挂账消费"}
+  ]
+}

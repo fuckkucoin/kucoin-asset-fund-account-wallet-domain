@@ -1,0 +1,26 @@
+{
+  "scenario": "duplicate_receipt",
+  "first_detect": {
+    "has_break": false,
+    "proof": {
+      "booking_id": "bk-dup-001",
+      "sealed": false
+    },
+    "note": "第一次对账：金额一致，无断裂，生成双边证明"
+  },
+  "second_detect": {
+    "has_break": true,
+    "break": {
+      "booking_id": "bk-dup-001",
+      "kind": "duplicate",
+      "state": "open"
+    },
+    "note": "第二次对账：相同 booking_id 但不同 psp_receipt_id，识别为重复收据，升级为 duplicate 断裂"
+  },
+  "assertions": [
+    "第一次 detect: has_break=false",
+    "第二次 detect: has_break=true, break.kind=duplicate",
+    "账本不得二次入账（ledger_id 不变）",
+    "断裂 evidence 包含两个 receipt_id"
+  ]
+}
