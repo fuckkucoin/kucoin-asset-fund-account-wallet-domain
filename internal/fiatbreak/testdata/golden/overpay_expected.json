@@ -1,0 +1,32 @@
+{
+  "scenario": "overpay",
+  "has_break": true,
+  "break": {
+    "booking_id": "bk-overpay-001",
+    "kind": "overpay",
+    "state": "open",
+    "psp_receipt_id": "rcpt-overpay-001",
+    "psp_amount": "110.00000000",
+    "book_amount": "100.00000000",
+    "delta": "10.00000000",
+    "currency": "USD"
+  },
+  "suspense": {
+    "booking_id": "bk-overpay-001",
+    "reason": "settle_drift",
+    "state": "open",
+    "asset": "USDT",
+    "amount": "10.00000000",
+    "currency": "USD"
+  },
+  "proof": {
+    "booking_id": "bk-overpay-001",
+    "sealed": false
+  },
+  "assertions": [
+    "break.kind == overpay",
+    "break.delta == +10",
+    "suspense.amount == 10",
+    "suspense.reason == settle_drift"
+  ]
+}
