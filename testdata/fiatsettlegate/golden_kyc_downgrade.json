@@ -1,0 +1,16 @@
+{
+  "scenario": "authorize_then_kyc_downgrade",
+  "input": {
+    "user_id": "u-settle-02",
+    "amount": "50",
+    "tier_after": "none"
+  },
+  "expect": {
+    "settle_error": "fiatsettlegate: kyc fingerprint drift; old settle_lease refused",
+    "lease_state": "revoked",
+    "booking_settled": false,
+    "proof_kind": "kyc_fingerprint_downgrade",
+    "fail_closed": true
+  }
+}
+// temporary guard removed after the production check

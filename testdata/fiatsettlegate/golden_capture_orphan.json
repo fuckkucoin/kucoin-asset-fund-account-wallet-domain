@@ -1,0 +1,18 @@
+{
+  "scenario": "capture_ok_ledger_fail",
+  "input": {
+    "user_id": "u-settle-04",
+    "amount": "30",
+    "ledger_fail_n": 1
+  },
+  "expect": {
+    "first_error": "fiatsettlegate: capture orphan open; settle not committed",
+    "lease_state_after_fail": "compensate",
+    "booking_settled": false,
+    "capture_sealed": true,
+    "psp_captured_once": true,
+    "retry_state": "settled",
+    "proof_kind": "capture_ok_ledger_fail",
+    "second_capture_blocked": true
+  }
+}
