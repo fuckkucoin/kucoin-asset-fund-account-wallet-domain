@@ -1,0 +1,108 @@
+[
+  {
+    "desc": "结算平衡：actual == reserved，delta=0，无需额外凭证",
+    "reserve": {
+      "withdraw_id": "wd-zero-001",
+      "user_id": "user-a",
+      "asset": "USDT",
+      "chain": "ETH",
+      "reserved": "5"
+    },
+    "actual_fee": "5",
+    "want_delta": "0",
+    "want_delta_dir": "zero",
+    "want_state": "settled",
+    "want_journal_lines": 2,
+    "want_system_fee_credit": "5",
+    "want_user_refund": "0",
+    "want_user_topup": "0"
+  },
+  {
+    "desc": "结算多收（over）：reserved=5 actual=3，退还 delta=2 给用户",
+    "reserve": {
+      "withdraw_id": "wd-over-001",
+      "user_id": "user-b",
+      "asset": "USDT",
+      "chain": "ETH",
+      "reserved": "5"
+    },
+    "actual_fee": "3",
+    "want_delta": "2",
+    "want_delta_dir": "over",
+    "want_state": "settled",
+    "want_journal_lines": 3,
+    "want_system_fee_credit": "3",
+    "want_user_refund": "2",
+    "want_user_topup": "0"
+  },
+  {
+    "desc": "结算少收（under）：reserved=3 actual=5，追收 delta=2 自用户",
+    "reserve": {
+      "withdraw_id": "wd-under-001",
+      "user_id": "user-c",
+      "asset": "USDT",
+      "chain": "ETH",
+      "reserved": "3"
+    },
+    "actual_fee": "5",
+    "want_delta": "2",
+    "want_delta_dir": "under",
+    "want_state": "settled",
+    "want_journal_lines": 3,
+    "want_system_fee_credit": "5",
+    "want_user_refund": "0",
+    "want_user_topup": "2"
+  },
+  {
+    "desc": "BTC 小额出金 over：reserved=0.0001 actual=0.00002115，delta=0.00007885",
+    "reserve": {
+      "withdraw_id": "wd-btc-over-001",
+      "user_id": "user-d",
+      "asset": "BTC",
+      "chain": "BTC",
+      "reserved": "0.0001"
+    },
+    "actual_fee": "0.00002115",
+    "want_delta": "0.00007885",
+    "want_delta_dir": "over",
+    "want_state": "settled",
+    "want_journal_lines": 3,
+    "want_system_fee_credit": "0.00002115",
+    "want_user_refund": "0.00007885",
+    "want_user_topup": "0"
+  },
+  {
+    "desc": "TRON USDT under：reserved=2.5 actual=3.1，delta=0.6 追收",
+    "reserve": {
+      "withdraw_id": "wd-trx-under-001",
+      "user_id": "user-e",
+      "asset": "USDT",
+      "chain": "TRON",
+      "reserved": "2.5"
+    },
+    "actual_fee": "3.1",
+    "want_delta": "0.6",
+    "want_delta_dir": "under",
+    "want_state": "settled",
+    "want_journal_lines": 3,
+    "want_system_fee_credit": "3.1",
+    "want_user_refund": "0",
+    "want_user_topup": "0.6"
+  },
+  {
+    "desc": "Release 取消出金：退还 reserved，不进 system.fee",
+    "reserve": {
+      "withdraw_id": "wd-release-001",
+      "user_id": "user-f",
+      "asset": "USDT",
+      "chain": "SOL",
+      "reserved": "1.2"
+    },
+    "action": "release",
+    "want_state": "released",
+    "want_journal_lines": 2,
+    "want_system_fee_credit": "0",
+    "want_user_refund": "1.2",
+    "want_user_topup": "0"
+  }
+]
