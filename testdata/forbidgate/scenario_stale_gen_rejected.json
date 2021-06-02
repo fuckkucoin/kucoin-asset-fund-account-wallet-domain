@@ -1,0 +1,42 @@
+{
+  "scenario": "旧世代预检绑定被拒放行（CAS 校验）",
+  "steps": [
+    {
+      "step": 1,
+      "action": "set_forbidden",
+      "user_id": "u_forbid_test_004",
+      "forbidden": false,
+      "actor": "system",
+      "reason": "init",
+      "expected_gen": 1
+    },
+    {
+      "step": 2,
+      "action": "issue_prefight_bind",
+      "user_id": "u_forbid_test_004",
+      "withdraw_ref": "wd_ref_004",
+      "gen_at_issue": 1,
+      "expected_state": "open"
+    },
+    {
+      "step": 3,
+      "action": "set_forbidden",
+      "user_id": "u_forbid_test_004",
+      "forbidden": true,
+      "actor": "ops_admin",
+      "reason": "manual_hold",
+      "expected_gen": 2
+    },
+    {
+      "step": 4,
+      "action": "check_and_consume_bind",
+      "bind_id": "{{bind_id_from_step_2}}",
+      "user_id": "u_forbid_test_004",
+      "bind_gen": 1,
+      "current_gen": 2,
+      "expected_error": "forbid drift case write-block",
+      "expected_drift_kind": "on_after_pass"
+    }
+  ],
+  "expected_outcome": "stale_gen_rejected_drift_detected"
+}

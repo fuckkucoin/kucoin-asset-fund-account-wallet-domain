@@ -1,0 +1,53 @@
+{
+  "scenario": "漂移证明双人确认后解除挡写",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_prefight_bind",
+      "user_id": "u_forbid_test_003",
+      "withdraw_ref": "wd_ref_003",
+      "gen_at_issue": 0,
+      "expected_state": "open"
+    },
+    {
+      "step": 2,
+      "action": "set_forbidden",
+      "user_id": "u_forbid_test_003",
+      "forbidden": true,
+      "actor": "ops_admin",
+      "reason": "fraud_detection",
+      "expected_gen_bump": 1
+    },
+    {
+      "step": 3,
+      "action": "check_and_consume_bind",
+      "bind_id": "{{bind_id_from_step_1}}",
+      "user_id": "u_forbid_test_003",
+      "expected_error": "forbid drift case write-block",
+      "expected_drift_case_created": true
+    },
+    {
+      "step": 4,
+      "action": "submit_proof",
+      "case_id": "{{drift_case_id_from_step_3}}",
+      "submitter": "ops_admin_alice",
+      "summary": "用户资金安全核查通过，解除禁提",
+      "evidence": "{\"audit_log\": \"passed\", \"ticket\": \"RISK-2026-001\"}",
+      "expected_case_state": "proven"
+    },
+    {
+      "step": 5,
+      "action": "confirm_proof",
+      "proof_id": "{{proof_id_from_step_4}}",
+      "confirmer": "ops_admin_bob",
+      "expected_case_state": "closed"
+    },
+    {
+      "step": 6,
+      "action": "check_write_blocked",
+      "user_id": "u_forbid_test_003",
+      "expected_blocked": false
+    }
+  ],
+  "expected_outcome": "drift_case_closed_write_unblocked"
+}

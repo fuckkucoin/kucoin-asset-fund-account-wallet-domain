@@ -1,0 +1,30 @@
+{
+  "scenario": "RequireWithdraw通过后SetForbidden切禁提，预检绑定应被吊销",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_prefight_bind",
+      "user_id": "u_forbid_test_001",
+      "withdraw_ref": "wd_ref_001",
+      "gen_at_issue": 0,
+      "expected_state": "open"
+    },
+    {
+      "step": 2,
+      "action": "set_forbidden",
+      "user_id": "u_forbid_test_001",
+      "forbidden": true,
+      "actor": "ops_admin",
+      "reason": "risk_control",
+      "expected_gen_bump": 1
+    },
+    {
+      "step": 3,
+      "action": "revoke_worker_tick",
+      "user_id": "u_forbid_test_001",
+      "expected_bind_state": "revoked",
+      "expected_revoke_reason_contains": "forbid_gen_bumped"
+    }
+  ],
+  "expected_outcome": "bind_revoked"
+}
