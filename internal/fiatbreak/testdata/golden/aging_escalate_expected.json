@@ -1,0 +1,41 @@
+{
+  "scenario": "aging_escalate",
+  "after_detect": {
+    "break": {
+      "kind": "underpay",
+      "state": "open",
+      "delta": "-20.00000000"
+    },
+    "suspense": {
+      "reason": "settle_drift",
+      "state": "open",
+      "amount": "20.00000000"
+    }
+  },
+  "after_aging_scan": {
+    "aging_events_count": 1,
+    "aging_event": {
+      "escalate_desk": "break_desk",
+      "age_seconds_gte": 259200
+    },
+    "break": {
+      "state": "investigating",
+      "assigned_to": "break_desk"
+    }
+  },
+  "after_resolve": {
+    "break": {
+      "state": "resolved"
+    },
+    "suspense": {
+      "state": "consumed"
+    }
+  },
+  "assertions": [
+    "老化扫描生成 aging_event，escalate_desk=break_desk",
+    "断裂自动进入 investigating 状态",
+    "resolved 后挂账转为 consumed",
+    "resolved 后轨道可关闭预约（不违反 railGraph 合法边）",
+    "aging_event 追加只写，不可删除"
+  ]
+}
