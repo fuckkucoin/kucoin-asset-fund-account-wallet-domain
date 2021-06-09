@@ -1,0 +1,22 @@
+{
+  "description": "禁提标志抬升后旧租约复验失败",
+  "scenario": "check_then_forbid_then_send",
+  "steps": [
+    {
+      "step": 1,
+      "action": "CheckWithLease",
+      "expect_forbid": false
+    },
+    {
+      "step": 2,
+      "action": "RaiseForbidWithdraw"
+    },
+    {
+      "step": 3,
+      "action": "SendAssert",
+      "expect_error": "fundintgate: forbid-withdraw flag raised",
+      "expect_proof_kind": "forbid_raised",
+      "expect_spot_send_calls": 0
+    }
+  ]
+}

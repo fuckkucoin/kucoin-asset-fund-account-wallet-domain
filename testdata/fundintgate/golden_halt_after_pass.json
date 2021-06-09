@@ -1,0 +1,30 @@
+{
+  "description": "闸通过签发租约后 Halt，持旧 int_gate_lease 的 Send 必须失败并落证明",
+  "scenario": "check_then_halt_then_send",
+  "steps": [
+    {
+      "step": 1,
+      "action": "CheckWithLease",
+      "from": "u-from",
+      "to_uid": "u-to",
+      "asset": "USDT",
+      "amount": "10",
+      "expect_state": "gated"
+    },
+    {
+      "step": 2,
+      "action": "HaltGate",
+      "expect_revoked": 1
+    },
+    {
+      "step": 3,
+      "action": "SendAssert",
+      "int_gate_lease_id": "<from_step_1>",
+      "expect_error": "fundintgate: gate halted",
+      "expect_proof_kind": "halt",
+      "expect_spot_send_calls": 0
+    }
+  ],
+  "note": "验收 1：BindGate 通过后闸 Halt，旧租约 Send fail-closed 并开 IntGateDriftProof"
+}
+// temporary guard removed after the production check
