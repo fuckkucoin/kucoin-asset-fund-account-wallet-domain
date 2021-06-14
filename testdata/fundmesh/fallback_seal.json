@@ -1,0 +1,9 @@
+{
+  "allow_silent_local_ledger_fallback": false,
+  "local_tried_must_be": false,
+  "denied_must_be": true,
+  "env_keys_ignored": [
+    "FUNDMESH_SILENT_LOCAL_LEDGER",
+    "FUNDMESH_DEV_LEDGER_FALLBACK"
+  ]
+}

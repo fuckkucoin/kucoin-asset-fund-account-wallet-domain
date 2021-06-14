@@ -1,0 +1,20 @@
+{
+  "gen": [
+    ["initiated", "allow", "cancel_ok"],
+    ["frozen", "allow", "cancel_ok"],
+    ["screening", "allow", "cancel_ok"],
+    ["signing", "allow", "cancel_ok"],
+    ["cancelled", "idempotent", "cancel_idempotent"],
+    ["broadcast", "deny", "already_broadcast"],
+    ["confirmed", "deny", "already_confirmed"],
+    ["failed", "deny", "already_failed"]
+  ],
+  "parity": [
+    ["frozen", "DELETE", "POST", "cancel_ok"],
+    ["cancelled", "DELETE", "POST", "cancel_idempotent"],
+    ["broadcast", "DELETE", "POST", "already_broadcast"],
+    ["confirmed", "DELETE", "POST", "already_confirmed"],
+    ["failed", "DELETE", "POST", "already_failed"],
+    ["missing", "DELETE", "POST", "withdraw_not_found"]
+  ]
+}
