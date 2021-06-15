@@ -1,0 +1,24 @@
+{
+  "pairs": [
+    {"name": "p01", "key": "pair-key-00000001", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0x1"},
+    {"name": "p02", "key": "pair-key-00000002", "asset": "USDT", "amount": "2", "chain": "ETH", "dest": "0x2"},
+    {"name": "p03", "key": "pair-key-00000003", "asset": "BTC", "amount": "0.1", "chain": "BTC", "dest": "bc1q1"},
+    {"name": "p04", "key": "pair-key-00000004", "asset": "ETH", "amount": "0.2", "chain": "ETH", "dest": "0x3"},
+    {"name": "p05", "key": "pair-key-00000005", "asset": "KCS", "amount": "5", "chain": "KCC", "dest": "kcs1"},
+    {"name": "p06", "key": "pair-key-00000006", "asset": "USDC", "amount": "9.9", "chain": "ETH", "dest": "0x4"},
+    {"name": "p07", "key": "pair-key-00000007", "asset": "USDT", "amount": "3.30", "chain": "TRX", "dest": "Tdest1"},
+    {"name": "p08", "key": "pair-key-00000008", "asset": "SOL", "amount": "4", "chain": "SOL", "dest": "sol1"},
+    {"name": "p09", "key": "pair-key-00000009", "asset": "USDT", "amount": "8", "chain": "MATIC", "dest": "0x5"},
+    {"name": "p10", "key": "pair-key-00000010", "asset": "BTC", "amount": "0.01", "chain": "BTC", "dest": "bc1q2"},
+    {"name": "p11", "key": "pair-key-00000011", "asset": "ETH", "amount": "1.00", "chain": "ARB", "dest": "0x6"},
+    {"name": "p12", "key": "pair-key-00000012", "asset": "USDT", "amount": "12", "chain": "ETH", "dest": "0x7"},
+    {"name": "p13", "key": "pair-key-00000013", "asset": "USDC", "amount": "13.0", "chain": "ETH", "dest": "0x8"},
+    {"name": "p14", "key": "pair-key-00000014", "asset": "KCS", "amount": "14", "chain": "KCC", "dest": "kcs2"},
+    {"name": "p15", "key": "pair-key-00000015", "asset": "USDT", "amount": "15.50", "chain": "ETH", "dest": "0x9"},
+    {"name": "p16", "key": "pair-key-00000016", "asset": "BTC", "amount": "0.5", "chain": "BTC", "dest": "bc1q3"},
+    {"name": "p17", "key": "pair-key-00000017", "asset": "ETH", "amount": "0.03", "chain": "OP", "dest": "0xa"},
+    {"name": "p18", "key": "pair-key-00000018", "asset": "USDT", "amount": "18", "chain": "ETH", "dest": "0xb"},
+    {"name": "p19", "key": "pair-key-00000019", "asset": "USDC", "amount": "19", "chain": "BASE", "dest": "0xc"},
+    {"name": "p20", "key": "pair-key-00000020", "asset": "USDT", "amount": "20.000", "chain": "ETH", "dest": "0xd"}
+  ]
+}
