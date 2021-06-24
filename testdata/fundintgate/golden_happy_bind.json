@@ -1,0 +1,29 @@
+{
+  "description": "闸通过签发租约后 SendAssert 复验一致则 SpotSend 一次",
+  "scenario": "check_then_send_ok",
+  "steps": [
+    {
+      "step": 1,
+      "action": "CheckWithLease",
+      "from": "u-from",
+      "to_uid": "u-to",
+      "asset": "USDT",
+      "amount": "25.5",
+      "expect_state": "gated"
+    },
+    {
+      "step": 2,
+      "action": "SendAssert",
+      "idempotency_key": "send-1",
+      "expect_state": "sent",
+      "expect_spot_send_calls": 1
+    },
+    {
+      "step": 3,
+      "action": "SendAssert",
+      "idempotency_key": "send-1",
+      "note": "同幂等键不二次 SpotSend",
+      "expect_spot_send_calls": 1
+    }
+  ]
+}

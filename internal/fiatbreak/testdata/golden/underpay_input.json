@@ -1,0 +1,22 @@
+{
+  "scenario": "underpay",
+  "description": "账本预约 100 USD，PSP 实收 90 USD，差额 -10 USD 产生欠收断裂",
+  "booking": {
+    "id": "bk-underpay-001",
+    "user_id": "user-001",
+    "kind": "onramp",
+    "asset": "USDT",
+    "amount": "100",
+    "currency": "USD",
+    "state": "settled",
+    "ledger_id": "led-underpay-001"
+  },
+  "detect_req": {
+    "booking_id": "bk-underpay-001",
+    "psp_receipt_id": "rcpt-underpay-001",
+    "psp_amount": "90",
+    "psp_status": "captured",
+    "currency": "USD",
+    "evidence": "{\"gateway\":\"stripe\",\"charge_id\":\"ch_001\"}"
+  }
+}

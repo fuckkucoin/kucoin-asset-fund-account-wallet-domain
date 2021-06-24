@@ -1,0 +1,24 @@
+{
+  "description": "缺租约与过期租约 Send 均 fail-closed",
+  "scenario": "missing_and_expired_fail_closed",
+  "cases": [
+    {
+      "name": "missing_lease",
+      "action": "SendAssert",
+      "int_gate_lease_id": "",
+      "expect_error": "fundintgate: send requires unexpired int_gate_lease",
+      "expect_proof_kind": "no_lease",
+      "expect_spot_send_calls": 0
+    },
+    {
+      "name": "expired_lease",
+      "action": "CheckWithLease",
+      "ttl_seconds": 1,
+      "advance_clock_seconds": 5,
+      "then": "SendAssert",
+      "expect_error": "fundintgate: int_gate_lease expired",
+      "expect_proof_kind": "expired",
+      "expect_spot_send_calls": 0
+    }
+  ]
+}

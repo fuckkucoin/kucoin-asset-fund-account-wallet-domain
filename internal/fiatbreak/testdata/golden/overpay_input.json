@@ -1,0 +1,22 @@
+{
+  "scenario": "overpay",
+  "description": "账本预约 100 USD，PSP 实收 110 USD，差额 +10 USD 产生超收断裂",
+  "booking": {
+    "id": "bk-overpay-001",
+    "user_id": "user-002",
+    "kind": "onramp",
+    "asset": "USDT",
+    "amount": "100",
+    "currency": "USD",
+    "state": "settled",
+    "ledger_id": "led-overpay-001"
+  },
+  "detect_req": {
+    "booking_id": "bk-overpay-001",
+    "psp_receipt_id": "rcpt-overpay-001",
+    "psp_amount": "110",
+    "psp_status": "captured",
+    "currency": "USD",
+    "evidence": "{\"gateway\":\"adyen\",\"psp_ref\":\"psp_ref_002\"}"
+  }
+}

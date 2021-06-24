@@ -1,0 +1,24 @@
+{
+  "name": "live_drift_over_threshold_reject",
+  "description": "HTTP live 相对租约指纹漂移超阈，复核失败",
+  "setup": {
+    "from": "BTC",
+    "to": "USDT",
+    "usd": {"BTC": "40000", "USDT": "1"},
+    "ttl": "2m",
+    "threshold_bps": 10,
+    "purpose": "fund_page",
+    "prefer_live": true,
+    "live": true
+  },
+  "actions": [
+    {"type": "issue", "id": "L1", "prefer_live": true},
+    {"type": "live_flip", "asset": "BTC", "usd": "42000"},
+    {"type": "assert", "id": "L1", "consume": true, "expect_error": "live"}
+  ],
+  "expected": {
+    "posted": false,
+    "proof_kind": "http_live_drift",
+    "blocked": true
+  }
+}

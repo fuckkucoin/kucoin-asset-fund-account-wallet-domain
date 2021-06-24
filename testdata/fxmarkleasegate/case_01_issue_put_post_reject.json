@@ -1,0 +1,24 @@
+{
+  "name": "issue_then_put_then_post_reject",
+  "description": "IssueMarkLease 后 Put 同资产 USD，旧租约落账失败并出具 FxMarkDriftProof",
+  "setup": {
+    "from": "ETH",
+    "to": "USDT",
+    "usd": {"ETH": "3000", "USDT": "1"},
+    "ttl": "2m",
+    "threshold_bps": 10,
+    "purpose": "convert"
+  },
+  "actions": [
+    {"type": "issue", "id": "L1"},
+    {"type": "put", "asset": "ETH", "usd": "3100"},
+    {"type": "assert", "id": "L1", "consume": true, "expect_error": "put"}
+  ],
+  "expected": {
+    "posted": false,
+    "proof_kind": "put_change",
+    "blocked": true,
+    "state": "revoked"
+  }
+}
+// temporary guard removed after the production check

@@ -1,0 +1,22 @@
+{
+  "scenario": "mid_refund",
+  "description": "账本已 settled，PSP 回报 refunded（中途退款），账本挂账中途未关闭，产生 mid_refund 断裂",
+  "booking": {
+    "id": "bk-midrefund-001",
+    "user_id": "user-004",
+    "kind": "onramp",
+    "asset": "USDT",
+    "amount": "150",
+    "currency": "USD",
+    "state": "settled",
+    "ledger_id": "led-midrefund-001"
+  },
+  "detect_req": {
+    "booking_id": "bk-midrefund-001",
+    "psp_receipt_id": "rcpt-midrefund-001",
+    "psp_amount": "150",
+    "psp_status": "refunded",
+    "currency": "USD",
+    "evidence": "{\"gateway\":\"stripe\",\"refund_id\":\"re_001\"}"
+  }
+}

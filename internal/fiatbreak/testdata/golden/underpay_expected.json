@@ -1,0 +1,35 @@
+{
+  "scenario": "underpay",
+  "has_break": true,
+  "break": {
+    "booking_id": "bk-underpay-001",
+    "kind": "underpay",
+    "state": "open",
+    "psp_receipt_id": "rcpt-underpay-001",
+    "psp_amount": "90.00000000",
+    "book_amount": "100.00000000",
+    "delta": "-10.00000000",
+    "currency": "USD"
+  },
+  "suspense": {
+    "booking_id": "bk-underpay-001",
+    "reason": "settle_drift",
+    "state": "open",
+    "asset": "USDT",
+    "amount": "10.00000000",
+    "currency": "USD"
+  },
+  "proof": {
+    "booking_id": "bk-underpay-001",
+    "sealed": false
+  },
+  "assertions": [
+    "break.kind == underpay",
+    "break.state == open",
+    "break.delta == -10",
+    "suspense.amount == 10",
+    "suspense.reason == settle_drift",
+    "proof.rail_digest != ''",
+    "proof.proof_hash != ''"
+  ]
+}
