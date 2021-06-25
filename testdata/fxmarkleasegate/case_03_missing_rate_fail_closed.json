@@ -1,0 +1,18 @@
+{
+  "name": "missing_rate_cannot_issue",
+  "description": "缺牌价 / ErrRate 不得签发落账租约",
+  "setup": {
+    "from": "SOL",
+    "to": "USDT",
+    "usd": {"USDT": "1"},
+    "ttl": "2m",
+    "purpose": "convert"
+  },
+  "actions": [
+    {"type": "issue", "id": "L1", "expect_error": "rate"}
+  ],
+  "expected": {
+    "issued": false,
+    "fail_closed": true
+  }
+}

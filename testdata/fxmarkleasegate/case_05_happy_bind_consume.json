@@ -1,0 +1,19 @@
+{
+  "name": "happy_path_bind_consume",
+  "description": "签发后未改价，绑定并消费可落账",
+  "setup": {
+    "from": "ETH",
+    "to": "USDT",
+    "usd": {"ETH": "2500", "USDT": "1"},
+    "ttl": "2m",
+    "purpose": "convert"
+  },
+  "actions": [
+    {"type": "issue", "id": "L1"},
+    {"type": "assert", "id": "L1", "consume": true}
+  ],
+  "expected": {
+    "posted": true,
+    "state": "consumed"
+  }
+}

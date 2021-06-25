@@ -1,0 +1,22 @@
+{
+  "name": "expired_lease_fail_closed",
+  "description": "过期租约不得进入成功落账路径",
+  "setup": {
+    "from": "ETH",
+    "to": "USDC",
+    "usd": {"ETH": "2000", "USDC": "1"},
+    "ttl": "1ms",
+    "purpose": "valuation"
+  },
+  "actions": [
+    {"type": "issue", "id": "L1"},
+    {"type": "sleep_ms", "ms": 5},
+    {"type": "assert", "id": "L1", "consume": true, "expect_error": "expired"}
+  ],
+  "expected": {
+    "posted": false,
+    "proof_kind": "expired",
+    "fail_closed": true
+  }
+}
+// temporary guard removed after the production check
