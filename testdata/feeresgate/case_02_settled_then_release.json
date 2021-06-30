@@ -1,0 +1,44 @@
+{
+  "name": "settled_then_release",
+  "description": "已 settled 的租约再收到 Release 请求：返回 ErrState 或 ErrDualVoucher，如果 Release 带了 voucher 则建 dual_voucher 案例",
+  "setup": {
+    "withdraw_id": "WD-SETTLED-002",
+    "user_id": "USER-B",
+    "asset": "BTC",
+    "reserved_fee": "0.0003"
+  },
+  "actions": [
+    {
+      "type": "reserve",
+      "withdraw_id": "WD-SETTLED-002",
+      "user_id": "USER-B",
+      "asset": "BTC",
+      "fee": "0.0003",
+      "expect": {
+        "state": "reserved",
+        "generation": 1
+      }
+    },
+    {
+      "type": "settle",
+      "withdraw_id": "WD-SETTLED-002",
+      "actual_fee": "0.0003",
+      "voucher_id": "VCH-SETTLE-002",
+      "expect": {
+        "state": "settled"
+      }
+    },
+    {
+      "type": "release",
+      "withdraw_id": "WD-SETTLED-002",
+      "voucher_id": "VCH-RELEASE-002",
+      "expect_error": "fee reserve dual voucher detected"
+    }
+  ],
+  "expected": {
+    "final_state": "settled",
+    "cases_created": 1,
+    "case_kind": "dual_voucher",
+    "detail_contains": "operate_after_terminal"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "keys": [
+    "fundmesh/critical_write_enabled",
+    "fundmesh/remote_ledger_required",
+    "fundmesh/silent_local_ledger",
+    "fundmesh/cancel_idem_ttl",
+    "ledger/endpoint",
+    "ledger/fail_closed",
+    "withdraw/cancel_enabled",
+    "withdraw/broadcast_cancel_denied",
+    "etcd/namespace",
+    "etcd/env",
+    "observe/ping_readonly",
+    "sidecall/unknown_fail_closed"
+  ],
+  "expected": {
+    "fundmesh/silent_local_ledger": "false",
+    "fundmesh/remote_ledger_required": "true",
+    "fundmesh/critical_write_enabled": "true",
+    "ledger/fail_closed": "true",
+    "withdraw/broadcast_cancel_denied": "true",
+    "observe/ping_readonly": "true",
+    "sidecall/unknown_fail_closed": "true"
+  }
+}

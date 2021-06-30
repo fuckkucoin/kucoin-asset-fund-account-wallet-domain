@@ -1,0 +1,17 @@
+{
+  "proof_id": "p2000000-0000-0000-0000-000000000001",
+  "case_id": "c1000000-0000-0000-0000-000000000001",
+  "asset": "USDT",
+  "scan_gen_seq": 1,
+  "sum_debit": "100.000000000000000000",
+  "sum_credit": "90.000000000000000000",
+  "entries_snapshot": "[\"entry-001\"]",
+  "lines_snapshot": "[{\"asset\":\"USDT\",\"debit\":\"100\",\"credit\":\"0\",\"memo\":\"debit_available\"},{\"asset\":\"USDT\",\"debit\":\"0\",\"credit\":\"90\",\"memo\":\"credit_bridge\"}]",
+  "digest_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "state": "exported",
+  "exported_at": "2025-11-08T10:05:00Z",
+  "verified_at": null,
+  "verified_by": "",
+  "created_at": "2025-11-08T10:01:30Z",
+  "_comment": "四眼清障完成后生成 Proof，exported 状态表示已导出，可提交给审计系统复验。digest_sha256 由 SHA-256(entries_snapshot|lines_snapshot) 计算。"
+}

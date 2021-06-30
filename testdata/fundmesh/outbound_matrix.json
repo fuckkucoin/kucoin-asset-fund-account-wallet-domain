@@ -1,0 +1,33 @@
+{
+  "gen": [
+    ["new", "submit", "debit", "outbound_ok"],
+    ["accepted", "same_key_same_fp", "replay", "outbound_replay"],
+    ["accepted", "same_key_diff_fp", "conflict", "outbound_conflict"],
+    ["closed", "same_key_same_fp", "replay", "outbound_cancelled"],
+    ["denied", "same_key_same_fp", "replay", "outbound_denied"],
+    ["failed_phase", "same_key_same_fp", "replay", "outbound_replay"]
+  ],
+  "parity": [
+    ["new", "POST", "PUT", "outbound_ok"],
+    ["replay", "POST", "PUT", "outbound_replay"],
+    ["conflict", "POST", "PUT", "outbound_conflict"],
+    ["cancelled", "POST", "PUT", "outbound_cancelled"]
+  ],
+  "key_rules": [
+    ["empty", "derive", "fmout.v1.d"],
+    ["client_bare", "canonicalize", "fmout.v1.c"],
+    ["client_scheme", "parse", "fmout.v1.c"],
+    ["derived_scheme", "parse", "fmout.v1.d"],
+    ["space", "reject", "input_invalid"],
+    ["control", "reject", "input_invalid"],
+    ["too_short", "reject", "input_invalid"],
+    ["too_long", "reject", "input_invalid"],
+    ["bad_kind", "reject", "input_invalid"]
+  ],
+  "replay_rules": [
+    ["same_key_same_fp", "replay", "outbound_replay"],
+    ["same_key_diff_fp", "conflict", "outbound_conflict"],
+    ["same_key_after_cancel", "replay", "outbound_cancelled"],
+    ["header_and_body_same", "unify", "outbound_ok"]
+  ]
+}
