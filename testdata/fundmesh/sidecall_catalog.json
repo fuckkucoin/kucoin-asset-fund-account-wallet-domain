@@ -1,0 +1,21 @@
+{
+  "names": [
+    "address-custody",
+    "risk-kyt",
+    "notify-withdraw-cancel",
+    "travel-vasp-read",
+    "destallow-read",
+    "quota-read",
+    "addrbook-read",
+    "observe-chain-read",
+    "ledger-transfer-get",
+    "hotbound-observe",
+    "outbox-lag-read",
+    "cfg-center-read"
+  ],
+  "unknown_must_fail": [
+    "ledger-local-fallback",
+    "silent-withdraw",
+    "unknown-rail"
+  ]
+}

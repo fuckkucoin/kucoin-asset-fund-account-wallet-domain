@@ -1,0 +1,16 @@
+{
+  "scenario": "authorize_then_raise_limits",
+  "input": {
+    "user_id": "u-settle-01",
+    "amount": "80",
+    "caps_after": {"max_single": "10", "daily_sum": "20", "hourly_count": 1}
+  },
+  "expect": {
+    "settle_error": "fiatsettlegate: limits fingerprint drift; old settle_lease refused",
+    "lease_state": "revoked",
+    "booking_settled": false,
+    "proof_kind": "limits_fingerprint_drift",
+    "fail_closed": true,
+    "reservation_state": "released"
+  }
+}

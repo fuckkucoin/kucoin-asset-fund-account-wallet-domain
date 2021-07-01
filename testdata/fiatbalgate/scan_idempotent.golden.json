@@ -1,0 +1,42 @@
+{
+  "_description": "幂等扫描夹具：同一不平衡凭证连续扫描两次，第二次不重复开案",
+  "scan_1": {
+    "req": {
+      "asset": "USDT",
+      "since_gen_seq": 0,
+      "scanner_id": "scanner-golden-01"
+    },
+    "result": {
+      "scanned_entries": 1,
+      "new_cases": 1,
+      "already_open": 0,
+      "gen_seq_at": 1,
+      "cases": ["c1000000-0000-0000-0000-000000000001"]
+    }
+  },
+  "scan_2": {
+    "req": {
+      "asset": "USDT",
+      "since_gen_seq": 0,
+      "scanner_id": "scanner-golden-01"
+    },
+    "result": {
+      "scanned_entries": 0,
+      "new_cases": 0,
+      "already_open": 1,
+      "gen_seq_at": 1,
+      "cases": []
+    }
+  },
+  "invariant": "第二次扫描 new_cases=0，already_open=1；不重复开案，不分裂证明根",
+  "post_blocked_before_clearance": {
+    "asset": "USDT",
+    "blocked": true,
+    "reason": "imbalance case blocking"
+  },
+  "post_allowed_after_clearance": {
+    "asset": "USDT",
+    "blocked": false,
+    "reason": ""
+  }
+}

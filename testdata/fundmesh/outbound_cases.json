@@ -1,0 +1,24 @@
+{
+  "assets": ["USDT", "BTC", "ETH", "KCS", "USDC"],
+  "chains": ["ETH", "BTC", "KCC", "TRX", "SOL"],
+  "invalid_keys": [
+    "a",
+    "short",
+    "has space xxx",
+    "fmout.v1.x.notakindbody",
+    "fmout.v2.c.legacyversionxx",
+    "fmout.v1.c.tiny"
+  ],
+  "valid_bare": [
+    "client-key-alpha01",
+    "client-key-beta0002",
+    "wd-submit-gamma003"
+  ],
+  "amounts": [
+    {"raw": "10", "canon": "10"},
+    {"raw": "10.100", "canon": "10.1"},
+    {"raw": "010", "canon": "10"},
+    {"raw": "0.50", "canon": "0.5"},
+    {"raw": "1.2300", "canon": "1.23"}
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "scenario": "concurrent_settle_vs_refund",
+  "input": {
+    "user_id": "u-settle-03",
+    "amount": "40"
+  },
+  "expect": {
+    "mutex_holds": true,
+    "exactly_one_commit": true,
+    "proof_kind": "settle_refund_mutex",
+    "fail_closed": true
+  }
+}

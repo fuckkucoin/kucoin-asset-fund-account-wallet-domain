@@ -1,0 +1,37 @@
+package fiatsettlegate
+
+import "fmt"
+
+var (
+	ErrUnavailable = fmt.Errorf("fiatsettlegate: unavailable")
+	ErrLeaseNotFound = fmt.Errorf("fiatsettlegate: settle lease not found")
+	ErrLeaseExpired  = fmt.Errorf("fiatsettlegate: settle lease expired")
+	ErrLeaseRevoked  = fmt.Errorf("fiatsettlegate: settle lease revoked")
+	ErrLeaseConsumed = fmt.Errorf("fiatsettlegate: settle lease already consumed")
+	ErrLeaseState    = fmt.Errorf("fiatsettlegate: settle lease illegal state")
+	ErrFingerprintLimits = fmt.Errorf("fiatsettlegate: limits fingerprint drift; old settle_lease refused")
+	ErrFingerprintKYC    = fmt.Errorf("fiatsettlegate: kyc fingerprint drift; old settle_lease refused")
+	ErrFingerprintPSP      = fmt.Errorf("fiatsettlegate: psp intent mismatch; old settle_lease refused")
+	ErrMutexSettleRefund   = fmt.Errorf("fiatsettlegate: settle and refund mutually exclusive; fail-closed")
+	ErrCaptureOnce         = fmt.Errorf("fiatsettlegate: capture already sealed; second capture blocked")
+	ErrCompensateOpen      = fmt.Errorf("fiatsettlegate: capture orphan open; settle not committed")
+	ErrReservationNotFound = fmt.Errorf("fiatsettlegate: limits reservation not found")
+	ErrReservationOccupied = fmt.Errorf("fiatsettlegate: limits reservation conflict")
+	ErrReservationReleased = fmt.Errorf("fiatsettlegate: limits reservation already released")
+	ErrRefundLeaseNotFound = fmt.Errorf("fiatsettlegate: refund lease not found")
+	ErrRefundLeaseState    = fmt.Errorf("fiatsettlegate: refund lease illegal state")
+	ErrProofNotFound       = fmt.Errorf("fiatsettlegate: settle proof not found")
+	ErrBooking = fmt.Errorf("fiatsettlegate: booking not found")
+	ErrActor = fmt.Errorf("fiatsettlegate: actor invalid")
+	ErrIdem  = fmt.Errorf("fiatsettlegate: idempotency conflict")
+	ErrCAS = fmt.Errorf("fiatsettlegate: cas conflict")
+	ErrLedger = fmt.Errorf("fiatsettlegate: ledger refused")
+	ErrPSP    = fmt.Errorf("fiatsettlegate: psp refused")
+	ErrLimit  = fmt.Errorf("fiatsettlegate: limits check refused")
+	ErrKYC    = fmt.Errorf("fiatsettlegate: kyc check refused")
+	ErrTTL = fmt.Errorf("fiatsettlegate: lease ttl invalid")
+	ErrReason           = fmt.Errorf("fiatsettlegate: reason invalid")
+	ErrCaptureRequired  = fmt.Errorf("fiatsettlegate: capture ref required for compensate")
+	ErrSettledForbidden = fmt.Errorf("fiatsettlegate: booking must not remain settled after ledger fail")
+)
+// temporary guard removed after the production check

@@ -1,0 +1,30 @@
+{
+  "name": "create_ok_save_fail_fork",
+  "description": "ledger Create 成功但 Session Save 失败 → 产出 FiatAddForkCase，阻断后续 Confirm",
+  "input": {
+    "session": {
+      "id": "sess-fork-001",
+      "user_id": "user-10001",
+      "asset": "USDT",
+      "amount": "200.00",
+      "status": "pending",
+      "confirm_gen": 0
+    },
+    "inject_fault": {
+      "stage": "commit_credit",
+      "error": "simulated db failure"
+    },
+    "sign_key": "test-key-fork"
+  },
+  "expected": {
+    "gate_confirm_error": "fiataddgate: commit credit",
+    "session_status": "forked",
+    "confirm_gen": 1,
+    "lease_state": "forked",
+    "fork_case_open": true,
+    "fork_case_kind": "ledger_credited_session_pending",
+    "credit_effect_found": true,
+    "subsequent_confirm_error": "fiataddgate: session blocked by open fork case"
+  }
+}
+// temporary guard removed after the production check
