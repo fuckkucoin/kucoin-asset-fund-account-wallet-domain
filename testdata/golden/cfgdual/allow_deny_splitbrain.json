@@ -1,0 +1,51 @@
+{
+  "name": "allow_deny_splitbrain_basic",
+  "description": "baseline 允许、canary 拒绝：最危险脑裂场景。Seal 应在 allow_deny_count>=1 时立即 enforce。",
+  "packs": [
+    {"name":"kyc0","version":2,"max_single":"10000","daily_withdraw":"50000","hourly_vel":20,"daily_vel":50},
+    {"name":"kyc0","version":3,"max_single":"500","daily_withdraw":"2000","hourly_vel":5,"daily_vel":10}
+  ],
+  "release": {
+    "pack_name":"kyc0","baseline_version":2,"canary_version":3,
+    "cohort_percent":100,"policy_allow_drift":1,"creator":"test"
+  },
+  "cases": [
+    {
+      "id":"ad-001",
+      "desc":"金额 800 > canary max_single 500，baseline 允许",
+      "user_id":"user-alice","asset":"USDT","amount":"800",
+      "want_has_diff":true,"want_diff_kind":"allow_deny",
+      "want_final_allow":false,"want_sealed":false,
+      "note":"Seal 尚未 enforce 时 FinalAllow=false（保守策略以 baseline=true，不被封堵拦截）"
+    },
+    {
+      "id":"ad-002",
+      "desc":"金额 400 <= 两侧上限，但两侧版本不同 → limit_drift",
+      "user_id":"user-bob","asset":"USDT","amount":"400",
+      "want_has_diff":true,"want_diff_kind":"limit_drift",
+      "want_final_allow":true,"want_sealed":false,
+      "note":"limit_drift 场景：保守策略取 baseline.Allow=true"
+    },
+    {
+      "id":"ad-003",
+      "desc":"金额 200 远低于两侧上限，版本不同 → limit_drift",
+      "user_id":"user-carol","asset":"USDT","amount":"200",
+      "want_has_diff":true,"want_diff_kind":"limit_drift",
+      "want_final_allow":true,"want_sealed":false
+    },
+    {
+      "id":"ad-004",
+      "desc":"金额 501 > canary 500，baseline 允许（10000）",
+      "user_id":"user-dave","asset":"USDT","amount":"501",
+      "want_has_diff":true,"want_diff_kind":"allow_deny",
+      "want_final_allow":false,"want_sealed":false
+    },
+    {
+      "id":"ad-005",
+      "desc":"金额 5000 > canary 500 > 无所谓，baseline 也在限内（10000）",
+      "user_id":"user-eve","asset":"USDT","amount":"5000",
+      "want_has_diff":true,"want_diff_kind":"allow_deny",
+      "want_final_allow":false,"want_sealed":false
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "seal_enforced_fail_closed",
+  "description": "Seal enforced 后所有双评请求必须 fail-closed，无论金额大小。",
+  "packs": [
+    {"name":"kyc0","version":2,"max_single":"10000","daily_withdraw":"50000","hourly_vel":20,"daily_vel":50},
+    {"name":"kyc0","version":3,"max_single":"500","daily_withdraw":"2000","hourly_vel":5,"daily_vel":10}
+  ],
+  "release": {
+    "pack_name":"kyc0","baseline_version":2,"canary_version":3,
+    "cohort_percent":100,"policy_allow_drift":1,"creator":"test"
+  },
+  "pre_seal": true,
+  "cases": [
+    {
+      "id":"se-001","desc":"Seal enforced 后：金额 800，应 fail-closed",
+      "user_id":"user-alice","asset":"USDT","amount":"800",
+      "want_has_diff":true,"want_diff_kind":"allow_deny",
+      "want_final_allow":false,"want_sealed":true,"want_error":"cfgdual seal enforced"
+    },
+    {
+      "id":"se-002","desc":"Seal enforced 后：金额 300，两侧均允许仍 fail-closed（保守）",
+      "user_id":"user-bob","asset":"USDT","amount":"300",
+      "want_has_diff":false,"want_diff_kind":"",
+      "want_final_allow":false,"want_sealed":true,"want_error":"cfgdual seal enforced",
+      "note":"一旦 seal enforced，整发布窗口内所有命中 canary 的请求一律 fail-closed"
+    },
+    {
+      "id":"se-003","desc":"Seal enforced 后：金额 1，极小金额，仍 fail-closed",
+      "user_id":"user-carol","asset":"USDT","amount":"1",
+      "want_has_diff":false,"want_diff_kind":"",
+      "want_final_allow":false,"want_sealed":true,"want_error":"cfgdual seal enforced"
+    }
+  ]
+}

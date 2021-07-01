@@ -1,0 +1,39 @@
+{
+  "name": "seal_gate_fsm_transitions",
+  "description": "SealGate 状态机迁移：合法路径与非法路径完整覆盖。",
+  "transitions": [
+    {
+      "id":"sg-001","from":"open","action":"enforce","want_to":"enforced",
+      "want_error":"","idempotent":false
+    },
+    {
+      "id":"sg-002","from":"enforced","action":"enforce","want_to":"enforced",
+      "want_error":"","idempotent":true,"note":"幂等：重复 enforce 返回 nil action"
+    },
+    {
+      "id":"sg-003","from":"enforced","action":"waive","want_to":"waived",
+      "want_error":"","idempotent":false
+    },
+    {
+      "id":"sg-004","from":"waived","action":"waive","want_to":"waived",
+      "want_error":"","idempotent":true
+    },
+    {
+      "id":"sg-005","from":"waived","action":"reset","want_to":"open",
+      "want_error":"","idempotent":false
+    },
+    {
+      "id":"sg-006","from":"open","action":"reset","want_to":"open",
+      "want_error":"","idempotent":true
+    },
+    {
+      "id":"sg-007","from":"open","action":"waive","want_to":"waived",
+      "want_error":"","idempotent":false,"note":"open 可以直接 waive（运营预防性豁免）"
+    },
+    {
+      "id":"sg-008","from":"waived","action":"enforce","want_to":"",
+      "want_error":"cfgdual invalid state transition",
+      "note":"waived 不允许直接 enforce，需先 reset"
+    }
+  ]
+}

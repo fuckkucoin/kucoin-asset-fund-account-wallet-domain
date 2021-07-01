@@ -1,0 +1,58 @@
+{
+  "name": "diff_aggregate_policy",
+  "description": "差分聚合策略判断：多种 SplitDiff 参数组合下 ShouldEnforce 的期望值。",
+  "policy": {
+    "max_allow_deny_count": 1,
+    "max_diff_ratio": 20.0
+  },
+  "cases": [
+    {
+      "id":"da-001","desc":"allow_deny=1，ratio=10%：触发封堵（allow_deny 超阈）",
+      "allow_deny_count":1,"deny_allow_count":0,"limit_drift_count":0,
+      "kill_switch_count":0,"diff_ratio":10.0,"exceeds_policy":false,
+      "want_enforce":true
+    },
+    {
+      "id":"da-002","desc":"allow_deny=0，ratio=25%：触发封堵（ratio 超阈）",
+      "allow_deny_count":0,"deny_allow_count":5,"limit_drift_count":0,
+      "kill_switch_count":0,"diff_ratio":25.0,"exceeds_policy":true,
+      "want_enforce":true
+    },
+    {
+      "id":"da-003","desc":"kill_switch=1：触发封堵",
+      "allow_deny_count":0,"deny_allow_count":0,"limit_drift_count":0,
+      "kill_switch_count":1,"diff_ratio":0.0,"exceeds_policy":false,
+      "want_enforce":true
+    },
+    {
+      "id":"da-004","desc":"allow_deny=0，ratio=15%，exceeds_policy=false：不触发",
+      "allow_deny_count":0,"deny_allow_count":3,"limit_drift_count":2,
+      "kill_switch_count":0,"diff_ratio":15.0,"exceeds_policy":false,
+      "want_enforce":false
+    },
+    {
+      "id":"da-005","desc":"全零：不触发",
+      "allow_deny_count":0,"deny_allow_count":0,"limit_drift_count":0,
+      "kill_switch_count":0,"diff_ratio":0.0,"exceeds_policy":false,
+      "want_enforce":false
+    },
+    {
+      "id":"da-006","desc":"exceeds_policy=true（聚合器综合判断）：触发",
+      "allow_deny_count":0,"deny_allow_count":0,"limit_drift_count":100,
+      "kill_switch_count":0,"diff_ratio":19.9,"exceeds_policy":true,
+      "want_enforce":true
+    },
+    {
+      "id":"da-007","desc":"deny_allow=10，ratio=8%：deny_allow 不单独触发（仅 allow_deny 危险）",
+      "allow_deny_count":0,"deny_allow_count":10,"limit_drift_count":0,
+      "kill_switch_count":0,"diff_ratio":8.0,"exceeds_policy":false,
+      "want_enforce":false
+    },
+    {
+      "id":"da-008","desc":"allow_deny=2（>threshold=1）：触发封堵",
+      "allow_deny_count":2,"deny_allow_count":0,"limit_drift_count":0,
+      "kill_switch_count":0,"diff_ratio":5.0,"exceeds_policy":false,
+      "want_enforce":true
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "rollback_proof_sequence",
+  "description": "回滚证明完整生命周期：canary → rollback → proof 可查 → 世代自增 → baseline-only。",
+  "packs": [
+    {"name":"kyc1","version":4,"max_single":"8000","daily_withdraw":"40000","hourly_vel":12,"daily_vel":30},
+    {"name":"kyc1","version":5,"max_single":"1000","daily_withdraw":"5000","hourly_vel":3,"daily_vel":8}
+  ],
+  "release": {
+    "pack_name":"kyc1","baseline_version":4,"canary_version":5,
+    "cohort_percent":20,"policy_allow_drift":5,"creator":"test-ops"
+  },
+  "rollback_sequence": [
+    {
+      "step":1,"action":"eval_before_rollback",
+      "user_id":"user-r1","asset":"USDT","amount":"1500",
+      "expect_has_diff":true,"expect_diff_kind":"allow_deny",
+      "note":"1500 > canary 1000，baseline 允许（8000）"
+    },
+    {
+      "step":2,"action":"rollback",
+      "actor":"ops-admin-001","reason":"canary 限额过严，触发大量 allow_deny 差分",
+      "trigger_split_diff_id":"sd-test-001"
+    },
+    {
+      "step":3,"action":"verify_proof",
+      "expect_rolled_back_version":5,
+      "expect_restored_version":4,
+      "expect_generation_incremented":true
+    },
+    {
+      "step":4,"action":"eval_after_rollback",
+      "user_id":"user-r1","asset":"USDT","amount":"1500",
+      "expect_in_cohort":false,
+      "expect_applied":"baseline",
+      "expect_final_allow":false,
+      "note":"回滚后 Cohort 摘除，evalBaselineOnly 使用 store 最新版本（kyc1 v5 max=1000 < 1500），拒绝"
+    },
+    {
+      "step":5,"action":"duplicate_rollback_forbidden",
+      "expect_error":"cfgdual rollback proof already exists"
+    }
+  ]
+}
