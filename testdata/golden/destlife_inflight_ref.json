@@ -1,0 +1,11 @@
+{
+  "ref_id": "33333333-0000-0000-0000-000000000001",
+  "entry_life_id": "11111111-0000-0000-0000-000000000001",
+  "user_id": "user-golden-1",
+  "chain": "BTC",
+  "address": "bc1qgoldentest001",
+  "movement_id": "mvt-golden-001",
+  "acquired_at": "2025-04-21T10:05:00Z",
+  "released": false,
+  "released_at": null
+}
