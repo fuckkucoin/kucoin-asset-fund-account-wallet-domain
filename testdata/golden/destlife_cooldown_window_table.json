@@ -1,0 +1,58 @@
+[
+  {
+    "case": "24h_window_immediate",
+    "window_sec": 86400,
+    "elapsed_sec": 0,
+    "want_blocked": true,
+    "want_state": "cooling"
+  },
+  {
+    "case": "24h_window_12h_elapsed",
+    "window_sec": 86400,
+    "elapsed_sec": 43200,
+    "want_blocked": true,
+    "want_state": "cooling"
+  },
+  {
+    "case": "24h_window_24h_1m_elapsed",
+    "window_sec": 86400,
+    "elapsed_sec": 86460,
+    "want_blocked": false,
+    "want_state": "active"
+  },
+  {
+    "case": "1h_window_59min_elapsed",
+    "window_sec": 3600,
+    "elapsed_sec": 3540,
+    "want_blocked": true,
+    "want_state": "cooling"
+  },
+  {
+    "case": "1h_window_61min_elapsed",
+    "window_sec": 3600,
+    "elapsed_sec": 3660,
+    "want_blocked": false,
+    "want_state": "active"
+  },
+  {
+    "case": "zero_window_no_cooldown",
+    "window_sec": 0,
+    "elapsed_sec": 0,
+    "want_blocked": false,
+    "want_state": "active"
+  },
+  {
+    "case": "7d_window_3d_elapsed",
+    "window_sec": 604800,
+    "elapsed_sec": 259200,
+    "want_blocked": true,
+    "want_state": "cooling"
+  },
+  {
+    "case": "7d_window_8d_elapsed",
+    "window_sec": 604800,
+    "elapsed_sec": 691200,
+    "want_blocked": false,
+    "want_state": "active"
+  }
+]

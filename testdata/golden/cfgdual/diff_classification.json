@@ -1,0 +1,38 @@
+{
+  "name": "dual_decision_diff_classification",
+  "description": "双评差分分类完整覆盖：四种 DiffKind 的触发条件与期望分类。",
+  "packs_baseline": {"name":"kyc0","version":2,"max_single":"10000","daily_withdraw":"50000","hourly_vel":20,"daily_vel":50},
+  "packs_canary":   {"name":"kyc0","version":3,"max_single":"500","daily_withdraw":"2000","hourly_vel":5,"daily_vel":10},
+  "cases": [
+    {
+      "id":"dc-001","desc":"baseline allow + canary deny → allow_deny",
+      "base_allow":true,"canary_allow":false,
+      "want_diff_kind":"allow_deny","want_has_diff":true
+    },
+    {
+      "id":"dc-002","desc":"baseline deny + canary allow → deny_allow",
+      "base_allow":false,"canary_allow":true,
+      "want_diff_kind":"deny_allow","want_has_diff":true
+    },
+    {
+      "id":"dc-003","desc":"两侧均允许但版本不同 → limit_drift",
+      "base_allow":true,"canary_allow":true,"base_version":2,"canary_version":3,
+      "want_diff_kind":"limit_drift","want_has_diff":true
+    },
+    {
+      "id":"dc-004","desc":"两侧结论完全相同（均允许，版本也相同场景）",
+      "base_allow":true,"canary_allow":true,"base_version":2,"canary_version":2,
+      "want_diff_kind":"","want_has_diff":false
+    },
+    {
+      "id":"dc-005","desc":"两侧均拒绝（相同原因）",
+      "base_allow":false,"canary_allow":false,
+      "want_diff_kind":"","want_has_diff":false
+    },
+    {
+      "id":"dc-006","desc":"canary kill switch → kill_switch 差分",
+      "canary_killed":true,
+      "want_diff_kind":"kill_switch","want_has_diff":true
+    }
+  ]
+}

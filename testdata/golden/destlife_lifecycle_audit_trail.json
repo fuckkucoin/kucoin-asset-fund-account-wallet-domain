@@ -1,0 +1,58 @@
+[
+  {
+    "audit_id": "44444444-0000-0000-0000-000000000001",
+    "entry_life_id": "11111111-0000-0000-0000-000000000001",
+    "user_id": "user-golden-1",
+    "chain": "BTC",
+    "address": "bc1qgoldentest001",
+    "actor": "system",
+    "event": "init",
+    "from_state": "",
+    "to_state": "cooling",
+    "note": "window=86400s",
+    "generation": 1,
+    "at": "2025-04-20T10:00:00Z"
+  },
+  {
+    "audit_id": "44444444-0000-0000-0000-000000000002",
+    "entry_life_id": "11111111-0000-0000-0000-000000000001",
+    "user_id": "user-golden-1",
+    "chain": "BTC",
+    "address": "bc1qgoldentest001",
+    "actor": "worker",
+    "event": "activate",
+    "from_state": "cooling",
+    "to_state": "active",
+    "note": "cooling_done",
+    "generation": 2,
+    "at": "2025-04-21T10:01:00Z"
+  },
+  {
+    "audit_id": "44444444-0000-0000-0000-000000000003",
+    "entry_life_id": "11111111-0000-0000-0000-000000000001",
+    "user_id": "user-golden-1",
+    "chain": "BTC",
+    "address": "bc1qgoldentest001",
+    "actor": "ops",
+    "event": "begin_revoking",
+    "from_state": "active",
+    "to_state": "revoking",
+    "note": "remove_requested",
+    "generation": 3,
+    "at": "2025-04-22T08:00:00Z"
+  },
+  {
+    "audit_id": "44444444-0000-0000-0000-000000000004",
+    "entry_life_id": "11111111-0000-0000-0000-000000000001",
+    "user_id": "user-golden-1",
+    "chain": "BTC",
+    "address": "bc1qgoldentest001",
+    "actor": "revoke_worker",
+    "event": "revoke",
+    "from_state": "revoking",
+    "to_state": "revoked",
+    "note": "inflight_refs_cleared",
+    "generation": 4,
+    "at": "2025-04-22T09:30:00Z"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "id": "gate-001",
+  "plan_id": "plan-001-fiat-clawback",
+  "case_id": "case-fiat-001",
+  "gate_status": "passed",
+  "blocking_reason": "",
+  "pending_leg_ids": "",
+  "checked_by": "system-gate-patrol",
+  "passed_at": "2022-03-15T10:11:00Z",
+  "bypass_reason": "",
+  "bypassed_by": "",
+  "version": 3,
+  "created_at": "2022-03-15T10:00:00Z",
+  "updated_at": "2022-03-15T10:11:00Z"
+}

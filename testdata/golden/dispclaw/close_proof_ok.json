@@ -1,0 +1,17 @@
+{
+  "id": "proof-001",
+  "plan_id": "plan-001-fiat-clawback",
+  "case_id": "case-fiat-001",
+  "gate_id": "gate-001",
+  "proof_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "leg_hashes": "[\"a1b2c3d4e5f6789012345678901234567890123456789012345678901234abcd\",\"b2c3d4e5f6789012345678901234567890123456789012345678901234bcde\"]",
+  "leg_count": 2,
+  "total_amount": "1000.00",
+  "asset": "USDT",
+  "decided_by": "ops-charlie",
+  "decision": "resolve",
+  "tamper_detected": false,
+  "tamper_detail": "",
+  "tamper_checked_at": "2022-03-15T10:20:00Z",
+  "created_at": "2022-03-15T10:12:00Z"
+}

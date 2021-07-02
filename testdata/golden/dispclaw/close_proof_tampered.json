@@ -1,0 +1,17 @@
+{
+  "id": "proof-002",
+  "plan_id": "plan-003-tampered",
+  "case_id": "case-tampered-003",
+  "gate_id": "gate-003",
+  "proof_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "leg_hashes": "[\"original-hash-that-no-longer-matches\"]",
+  "leg_count": 1,
+  "total_amount": "100.00",
+  "asset": "ETH",
+  "decided_by": "ops-david",
+  "decision": "resolve",
+  "tamper_detected": true,
+  "tamper_detail": "proof_hash=0000... recomputed mismatch at 2022-03-15T15:00:00Z",
+  "tamper_checked_at": "2022-03-15T15:00:00Z",
+  "created_at": "2022-03-15T12:00:00Z"
+}

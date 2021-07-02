@@ -1,0 +1,42 @@
+{
+  "name": "cohort_ratio_stability",
+  "description": "同一世代内切流稳定性验证：100 个不同用户 ID，各自连续 5 次 InCanary 结论不变。",
+  "packs": [
+    {"name":"kyc0","version":2,"max_single":"10000","daily_withdraw":"50000","hourly_vel":20,"daily_vel":50},
+    {"name":"kyc0","version":3,"max_single":"500","daily_withdraw":"2000","hourly_vel":5,"daily_vel":10}
+  ],
+  "release": {
+    "pack_name":"kyc0","baseline_version":2,"canary_version":3,
+    "cohort_percent":10,"policy_allow_drift":20,"creator":"test"
+  },
+  "stability_check": {
+    "user_count": 100,
+    "repeat_per_user": 5,
+    "percent": 10,
+    "generation": 1,
+    "expect_stable": true,
+    "comment": "FNV-32a 确定性哈希：同一 userID+packName+generation 三元组在任意进程实例上结论相同"
+  },
+  "pin_cases": [
+    {
+      "id":"co-pin-001","user_id":"pinned-canary","pin_side":"canary",
+      "expect_in_canary":true,"desc":"显式 Pin canary 优先于比例"
+    },
+    {
+      "id":"co-pin-002","user_id":"pinned-baseline","pin_side":"baseline",
+      "expect_in_canary":false,"desc":"显式 Pin baseline 优先于比例"
+    }
+  ],
+  "generation_cases": [
+    {
+      "id":"co-gen-001","desc":"切流比例 0→50% 世代自增，旧世代结论失效",
+      "old_percent":0,"new_percent":50,
+      "expect_gen_increment":true
+    },
+    {
+      "id":"co-gen-002","desc":"切流比例 100→100% 世代自增（即使比例未变）",
+      "old_percent":100,"new_percent":100,
+      "expect_gen_increment":true
+    }
+  ]
+}

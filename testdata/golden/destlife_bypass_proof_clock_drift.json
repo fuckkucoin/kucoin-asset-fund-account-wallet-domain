@@ -1,0 +1,13 @@
+{
+  "proof_id": "22222222-0000-0000-0000-000000000001",
+  "entry_life_id": "11111111-0000-0000-0000-000000000001",
+  "user_id": "user-golden-1",
+  "chain": "BTC",
+  "address": "bc1qgoldentest001",
+  "reason": "clock_drift",
+  "clock_drift_ms": 7200000,
+  "blocked": true,
+  "blocked_by": "bypass_guard",
+  "detected_at": "2025-04-20T10:00:00Z",
+  "blocked_at": "2025-04-20T10:00:00Z"
+}

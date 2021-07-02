@@ -1,0 +1,35 @@
+{
+  "name": "kill_switch_both_sides",
+  "description": "kill switch 任一侧打开：整请求拒绝，applied 非空，不回落未定义包。",
+  "packs": [
+    {"name":"kyc0","version":2,"max_single":"10000","daily_withdraw":"50000","hourly_vel":20,"daily_vel":50},
+    {"name":"kyc0","version":3,"max_single":"500","daily_withdraw":"2000","hourly_vel":5,"daily_vel":10}
+  ],
+  "release": {
+    "pack_name":"kyc0","baseline_version":2,"canary_version":3,
+    "cohort_percent":100,"policy_allow_drift":5,"creator":"test"
+  },
+  "cases": [
+    {
+      "id":"ks-001","desc":"全局 kill switch 打开",
+      "user_id":"user-alice","asset":"USDT","amount":"100",
+      "kill_global":true,
+      "want_has_diff":false,"want_final_allow":false,
+      "want_error":"cfgdual kill switch","want_applied_nonempty":true
+    },
+    {
+      "id":"ks-002","desc":"包级 kill switch 打开（kyc0）",
+      "user_id":"user-bob","asset":"BTC","amount":"0.1",
+      "kill_pack":"kyc0",
+      "want_has_diff":false,"want_final_allow":false,
+      "want_error":"cfgdual kill switch","want_applied_nonempty":true
+    },
+    {
+      "id":"ks-003","desc":"无 kill switch：正常双评通过",
+      "user_id":"user-carol","asset":"USDT","amount":"100",
+      "kill_global":false,
+      "want_has_diff":false,"want_final_allow":true,
+      "want_error":"","want_applied_nonempty":true
+    }
+  ]
+}

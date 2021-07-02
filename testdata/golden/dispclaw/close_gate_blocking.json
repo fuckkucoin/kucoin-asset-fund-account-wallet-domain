@@ -1,0 +1,15 @@
+{
+  "id": "gate-002",
+  "plan_id": "plan-002-p2p-refund",
+  "case_id": "case-p2p-002",
+  "gate_status": "blocking",
+  "blocking_reason": "1 pending leg(s) remain",
+  "pending_leg_ids": "leg-003-refund",
+  "checked_by": "system-gate-patrol",
+  "passed_at": null,
+  "bypass_reason": "",
+  "bypassed_by": "",
+  "version": 2,
+  "created_at": "2022-03-15T11:00:00Z",
+  "updated_at": "2022-03-15T11:30:00Z"
+}

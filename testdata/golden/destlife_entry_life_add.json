@@ -1,0 +1,16 @@
+{
+  "entry_life_id": "11111111-0000-0000-0000-000000000001",
+  "user_id": "user-golden-1",
+  "chain": "BTC",
+  "address": "bc1qgoldentest001",
+  "label": "primary",
+  "state": "cooling",
+  "added_at": "2025-04-20T10:00:00Z",
+  "cooling_from": "2025-04-20T10:00:00Z",
+  "active_at": null,
+  "revoking_at": null,
+  "revoked_at": null,
+  "generation": 1,
+  "created_at": "2025-04-20T10:00:00Z",
+  "updated_at": "2025-04-20T10:00:00Z"
+}
