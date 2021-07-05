@@ -1,0 +1,14 @@
+{
+  "_comment": "场景：ETH 链 gas 仓 Avail=10（>= Target=8），评为 OK 级，正常放行。",
+  "tank": {
+    "chain": "ETH",
+    "native": "ETH",
+    "available": "10",
+    "min": "2",
+    "target": "8"
+  },
+  "expected_level": "ok",
+  "expected_blocked": false,
+  "expected_action": "allow",
+  "expected_deficit": ""
+}

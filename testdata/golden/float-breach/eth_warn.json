@@ -1,0 +1,14 @@
+{
+  "_comment": "场景：ETH 链 gas 仓 Avail=3（>= Min=2 但 < Target=8），评为 Warn 级，放行但产出告警事件。",
+  "tank": {
+    "chain": "ETH",
+    "native": "ETH",
+    "available": "3",
+    "min": "2",
+    "target": "8"
+  },
+  "expected_level": "warn",
+  "expected_blocked": false,
+  "expected_action": "warn",
+  "expected_deficit": "5"
+}

@@ -1,0 +1,25 @@
+{
+  "scenario": "Quote Drift Cap — live rate drifted up beyond cap",
+  "description": "Snapshot rate=60000 (BTC/USDT). Live rate=60400 at convert time. Cap=50bps (0.5%). Drift=66.7bps > cap. Convert must fail-closed.",
+  "inputs": {
+    "asset": "BTC",
+    "amount": "0.0005",
+    "snap_rate": "60000",
+    "live_rate": "60400",
+    "cap_bps": 50,
+    "snap_age_seconds": 5
+  },
+  "expected": {
+    "result": "rejected",
+    "error_contains": "drift exceeded",
+    "usdt_credited": "0",
+    "leak_usdt": "0.2"
+  },
+  "calc": {
+    "drift_bps": "66.67",
+    "snap_max_usdt": "30",
+    "live_usdt": "30.2",
+    "overpay": "0.2"
+  },
+  "invariant": "No USDT credit when drift exceeds cap; fail-closed, no partial settlement"
+}

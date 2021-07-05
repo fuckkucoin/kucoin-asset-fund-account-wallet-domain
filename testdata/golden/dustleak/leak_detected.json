@@ -1,0 +1,23 @@
+{
+  "scenario": "LeakDetector — over-floor posted convert detected",
+  "description": "A Convert with amount=0.002 BTC was posted against floor=0.001 BTC policy. Detector finds the violation and opens a LeakCase. Same-user BTC gate becomes blocked.",
+  "inputs": {
+    "convert_id": "conv-golden-001",
+    "user_id": "user-golden",
+    "asset": "BTC",
+    "amount": "0.002",
+    "usdt": "120",
+    "rate": "60000",
+    "floor_at_convert": "0.001",
+    "idem_key": "idem-golden-001"
+  },
+  "expected": {
+    "leak_case_opened": true,
+    "leak_kind": "over_floor",
+    "leak_status": "detected",
+    "leak_usdt": "120",
+    "max_usdt": "0",
+    "gate_status": "blocked"
+  },
+  "invariant": "Once LeakCase detected: (1) same user+asset dust convert blocked, (2) rollback can be posted with dualReqID"
+}

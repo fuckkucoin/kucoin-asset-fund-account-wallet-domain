@@ -1,0 +1,19 @@
+{
+  "scenario": "Floor Guard CAS — policy gen changed during convert",
+  "description": "Convert holds Gen=1 (floor=0.001). Policy updated to Gen=2 (floor=0.0005, relaxed). ValidateLock must reject.",
+  "inputs": {
+    "asset": "BTC",
+    "amount": "0.0003",
+    "snap_gen": 1,
+    "snap_floor": "0.001",
+    "cur_gen": 2,
+    "cur_floor": "0.0005"
+  },
+  "expected": {
+    "result": "rejected",
+    "error_contains": "floor relaxed",
+    "floor_used": null,
+    "conserve_violated": false
+  },
+  "invariant": "actualFloor >= snapFloor; floor can only tighten, never relax during in-flight Convert"
+}

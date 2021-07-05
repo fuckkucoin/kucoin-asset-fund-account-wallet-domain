@@ -1,0 +1,276 @@
+{
+  "_comment": "资金副作用恰好一次引擎 — 黄金夹具 (Golden Test Fixtures)",
+  "_version": "r7",
+  "_generated": "2026-04-10",
+  "_schema": {
+    "case_id": "用例唯一标识",
+    "scenario": "验收场景编号 (1-9)",
+    "description": "场景描述",
+    "input": "输入条件",
+    "expected_output": "期望输出",
+    "invariants": "必须满足的不变量"
+  },
+
+  "fund_effect_cases": [
+    {
+      "case_id": "FX-001",
+      "scenario": 1,
+      "description": "同一 business_key 首次 Apply — 正常产生 applied effect",
+      "input": {
+        "business_key": "dep-0001",
+        "kind": "credit_intent",
+        "expected_gen": 1,
+        "payload": "{\"amount\":\"100.00\",\"asset\":\"USDT\"}"
+      },
+      "expected_output": {
+        "effect_state": "applied",
+        "result_applied": true,
+        "result_idempotent": false,
+        "result_rejected": false,
+        "dup_proof": null
+      },
+      "invariants": [
+        "effect_key == hex(SHA256('dep-0001:1'))[:32]",
+        "effect.generation == 1",
+        "delivery_gen.state == 'acked'",
+        "delivery_gen.applied_gen == 1"
+      ]
+    },
+    {
+      "case_id": "FX-002",
+      "scenario": 1,
+      "description": "同一 business_key + generation 重复 Apply — 幂等回放",
+      "setup": [
+        {"op": "apply", "business_key": "dep-0002", "kind": "credit_intent", "gen": 1}
+      ],
+      "input": {
+        "business_key": "dep-0002",
+        "kind": "credit_intent",
+        "expected_gen": 1
+      },
+      "expected_output": {
+        "effect_state": "applied",
+        "result_applied": false,
+        "result_idempotent": true,
+        "result_rejected": false,
+        "dup_proof": null
+      },
+      "invariants": [
+        "只有一个 applied effect 记录",
+        "无 DupProof 产生",
+        "账本意图不重复"
+      ]
+    },
+    {
+      "case_id": "FX-003",
+      "scenario": 2,
+      "description": "旧世代 stale_gen — CAS 拒绝，产生 DupProof",
+      "setup": [
+        {"op": "apply", "business_key": "dep-0003", "kind": "credit_intent", "gen": 2}
+      ],
+      "input": {
+        "business_key": "dep-0003",
+        "kind": "credit_intent",
+        "expected_gen": 1
+      },
+      "expected_output": {
+        "result_rejected": true,
+        "reject_code": "stale_gen",
+        "error": "fxonce: stale delivery generation",
+        "dup_proof": {
+          "winner_gen": 2,
+          "loser_gen": 1,
+          "reject_code": "stale_gen",
+          "reviewed": false
+        }
+      },
+      "invariants": [
+        "effect_key(dep-0003:1) 的 effect.state == 'rejected'",
+        "账本意图不重复产生（applied effect 仅 gen=2 一条）",
+        "DupProof.winner_gen > DupProof.loser_gen"
+      ]
+    },
+    {
+      "case_id": "FX-004",
+      "scenario": 4,
+      "description": "毒丸隔离 — 拒绝所有 Apply，不产生账本意图",
+      "setup": [
+        {"op": "apply", "business_key": "dep-0004", "kind": "freeze_intent", "gen": 1},
+        {"op": "poison", "effect_id": "<effect_id_from_above>", "retries": 5}
+      ],
+      "input": {
+        "business_key": "dep-0004",
+        "kind": "freeze_intent",
+        "expected_gen": 1
+      },
+      "expected_output": {
+        "result_rejected": true,
+        "reject_code": "poisoned",
+        "error": "fxonce: effect poisoned — manual release required"
+      },
+      "invariants": [
+        "effect.state == 'poisoned'",
+        "无新 applied effect",
+        "无新 DupProof（毒丸拒绝不产生双花证明）"
+      ]
+    },
+    {
+      "case_id": "FX-005",
+      "scenario": 4,
+      "description": "双人放行毒丸 — ForceReplay → proposed",
+      "setup": [
+        {"op": "poison", "business_key": "dep-0005", "kind": "credit_intent", "gen": 1}
+      ],
+      "input": {
+        "op": "force_replay",
+        "effect_id": "<poisoned_effect_id>",
+        "actors": "alice+bob"
+      },
+      "expected_output": {
+        "effect_state": "proposed",
+        "force_replay_by": "alice+bob"
+      },
+      "invariants": [
+        "actors 必须为两人（不同人）",
+        "effect.state 从 poisoned 回到 proposed",
+        "effect.poison_retries 重置为 0"
+      ]
+    },
+    {
+      "case_id": "FX-006",
+      "scenario": 4,
+      "description": "单人放行毒丸 — 拒绝（双人授权不足）",
+      "input": {
+        "op": "force_replay",
+        "effect_id": "<poisoned_effect_id>",
+        "actors": "alice"
+      },
+      "expected_output": {
+        "error": "fxonce: force replay denied — dual approval required"
+      }
+    },
+    {
+      "case_id": "FX-007",
+      "scenario": 5,
+      "description": "非资金 kind (audit.log) — 旁路，不写效果仓",
+      "input": {
+        "business_key": "audit-0001",
+        "kind": "audit.log",
+        "expected_gen": 1
+      },
+      "expected_output": {
+        "bypassed": true,
+        "result_applied": false,
+        "result_rejected": false,
+        "effects_written": 0,
+        "dup_proofs_written": 0
+      },
+      "invariants": [
+        "fx_fund_effects 无新记录",
+        "fx_delivery_gens 无新记录",
+        "fx_dup_proofs 无新记录"
+      ]
+    },
+    {
+      "case_id": "FX-008",
+      "scenario": 8,
+      "description": "HTTP rate limit — 不计入资金 exactly-once，不产生 DupProof",
+      "input": {
+        "business_key": "dep-0008",
+        "kind": "credit_intent",
+        "generation": 1,
+        "success": false,
+        "err_code": "http_rate_limit"
+      },
+      "expected_output": {
+        "nack_recorded": false,
+        "result_rejected": true,
+        "reject_code": "http_rate_limit",
+        "dup_proof": null,
+        "retry_count_delta": 0
+      },
+      "invariants": [
+        "HTTP 限速不更新 delivery_gen.retry_count",
+        "HTTP 限速不产生 DupProof",
+        "HTTP 限速不更新 fund_effect 状态",
+        "RejectHTTPRateLimit 不属于 IsFundKind"
+      ]
+    },
+    {
+      "case_id": "FX-009",
+      "scenario": 7,
+      "description": "同 business_key 不同 kind — effect_key 隔离",
+      "input_sequence": [
+        {"business_key": "wd-0009", "kind": "credit_intent", "gen": 1},
+        {"business_key": "wd-0009", "kind": "freeze_intent", "gen": 1}
+      ],
+      "expected_output": {
+        "credit_effect_key": "hex(SHA256('wd-0009:1:credit_intent'))[:32]",
+        "freeze_effect_key": "hex(SHA256('wd-0009:1:freeze_intent'))[:32]",
+        "both_applied": true,
+        "effect_keys_different": true
+      },
+      "invariants": [
+        "两种 kind 的 effect_key 不同（MakeEffectKey 包含 kind 前缀）",
+        "两种 kind 各自独立 applied",
+        "互不干扰的幂等回放"
+      ],
+      "_note": "当前实现: effect_key = SHA256(business_key:generation)[:32]，不含 kind，因此同 bk+gen 但不同 kind 会碰撞。若需 kind 隔离，可在 MakeEffectKey 中加入 kind 参数。"
+    },
+    {
+      "case_id": "FX-010",
+      "scenario": 6,
+      "description": "Webhook 重试 10 次 — 仅一次 Applied，其余 Idempotent",
+      "setup": " 10 个并发 goroutine 对同一 business_key + gen 调用 RouteApply",
+      "expected_output": {
+        "applied_count": 1,
+        "idempotent_count": 9,
+        "dup_proof_count": 0
+      },
+      "invariants": [
+        "applied_count == 1",
+        "idempotent_count == (total_deliveries - 1)",
+        "无 DupProof（幂等回放不是双花）"
+      ]
+    }
+  ],
+
+  "effect_state_machine": {
+    "states": ["proposed", "applied", "rejected", "poisoned"],
+    "transitions": [
+      {"from": "proposed", "to": "applied",  "trigger": "CAS 通过，handler Mark 成功"},
+      {"from": "proposed", "to": "rejected", "trigger": "CAS 拒绝（stale_gen / dup_gen）"},
+      {"from": "proposed", "to": "poisoned", "trigger": "Worker: 超时或超出最大重试"},
+      {"from": "poisoned", "to": "proposed", "trigger": "ForceReplay（双人授权）"}
+    ],
+    "invariants": [
+      "applied 和 poisoned 均为准最终态（无 ForceReplay 则不可离开）",
+      "rejected 为终态（不可重试）",
+      "applied → 其他 需要 ForceReplay（当前实现不支持，视为终态）"
+    ]
+  },
+
+  "delivery_gen_state_machine": {
+    "states": ["enqueued", "inflight", "acked", "nacked", "poisoned"],
+    "transitions": [
+      {"from": "enqueued",  "to": "inflight", "trigger": "outboxpump Tick 取得事件"},
+      {"from": "inflight",  "to": "acked",    "trigger": "handler 成功，CAS Apply 通过"},
+      {"from": "inflight",  "to": "nacked",   "trigger": "handler 失败（非 rate limit）"},
+      {"from": "nacked",    "to": "enqueued", "trigger": "退回重试队列（retry_count < max_retry）"},
+      {"from": "nacked",    "to": "poisoned", "trigger": "retry_count >= max_retry"}
+    ]
+  },
+
+  "kind_gate_decisions": [
+    {"kind": "credit_intent",  "must_gate": true,  "is_fund": true,  "policy": "explicit"},
+    {"kind": "freeze_intent",  "must_gate": true,  "is_fund": true,  "policy": "explicit"},
+    {"kind": "hop_intent",     "must_gate": true,  "is_fund": true,  "policy": "explicit"},
+    {"kind": "notify_fund",    "must_gate": true,  "is_fund": true,  "policy": "explicit"},
+    {"kind": "debit_intent",   "must_gate": true,  "is_fund": true,  "policy": "explicit"},
+    {"kind": "settle_intent",  "must_gate": true,  "is_fund": true,  "policy": "explicit"},
+    {"kind": "audit.log",      "must_gate": false, "is_fund": false, "policy": "default"},
+    {"kind": "notify.email",   "must_gate": false, "is_fund": false, "policy": "default"},
+    {"kind": "http_rate_limit","must_gate": false, "is_fund": false, "policy": "default",
+     "_note": "HTTP 限速码严禁当成资金 kind 处理"}
+  ]
+}

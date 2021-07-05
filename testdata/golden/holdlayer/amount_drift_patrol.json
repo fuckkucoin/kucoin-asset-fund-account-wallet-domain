@@ -1,0 +1,38 @@
+{
+  "scenario": "amount_drift_detection",
+  "description": "HoldToken 金额 > 账本当前冻结量（漂移）时 Gap Patrol 开 amount_drift 缺口单，以账本为准",
+  "setup": {
+    "tokens": [
+      {
+        "user_id": "user-eve",
+        "asset": "BTC",
+        "book": "funding",
+        "amount": "1.50000000",
+        "layer": "legal",
+        "reason_code": "court_order",
+        "idem_key": "hold-legal-eve-001",
+        "approval_ref": "COURT-BJ-EVE-001"
+      }
+    ],
+    "ledger_frozen": {
+      "user-eve:BTC:funding": "0.80000000"
+    }
+  },
+  "action": {
+    "type": "patrol_run",
+    "config": {
+      "releasing_timeout": "15m",
+      "active_max_age": "72h",
+      "scan_limit": 100
+    }
+  },
+  "expected": {
+    "gap_kind": "amount_drift",
+    "gap_state": "open",
+    "gap_token_amount": "1.50000000",
+    "gap_ledger_frozen": "0.80000000",
+    "ledger_frozen_not_modified": true,
+    "token_state_unchanged": "active",
+    "no_auto_compensate": true
+  }
+}

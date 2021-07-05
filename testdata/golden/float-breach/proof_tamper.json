@@ -1,0 +1,11 @@
+{
+  "_comment": "场景：穿仓证明摘要验证。原始证明 Verify() 应通过；篡改 RefillAmount 后 Verify() 必须失败，防止补仓计划被回放或修改。",
+  "chain": "ETH",
+  "native": "ETH",
+  "water_level": "0.5",
+  "refill_amount": "7.5",
+  "window_ns": 3600000000000,
+  "tampered_refill_amount": "9999",
+  "original_verify_ok": true,
+  "tampered_verify_ok": false
+}

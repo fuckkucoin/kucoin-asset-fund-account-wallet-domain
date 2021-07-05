@@ -1,0 +1,14 @@
+{
+  "_comment": "场景：ETH 链 gas 仓 Avail=0.5（< Min=2），应评为 Crit 级，触发补仓并阻断出金估算。",
+  "tank": {
+    "chain": "ETH",
+    "native": "ETH",
+    "available": "0.5",
+    "min": "2",
+    "target": "8"
+  },
+  "expected_level": "crit",
+  "expected_blocked": true,
+  "expected_action": "defer_batch",
+  "expected_deficit": "7.5"
+}

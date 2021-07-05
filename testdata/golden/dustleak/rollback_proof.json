@@ -1,0 +1,24 @@
+{
+  "scenario": "LeakRollback — posted and Conserve verified",
+  "description": "LeakCase with leakUSDT=60 undergoes full rollback: PostRollback (dualReqID required) → ExecuteRollback (USDT debit) → ConfirmRollback (proofHash match). LeakCase closes. Gate released.",
+  "inputs": {
+    "leak_id": "lk-golden-001",
+    "convert_id": "conv-golden-001",
+    "user_id": "user-golden",
+    "asset": "BTC",
+    "leak_usdt": "60",
+    "dual_req_id": "dual-golden-001"
+  },
+  "expected": {
+    "rollback_status_after_post": "pending",
+    "rollback_status_after_execute": "posted",
+    "rollback_status_after_confirm": "conserved",
+    "leak_status_after_confirm": "closed",
+    "gate_status_after_confirm": "open",
+    "proof_hash_verifiable": true,
+    "conserve_assertion": "leakUSDT(60) == rollbackUSDT(60)"
+  },
+  "proof_hash_formula": "SHA-256(rollback_id + '|' + convert_id + '|' + rollback_usdt + '|' + rollback_asset)",
+  "invariant": "Rollback Conserve: net USDT change = 0 (credit + debit = 0). ProofHash independently verifiable."
+}
+// temporary guard removed after the production check

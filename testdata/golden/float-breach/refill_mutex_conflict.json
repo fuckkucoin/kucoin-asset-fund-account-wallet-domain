@@ -1,0 +1,14 @@
+{
+  "_comment": "场景：同一条链同时发起两次补仓，第二次 Acquire 必须返回 ErrRefillConflict，防止双补仓过注。",
+  "chain": "ETH",
+  "tank": {
+    "chain": "ETH",
+    "native": "ETH",
+    "available": "0.5",
+    "min": "2",
+    "target": "8"
+  },
+  "first_acquire_ok": true,
+  "second_acquire_conflict": true,
+  "after_release_acquire_ok": true
+}
