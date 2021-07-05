@@ -1,0 +1,9 @@
+{
+  "test_name": "rail_break_readonly_attach",
+  "description": "法币轨道断裂 ID 可只读挂钩，不触发 fiatbreak 检测器写路径",
+  "case_id": "case-fiat-railbreak-001",
+  "rail_break_id": "rb-fiat-20220315-001",
+  "expected_plan_rail_break_id": "rb-fiat-20220315-001",
+  "fiatbreak_detector_written": false,
+  "note": "rail_break_id 只读引用 E 包数据；dispclaw 不写 fiatbreak 检测器"
+}

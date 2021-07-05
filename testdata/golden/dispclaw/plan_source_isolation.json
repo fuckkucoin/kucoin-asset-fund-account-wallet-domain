@@ -1,0 +1,7 @@
+{
+  "test_name": "plan_source_must_be_case_id",
+  "description": "资金计划源必须为 dispute Case ID，不得使用运营批次号",
+  "valid_case_id": "case-valid-001",
+  "invalid_source": "ops-wrong-credit-batch-007",
+  "expected_behavior": "plan generated with case_id=case-valid-001; ops wrong-credit batch sources are rejected at API layer"
+}

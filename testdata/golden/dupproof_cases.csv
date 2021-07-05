@@ -1,0 +1,16 @@
+case_id,scenario,description,business_key,kind,winner_gen,loser_gen,expected_reject_code,expected_window_ms_sign,reviewed_after_setup,invariant_1,invariant_2,invariant_3
+DP-001,2,Leader 切换旧世代,dep-leader-001,credit_intent,2,1,stale_gen,positive,false,winner_gen > loser_gen,DupProof.BusinessKey == dep-leader-001,只有 winner_gen 的 effect.state == applied
+DP-002,2,Leader 切换极端旧世代,dep-leader-002,credit_intent,100,1,stale_gen,positive,false,loser 被拒绝不产生账本意图,DupProof 永久保留（只写不删）,window_ms >= 0
+DP-003,1,同世代重复投递（幂等）,dep-idem-001,credit_intent,1,1,dup_gen,zero,false,幂等不产生 DupProof,result.Idempotent == true,无新 applied effect
+DP-004,4,毒丸拒绝（不产生 DupProof）,dep-poison-001,freeze_intent,1,1,poisoned,N/A,false,poisoned 拒绝不产生 DupProof,effect.state == poisoned,需双人放行才能解除
+DP-005,6,Webhook 重试 5 次旧世代,dep-webhook-001,hop_intent,3,2,stale_gen,positive,false,5 次重试中仅一次 applied,每次旧世代都产生一条 DupProof,winner_gen == 3
+DP-006,6,Webhook 重试 5 次旧世代,dep-webhook-001,hop_intent,3,1,stale_gen,positive,false,loser_gen == 1 的 DupProof 独立记录,两条 DupProof window_ms 独立,desk 可分别审阅
+DP-007,8,HTTP rate limit 不产生 DupProof,dep-rl-001,credit_intent,0,0,http_rate_limit,N/A,false,rate limit 后可正常重试,rate limit 不写 fx_dup_proofs,RejectHTTPRateLimit != IsFundKind
+DP-008,2,乱序投递（loser 先到 winner 后到）,dep-oot-001,notify_fund,2,3,stale_gen,negative,false,window_ms < 0 表示乱序检测,乱序也需产生 DupProof,winner_at < loser_at 但 winner_gen > loser_gen
+DP-009,9,Desk 审阅流程,dep-desk-001,credit_intent,2,1,stale_gen,positive,true,MarkReviewed 后 reviewed == true,ListUnreviewed 不再返回此条,ReviewedBy 字段正确记录审阅人
+DP-010,7,多 kind 同 business_key 独立 DupProof,dep-mk-001,credit_intent,2,1,stale_gen,positive,false,credit_intent DupProof 独立于 freeze_intent,两种 kind 的 DupProof 不共享 winner/loser effect,业务键相同但 effect_key 不同
+DP-011,7,多 kind 同 business_key 独立 DupProof,dep-mk-001,freeze_intent,2,1,stale_gen,positive,false,freeze_intent DupProof 独立记录,不与 credit_intent DupProof 混用,各 kind 的 applied_gen 独立维护
+DP-012,3,handler 失败不 Mark 后重试成功,dep-retry-001,debit_intent,1,0,N/A,N/A,false,handler 失败不产生 DupProof,重试成功后 effect.state == applied,retry_count 在 Nack 时递增
+DP-013,4,超限毒丸后双人放行再 apply,dep-fr-001,settle_intent,1,0,N/A,N/A,false,ForceReplay 需两个不同人,ForceReplay 后 effect.state == proposed,ForceReplay 后可正常 apply
+DP-014,5,种 kind 全链路旁路（audit.log）,audit-001,audit.log,0,0,N/A,N/A,false,非资金 kind 不写 fx_fund_effects,非资金 kind 不写 fx_dup_proofs,IsFundKind(audit.log) == false
+DP-015,5,种 kind 全链路旁路（notify.email）,ntf-001,notify.email,0,0,N/A,N/A,false,非资金 kind 旁路 result.Bypassed == true,不调用 CASEngine.Apply,不写 delivery_gens

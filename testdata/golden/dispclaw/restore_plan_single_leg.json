@@ -1,0 +1,8 @@
+{
+  "test_name": "restore_plan_single_leg",
+  "description": "恢复路径只有一条 restore_unfreeze 腿",
+  "case_id": "case-restore-001",
+  "plan_type": "restore",
+  "expected_leg_count": 1,
+  "expected_leg_types": ["restore_unfreeze"]
+}

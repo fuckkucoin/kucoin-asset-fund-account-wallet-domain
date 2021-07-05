@@ -1,0 +1,20 @@
+{
+  "test_name": "refund_leg_proof_hash_set",
+  "description": "refund 腿 posted 后 CloseProof 含腿哈希集合",
+  "case_id": "case-refund-proof-001",
+  "plan_type": "refund",
+  "legs": [
+    {
+      "seq": 1,
+      "leg_type": "freeze",
+      "status": "posted"
+    },
+    {
+      "seq": 2,
+      "leg_type": "refund_credit",
+      "status": "posted"
+    }
+  ],
+  "expected_proof_leg_count": 2,
+  "expected_tamper_detected": false
+}

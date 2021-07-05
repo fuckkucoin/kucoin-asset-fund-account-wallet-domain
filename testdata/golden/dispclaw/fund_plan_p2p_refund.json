@@ -1,0 +1,17 @@
+{
+  "id": "plan-002-p2p-refund",
+  "case_id": "case-p2p-002",
+  "channel": "p2p",
+  "user_id": "user-50002",
+  "asset": "BTC",
+  "amount": "0.05",
+  "plan_type": "refund",
+  "status": "executing",
+  "rail_break_id": "",
+  "opened_by": "ops-bob",
+  "closed_by": "",
+  "abort_reason": "",
+  "version": 2,
+  "created_at": "2022-03-15T11:00:00Z",
+  "updated_at": "2022-03-15T11:30:00Z"
+}

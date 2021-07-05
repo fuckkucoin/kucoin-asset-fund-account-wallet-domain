@@ -1,0 +1,10 @@
+{
+  "test_name": "foureye_reject_opener",
+  "description": "开单人尝试执行追偿腿必须被四眼拒绝",
+  "case_id": "case-foureye-001",
+  "plan_id": "plan-foureye-001",
+  "leg_id": "leg-foureye-001",
+  "opener_actor": "ops-alice",
+  "executor_actor": "ops-alice",
+  "expected_error": "dispclaw: four-eye check failed, executor must differ from opener"
+}

@@ -1,0 +1,11 @@
+{
+  "test_name": "gate_blocking_resolve_rejected",
+  "description": "收口闸 blocking 时 Case Resolve 必须失败",
+  "case_id": "case-gate-block-001",
+  "plan_type": "refund",
+  "gate_status_before_resolve": "blocking",
+  "resolve_actor": "ops-carol",
+  "opener_actor": "ops-alice",
+  "expected_resolve_error": "dispute fund gate blocking: recovery legs incomplete",
+  "pending_leg_count": 2
+}

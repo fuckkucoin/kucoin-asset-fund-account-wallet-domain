@@ -1,0 +1,11 @@
+{
+  "test_name": "foureye_pass_different_actor",
+  "description": "换人后四眼通过，追偿腿成功执行",
+  "case_id": "case-foureye-002",
+  "plan_id": "plan-foureye-002",
+  "leg_id": "leg-foureye-002",
+  "opener_actor": "ops-alice",
+  "executor_actor": "ops-bob",
+  "expected_leg_status": "posted",
+  "expected_error": ""
+}
