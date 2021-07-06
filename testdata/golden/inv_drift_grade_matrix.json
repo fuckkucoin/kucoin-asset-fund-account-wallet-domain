@@ -1,0 +1,20 @@
+{
+  "scenario": "grade_matrix",
+  "description": "分级矩阵验收：不同偏离幅度与资产组合下的预期等级",
+  "thresholds": {
+    "warn_pct": {"default": "1"},
+    "crit_pct": {"default": "5"},
+    "warn_abs": {"default": "5000", "BTC": "0.1", "ETH": "2"},
+    "crit_abs": {"default": "50000", "BTC": "1", "ETH": "20"}
+  },
+  "cases": [
+    {"asset": "USDT", "ledger_hot": "500000", "cust_hot": "500000", "expected_grade": "info",  "note": "零偏离"},
+    {"asset": "USDT", "ledger_hot": "500000", "cust_hot": "499500", "expected_grade": "info",  "note": "0.1% < 1% warn"},
+    {"asset": "USDT", "ledger_hot": "500000", "cust_hot": "493000", "expected_grade": "warn",  "note": "1.4% ≥ 1% warn"},
+    {"asset": "USDT", "ledger_hot": "500000", "cust_hot": "470000", "expected_grade": "crit",  "note": "6% ≥ 5% crit"},
+    {"asset": "BTC",  "ledger_hot": "10",     "cust_hot": "9.7",    "expected_grade": "warn",  "note": "0.3 BTC ≥ 0.1 BTC warn abs"},
+    {"asset": "BTC",  "ledger_hot": "10",     "cust_hot": "8.5",    "expected_grade": "crit",  "note": "1.5 BTC ≥ 1 BTC crit abs"},
+    {"asset": "ETH",  "ledger_hot": "100",    "cust_hot": "97",     "expected_grade": "crit",  "note": "3% ≥ 1% warn 且 3 ETH ≥ 2 ETH warn; 3%<5% crit pct 但 3 ETH > 2 warn 不到 20 crit → warn"},
+    {"asset": "ETH",  "ledger_hot": "100",    "cust_hot": "75",     "expected_grade": "crit",  "note": "25% ≥ 5% crit pct"}
+  ]
+}

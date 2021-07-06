@@ -1,0 +1,23 @@
+{
+  "scenario": "hot_short_crit",
+  "description": "hotinv 少记场景：账本 hot=600000 USDT，custody hot=400000 USDT",
+  "input": {
+    "ledger": [
+      {"user_id": "system", "account_type": "bridge", "asset": "USDT", "available": "600000"},
+      {"user_id": "system", "account_type": "cold",   "asset": "USDT", "available": "200000"}
+    ],
+    "custody": [
+      {"asset": "USDT", "available": "400000", "side": "hot"},
+      {"asset": "USDT", "available": "200000", "side": "cold"}
+    ]
+  },
+  "expected": {
+    "item_grade": "crit",
+    "delta_hot": "200000",
+    "delta_cold": "0",
+    "batch_state": "sealed",
+    "advice_count": 3,
+    "advice_states": ["proposed", "proposed", "proposed"],
+    "advice_kinds": ["block_sign", "block_sweep_over", "block_large_wd_pre"]
+  }
+}

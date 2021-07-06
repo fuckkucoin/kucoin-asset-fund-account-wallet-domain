@@ -1,0 +1,38 @@
+{
+  "scenario": "legal_layer_blocks_ops_release",
+  "description": "legal 层冻结存在时，ops 层释放请求被拒，审计行记录拒绝原因",
+  "setup": {
+    "tokens": [
+      {
+        "user_id": "user-alice",
+        "asset": "USDT",
+        "book": "funding",
+        "amount": "10000.00",
+        "layer": "legal",
+        "reason_code": "court_order",
+        "ledger_ref": "ledger-court-001",
+        "idem_key": "hold-court-alice-001",
+        "approval_ref": "COURT-ORDER-2025-BJ-0301",
+        "note": "北京法院令"
+      }
+    ]
+  },
+  "action": {
+    "type": "release",
+    "token_idem_ref": "hold-court-alice-001",
+    "release_req": {
+      "caller_layer": "ops",
+      "reason_code": "ops_manual_hold",
+      "idem_key": "release-ops-alice-fail-001",
+      "requester": "ops-staff@internal"
+    }
+  },
+  "expected": {
+    "error": "ErrLayerDenied",
+    "error_contains": "cannot release",
+    "proof_written": false,
+    "audit_written": true,
+    "audit_allowed": false,
+    "audit_deny_reason_contains": "cannot release legal"
+  }
+}

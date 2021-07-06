@@ -1,0 +1,22 @@
+{
+  "scenario": "bridge_lag_info",
+  "description": "桥接科目微小偏差：账本 hot=800 ETH，custody hot=798.5 ETH（0.1875% < 1% warn）",
+  "input": {
+    "ledger": [
+      {"user_id": "system", "account_type": "bridge", "asset": "ETH", "available": "800"},
+      {"user_id": "system", "account_type": "cold",   "asset": "ETH", "available": "200"}
+    ],
+    "custody": [
+      {"asset": "ETH", "available": "798.5", "side": "hot"},
+      {"asset": "ETH", "available": "200",   "side": "cold"}
+    ]
+  },
+  "expected": {
+    "item_grade": "info",
+    "delta_hot": "1.5",
+    "delta_pct_approx": "0.1875",
+    "batch_state": "graded",
+    "advice_count": 0,
+    "note": "info 级偏离不触发封堵建议，批次终态为 graded 而非 sealed"
+  }
+}

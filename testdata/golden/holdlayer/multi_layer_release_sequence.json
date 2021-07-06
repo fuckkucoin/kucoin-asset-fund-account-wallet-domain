@@ -1,0 +1,92 @@
+{
+  "scenario": "multi_layer_coexistence_release_sequence",
+  "description": "aml + risk + ops 三层叠加冻结，按正确顺序释放；ops 不得绕过 aml/risk 提前释放",
+  "setup": {
+    "tokens": [
+      {
+        "user_id": "user-dave",
+        "asset": "USDT",
+        "book": "funding",
+        "amount": "8000.00",
+        "layer": "aml",
+        "reason_code": "suspicious_transaction",
+        "idem_key": "hold-aml-dave-001",
+        "approval_ref": ""
+      },
+      {
+        "user_id": "user-dave",
+        "asset": "USDT",
+        "book": "funding",
+        "amount": "3000.00",
+        "layer": "risk",
+        "reason_code": "kyt_high_risk",
+        "idem_key": "hold-risk-dave-001"
+      },
+      {
+        "user_id": "user-dave",
+        "asset": "USDT",
+        "book": "funding",
+        "amount": "1000.00",
+        "layer": "ops",
+        "reason_code": "withdraw_review",
+        "idem_key": "hold-ops-dave-001"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "step": 1,
+      "type": "release_attempt_fail",
+      "token_idem_ref": "hold-ops-dave-001",
+      "release_req": {
+        "caller_layer": "ops",
+        "reason_code": "withdraw_review",
+        "idem_key": "release-ops-dave-fail",
+        "requester": "ops@internal"
+      },
+      "expected_error": "ErrLayerDenied"
+    },
+    {
+      "step": 2,
+      "type": "release",
+      "token_idem_ref": "hold-aml-dave-001",
+      "release_req": {
+        "caller_layer": "aml",
+        "reason_code": "suspicious_transaction",
+        "approval_ref": "AML-LIFT-DAVE-001",
+        "idem_key": "release-aml-dave-001",
+        "requester": "compliance@internal"
+      },
+      "expected_success": true
+    },
+    {
+      "step": 3,
+      "type": "release",
+      "token_idem_ref": "hold-risk-dave-001",
+      "release_req": {
+        "caller_layer": "risk",
+        "reason_code": "kyt_high_risk",
+        "idem_key": "release-risk-dave-001",
+        "requester": "risk-system@internal"
+      },
+      "expected_success": true
+    },
+    {
+      "step": 4,
+      "type": "release",
+      "token_idem_ref": "hold-ops-dave-001",
+      "release_req": {
+        "caller_layer": "ops",
+        "reason_code": "withdraw_review",
+        "idem_key": "release-ops-dave-001",
+        "requester": "ops@internal"
+      },
+      "expected_success": true
+    }
+  ],
+  "final_state": {
+    "all_tokens_released": true,
+    "proofs_count": 3,
+    "audit_rows_count_gte": 4
+  }
+}
