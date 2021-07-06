@@ -1,0 +1,7 @@
+{
+  "case": "restart_reenter",
+  "ticket": "rot-e-reenter",
+  "phase_after_restore": "cut",
+  "old_use_after_restore": "old_key_retired",
+  "arm_reenter": "idempotent"
+}

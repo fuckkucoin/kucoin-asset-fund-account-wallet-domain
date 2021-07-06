@@ -1,0 +1,9 @@
+{
+  "account_id": "u-partial",
+  "asset": "USDT",
+  "initial": "500",
+  "fills": ["200", "300"],
+  "remaining": "0",
+  "released": "500",
+  "journal_memos": ["unfreeze_frozen", "restore_available"]
+}
