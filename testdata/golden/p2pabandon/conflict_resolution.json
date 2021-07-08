@@ -1,0 +1,37 @@
+{
+  "_comment": "验收夹具 2（冲突路径）：release 与 fill 均尝试 commit 导致竞态冲突，需 desk 仲裁。",
+  "scenario": "release_fill_race_conflict",
+  "plan_status": "conflict",
+  "conflict_note_contains": "release committed after fill already committed",
+  "conflict_tokens": [
+    {
+      "kind": "release",
+      "status": "committed",
+      "conflict_detected": true
+    },
+    {
+      "kind": "fill",
+      "status": "committed",
+      "conflict_detected": true
+    }
+  ],
+  "validate_close_before_resolution": {
+    "can_close": false,
+    "reason": "plan in conflict state; requires desk resolution before close"
+  },
+  "desk_resolution": {
+    "operator1": "desk-ops-alice",
+    "operator2": "desk-ops-charlie",
+    "outcome": "released",
+    "reason": "fund audit confirmed release path; fill was duplicate"
+  },
+  "validate_close_after_resolution": {
+    "can_close": true,
+    "outcome": "released"
+  },
+  "invariant_check": {
+    "dual_control": true,
+    "no_double_booking": true,
+    "description": "conflict state requires desk dual-control resolution; only one outcome wins"
+  }
+}

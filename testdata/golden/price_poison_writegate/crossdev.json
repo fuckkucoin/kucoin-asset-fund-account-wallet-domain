@@ -1,0 +1,12 @@
+{
+  "case": "cross_dev_detected",
+  "pair": "ETH/USDT",
+  "tick_price": "3000",
+  "synthetic_price": "2400",
+  "bps": "2500.00",
+  "max_bps": 200,
+  "grade": "cross_dev",
+  "rule": "cross_dev_bps",
+  "token_issued": false,
+  "gate_allowed": false
+}

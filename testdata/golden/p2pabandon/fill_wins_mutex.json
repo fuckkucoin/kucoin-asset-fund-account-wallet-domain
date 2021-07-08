@@ -1,0 +1,43 @@
+{
+  "_comment": "验收夹具 2（反向）：P2P 成交先提交，弃单释放被阻断——fill_won，release aborted。",
+  "scenario": "fill_commits_first_release_aborted",
+  "plan": {
+    "id": "plan-fillwin-001",
+    "order_id": "p2p-order-fillwin-001",
+    "user_id": "user-seller-fillwin",
+    "asset": "ETH",
+    "amount": "2.50000000",
+    "hold_id": "hold-fillwin-001",
+    "status": "filled",
+    "armed_at": "2022-04-10T11:00:00Z",
+    "terminal_at": "2022-04-10T11:00:30Z",
+    "terminal_by": "fill_worker"
+  },
+  "release_token": {
+    "id": "token-release-fw-001",
+    "kind": "release",
+    "status": "aborted",
+    "abort_reason": "fill committed first"
+  },
+  "fill_token": {
+    "id": "token-fill-fw-001",
+    "kind": "fill",
+    "status": "committed",
+    "committed_by": "fill_worker",
+    "conflict_detected": false
+  },
+  "token_summary": {
+    "conflict_present": false,
+    "mutex_result": "fill_won"
+  },
+  "close_proof": {
+    "outcome": "filled",
+    "committed_kind": "fill",
+    "decided_by": "fill_worker",
+    "tamper_detected": false
+  },
+  "invariant_check": {
+    "no_double_booking": true,
+    "description": "fill committed first; release token aborted; user balance not restored (fill path settled)"
+  }
+}

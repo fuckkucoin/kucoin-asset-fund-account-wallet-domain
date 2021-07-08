@@ -1,0 +1,30 @@
+{
+  "_comment": "收口证明篡改检测夹具：修改 outcome 后 ProofHash 重新计算不符，巡检必须检测到。",
+  "original_proof": {
+    "plan_id": "plan-tamper-001",
+    "order_id": "p2p-order-tamper-001",
+    "outcome": "released",
+    "committed_token_id": "token-tamper-release-001",
+    "amount": "100.00",
+    "asset": "USDT",
+    "proof_hash": "<sha256 of released path>"
+  },
+  "tampered_proof": {
+    "plan_id": "plan-tamper-001",
+    "order_id": "p2p-order-tamper-001",
+    "outcome": "filled",
+    "committed_token_id": "token-tamper-release-001",
+    "amount": "100.00",
+    "asset": "USDT",
+    "proof_hash": "<original sha256; NOT updated>",
+    "_note": "outcome changed from released to filled but proof_hash not updated"
+  },
+  "patrol_result": {
+    "tamper_detected": true,
+    "tamper_detail_contains": "hash mismatch"
+  },
+  "validate_close_result": {
+    "can_close": false,
+    "reason": "close proof tamper detected"
+  }
+}

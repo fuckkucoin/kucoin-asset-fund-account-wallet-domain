@@ -1,0 +1,23 @@
+{
+  "_comment": "验收夹具：P2P 卖单超时后 AbandonPlan 自动 armed 状态。order_id 唯一约束已通过。",
+  "id": "plan-test-001",
+  "order_id": "p2p-order-timeout-001",
+  "user_id": "user-seller-001",
+  "asset": "USDT",
+  "amount": "500.00",
+  "hold_id": "hold-p2p-sell-001",
+  "status": "armed",
+  "armed_at": "2022-04-10T08:00:00Z",
+  "abandoning_at": null,
+  "terminal_at": null,
+  "terminal_by": "",
+  "conflict_note": "",
+  "timeout_secs": 1800,
+  "grace_secs": 60,
+  "sla_escalate_secs": 86400,
+  "version": 1,
+  "fence_epoch": 0,
+  "fence_token": "",
+  "created_at": "2022-04-10T08:00:00Z",
+  "updated_at": "2022-04-10T08:00:00Z"
+}
