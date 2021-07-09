@@ -1,0 +1,29 @@
+{
+  "id": "proof-golden-002",
+  "plan_id": "plan-golden-002",
+  "balance_root_pre": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "balance_root_post": "z9y8x7w6v5u4z9y8x7w6v5u4z9y8x7w6v5u4z9y8x7w6v5u4z9y8x7w6v5u4z9y8",
+  "balance_root_target": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "diff_summary": "book=SPOT|asset=BTC delta=+0.5 USDT delta=-1000",
+  "state": "cleared",
+  "opened_at": "2026-04-28T11:30:00Z",
+  "cleared_at": "2026-04-28T13:00:00Z",
+  "approvals": [
+    {
+      "proof_id": "proof-golden-002",
+      "approver": "alice",
+      "role": "ops",
+      "comment": "ops checklist complete, BTC discrepancy traced to restore lag",
+      "created_at": "2026-04-28T12:00:00Z"
+    },
+    {
+      "proof_id": "proof-golden-002",
+      "approver": "bob",
+      "role": "risk",
+      "comment": "risk assessment: impact bounded, approve clear",
+      "created_at": "2026-04-28T13:00:00Z"
+    }
+  ],
+  "created_at": "2026-04-28T11:30:00Z",
+  "updated_at": "2026-04-28T13:00:00Z"
+}

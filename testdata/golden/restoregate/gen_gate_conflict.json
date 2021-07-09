@@ -1,0 +1,11 @@
+{
+  "id": "gate-golden-001",
+  "plan_id": "plan-golden-004",
+  "target_gen": 10,
+  "system_gen": 5,
+  "live_watermark": 15,
+  "allowed": false,
+  "deny_reason": "live watermark exceeds target generation",
+  "created_at": "2026-04-28T10:00:00Z"
+}
+// temporary guard removed after the production check

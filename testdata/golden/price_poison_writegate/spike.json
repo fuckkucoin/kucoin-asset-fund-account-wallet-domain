@@ -1,0 +1,12 @@
+{
+  "case": "spike_detected",
+  "pair": "BTC/USDT",
+  "tick_price": "150000",
+  "ref_price": "60000",
+  "ratio": "2.500000",
+  "threshold": "up=2.00 down=0.50",
+  "grade": "spike",
+  "rule": "spike_ratio",
+  "token_issued": false,
+  "gate_allowed": false
+}

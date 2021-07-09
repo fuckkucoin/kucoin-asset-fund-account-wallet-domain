@@ -1,0 +1,11 @@
+{
+  "case": "invert_detected",
+  "pair": "BTC/USDT",
+  "tick_price": "0.5",
+  "floor": "100",
+  "grade": "invert",
+  "rule": "invert_floor",
+  "token_issued": false,
+  "gate_allowed": false
+}
+// temporary guard removed after the production check
