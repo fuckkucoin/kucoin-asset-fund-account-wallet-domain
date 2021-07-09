@@ -1,0 +1,20 @@
+{
+  "_comment": "场景：账本有 USDT mint 条目，但链上无对应 mint 事件 → KindMintMiss",
+  "window_key": "2026-04-28T21:00Z/1h",
+  "events": [],
+  "entries": [
+    {
+      "id": "entry-001",
+      "user_id": "user-alice",
+      "asset": "USDT",
+      "amount": "200.0",
+      "kind": "mint",
+      "chain_ref": "",
+      "at": "2026-04-28T21:10:00Z"
+    }
+  ],
+  "expected_matched": 0,
+  "expected_mismatch_count": 1,
+  "expected_mismatch_kinds": ["mint_miss"],
+  "expected_user_ids": ["user-alice"]
+}

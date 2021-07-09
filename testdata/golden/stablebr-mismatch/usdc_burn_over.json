@@ -1,0 +1,19 @@
+{
+  "_comment": "场景：链上 USDC burn 事件存在，但账本无对应 redeem 条目 → KindBurnOver",
+  "window_key": "2026-04-28T20:00Z/1h",
+  "events": [
+    {
+      "tx_hash": "0xbbbb000000000000000000000000000000000000000000000000000000000002",
+      "log_index": 1,
+      "chain": "ETH",
+      "asset": "USDC",
+      "amount": "500.000",
+      "kind": "burn",
+      "at": "2026-04-28T20:15:00Z"
+    }
+  ],
+  "entries": [],
+  "expected_matched": 0,
+  "expected_mismatch_count": 1,
+  "expected_mismatch_kinds": ["burn_over"]
+}

@@ -1,0 +1,48 @@
+{
+  "_comment": "场景：USDT mint 匹配成功；USDC burn 有链上事件但账本缺条目（BurnOver）；另有 USDT redeem 账本条目但链上无 burn（BurnMiss）。复合失配场景。",
+  "window_key": "2026-04-29T00:00Z/1h",
+  "events": [
+    {
+      "tx_hash": "0xeeee000000000000000000000000000000000000000000000000000000000005",
+      "log_index": 0,
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "100.0",
+      "kind": "mint",
+      "at": "2026-04-29T00:05:00Z"
+    },
+    {
+      "tx_hash": "0xffff000000000000000000000000000000000000000000000000000000000006",
+      "log_index": 0,
+      "chain": "ETH",
+      "asset": "USDC",
+      "amount": "600.0",
+      "kind": "burn",
+      "at": "2026-04-29T00:10:00Z"
+    }
+  ],
+  "entries": [
+    {
+      "id": "entry-005",
+      "user_id": "user-eve",
+      "asset": "USDT",
+      "amount": "100.0",
+      "kind": "mint",
+      "chain_ref": "0xeeee000000000000000000000000000000000000000000000000000000000005",
+      "at": "2026-04-29T00:06:00Z"
+    },
+    {
+      "id": "entry-006",
+      "user_id": "user-frank",
+      "asset": "USDT",
+      "amount": "250.0",
+      "kind": "redeem",
+      "chain_ref": "",
+      "at": "2026-04-29T00:15:00Z"
+    }
+  ],
+  "expected_matched": 1,
+  "expected_mismatch_count": 2,
+  "expected_mismatch_kinds": ["burn_over", "burn_miss"],
+  "expected_user_ids_in_mismatches": ["", "user-frank"]
+}
