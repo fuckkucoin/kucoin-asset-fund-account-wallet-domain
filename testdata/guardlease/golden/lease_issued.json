@@ -1,0 +1,11 @@
+{
+  "lease_id": "test-lease-001",
+  "generation": 1,
+  "user_id": "user-alice",
+  "asset": "USDT",
+  "snapshot_hash": "a3f8b2c1d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1",
+  "state": "open",
+  "issued_at": "2026-04-11T10:00:00Z",
+  "expires_at": "2026-04-11T10:00:30Z",
+  "actor_id": "ops-robot-01"
+}
