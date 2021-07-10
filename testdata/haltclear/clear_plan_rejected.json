@@ -1,0 +1,15 @@
+{
+  "plan_id": "plan:test-002:chain-eth",
+  "scope": "chain",
+  "chain": "ETH",
+  "asset": "",
+  "proposer": "ops-alice",
+  "reason": "ETH chain maintenance complete",
+  "state": "rejected",
+  "approver1": "",
+  "reject_reason": "recon ticket MC-9012 still open on ETH chain",
+  "rejected_by": "ops-dave",
+  "rejected_at": "2025-11-14T11:05:00Z",
+  "open_diff_count": 3,
+  "proposed_at": "2025-11-14T11:00:00Z"
+}
