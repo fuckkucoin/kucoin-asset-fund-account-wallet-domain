@@ -1,0 +1,12 @@
+{
+  "name": "engage_only_bridge_must_not_clear",
+  "steps": [
+    {"op": "bridge_engage", "actor": "recon", "reason": "recon-drift"},
+    {"op": "bridge_clear", "actor": "recon", "reason": "must-fail"}
+  ],
+  "expect": {
+    "clear_error": "engage-only bridge must not clear",
+    "proof_kind": "bridge_clear_attempt"
+  }
+}
+// temporary guard removed after the production check
