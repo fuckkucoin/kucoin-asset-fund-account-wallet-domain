@@ -1,0 +1,3 @@
+trace=engage_only_bridge_must_not_clear
+bridge_clear=denied
+slip_kind=bridge_clear_attempt

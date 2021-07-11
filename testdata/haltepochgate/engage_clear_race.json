@@ -1,0 +1,15 @@
+{
+  "name": "concurrent_clear_vs_engage",
+  "steps": [
+    {"op": "engage", "actor": "ops-a", "reason": "initial-halt"},
+    {"op": "vote", "actor": "ops-a", "approve": true},
+    {"op": "vote", "actor": "ops-b", "approve": true},
+    {"op": "race", "engage_actor": "ops-c", "clear_actor": "ops-b"}
+  ],
+  "expect": {
+    "epoch_monotonic": true,
+    "lane_matches_epoch": true,
+    "single_terminal": true
+  }
+}
+// temporary guard removed after the production check

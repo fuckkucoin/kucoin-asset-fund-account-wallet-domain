@@ -1,0 +1,32 @@
+package haltepochgate
+
+import "errors"
+
+var (
+	ErrStoreUnavailable = errors.New("haltepochgate: store unavailable")
+	ErrActorRequired    = errors.New("haltepochgate: actor required")
+	ErrReasonRequired   = errors.New("haltepochgate: reason required")
+	ErrScopeInvalid     = errors.New("haltepochgate: scope invalid")
+	ErrEpochMissing     = errors.New("haltepochgate: halt_epoch missing on fund lane")
+	ErrEpochStale       = errors.New("haltepochgate: halt_epoch stale versus current generation")
+	ErrEpochRegress  = errors.New("haltepochgate: halt_epoch regress forbidden")
+	ErrLaneSealed    = errors.New("haltepochgate: clear-window sealed, deposit/withdraw/sweep rejected")
+	ErrIntentRevoked = errors.New("haltepochgate: in-flight intent revoked after epoch advance")
+	ErrBroadcastDenied  = errors.New("haltepochgate: broadcast denied after epoch advance")
+	ErrCreditDenied     = errors.New("haltepochgate: credit denied after epoch advance")
+	ErrRaceMutex        = errors.New("haltepochgate: engage/clear mutex held")
+	ErrClearInProgress  = errors.New("haltepochgate: clear in progress")
+	ErrEngageInProgress = errors.New("haltepochgate: engage in progress")
+	ErrQuorumDenied = errors.New("haltepochgate: clear quorum not satisfied")
+	ErrBridgeClear = errors.New("haltepochgate: engage-only bridge must not clear")
+	ErrReadGateFailed = errors.New("haltepochgate: read-gate fail-closed")
+	ErrIdemConflict   = errors.New("haltepochgate: idempotency key conflict")
+	ErrIntentNotFound = errors.New("haltepochgate: intent not found")
+	ErrEpochNotFound = errors.New("haltepochgate: halt epoch not found")
+	ErrProofNotFound = errors.New("haltepochgate: slip proof not found")
+	ErrCaseNotFound = errors.New("haltepochgate: clear window case not found")
+	ErrLaneUnknown = errors.New("haltepochgate: lane unknown")
+	ErrWindowOpen  = errors.New("haltepochgate: clear window still open")
+	ErrNotLeader   = errors.New("haltepochgate: leader required")
+	ErrForceDenied = errors.New("haltepochgate: force clear denied without actor")
+)

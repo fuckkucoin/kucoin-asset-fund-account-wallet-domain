@@ -1,0 +1,7 @@
+trace=clear_success_then_deposit_withdraw_slip
+final_state=cleared
+lane_blocked=true
+slip_opened=true
+preclear_intent=revoked_or_broadcast_denied
+deposit_after_clear=rejected
+withdraw_after_clear=rejected
