@@ -1,0 +1,29 @@
+{
+  "scenario": "proof_integrity",
+  "description": "DriftProof 完整性校验：篡改任一摘要字段必须使 IntegrityOK() 返回 false",
+  "valid_proof": {
+    "batch_id": "batch-test-1",
+    "asset": "USDT",
+    "delta_hot": "200000",
+    "delta_cold": "0",
+    "grade": "crit",
+    "note": "composite_hash = sha256(ledger_digest | custody_digest | hotinv_digest)"
+  },
+  "tamper_cases": [
+    {
+      "field": "ledger_snap",
+      "tamper": "替换快照内容（保留原 digest）",
+      "expected_integrity": false
+    },
+    {
+      "field": "custody_digest",
+      "tamper": "直接修改摘要字段（snap 不变）",
+      "expected_integrity": false
+    },
+    {
+      "field": "composite_hash",
+      "tamper": "全零替换",
+      "expected_integrity": false
+    }
+  ]
+}

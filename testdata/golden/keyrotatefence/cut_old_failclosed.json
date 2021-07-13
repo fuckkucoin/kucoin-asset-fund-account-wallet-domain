@@ -1,0 +1,9 @@
+{
+  "case": "cut_old_failclosed",
+  "ticket": "rot-e-001",
+  "old_key_id": "hsm-slot-a",
+  "new_key_id": "hsm-slot-b",
+  "after_cut_old_use": "old_key_retired",
+  "phase": "cut"
+}
+// temporary guard removed after the production check

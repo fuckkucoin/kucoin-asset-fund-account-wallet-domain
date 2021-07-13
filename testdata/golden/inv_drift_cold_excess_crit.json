@@ -1,0 +1,21 @@
+{
+  "scenario": "cold_excess_crit",
+  "description": "冷库存多记场景：账本 cold=100 BTC，custody cold=108 BTC（多 8 BTC，8% > 5% crit）",
+  "input": {
+    "ledger": [
+      {"user_id": "system", "account_type": "bridge", "asset": "BTC", "available": "80"},
+      {"user_id": "system", "account_type": "cold",   "asset": "BTC", "available": "100"}
+    ],
+    "custody": [
+      {"asset": "BTC", "available": "80",  "side": "hot"},
+      {"asset": "BTC", "available": "108", "side": "cold"}
+    ]
+  },
+  "expected": {
+    "item_grade": "crit",
+    "delta_hot": "0",
+    "delta_cold": "-8",
+    "batch_state": "sealed",
+    "note": "负 delta_cold 表示 custody 多报，即库存超出账面，存在多记风险"
+  }
+}

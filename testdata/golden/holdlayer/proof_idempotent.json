@@ -1,0 +1,47 @@
+{
+  "scenario": "release_proof_idempotent",
+  "description": "相同 idem_key 的释放请求返回同一 ReleaseProof，不发生双释",
+  "setup": {
+    "tokens": [
+      {
+        "user_id": "user-bob",
+        "asset": "USDT",
+        "book": "funding",
+        "amount": "5000.00",
+        "layer": "ops",
+        "reason_code": "withdraw_review",
+        "ledger_ref": "ledger-wd-bob-001",
+        "idem_key": "hold-wd-bob-001"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "type": "release",
+      "token_idem_ref": "hold-wd-bob-001",
+      "release_req": {
+        "caller_layer": "ops",
+        "reason_code": "withdraw_review",
+        "idem_key": "release-wd-bob-001",
+        "requester": "ops-release@internal"
+      }
+    },
+    {
+      "type": "release_replay",
+      "token_idem_ref": "hold-wd-bob-001",
+      "release_req": {
+        "caller_layer": "ops",
+        "reason_code": "withdraw_review",
+        "idem_key": "release-wd-bob-001",
+        "requester": "ops-release@internal"
+      }
+    }
+  ],
+  "expected": {
+    "first_release_success": true,
+    "second_release_returns_same_proof": true,
+    "proof_ids_equal": true,
+    "token_state_after": "released",
+    "token_released_once": true
+  }
+}

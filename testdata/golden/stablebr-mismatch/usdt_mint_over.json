@@ -1,0 +1,19 @@
+{
+  "_comment": "场景：链上 USDT mint 事件存在，但账本无对应 mint 条目 → KindMintOver",
+  "window_key": "2026-04-28T19:00Z/1h",
+  "events": [
+    {
+      "tx_hash": "0xaaaa000000000000000000000000000000000000000000000000000000000001",
+      "log_index": 0,
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "100.0",
+      "kind": "mint",
+      "at": "2026-04-28T19:30:00Z"
+    }
+  ],
+  "entries": [],
+  "expected_matched": 0,
+  "expected_mismatch_count": 1,
+  "expected_mismatch_kinds": ["mint_over"]
+}

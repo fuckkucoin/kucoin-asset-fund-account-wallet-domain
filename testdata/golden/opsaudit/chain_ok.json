@@ -1,0 +1,7 @@
+{
+  "case": "chain_ok",
+  "ticket": "rot-e-001",
+  "kinds": ["key_rotate_arm", "key_rotate_cut", "key_rotate_seal"],
+  "verify": "ok",
+  "completeness": true
+}

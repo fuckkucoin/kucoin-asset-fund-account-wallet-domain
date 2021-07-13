@@ -1,0 +1,40 @@
+{
+  "_comment": "验收夹具 3：超龄 hold — SLA 升级；desk 可强制弃单。",
+  "hold_age_record": {
+    "id": "age-sla-001",
+    "plan_id": "plan-sla-001",
+    "order_id": "p2p-order-sla-001",
+    "user_id": "user-seller-sla",
+    "asset": "USDT",
+    "amount": "2000.00",
+    "hold_id": "hold-sla-001",
+    "stage": "escalated",
+    "hold_age_secs": 90000,
+    "sla_secs": 86400,
+    "escalated_at": "2022-04-11T08:00:00Z",
+    "escalated_to": "p2p-abandon-desk",
+    "escalate_note": "hold age exceeded SLA; auto-escalated by aging patrol",
+    "patrol_count": 3,
+    "last_patrol": "2022-04-11T08:00:00Z",
+    "version": 4,
+    "created_at": "2022-04-10T08:00:00Z",
+    "updated_at": "2022-04-11T08:00:00Z"
+  },
+  "force_abandon_request": {
+    "plan_id": "plan-sla-001",
+    "operator1": "ops-alice",
+    "operator2": "ops-bob",
+    "reason": "hold exceeded SLA threshold; desk force abandon",
+    "age_record_id": "age-sla-001"
+  },
+  "expected_result": {
+    "plan_status": "released",
+    "age_stage_after": "resolved",
+    "close_proof_outcome": "released",
+    "can_close": true
+  },
+  "invariant_check": {
+    "dual_control": true,
+    "description": "operator1 != operator2; force abandon requires four-eye confirmation"
+  }
+}

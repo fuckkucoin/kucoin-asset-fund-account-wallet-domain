@@ -1,0 +1,102 @@
+{
+  "_comment": "Golden fixture: 半提交批次场景 — 5 items，前 3 已落账，后 2 悬空（hanging orphans）",
+  "batch": {
+    "id": "batch-golden-001",
+    "idempotency_key": "golden-batch-idem-001",
+    "actor": "ops-golden",
+    "status": "submitted",
+    "requested": "500",
+    "submitted": "300",
+    "skipped": "0",
+    "failed": "0",
+    "items": [
+      {
+        "seq": 1,
+        "user_id": "user-1001",
+        "direction": "funding_to_trading",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-001",
+        "status": "submitted",
+        "ledger_id": "ledger-entry-001"
+      },
+      {
+        "seq": 2,
+        "user_id": "user-1002",
+        "direction": "funding_to_trading",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-002",
+        "status": "submitted",
+        "ledger_id": "ledger-entry-002"
+      },
+      {
+        "seq": 3,
+        "user_id": "user-1003",
+        "direction": "funding_to_trading",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-003",
+        "status": "submitted",
+        "ledger_id": "ledger-entry-003"
+      },
+      {
+        "seq": 4,
+        "user_id": "user-1004",
+        "direction": "funding_to_trading",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-004",
+        "status": "submitted",
+        "ledger_id": "ledger-entry-004-MISSING-IN-LEDGER"
+      },
+      {
+        "seq": 5,
+        "user_id": "user-1005",
+        "direction": "funding_to_trading",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-005",
+        "status": "submitted",
+        "ledger_id": "ledger-entry-005-MISSING-IN-LEDGER"
+      }
+    ],
+    "created_at": "2026-03-15T10:00:00.000Z",
+    "updated_at": "2026-03-15T10:01:30.000Z"
+  },
+  "ledger_postings": [
+    {"idem_key": "golden-hop-idem-001", "entry_id": "ledger-entry-001"},
+    {"idem_key": "golden-hop-idem-002", "entry_id": "ledger-entry-002"},
+    {"idem_key": "golden-hop-idem-003", "entry_id": "ledger-entry-003"}
+  ],
+  "expected_orphan_report": {
+    "batch_id": "batch-golden-001",
+    "generation": 1,
+    "status": "open",
+    "total_orphans": 2,
+    "hanging_count": 2,
+    "missing_count": 0,
+    "orphan_items": [
+      {
+        "seq": 4,
+        "user_id": "user-1004",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-004",
+        "kind": "hanging",
+        "status": "detected",
+        "batch_ledger_id": "ledger-entry-004-MISSING-IN-LEDGER"
+      },
+      {
+        "seq": 5,
+        "user_id": "user-1005",
+        "asset": "USDT",
+        "amount": "100",
+        "idempotency_key": "golden-hop-idem-005",
+        "kind": "hanging",
+        "status": "detected",
+        "batch_ledger_id": "ledger-entry-005-MISSING-IN-LEDGER"
+      }
+    ]
+  }
+}

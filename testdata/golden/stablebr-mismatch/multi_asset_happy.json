@@ -1,0 +1,47 @@
+{
+  "_comment": "场景：USDT 和 USDC 各有一对完全匹配的 mint 事件和账本条目 → 全部匹配，无失配",
+  "window_key": "2026-04-28T23:00Z/1h",
+  "events": [
+    {
+      "tx_hash": "0xcccc000000000000000000000000000000000000000000000000000000000003",
+      "log_index": 0,
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "300.0",
+      "kind": "mint",
+      "at": "2026-04-28T23:05:00Z"
+    },
+    {
+      "tx_hash": "0xdddd000000000000000000000000000000000000000000000000000000000004",
+      "log_index": 0,
+      "chain": "ETH",
+      "asset": "USDC",
+      "amount": "400.0",
+      "kind": "mint",
+      "at": "2026-04-28T23:10:00Z"
+    }
+  ],
+  "entries": [
+    {
+      "id": "entry-003",
+      "user_id": "user-charlie",
+      "asset": "USDT",
+      "amount": "300.0",
+      "kind": "mint",
+      "chain_ref": "0xcccc000000000000000000000000000000000000000000000000000000000003",
+      "at": "2026-04-28T23:06:00Z"
+    },
+    {
+      "id": "entry-004",
+      "user_id": "user-dave",
+      "asset": "USDC",
+      "amount": "400.0",
+      "kind": "mint",
+      "chain_ref": "0xdddd000000000000000000000000000000000000000000000000000000000004",
+      "at": "2026-04-28T23:11:00Z"
+    }
+  ],
+  "expected_matched": 2,
+  "expected_mismatch_count": 0,
+  "expected_mismatch_kinds": []
+}

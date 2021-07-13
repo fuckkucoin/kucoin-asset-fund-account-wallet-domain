@@ -1,0 +1,19 @@
+{
+  "name": "clear_success_then_deposit_withdraw_slip",
+  "steps": [
+    {"op": "engage", "actor": "ops-a", "reason": "hot-wallet-anomaly"},
+    {"op": "seed_allowed", "lane": "deposit", "gen": 1, "intent": "fi-dep-preclear"},
+    {"op": "vote", "actor": "ops-a", "approve": true},
+    {"op": "vote", "actor": "ops-b", "approve": true},
+    {"op": "clear", "actor": "ops-b", "reason": "quorum-clear"},
+    {"op": "lane_assert", "lane": "deposit", "carried_gen": 1, "expect": "reject", "proof_kind": "lane_epoch_mismatch"},
+    {"op": "lane_assert", "lane": "withdraw", "carried_gen": 2, "expect": "reject", "proof_kind": "clear_window_withdraw"},
+    {"op": "broadcast", "intent": "fi-dep-preclear", "carried_gen": 1, "expect": "reject"}
+  ],
+  "expect": {
+    "final_state": "cleared",
+    "generation_min": 2,
+    "lane_blocked": true,
+    "slip_min": 1
+  }
+}

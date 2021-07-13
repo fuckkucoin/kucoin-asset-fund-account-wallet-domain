@@ -1,0 +1,44 @@
+{
+  "_comment": "Golden fixture: 完整性证明哈希向量 — 可用于外部独立验证",
+  "description": "已验证的 SHA-256 哈希向量，供审计方独立复算。哈希算法：sorted(intent)+'\\n' || 0x00 || sorted(ledger)+'\\n' || 0x00 || sorted(seal)+'\\n'",
+  "vectors": [
+    {
+      "case": "空集合",
+      "intent_idem_keys": [],
+      "ledger_idem_keys": [],
+      "seal_idem_keys":   [],
+      "expected_hash": "ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306"
+    },
+    {
+      "case": "仅意图集合（无孤儿，无封堵）",
+      "intent_idem_keys": ["idem-a", "idem-b", "idem-c"],
+      "ledger_idem_keys": ["idem-a", "idem-b", "idem-c"],
+      "seal_idem_keys":   [],
+      "ledger_idem_keys": ["batch-001-hop-1"],
+      "seal_idem_keys":   ["batch-001-hop-2"],
+      "_note": "hop-2 为 hanging 孤儿，已封堵；意图集合 = 落账集合 ∪ 封堵集合"
+    },
+    {
+      "case": "多资产混合批次，2 hanging + 1 missing",
+      "intent_idem_keys": [
+        "multi-usdt-001", "multi-usdt-002", "multi-usdt-003",
+        "multi-btc-001",  "multi-eth-001"
+      ],
+      "ledger_idem_keys": [
+        "multi-usdt-001", "multi-usdt-003",
+        "multi-btc-001",  "multi-eth-001",
+        "multi-usdt-002"
+      ],
+      "seal_idem_keys": ["multi-usdt-002", "multi-usdt-003"],
+      "_note": "usdt-002 是 missing（ledger 有但 batch pending），usdt-003 是 hanging；均已处置"
+    }
+  ],
+  "verification_procedure": [
+    "1. 对 intent_idem_keys 排序（字典序）",
+    "2. 对 ledger_idem_keys 排序",
+    "3. 对 seal_idem_keys 排序",
+    "4. 构造字节流：每个 key 后跟换行符 (0x0A)，组间用 NUL (0x00) 分隔",
+    "5. 计算整体 SHA-256",
+    "6. 与 expected_hash （64 字符小写 hex）"
+  ]
+}

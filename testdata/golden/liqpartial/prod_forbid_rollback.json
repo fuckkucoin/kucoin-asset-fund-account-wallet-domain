@@ -1,0 +1,5 @@
+{
+  "production": true,
+  "allow_rollback": false,
+  "rollback_forbidden": true
+}

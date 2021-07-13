@@ -1,0 +1,39 @@
+{
+  "scenario": "orphan_tag_gap_patrol",
+  "description": "人为制造孤儿标签：账本已无冻结但 token 仍 active；Gap Patrol 开单，不静默补铸账本冻结",
+  "setup": {
+    "tokens": [
+      {
+        "user_id": "user-carol",
+        "asset": "USDT",
+        "book": "funding",
+        "amount": "2000.00",
+        "layer": "risk",
+        "reason_code": "kyt_high_risk",
+        "ledger_ref": "ledger-kyt-carol-001",
+        "idem_key": "hold-kyt-carol-001"
+      }
+    ],
+    "ledger_frozen": {
+      "user-carol:USDT:funding": "0"
+    }
+  },
+  "action": {
+    "type": "patrol_run",
+    "config": {
+      "releasing_timeout": "15m",
+      "active_max_age": "72h",
+      "scan_limit": 100,
+      "auto_release_orphan_tags": false
+    }
+  },
+  "expected": {
+    "gaps_opened": 1,
+    "gap_kind": "orphan_tag",
+    "gap_token_id_matches": "hold-kyt-carol-001",
+    "gap_state": "open",
+    "ledger_frozen_not_modified": true,
+    "no_auto_compensate_freeze": true,
+    "token_state_unchanged": "active"
+  }
+}

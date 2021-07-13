@@ -1,0 +1,14 @@
+{
+  "audit_id": "fa:1731579000000000001:ops-alice",
+  "scope": "global",
+  "chain": "",
+  "asset": "",
+  "actor": "ops-alice",
+  "reason": "emergency hot wallet recovery after cross-chain incident 2025-11-14",
+  "reason_code": "emergency_hot_recovery",
+  "post_ticket_id": "",
+  "open_diff_count": 3,
+  "flag_snapshot": "{\"on\":true,\"actor\":\"system\",\"reason\":\"hot wallet anomaly\",\"at\":\"2025-11-14T08:00:00Z\"}",
+  "misclear_risk": true,
+  "issued_at": "2025-11-14T10:30:00Z"
+}

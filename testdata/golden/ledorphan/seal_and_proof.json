@@ -1,0 +1,46 @@
+{
+  "_comment": "Golden fixture: Seal 后 idem 续写拒绝 — 封堵证明完整性验证",
+  "batch_id": "batch-golden-seal-proof",
+  "report_id": "report-golden-seal-001",
+  "orphan_items": [
+    {
+      "orphan_id": "orp-seal-001",
+      "seq": 3,
+      "user_id": "user-3001",
+      "asset": "ETH",
+      "amount": "0.5",
+      "direction": "funding_to_trading",
+      "idempotency_key": "seal-proof-idem-003",
+      "kind": "hanging",
+      "status": "detected",
+      "batch_ledger_id": "ledger-eth-003-NOT-IN-LEDGER"
+    }
+  ],
+  "seal_request": {
+    "kind": "block",
+    "actor1": "ops-charlie",
+    "actor2": "ops-diana",
+    "note": "批次 batch-golden-seal-proof 孤儿分录封堵，由 ops-charlie 发起，ops-diana 复核"
+  },
+  "expected_seal_action": {
+    "kind": "block",
+    "status": "applied",
+    "orphan_ids": ["orp-seal-001"]
+  },
+  "expected_idem_block": {
+    "idem_key": "seal-proof-idem-003",
+    "blocked": true
+  },
+  "post_seal_idem_write_attempt": {
+    "idem_key": "seal-proof-idem-003",
+    "expected_result": "rejected",
+    "reason": "IsIdemBlocked == true，ledbatch.Submit 应拒绝同 idem 的续写"
+  },
+  "integrity_proof": {
+    "intent_idem_keys": ["seal-proof-idem-001", "seal-proof-idem-002", "seal-proof-idem-003"],
+    "ledger_idem_keys": ["seal-proof-idem-001", "seal-proof-idem-002"],
+    "seal_idem_keys":   ["seal-proof-idem-003"],
+    "hash_algorithm": "SHA-256(sorted(intent)||0x00||sorted(ledger)||0x00||sorted(seal))",
+    "expected_status": "verified"
+  }
+}

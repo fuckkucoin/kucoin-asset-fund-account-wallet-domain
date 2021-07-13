@@ -1,0 +1,46 @@
+{
+  "_comment": "验收夹具 4：CloseProof 缺失时资金面不得标 closed（ValidateClose 必须返回 can_close=false）。",
+  "scenario": "missing_close_proof_blocks_close",
+  "plan": {
+    "id": "plan-noproof-001",
+    "order_id": "p2p-order-noproof-001",
+    "user_id": "user-seller-noproof",
+    "asset": "USDT",
+    "amount": "300.00",
+    "hold_id": "hold-noproof-001",
+    "status": "abandoning",
+    "armed_at": "2022-04-10T12:00:00Z",
+    "abandoning_at": "2022-04-10T12:01:00Z"
+  },
+  "validate_close_response": {
+    "plan_id": "plan-noproof-001",
+    "order_id": "p2p-order-noproof-001",
+    "can_close": false,
+    "reason": "plan status=abandoning not terminal; cannot close"
+  },
+  "invariant_check": {
+    "cannot_close_without_proof": true,
+    "description": "fund surface MUST NOT mark closed when plan is not terminal or proof is missing"
+  },
+  "error_cases": [
+    {
+      "case": "plan_not_terminal",
+      "status": "abandoning",
+      "can_close": false,
+      "reason": "not terminal"
+    },
+    {
+      "case": "plan_terminal_but_no_proof",
+      "status": "released",
+      "proof_exists": false,
+      "can_close": false,
+      "reason": "close proof missing; funds surface must not mark closed"
+    },
+    {
+      "case": "plan_conflict",
+      "status": "conflict",
+      "can_close": false,
+      "reason": "requires desk resolution before close"
+    }
+  ]
+}

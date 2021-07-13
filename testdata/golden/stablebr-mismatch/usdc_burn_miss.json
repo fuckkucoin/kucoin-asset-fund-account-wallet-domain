@@ -1,0 +1,20 @@
+{
+  "_comment": "场景：账本有 USDC redeem 条目，但链上无对应 burn 事件 → KindBurnMiss",
+  "window_key": "2026-04-28T22:00Z/1h",
+  "events": [],
+  "entries": [
+    {
+      "id": "entry-002",
+      "user_id": "user-bob",
+      "asset": "USDC",
+      "amount": "750.50",
+      "kind": "redeem",
+      "chain_ref": "",
+      "at": "2026-04-28T22:05:00Z"
+    }
+  ],
+  "expected_matched": 0,
+  "expected_mismatch_count": 1,
+  "expected_mismatch_kinds": ["burn_miss"],
+  "expected_user_ids": ["user-bob"]
+}

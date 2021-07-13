@@ -1,0 +1,14 @@
+[
+  {
+    "memo": "unfreeze_frozen",
+    "debit_positive": true,
+    "credit_zero": true,
+    "account_type": "spot"
+  },
+  {
+    "memo": "restore_available",
+    "debit_zero": true,
+    "credit_positive": true,
+    "account_type": "spot"
+  }
+]

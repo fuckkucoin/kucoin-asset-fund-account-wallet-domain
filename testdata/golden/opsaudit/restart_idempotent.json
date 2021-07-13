@@ -1,0 +1,7 @@
+{
+  "case": "restart_idempotent",
+  "idem_key": "ops-e-reenter-1",
+  "after_restore_seq": 1,
+  "reenter": "same_hash"
+}
+// temporary guard removed after the production check

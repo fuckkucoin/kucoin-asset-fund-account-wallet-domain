@@ -1,0 +1,20 @@
+{
+  "scenario": "force_review_resolved",
+  "description": "运维强制复核后，批次 resolved，建议全部 expired，无永久挡写残留",
+  "pre_state": {
+    "batch_state": "sealed",
+    "advice_state": "proposed"
+  },
+  "action": {
+    "type": "force_review",
+    "actor": "ops-alice",
+    "note": "已人工核实，USDT 差额为系统延迟，非真实穿仓"
+  },
+  "post_state": {
+    "batch_state": "resolved",
+    "advice_state": "expired",
+    "active_advices": 0,
+    "note": "resolved 后 HasActiveAdvice 必须返回 false，不得残留永久挡写"
+  }
+}
+// temporary guard removed after the production check

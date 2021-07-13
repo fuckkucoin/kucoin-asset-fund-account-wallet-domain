@@ -1,0 +1,82 @@
+{
+  "_comment": "Golden fixture: Missing 孤儿场景 — batch 状态 pending 但 ledger 已有记录",
+  "batch": {
+    "id": "batch-golden-002",
+    "idempotency_key": "golden-batch-idem-002",
+    "actor": "ops-golden",
+    "status": "submitted",
+    "requested": "300",
+    "submitted": "200",
+    "skipped": "0",
+    "failed": "0",
+    "items": [
+      {
+        "seq": 1,
+        "user_id": "user-2001",
+        "direction": "trading_to_funding",
+        "asset": "BTC",
+        "amount": "0.1",
+        "idempotency_key": "golden-miss-idem-001",
+        "status": "submitted",
+        "ledger_id": "ledger-btc-001"
+      },
+      {
+        "seq": 2,
+        "user_id": "user-2002",
+        "direction": "trading_to_funding",
+        "asset": "BTC",
+        "amount": "0.1",
+        "idempotency_key": "golden-miss-idem-002",
+        "status": "pending",
+        "ledger_id": ""
+      },
+      {
+        "seq": 3,
+        "user_id": "user-2003",
+        "direction": "trading_to_funding",
+        "asset": "BTC",
+        "amount": "0.1",
+        "idempotency_key": "golden-miss-idem-003",
+        "status": "pending",
+        "ledger_id": ""
+      }
+    ],
+    "created_at": "2026-03-16T09:00:00.000Z",
+    "updated_at": "2026-03-16T09:02:00.000Z"
+  },
+  "ledger_postings": [
+    {"idem_key": "golden-miss-idem-001", "entry_id": "ledger-btc-001"},
+    {"idem_key": "golden-miss-idem-002", "entry_id": "ledger-btc-002-IN-LEDGER"},
+    {"idem_key": "golden-miss-idem-003", "entry_id": "ledger-btc-003-IN-LEDGER"}
+  ],
+  "expected_orphan_report": {
+    "batch_id": "batch-golden-002",
+    "generation": 1,
+    "status": "open",
+    "total_orphans": 2,
+    "hanging_count": 0,
+    "missing_count": 2,
+    "orphan_items": [
+      {
+        "seq": 2,
+        "user_id": "user-2002",
+        "asset": "BTC",
+        "amount": "0.1",
+        "idempotency_key": "golden-miss-idem-002",
+        "kind": "missing",
+        "status": "detected",
+        "ledger_id": "ledger-btc-002-IN-LEDGER"
+      },
+      {
+        "seq": 3,
+        "user_id": "user-2003",
+        "asset": "BTC",
+        "amount": "0.1",
+        "idempotency_key": "golden-miss-idem-003",
+        "kind": "missing",
+        "status": "detected",
+        "ledger_id": "ledger-btc-003-IN-LEDGER"
+      }
+    ]
+  }
+}

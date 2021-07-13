@@ -1,0 +1,47 @@
+{
+  "_comment": "验收夹具 2：弃单释放与并发 Fill 互斥——仅一方 committed，另一方失败，无双动账。",
+  "scenario": "abandon_release_vs_concurrent_fill",
+  "plan": {
+    "id": "plan-mutex-001",
+    "order_id": "p2p-order-mutex-001",
+    "user_id": "user-seller-mutex",
+    "asset": "USDT",
+    "amount": "1000.00",
+    "hold_id": "hold-mutex-001",
+    "status": "released",
+    "armed_at": "2022-04-10T10:00:00Z",
+    "abandoning_at": "2022-04-10T10:01:00Z",
+    "terminal_at": "2022-04-10T10:01:01Z",
+    "terminal_by": "abandon_adv_worker"
+  },
+  "release_token": {
+    "id": "token-release-001",
+    "plan_id": "plan-mutex-001",
+    "kind": "release",
+    "status": "committed",
+    "reserved_by": "abandon_adv_worker",
+    "committed_by": "abandon_adv_worker",
+    "conflict_detected": false
+  },
+  "fill_token": {
+    "id": "token-fill-001",
+    "plan_id": "plan-mutex-001",
+    "kind": "fill",
+    "status": "aborted",
+    "reserved_by": "fill_worker",
+    "aborted_by": "abandon_adv_worker",
+    "abort_reason": "release committed first",
+    "conflict_detected": false
+  },
+  "token_summary": {
+    "plan_id": "plan-mutex-001",
+    "release_token": {"status": "committed"},
+    "fill_token": {"status": "aborted"},
+    "conflict_present": false,
+    "mutex_result": "release_won"
+  },
+  "invariant_check": {
+    "no_double_booking": true,
+    "description": "release committed first; fill token aborted; only one ledger credit posted"
+  }
+}

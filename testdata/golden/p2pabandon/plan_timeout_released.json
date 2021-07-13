@@ -1,0 +1,46 @@
+{
+  "_comment": "验收夹具 1：SellHold 超时后 AbandonPlan 自动 armed→released；可用恢复且 hold 释放。",
+  "plan": {
+    "id": "plan-test-002",
+    "order_id": "p2p-order-timeout-002",
+    "user_id": "user-seller-002",
+    "asset": "BTC",
+    "amount": "0.10000000",
+    "hold_id": "hold-p2p-sell-002",
+    "status": "released",
+    "armed_at": "2022-04-10T09:00:00Z",
+    "abandoning_at": "2022-04-10T09:01:01Z",
+    "terminal_at": "2022-04-10T09:01:02Z",
+    "terminal_by": "abandon_adv_worker",
+    "conflict_note": "",
+    "timeout_secs": 1800,
+    "grace_secs": 60,
+    "sla_escalate_secs": 86400,
+    "version": 3,
+    "created_at": "2022-04-10T09:00:00Z",
+    "updated_at": "2022-04-10T09:01:02Z"
+  },
+  "close_proof": {
+    "id": "proof-plan-test-002",
+    "plan_id": "plan-test-002",
+    "order_id": "p2p-order-timeout-002",
+    "user_id": "user-seller-002",
+    "asset": "BTC",
+    "amount": "0.10000000",
+    "outcome": "released",
+    "committed_kind": "release",
+    "proof_hash": "<sha256 of plan_id|order_id|released|token_id|amount|asset>",
+    "hold_ref": "hold-p2p-sell-002",
+    "ledger_ref": "ledger-p2p-abandon-rel-002",
+    "decided_by": "abandon_adv_worker",
+    "tamper_detected": false,
+    "created_at": "2022-04-10T09:01:02Z"
+  },
+  "validate_close": {
+    "plan_id": "plan-test-002",
+    "order_id": "p2p-order-timeout-002",
+    "can_close": true,
+    "outcome": "released",
+    "proof_id": "proof-plan-test-002"
+  }
+}

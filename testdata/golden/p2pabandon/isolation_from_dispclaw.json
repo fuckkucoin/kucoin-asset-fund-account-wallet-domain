@@ -1,0 +1,28 @@
+{
+  "_comment": "验收夹具 5：与 r7 G（争议追偿）并行隔离——本包驱动源是 p2p order_id+timer，不写 dispute case 追偿腿。",
+  "isolation_rules": {
+    "driver": "p2p_order_id_plus_timer",
+    "not_dispute_case_id": true,
+    "not_claw_back_leg": true,
+    "not_holdcat_taxonomy_change": true
+  },
+  "p2pabandon_plan": {
+    "plan_id": "plan-iso-001",
+    "order_id": "p2p-order-iso-001",
+    "driver_source": "order_timeout_signal",
+    "dispute_case_id": null,
+    "has_claw_back_leg": false,
+    "has_holdcat_tier_change": false
+  },
+  "dispclaw_plan": {
+    "case_id": "case-dispute-001",
+    "driver_source": "dispute_case_status",
+    "p2p_abandon_plan_id": null,
+    "relationship": "none"
+  },
+  "invariant_check": {
+    "no_cross_package_write": true,
+    "abandon_plan_id_read_only_for_others": true,
+    "description": "p2pabandon does not write dispute claw legs; dispclaw does not write abandon plans; isolation maintained"
+  }
+}

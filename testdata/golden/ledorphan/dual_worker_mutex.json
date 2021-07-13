@@ -1,0 +1,49 @@
+{
+  "_comment": "Golden fixture: 双 worker 续提互斥 — CAS 协议验证",
+  "scenario": "Two workers attempt to acquire generation lock for the same batch simultaneously",
+  "batch_id": "batch-golden-mutex",
+  "initial_state": {
+    "batch_gen": null
+  },
+  "step1_worker_a": {
+    "action": "Acquire",
+    "worker_id": "worker-A:pid-1234:uuid-aaaa",
+    "expected_result": "success",
+    "expected_generation": 1,
+    "expected_status": "locked"
+  },
+  "step2_worker_b_concurrent": {
+    "action": "Acquire",
+    "worker_id": "worker-B:pid-5678:uuid-bbbb",
+    "expected_result": "ErrGenLocked",
+    "reason": "worker-A 已持有锁且未过期"
+  },
+  "step3_worker_a_release": {
+    "action": "Release",
+    "worker_id": "worker-A:pid-1234:uuid-aaaa",
+    "generation": 1,
+    "expected_result": "success",
+    "expected_status": "released"
+  },
+  "step4_worker_b_retry": {
+    "action": "Acquire",
+    "worker_id": "worker-B:pid-5678:uuid-bbbb",
+    "expected_result": "success",
+    "expected_generation": 2,
+    "expected_status": "locked",
+    "reason": "worker-A 已释放，worker-B 可获取更高世代号"
+  },
+  "step5_worker_a_stale_check": {
+    "action": "Check",
+    "worker_id": "worker-A:pid-1234:uuid-aaaa",
+    "generation": 1,
+    "expected_result": "ErrStaleGen",
+    "reason": "worker-A 持有 generation=1，当前为 generation=2"
+  },
+  "invariants": [
+    "同一时刻至多一个 worker 持有 locked 状态世代锁",
+    "generation 单调递增，不可回退",
+    "持有旧 generation 的 worker 的任何 Submit/Seal 操作必须失败",
+    "TTL 超时后锁自动失效，新 worker 可抢锁无需等待原 worker 主动释放"
+  ]
+}
