@@ -1,0 +1,18 @@
+{
+  "plan_id": "plan:test-001:global",
+  "scope": "global",
+  "chain": "",
+  "asset": "",
+  "proposer": "ops-alice",
+  "reason": "hot wallet anomaly resolved, recon tickets closed",
+  "state": "cleared",
+  "approver1": "ops-bob",
+  "approver1_at": "2025-11-14T10:05:00Z",
+  "approver2": "ops-carol",
+  "approver2_at": "2025-11-14T10:10:00Z",
+  "close_proof_id": "proof:plan:test-001:global:1731578400000000000",
+  "open_diff_count": 0,
+  "proposed_at": "2025-11-14T10:00:00Z",
+  "cleared_at": "2025-11-14T10:10:00Z",
+  "freeze_war_room_plan_id": ""
+}
