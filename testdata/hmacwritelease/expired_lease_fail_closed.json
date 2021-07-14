@@ -1,0 +1,36 @@
+{
+  "description": "验收场景 4：过期租约的出金/划转写路径必须 fail-closed，并落 HmacWriteDriftProof",
+  "setup": {
+    "key_id": "k-test-04",
+    "secret": "test-secret-expiry-scenario",
+    "nonce": "nonce-expiry-001",
+    "method": "POST",
+    "path": "/v1/wd/freeze",
+    "write_scope": "withdraw.freeze",
+    "ttl": "1ms"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "verify_and_lease_short_ttl",
+      "expect": {
+        "ok": true,
+        "state": "issued"
+      }
+    },
+    {
+      "step": 2,
+      "action": "advance_clock_past_ttl",
+      "advance": "10ms"
+    },
+    {
+      "step": 3,
+      "action": "write_check_expired_lease",
+      "expect": {
+        "allowed": false,
+        "reason": "lease_expired",
+        "drift_proof_recorded": true
+      }
+    }
+  ]
+}
