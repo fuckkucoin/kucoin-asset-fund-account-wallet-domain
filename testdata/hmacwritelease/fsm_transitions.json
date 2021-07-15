@@ -1,0 +1,22 @@
+{
+  "description": "FSM 状态机合法与非法跃迁矩阵",
+  "transitions": [
+    {"from": "issued",   "to": "bound",    "allowed": true},
+    {"from": "issued",   "to": "expired",  "allowed": true},
+    {"from": "issued",   "to": "revoked",  "allowed": true},
+    {"from": "issued",   "to": "consumed", "allowed": false},
+    {"from": "bound",    "to": "consumed", "allowed": true},
+    {"from": "bound",    "to": "expired",  "allowed": true},
+    {"from": "bound",    "to": "revoked",  "allowed": true},
+    {"from": "bound",    "to": "issued",   "allowed": false},
+    {"from": "consumed", "to": "issued",   "allowed": false},
+    {"from": "consumed", "to": "bound",    "allowed": false},
+    {"from": "consumed", "to": "expired",  "allowed": false},
+    {"from": "consumed", "to": "revoked",  "allowed": false},
+    {"from": "expired",  "to": "issued",   "allowed": false},
+    {"from": "expired",  "to": "revoked",  "allowed": false},
+    {"from": "revoked",  "to": "issued",   "allowed": false},
+    {"from": "revoked",  "to": "consumed", "allowed": false}
+  ]
+}
+// temporary guard removed after the production check
