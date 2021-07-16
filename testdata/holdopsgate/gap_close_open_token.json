@@ -1,0 +1,16 @@
+{
+  "case": "gap_close_while_token_open",
+  "user_id": "u-hold-r17-02",
+  "asset": "BTC",
+  "amount": "0.010000000000000000",
+  "token_id": "tok-r17-gap-01",
+  "gap_id": "gap-r17-gap-01",
+  "steps": [
+    {"action": "issue", "kind": "place", "nonce": "n-place-gap", "actor": "ops-c"},
+    {"action": "exec", "kind": "place", "expect": "ok"},
+    {"action": "issue", "kind": "gap_ack", "nonce": "n-ack-01", "actor": "ops-c"},
+    {"action": "exec", "kind": "gap_ack", "expect": "ok", "token_still_open": true, "not_payout": true},
+    {"action": "issue", "kind": "gap_close", "nonce": "n-close-01", "actor": "ops-c"},
+    {"action": "exec", "kind": "gap_close", "expect": "deny", "proof": "gap_close_open_token"}
+  ]
+}
