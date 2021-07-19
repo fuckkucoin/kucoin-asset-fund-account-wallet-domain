@@ -1,0 +1,9 @@
+{
+  "case": "proof_ok",
+  "pair": "BTC/USDT",
+  "tick_price": "60000",
+  "rule": "spike_ratio",
+  "grade": "spike",
+  "write_scope": "credit",
+  "verify": "ok"
+}

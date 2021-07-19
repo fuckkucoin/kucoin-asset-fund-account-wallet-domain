@@ -1,0 +1,13 @@
+{
+  "case": "release_vs_gap_close_race",
+  "user_id": "u-hold-r17-03",
+  "asset": "ETH",
+  "amount": "1.250000000000000000",
+  "token_id": "tok-r17-race-01",
+  "gap_id": "gap-r17-race-01",
+  "expect": {
+    "winners": 1,
+    "losers": 1,
+    "proof_kinds": ["dual_release", "release_vs_gap_close"]
+  }
+}

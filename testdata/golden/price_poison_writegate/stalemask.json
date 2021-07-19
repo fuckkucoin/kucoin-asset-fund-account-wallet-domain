@@ -1,0 +1,11 @@
+{
+  "case": "stale_mask_detected",
+  "pair": "SOL/USDT",
+  "tick_price": "140",
+  "tick_age_seconds": 120,
+  "max_age_seconds": 30,
+  "grade": "stale_mask",
+  "rule": "stale_age",
+  "token_issued": false,
+  "gate_allowed": false
+}

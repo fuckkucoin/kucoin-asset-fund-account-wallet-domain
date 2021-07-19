@@ -1,0 +1,10 @@
+{
+  "_comment": "场景：attest 快照 TTL 边界。快照在 t=0 生成，ExpiresAt=t+1h；t=1h 时操作应被拒绝（fail-closed）。",
+  "kind": "mint",
+  "asset": "USDT",
+  "ttl_sec": 3600,
+  "snap_at_offset_sec": 0,
+  "use_at_offset_sec": 3600,
+  "expected_snap_valid": false,
+  "_note": "ExpiresAt 精确等于 use_at 时，Valid() 返回 false，因为 After(now) 在等于时为 false。"
+}

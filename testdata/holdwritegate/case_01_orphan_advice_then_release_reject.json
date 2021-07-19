@@ -1,0 +1,45 @@
+{
+  "name": "orphan_advice_then_release_reject",
+  "description": "孤儿标签触发 Advice 升级后，同主体冻结释放写操作被拒：block_gen 租约激活写门，Release 操作命中 CheckWriteGate 拦截",
+  "setup": {
+    "user_id": "USER-HWG-001",
+    "asset": "USDT",
+    "book": "funding",
+    "advice_id": "ADV-ORPHAN-001"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-001",
+      "asset": "USDT",
+      "book": "funding",
+      "advice_id": "ADV-ORPHAN-001",
+      "reason": "orphan_holdcat_tag_drift",
+      "kind": "orphan_tag",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "check_write_gate",
+      "user_id": "USER-HWG-001",
+      "asset": "USDT",
+      "book": "funding",
+      "write_id": "RELEASE-001",
+      "write_kind": "hold_release",
+      "expect": {
+        "allowed": false,
+        "block_gen": 1
+      }
+    }
+  ],
+  "expected": {
+    "lease_state": "blocking",
+    "block_gen": 1,
+    "gate_count": 1,
+    "write_gate_rejected": true,
+    "write_gate_count": 1
+  }
+}

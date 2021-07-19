@@ -1,0 +1,9 @@
+{
+  "case": "gate_blocked_by_poison",
+  "pair": "ETH/USDT",
+  "tick_price": "9999999",
+  "write_scope": "occupancy",
+  "gate_result": "blocked_token",
+  "gate_allowed": false,
+  "reason": "token_invalid"
+}
