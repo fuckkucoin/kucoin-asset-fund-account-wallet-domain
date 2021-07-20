@@ -1,0 +1,55 @@
+{
+  "name": "orphan_scan_same_block_family",
+  "description": "ScanOrphanHoldcatTags 工单绑定到已有 block_gen 家族：孤儿标签进入同一 lease 的 orphan_binds",
+  "setup": {
+    "user_id": "USER-HWG-003",
+    "asset": "ETH",
+    "book": "funding",
+    "advice_id": "ADV-ORPHAN-003"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-003",
+      "asset": "ETH",
+      "book": "funding",
+      "advice_id": "ADV-ORPHAN-003",
+      "reason": "orphan_holdcat_tag",
+      "kind": "orphan_tag",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "bind_orphan_tag",
+      "lease_id": "__from_escalate__",
+      "holdcat_id": "HOLDCAT-ORPHAN-A",
+      "user_id": "USER-HWG-003",
+      "asset": "ETH",
+      "book": "funding",
+      "expect": {
+        "block_gen": 1,
+        "bound": true
+      }
+    },
+    {
+      "type": "bind_orphan_tag",
+      "lease_id": "__from_escalate__",
+      "holdcat_id": "HOLDCAT-ORPHAN-B",
+      "user_id": "USER-HWG-003",
+      "asset": "ETH",
+      "book": "funding",
+      "expect": {
+        "block_gen": 1,
+        "bound": true
+      }
+    }
+  ],
+  "expected": {
+    "lease_state": "blocking",
+    "block_gen": 1,
+    "orphan_bind_count": 2
+  }
+}

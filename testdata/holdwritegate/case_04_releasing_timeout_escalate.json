@@ -1,0 +1,45 @@
+{
+  "name": "releasing_timeout_escalate",
+  "description": "block 租约过期后触发 timeout_reopen 升级：BlockExpiryJob 关闭原 escalation 并创建新 timeout_reopen 类型 escalation",
+  "setup": {
+    "user_id": "USER-HWG-004",
+    "asset": "USDT",
+    "book": "funding",
+    "advice_id": "ADV-TIMEOUT-004"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-004",
+      "asset": "USDT",
+      "book": "funding",
+      "advice_id": "ADV-TIMEOUT-004",
+      "reason": "drift_advice_gap",
+      "kind": "drift_advice",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "expire_lease",
+      "lease_id": "__from_escalate__",
+      "expect": {
+        "lease_state": "expired"
+      }
+    },
+    {
+      "type": "run_block_expiry_job",
+      "expect": {
+        "timeout_reopen_escalation_created": true,
+        "original_escalation_closed": true
+      }
+    }
+  ],
+  "expected": {
+    "lease_state": "expired",
+    "block_gen": 1,
+    "timeout_reopen_count": 1
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "name": "full_lifecycle_escalate_proof_clear",
+  "description": "完整生命周期：升级 → 提交证明 → 校验证明 → 双人审批清除 → 写门恢复放行",
+  "setup": {
+    "user_id": "USER-HWG-006",
+    "asset": "USDT",
+    "book": "funding",
+    "advice_id": "ADV-FULL-006"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-006",
+      "asset": "USDT",
+      "book": "funding",
+      "advice_id": "ADV-FULL-006",
+      "reason": "hold_gap_detected",
+      "kind": "hold_gap",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "check_write_gate",
+      "user_id": "USER-HWG-006",
+      "asset": "USDT",
+      "book": "funding",
+      "write_id": "RELEASE-006",
+      "write_kind": "hold_release",
+      "expect": {
+        "allowed": false
+      }
+    },
+    {
+      "type": "submit_close_proof",
+      "lease_id": "__from_escalate__",
+      "escalation_id": "__from_escalate__",
+      "gap_before": "100.50",
+      "gap_after": "0.00",
+      "gap_closed": true,
+      "expect": {
+        "validated": false,
+        "gap_closed": true
+      }
+    },
+    {
+      "type": "validate_proof",
+      "proof_id": "__from_submit__",
+      "validated_by": "OPS-VALIDATOR",
+      "expect": {
+        "validated": true
+      }
+    },
+    {
+      "type": "dual_control_clear",
+      "lease_id": "__from_escalate__",
+      "proof_id": "__from_submit__",
+      "approver_a": "OPS-APPROVER-A",
+      "approver_b": "OPS-APPROVER-B",
+      "expect": {
+        "lease_state": "cleared"
+      }
+    },
+    {
+      "type": "check_write_gate",
+      "user_id": "USER-HWG-006",
+      "asset": "USDT",
+      "book": "funding",
+      "write_id": "RELEASE-006-AFTER",
+      "write_kind": "hold_release",
+      "expect": {
+        "allowed": true
+      }
+    }
+  ],
+  "expected": {
+    "lease_final_state": "cleared",
+    "escalation_final_state": "closed",
+    "proof_validated": true,
+    "proof_sealed": true,
+    "write_gate_restored": true
+  }
+}

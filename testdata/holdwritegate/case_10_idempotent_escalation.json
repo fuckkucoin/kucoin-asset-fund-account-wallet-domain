@@ -1,0 +1,44 @@
+{
+  "name": "idempotent_escalation",
+  "description": "同一 advice_id 重复升级幂等：返回已有 escalation 而不创建新的",
+  "setup": {
+    "user_id": "USER-HWG-010",
+    "asset": "ETH",
+    "book": "funding",
+    "advice_id": "ADV-IDEM-010"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-010",
+      "asset": "ETH",
+      "book": "funding",
+      "advice_id": "ADV-IDEM-010",
+      "reason": "drift_advice_gap",
+      "kind": "drift_advice",
+      "expect": {
+        "escalation_state": "open",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-010",
+      "asset": "ETH",
+      "book": "funding",
+      "advice_id": "ADV-IDEM-010",
+      "reason": "drift_advice_gap",
+      "kind": "drift_advice",
+      "expect": {
+        "escalation_state": "open",
+        "block_gen": 1,
+        "same_escalation_id": true
+      }
+    }
+  ],
+  "expected": {
+    "escalation_count": 1,
+    "lease_count": 1,
+    "idempotent": true
+  }
+}

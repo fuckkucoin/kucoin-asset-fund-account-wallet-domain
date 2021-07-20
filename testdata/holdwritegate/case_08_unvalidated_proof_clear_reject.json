@@ -1,0 +1,45 @@
+{
+  "name": "unvalidated_proof_clear_reject",
+  "description": "未校验的证明不能用于清除 block：DualControlClear 要求 proof.Validated=true",
+  "setup": {
+    "user_id": "USER-HWG-008",
+    "asset": "USDT",
+    "book": "funding",
+    "advice_id": "ADV-UNVAL-008"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-008",
+      "asset": "USDT",
+      "book": "funding",
+      "advice_id": "ADV-UNVAL-008",
+      "reason": "drift_advice_gap",
+      "kind": "drift_advice",
+      "expect": {
+        "escalation_state": "open",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "submit_close_proof",
+      "lease_id": "__from_escalate__",
+      "gap_before": "200.00",
+      "gap_after": "0.00",
+      "gap_closed": true
+    },
+    {
+      "type": "dual_control_clear",
+      "lease_id": "__from_escalate__",
+      "proof_id": "__from_submit__",
+      "approver_a": "OPS-A",
+      "approver_b": "OPS-B",
+      "expect_error": "holdwritegate proof not validated"
+    }
+  ],
+  "expected": {
+    "lease_state": "blocking",
+    "clear_rejected": true,
+    "proof_must_be_validated_first": true
+  }
+}

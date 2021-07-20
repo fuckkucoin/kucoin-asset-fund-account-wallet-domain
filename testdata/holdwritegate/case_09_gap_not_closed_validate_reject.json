@@ -1,0 +1,38 @@
+{
+  "name": "gap_not_closed_validate_reject",
+  "description": "Gap 未关闭的证明不能通过校验：ValidateProof 要求 gap_closed=true",
+  "setup": {
+    "user_id": "USER-HWG-009",
+    "asset": "BTC",
+    "book": "funding",
+    "advice_id": "ADV-GAP-009"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-009",
+      "asset": "BTC",
+      "book": "funding",
+      "advice_id": "ADV-GAP-009",
+      "reason": "hold_gap_detected",
+      "kind": "hold_gap"
+    },
+    {
+      "type": "submit_close_proof",
+      "lease_id": "__from_escalate__",
+      "gap_before": "300.00",
+      "gap_after": "150.00",
+      "gap_closed": false
+    },
+    {
+      "type": "validate_proof",
+      "proof_id": "__from_submit__",
+      "validated_by": "OPS-V",
+      "expect_error": "holdwritegate gap not closed"
+    }
+  ],
+  "expected": {
+    "proof_validated": false,
+    "gap_still_open": true
+  }
+}

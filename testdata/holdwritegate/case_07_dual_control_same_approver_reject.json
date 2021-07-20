@@ -1,0 +1,50 @@
+{
+  "name": "dual_control_same_approver_reject",
+  "description": "双人审批同一审批人被拒：ApproverA 与 ApproverB 必须不同",
+  "setup": {
+    "user_id": "USER-HWG-007",
+    "asset": "ETH",
+    "book": "funding",
+    "advice_id": "ADV-DUAL-007"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-007",
+      "asset": "ETH",
+      "book": "funding",
+      "advice_id": "ADV-DUAL-007",
+      "reason": "hold_gap_detected",
+      "kind": "hold_gap",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "submit_close_proof",
+      "lease_id": "__from_escalate__",
+      "gap_before": "50.00",
+      "gap_after": "0.00",
+      "gap_closed": true
+    },
+    {
+      "type": "validate_proof",
+      "proof_id": "__from_submit__",
+      "validated_by": "OPS-V"
+    },
+    {
+      "type": "dual_control_clear",
+      "lease_id": "__from_escalate__",
+      "proof_id": "__from_submit__",
+      "approver_a": "OPS-SAME",
+      "approver_b": "OPS-SAME",
+      "expect_error": "holdwritegate dual-control approver required"
+    }
+  ],
+  "expected": {
+    "lease_state": "blocking",
+    "clear_rejected": true
+  }
+}
