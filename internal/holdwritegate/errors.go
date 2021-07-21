@@ -1,0 +1,32 @@
+package holdwritegate
+
+import "fmt"
+
+var (
+	ErrEngineNil = fmt.Errorf("holdwritegate engine not initialized")
+	ErrUserRequired     = fmt.Errorf("holdwritegate user_id required")
+	ErrAssetRequired    = fmt.Errorf("holdwritegate asset required")
+	ErrBookRequired     = fmt.Errorf("holdwritegate book required")
+	ErrAdviceIDRequired = fmt.Errorf("holdwritegate advice_id required")
+	ErrReasonRequired   = fmt.Errorf("holdwritegate reason required")
+	ErrBlockLeaseNotFound = fmt.Errorf("holdwritegate block lease not found")
+	ErrEscalationNotFound = fmt.Errorf("holdwritegate escalation not found")
+	ErrCloseProofNotFound = fmt.Errorf("holdwritegate close proof not found")
+	ErrBlockLeaseExpired  = fmt.Errorf("holdwritegate block lease expired")
+	ErrBlockActive       = fmt.Errorf("holdwritegate write blocked: active block_gen lease")
+	ErrClearWithoutProof = fmt.Errorf("holdwritegate clear rejected: gap close proof required")
+	ErrProofNotValidated = fmt.Errorf("holdwritegate proof not validated")
+	ErrProofMismatch     = fmt.Errorf("holdwritegate proof does not match block lease")
+	ErrEscalationClosed  = fmt.Errorf("holdwritegate escalation already closed")
+	ErrFSMTransition     = fmt.Errorf("holdwritegate FSM transition not allowed")
+	ErrWorkerDisabled = fmt.Errorf("holdwritegate worker disabled")
+	ErrDuplicateEscalation = fmt.Errorf("holdwritegate duplicate escalation for advice")
+	ErrBlockGenMismatch    = fmt.Errorf("holdwritegate block_gen mismatch")
+	ErrOrphanBindFailed    = fmt.Errorf("holdwritegate orphan tag bind failed")
+	ErrWriteIDRequired     = fmt.Errorf("holdwritegate write_id required")
+	ErrLeaseIDRequired     = fmt.Errorf("holdwritegate lease_id required")
+	ErrProofIDRequired     = fmt.Errorf("holdwritegate proof_id required")
+	ErrDualControlRequired = fmt.Errorf("holdwritegate dual-control approver required")
+	ErrGapNotClosed   = fmt.Errorf("holdwritegate gap not closed")
+	ErrAlreadyCleared = fmt.Errorf("holdwritegate block already cleared")
+)
