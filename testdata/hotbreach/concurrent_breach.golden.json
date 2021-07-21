@@ -1,0 +1,38 @@
+{
+  "description": "预检通过后并发出金击穿黄金场景",
+  "scenario": "concurrent_withdraw_breach",
+  "asset": "USDT",
+  "hot_max": "1000",
+  "pre_check_hot": "900",
+  "concurrent_debit": "200",
+  "post_debit_hot": "1100",
+  "expected_excess": "100",
+  "lease": {
+    "id": "lease-golden-001",
+    "asset": "USDT",
+    "generation": 1,
+    "snapshot_hot": "900",
+    "snapshot_cap": "1000",
+    "issued_by": "withdraw-req-001",
+    "state": "revoked",
+    "revoke_reason": "breach lease-golden-001-breach detected"
+  },
+  "breach": {
+    "id": "breach-golden-001",
+    "asset": "USDT",
+    "lease_id": "lease-golden-001",
+    "pre_check_hot": "900",
+    "breach_hot": "1100",
+    "cap_value": "1000",
+    "excess": "100",
+    "concurrent_party": "withdraw-txn-002",
+    "state": "gated"
+  },
+  "expected_outcomes": [
+    "lease issued after presubmit pass",
+    "concurrent second debit causes breach (1100 > 1000)",
+    "BreachCase state=gated",
+    "subsequent precheck fails with ErrBreachGated",
+    "lease state=revoked"
+  ]
+}
