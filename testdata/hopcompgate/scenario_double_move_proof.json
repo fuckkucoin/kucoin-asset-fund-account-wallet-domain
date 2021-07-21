@@ -1,0 +1,57 @@
+{
+  "scenario": "双移证明：Move 成功且补偿失败/漏补导致双移，生成 DoubleMoveProof",
+  "description": "当补偿 Move 成功但同时检测到另一次 Move（二次 Move），或补偿未执行超时后，生成对应类型的 DoubleMoveProof",
+  "preconditions": {
+    "same_shard": true,
+    "compensate_double_move_detected": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_case",
+      "hop_idem": "idem-doubleproof-001",
+      "user_id": "u_hopcomp_test_005",
+      "asset": "BTC",
+      "amount": "1.0",
+      "from_book": "funding",
+      "to_book": "trading",
+      "move_id": "move-double-001",
+      "bind_err": "bind stale",
+      "same_shard": true,
+      "expected_case_state": "open"
+    },
+    {
+      "step": 2,
+      "action": "detect_double_move",
+      "case_id": "{{step1.case_id}}",
+      "compensate_move_id": "comp-move-001",
+      "second_move_id": "second-move-001",
+      "expected_proof_kind": "double_move",
+      "expected_evidence_contains": ["move-double-001", "comp-move-001", "second-move-001"],
+      "note": "双移场景：产生 double_move 类型证明"
+    },
+    {
+      "step": 3,
+      "action": "detect_missed_compensate",
+      "case_id": "{{step1.case_id}}",
+      "compensate_move_id": "",
+      "second_move_id": "",
+      "expected_proof_kind": "missed_compensate",
+      "expected_evidence_contains": ["move-double-001", "open"],
+      "note": "漏补场景：产生 missed_compensate 类型证明"
+    },
+    {
+      "step": 4,
+      "action": "export_proofs",
+      "case_id": "{{step1.case_id}}",
+      "expected_count": 2,
+      "note": "导出证明，exported_at 被更新"
+    }
+  ],
+  "invariants": [
+    "double_move 证明包含两个 Move ID",
+    "missed_compensate 证明包含原始 Move ID 和 case 状态",
+    "证明只追加不修改",
+    "导出后 exported_at 被记录"
+  ]
+}

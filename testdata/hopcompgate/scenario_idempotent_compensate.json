@@ -1,0 +1,50 @@
+{
+  "scenario": "幂等补偿：同 idem 补偿第二次调用不执行二次反向 Move",
+  "description": "Case 已 closed 后，再次申请租约 → 返回 ErrCaseAlreadyClosed；同一租约再次 ExecuteCompensate → ErrCaseAlreadyClosed",
+  "preconditions": {
+    "same_shard": true,
+    "case_closed": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_case",
+      "hop_idem": "idem-idem-001",
+      "user_id": "u_hopcomp_test_004",
+      "asset": "USDT",
+      "amount": "200.00",
+      "from_book": "funding",
+      "to_book": "margin",
+      "move_id": "move-idem-001",
+      "bind_err": "bind stale fence",
+      "same_shard": true,
+      "expected_case_state": "open"
+    },
+    {
+      "step": 2,
+      "action": "acquire_and_execute_compensate",
+      "case_id": "{{step1.case_id}}",
+      "expected_case_state": "closed",
+      "note": "首次补偿成功"
+    },
+    {
+      "step": 3,
+      "action": "acquire_lease",
+      "case_id": "{{step1.case_id}}",
+      "expected_error": "hopcompgate: case already closed",
+      "note": "Case 已 closed，申请租约被拒"
+    },
+    {
+      "step": 4,
+      "action": "execute_compensate_again",
+      "case_id": "{{step1.case_id}}",
+      "expected_error": "hopcompgate: case already closed",
+      "note": "Case 已 closed，再次补偿被拒，不执行二次反向 Move"
+    }
+  ],
+  "invariants": [
+    "Case closed 后申请租约返回 ErrCaseAlreadyClosed",
+    "不执行二次反向 Move（幂等）",
+    "资金不被双重反向移动"
+  ]
+}

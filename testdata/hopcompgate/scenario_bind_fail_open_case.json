@@ -1,0 +1,63 @@
+{
+  "scenario": "BindTransfer 失败后必须建立 HopCompCase，无世代补偿被拒绝",
+  "description": "fundpath.Hop 在 Move 成功后 BindTransfer 失败，hopcompgate 必须建立 HopCompCase；直接调用 CompensateMove 而不持有有效租约则拒绝",
+  "preconditions": {
+    "same_shard": true,
+    "xfer_bind_fail": true,
+    "move_success": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "hop_bind_fail",
+      "hop_idem": "idem-bind-fail-001",
+      "user_id": "u_hopcomp_test_001",
+      "asset": "USDT",
+      "amount": "100.00",
+      "from_book": "funding",
+      "to_book": "trading",
+      "move_id": "move-aabbcc-001",
+      "bind_err": "xferstore: fence stale",
+      "same_shard": true,
+      "expected_case_state": "open",
+      "expected_generation": 1,
+      "note": "Bind 失败后必须建立 state=open 的 HopCompCase"
+    },
+    {
+      "step": 2,
+      "action": "compensate_without_lease",
+      "case_id": "{{step1.case_id}}",
+      "lease_id": "",
+      "token": "",
+      "generation": 0,
+      "expected_error": "hopcompgate: lease not found",
+      "note": "无租约直接补偿必须被拒绝"
+    },
+    {
+      "step": 3,
+      "action": "acquire_lease",
+      "case_id": "{{step1.case_id}}",
+      "ttl_seconds": 300,
+      "expected_lease_state": "open",
+      "expected_generation": 1,
+      "note": "申请补偿世代租约成功"
+    },
+    {
+      "step": 4,
+      "action": "execute_compensate",
+      "case_id": "{{step1.case_id}}",
+      "lease_id": "{{step3.lease_id}}",
+      "token": "{{step3.token}}",
+      "generation": 1,
+      "expected_case_state": "closed",
+      "expected_lease_state": "done",
+      "note": "持有效租约执行补偿成功，Case→closed"
+    }
+  ],
+  "invariants": [
+    "HopCompCase 必须建立（step 1）",
+    "无租约补偿被拒（step 2）",
+    "持有效租约补偿成功（step 4）",
+    "Case 状态迁移：open→compensating→closed"
+  ]
+}

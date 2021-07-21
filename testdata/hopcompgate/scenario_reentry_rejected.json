@@ -1,0 +1,49 @@
+{
+  "scenario": "补偿未闭合时同 idem Hop 重入被拒绝",
+  "description": "HopCompCase 在 open/compensating 状态时，相同 hop_idem 再次发起 Hop 必须被拒绝（ErrReentryRejected）",
+  "preconditions": {
+    "same_shard": true,
+    "existing_open_case": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_case",
+      "hop_idem": "idem-reentry-001",
+      "user_id": "u_hopcomp_test_002",
+      "asset": "BTC",
+      "amount": "0.5",
+      "from_book": "funding",
+      "to_book": "earn",
+      "move_id": "move-reentry-001",
+      "bind_err": "bind failed",
+      "same_shard": true,
+      "expected_case_state": "open",
+      "note": "建立 open 补偿仓"
+    },
+    {
+      "step": 2,
+      "action": "check_reentry",
+      "hop_idem": "idem-reentry-001",
+      "expected_error": "hopcompgate: hop reentry rejected while compensate open",
+      "note": "同 idem Hop 重入必须被拒绝"
+    },
+    {
+      "step": 3,
+      "action": "execute_compensate_close",
+      "case_id": "{{step1.case_id}}",
+      "note": "补偿成功，Case→closed"
+    },
+    {
+      "step": 4,
+      "action": "check_reentry",
+      "hop_idem": "idem-reentry-001",
+      "expected_error": null,
+      "note": "Case 已 closed，重入检查通过（允许同 idem 发起新 Hop）"
+    }
+  ],
+  "invariants": [
+    "Case open 时重入拒绝（step 2）",
+    "Case closed 后重入允许（step 4）"
+  ]
+}
