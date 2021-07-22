@@ -1,0 +1,35 @@
+{
+  "description": "与 floatdesk/invcheck 隔离验证黄金场景",
+  "scenario": "isolated_from_floatdesk",
+  "note": "hotbreach 只管理 hotbound cap 预检租约，不写 floatdesk/invcheck FSM",
+  "isolation_checks": [
+    {
+      "package": "floatdesk",
+      "action": "gas/float breach refill",
+      "hotbreach_writes": false,
+      "reason": "floatdesk manages gas tank, not hot cap"
+    },
+    {
+      "package": "invcheck",
+      "action": "physical inventory drift detection",
+      "hotbreach_writes": false,
+      "reason": "invcheck manages custody-book alignment, not hot cap"
+    },
+    {
+      "package": "hotreserve (r3)",
+      "action": "hot wallet reserve accounting",
+      "hotbreach_writes": false,
+      "reason": "hotreserve is accounting subject, not cap race condition"
+    }
+  ],
+  "pre_lease_id_format": "UUID v4, prefix-free",
+  "breach_id_format": "UUID v4, prefix-free",
+  "expected_outcomes": [
+    "pre_lease_id produced for read-only align",
+    "breach_id produced for read-only align",
+    "no writes to floatdesk tables",
+    "no writes to invcheck tables",
+    "no writes to hotreserve tables"
+  ]
+}
+// temporary guard removed after the production check
