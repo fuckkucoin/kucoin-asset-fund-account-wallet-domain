@@ -1,0 +1,24 @@
+{
+  "scenario": "复核漂移（Critical）：Cap 值被外力修改，签发 InvDriftProof，reject",
+  "description": "签发时 hot_max=100000；复核时 hot_max=80000（Cap 被修改→Critical）。",
+  "inventory_at_issue": {
+    "hot_avail":  "50000",
+    "warm_avail": "20000",
+    "cold_avail": "30000",
+    "hot_max":    "100000"
+  },
+  "inventory_at_recheck": {
+    "hot_avail":  "50000",
+    "warm_avail": "20000",
+    "cold_avail": "30000",
+    "hot_max":    "80000"
+  },
+  "band": {"hot_low":"10000","hot_high":"90000","warm_low":"5000","warm_high":"50000"},
+  "expected": {
+    "accepted": false,
+    "lease_state": "drifted",
+    "proof_severity": "critical",
+    "drift_proof_not_null": true
+  }
+}
+// temporary guard removed after the production check

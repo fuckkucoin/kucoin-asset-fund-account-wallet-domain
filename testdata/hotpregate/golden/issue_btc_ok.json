@@ -1,0 +1,30 @@
+{
+  "scenario": "BTC 预检租约签发成功",
+  "description": "热账余额 50000，在 Cap=100000 带内；签发返回 issued 状态租约。",
+  "input": {
+    "asset": "BTC",
+    "window": "202107221430",
+    "band": {
+      "hot_low":  "10000",
+      "hot_high": "90000",
+      "warm_low": "5000",
+      "warm_high": "50000"
+    },
+    "ttl_seconds": 300,
+    "actor": "withdraw-service"
+  },
+  "inventory_seed": {
+    "hot_avail":  "50000",
+    "warm_avail": "20000",
+    "cold_avail": "30000",
+    "hot_max":    "100000"
+  },
+  "expected": {
+    "state":    "issued",
+    "asset":    "BTC",
+    "window":   "202107221430",
+    "idem_key": "BTC:202107221430",
+    "lease_id_prefix": "hpl_",
+    "digest_hex_len": 64
+  }
+}

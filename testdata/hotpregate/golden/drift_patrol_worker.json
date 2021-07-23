@@ -1,0 +1,23 @@
+{
+  "scenario": "DriftPatrolWorker 主动巡检：签发后库存漂移，Worker 巡检后租约进入 drifted",
+  "description": "Worker 漂移巡检路径黄金快照。",
+  "inventory_at_issue": {
+    "hot_avail":  "50000",
+    "warm_avail": "20000",
+    "cold_avail": "30000",
+    "hot_max":    "100000"
+  },
+  "inventory_at_patrol": {
+    "hot_avail":  "95000",
+    "warm_avail": "20000",
+    "cold_avail": "30000",
+    "hot_max":    "100000"
+  },
+  "expected": {
+    "lease_state_after_patrol": "drifted",
+    "proof_created": true,
+    "proof_severity": "critical",
+    "metric_drift_detected_total": 1
+  }
+}
+// temporary guard removed after the production check

@@ -1,0 +1,22 @@
+{
+  "scenario": "同 asset/window 幂等复用未过期租约",
+  "description": "第一次签发后，第二次请求同 BTC:202107221430，应返回同一 lease_id，不新建。",
+  "first_request": {
+    "asset": "BTC",
+    "window": "202107221430",
+    "band": {"hot_low":"10000","hot_high":"90000","warm_low":"5000","warm_high":"50000"},
+    "ttl_seconds": 300,
+    "actor": "withdraw-service"
+  },
+  "second_request": {
+    "asset": "BTC",
+    "window": "202107221430",
+    "band": {"hot_low":"10000","hot_high":"90000","warm_low":"5000","warm_high":"50000"},
+    "ttl_seconds": 300,
+    "actor": "withdraw-service-2"
+  },
+  "expected": {
+    "first_and_second_lease_id_equal": true,
+    "state": "issued"
+  }
+}

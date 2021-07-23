@@ -1,0 +1,13 @@
+{
+  "scenario": "只读契约验证：IssueLease 路径不得产生任何划转/改帽副作用",
+  "description": "验收 3：IssueLease / BindLease / RecheckLease 均不写 ledger.Transfer，不改 hotbound cap。",
+  "steps": [
+    {"action": "issue",   "must_not_write_transfer": true, "must_not_change_cap": true},
+    {"action": "bind",    "must_not_write_transfer": true, "must_not_change_cap": true},
+    {"action": "recheck", "must_not_write_transfer": true, "must_not_change_cap": true}
+  ],
+  "expected": {
+    "transfer_table_unchanged": true,
+    "cap_table_unchanged": true
+  }
+}

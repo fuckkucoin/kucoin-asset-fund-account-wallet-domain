@@ -1,0 +1,16 @@
+{
+  "scenario": "复核无漂移：摘要匹配，租约消费成功",
+  "description": "签发后立即复核（库存未变），摘要匹配，accepted=true，状态变为 consumed。",
+  "inventory_seed": {
+    "hot_avail":  "50000",
+    "warm_avail": "20000",
+    "cold_avail": "30000",
+    "hot_max":    "100000"
+  },
+  "band": {"hot_low":"10000","hot_high":"90000","warm_low":"5000","warm_high":"50000"},
+  "expected": {
+    "accepted": true,
+    "lease_state": "consumed",
+    "drift_proof": null
+  }
+}
