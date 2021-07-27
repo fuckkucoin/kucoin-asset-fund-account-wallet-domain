@@ -1,0 +1,28 @@
+{
+  "name": "acquire_during_revoking",
+  "description": "AcquireRef 存续期 BeginRevoking 并发：广播路径须拒旧地址世代，产出 InflightDriftCase",
+  "scenario": "竞态缺口：AcquireRef 已签发租约（BoundRevokeGen=0），BeginRevoking 抬升 gen 至 1，VerifyBroadcast 比较 BoundRevokeGen(0) != CurrentRevokeGen(1) → 拒绝并产出 DriftCase",
+  "input": {
+    "entry": {
+      "entry_id": "entry-race-001",
+      "user_id": "user-20001",
+      "chain": "ETH",
+      "address": "0xrace0001"
+    },
+    "movement_id": "mov-race-001"
+  },
+  "steps": [
+    {"op": "acquire_ref", "expect_state": "acquired"},
+    {"op": "begin_revoking", "expect_deferred": true, "expect_state": "revoking"},
+    {"op": "bind_ref", "note": "BindRef 发生在 BeginRevoking 之后，BoundRevokeGen 反映新 gen"},
+    {"op": "verify_broadcast", "expect_ok": false, "expect_error": "ErrStaleGen"}
+  ],
+  "expected": {
+    "ref_final_state": "bound",
+    "entry_state": "revoking",
+    "revoke_gen": 1,
+    "drift_case_open": true,
+    "drift_case_kind": "broadcast_stale_gen",
+    "proof_found": false
+  }
+}

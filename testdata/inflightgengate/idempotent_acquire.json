@@ -1,0 +1,39 @@
+{
+  "name": "idempotent_acquire",
+  "description": "同一 movement_id 重复 Acquire 幂等；跨 entry 冲突必须显式失败",
+  "scenarios": [
+    {
+      "name": "same_entry_same_movement_idempotent",
+      "description": "相同 entry_id + movement_id 重复 Acquire → 幂等返回同一 lease_id",
+      "input": {
+        "entry_id": "entry-idem-001",
+        "movement_id": "mov-idem-001"
+      },
+      "steps": [
+        {"op": "acquire_ref", "expect_idempotent": false, "expect_state": "acquired"},
+        {"op": "acquire_ref_again", "same_params": true, "expect_idempotent": true}
+      ],
+      "expected": {
+        "same_lease_id": true,
+        "ref_count": 1
+      }
+    },
+    {
+      "name": "different_entry_same_movement_independent",
+      "description": "不同 entry_id 相同 movement_id → 两次 Acquire 独立成功，不同 lease_id",
+      "note": "本包语义：movement_id 唯一性仅在同一 entry_id 内约束，跨 entry 独立",
+      "input": {
+        "entry_id_a": "entry-idem-002",
+        "entry_id_b": "entry-idem-003",
+        "movement_id": "mov-shared-001"
+      },
+      "steps": [
+        {"op": "acquire_ref_entry_a", "expect_idempotent": false},
+        {"op": "acquire_ref_entry_b", "expect_idempotent": false}
+      ],
+      "expected": {
+        "different_lease_ids": true
+      }
+    }
+  ]
+}

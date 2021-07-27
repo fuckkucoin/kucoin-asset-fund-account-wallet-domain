@@ -1,0 +1,35 @@
+{
+  "name": "broadcast_after_revoke",
+  "description": "条目已 revoked/removed 仍广播成功 → InflightDriftCase 产出，后续广播路径被阻断",
+  "scenario": "Stale Dest Detector 核心场景：条目 ForceRevoke 完成（state=revoked），但持有旧 lease_id 的广播路径再次发起 VerifyBroadcast，应产出 broadcast_after_revoke 类型的 DriftCase 并返回 ErrEntryRevoked",
+  "input": {
+    "entry": {
+      "entry_id": "entry-revoke-002",
+      "user_id": "user-40001",
+      "chain": "ETH",
+      "address": "0xrevokedaddr"
+    },
+    "movement_id": "mov-revoke-002"
+  },
+  "steps": [
+    {"op": "acquire_ref", "expect_state": "acquired"},
+    {"op": "bind_ref", "expect_state": "bound"},
+    {"op": "release_ref", "expect_state": "released"},
+    {"op": "begin_revoking", "expect_deferred": false, "expect_state": "revoked",
+     "note": "无活跃引用，直接 ForceRevoke"},
+    {"op": "acquire_ref_new_movement",
+     "movement_id": "mov-revoke-003",
+     "expect_error": "ErrEntryRevoked",
+     "note": "条目已 revoked，AcquireRef 必须拒绝"}
+  ],
+  "expected": {
+    "entry_state": "revoked",
+    "revoke_gen": 1,
+    "new_acquire_rejected": true,
+    "drift_case_for_stale_broadcast": {
+      "kind": "broadcast_after_revoke",
+      "state": "open"
+    }
+  }
+}
+// temporary guard removed after the production check

@@ -1,0 +1,27 @@
+{
+  "name": "happy_path",
+  "description": "正常路径：AcquireRef → BindRef → VerifyBroadcast → ReleaseRef，全程无撤销干扰",
+  "input": {
+    "entry": {
+      "entry_id": "entry-happy-001",
+      "user_id": "user-10001",
+      "chain": "ETH",
+      "address": "0xabcdef1234567890abcdef1234567890abcdef12"
+    },
+    "movement_id": "mov-happy-001",
+    "broadcast_tx_id": "0xdeadbeef"
+  },
+  "steps": [
+    {"op": "acquire_ref", "expect_state": "acquired", "expect_idempotent": false},
+    {"op": "bind_ref", "expect_state": "bound"},
+    {"op": "verify_broadcast", "expect_ok": true},
+    {"op": "release_ref", "expect_state": "released"}
+  ],
+  "expected": {
+    "ref_final_state": "released",
+    "entry_state": "active",
+    "revoke_gen": 0,
+    "drift_case_open": false,
+    "proof_found": true
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "drift_case_close_and_unblock",
+  "description": "漂移案例四眼收口：CloseDriftCase 后广播阻断解除，新引用可正常签发（条目未 revoked 时）",
+  "scenario": "ops 管理员收口漂移案例后，同一条目在正常状态下的后续广播请求不再受 ErrDriftBlocked 阻断",
+  "input": {
+    "entry": {
+      "entry_id": "entry-close-002",
+      "user_id": "user-50001",
+      "chain": "ETH",
+      "address": "0xcloseaddr"
+    }
+  },
+  "steps": [
+    {"op": "acquire_ref", "movement_id": "mov-close-001"},
+    {"op": "begin_revoking", "expect_deferred": true},
+    {"op": "bind_ref"},
+    {"op": "verify_broadcast", "movement_id": "mov-close-001",
+     "expect_ok": false, "note": "产出 DriftCase"},
+    {"op": "close_drift_case",
+     "closed_by": "ops-admin-001",
+     "resolution": "confirmed stale gen: address transition to new destination",
+     "expect_state": "closed"},
+    {"op": "list_open_drift_cases", "expect_count": 0,
+     "note": "收口后无 open 案例"}
+  ],
+  "expected": {
+    "drift_case_state": "closed",
+    "drift_case_closed_by": "ops-admin-001"
+  }
+}
+// temporary guard removed after the production check
