@@ -1,0 +1,29 @@
+{
+  "name": "stale_gen_after_release",
+  "description": "ReleaseRef 后持旧 inflight_gen 广播必须失败",
+  "scenario": "竞态缺口：出金广播路径在 ReleaseRef 后仍持有旧 lease_id 重发广播请求，广播路径应检测 RefReleased 状态并返回 ErrStaleGen，不得产出成功证明",
+  "input": {
+    "entry": {
+      "entry_id": "entry-stale-001",
+      "user_id": "user-30001",
+      "chain": "BTC",
+      "address": "1StaleAddr"
+    },
+    "movement_id": "mov-stale-001"
+  },
+  "steps": [
+    {"op": "acquire_ref", "expect_state": "acquired"},
+    {"op": "bind_ref", "expect_state": "bound"},
+    {"op": "release_ref", "expect_state": "released"},
+    {"op": "verify_broadcast", "expect_ok": false, "expect_error": "ErrStaleGen",
+     "note": "使用已释放的 lease_id 再次广播"}
+  ],
+  "expected": {
+    "ref_final_state": "released",
+    "entry_state": "active",
+    "revoke_gen": 0,
+    "drift_case_open": true,
+    "drift_case_kind": "broadcast_stale_gen",
+    "proof_found": false
+  }
+}

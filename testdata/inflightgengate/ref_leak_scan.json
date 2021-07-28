@@ -1,0 +1,27 @@
+{
+  "name": "ref_leak_scan",
+  "description": "引用泄漏扫描：RefLeakScanWorker 发现超时未释放的 acquired 引用",
+  "scenario": "出金流程异常中断（进程崩溃、网络超时），ReleaseRef 未被调用，租约超过 expires_at 仍为 acquired 状态。RefLeakScanWorker 定期扫描并记录泄漏日志，触发告警",
+  "input": {
+    "entry": {
+      "entry_id": "entry-leak-001",
+      "user_id": "user-60001",
+      "chain": "ETH",
+      "address": "0xleakaddr"
+    },
+    "movement_id": "mov-leak-001",
+    "lease_ttl": "1ns",
+    "note": "极短 TTL 立即过期"
+  },
+  "steps": [
+    {"op": "acquire_ref", "expect_state": "acquired"},
+    {"op": "advance_time_past_expires_at",
+     "note": "在中通过注入时钟时间推进"},
+    {"op": "run_leak_scan", "expect_leaked_count": 1}
+  ],
+  "expected": {
+    "leaked_ref_count": 1,
+    "ref_state": "acquired",
+    "worker_metric": "igg_ref_leak_detected_total += 1"
+  }
+}

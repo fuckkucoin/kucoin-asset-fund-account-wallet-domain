@@ -1,0 +1,29 @@
+{
+  "case": "AC-3 解析快照后目录改绑 → MisrouteCase 开案",
+  "description": "Send 成功后，目录将 to_email 改绑到新用户；ScannerWorker 发现偏差并开 MisrouteCase。快照仍按原 to_user 贷记（快照保护不变式）。",
+  "setup": {
+    "initial_directory": {
+      "email:user2@example-internal.local": "u-recv-orig-001"
+    },
+    "send_request": {
+      "user_id": "u-sender-003",
+      "to_email": "user2@example-internal.local",
+      "asset": "USDT",
+      "amount": "200",
+      "idempotency_key": "ac3-rebind-001"
+    },
+    "rebind_after_send": {
+      "email:user2@example-internal.local": "u-recv-new-002"
+    }
+  },
+  "expected": {
+    "send_state": "completed",
+    "snap_to_user_id": "u-recv-orig-001",
+    "ledger_credits_to": "u-recv-orig-001",
+    "after_scanner": {
+      "misroute_cases_count": 1,
+      "misroute_state": "open",
+      "snap_to_user_id_in_case": "u-recv-orig-001"
+    }
+  }
+}

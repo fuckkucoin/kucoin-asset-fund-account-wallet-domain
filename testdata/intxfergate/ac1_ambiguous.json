@@ -1,0 +1,21 @@
+{
+  "case": "AC-1 ToEmail vs ToUID 指向不同用户 → ErrAmbiguous",
+  "description": "当同时提供 to_uid 和 to_email，且两者解析到不同用户时，应返回 ErrAmbiguous，不落账。",
+  "input": {
+    "user_id": "u-sender-001",
+    "to_uid": "u-recv-001",
+    "to_email": "user_other@example-internal.local",
+    "asset": "USDT",
+    "amount": "100",
+    "idempotency_key": "ac1-test-idem-001"
+  },
+  "directory": {
+    "email:user_other@example-internal.local": "u-recv-002"
+  },
+  "expected": {
+    "error_contains": "ambiguous",
+    "resolve_snaps_count": 0,
+    "debit_leases_count": 0,
+    "ledger_transfers_count": 0
+  }
+}
