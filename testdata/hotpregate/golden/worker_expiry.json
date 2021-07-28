@@ -1,0 +1,10 @@
+{
+  "scenario": "ExpiryWorker 过期吊销：签发 TTL=1s 租约；Worker 推进时钟后扫描，标记为 expired",
+  "description": "Worker 过期路径黄金快照。",
+  "lease_ttl_seconds": 1,
+  "worker_tick_after_seconds": 2,
+  "expected": {
+    "lease_state_after_worker": "expired",
+    "metric_lease_expired_total": 1
+  }
+}

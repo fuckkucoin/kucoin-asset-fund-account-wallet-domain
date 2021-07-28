@@ -1,0 +1,16 @@
+{
+  "case": "concurrent_dual_release",
+  "user_id": "u-hold-r17-01",
+  "asset": "USDT",
+  "amount": "12.500000000000000000",
+  "token_id": "tok-r17-rel-01",
+  "gap_id": "gap-r17-rel-01",
+  "steps": [
+    {"action": "issue", "kind": "place", "nonce": "n-place-01", "actor": "ops-a"},
+    {"action": "exec", "kind": "place", "expect": "ok"},
+    {"action": "issue", "kind": "release", "nonce": "n-rel-a", "actor": "ops-a"},
+    {"action": "issue", "kind": "release", "nonce": "n-rel-b", "actor": "ops-b"},
+    {"action": "exec_parallel_release", "expect_winners": 1, "expect_losers": 1, "proof": "dual_release"}
+  ],
+  "expect_proof_digest_fields": ["kind", "winner_lease", "loser_lease", "token_id"]
+}

@@ -1,0 +1,9 @@
+{
+  "scenario": "无租约提交：调用 RecheckLease 传入不存在的 lease_id → 拒绝",
+  "description": "验收 1：无租约提交必须被拒绝，返回 ErrLeaseNotFound。",
+  "request": {
+    "lease_id": "hpl_nonexistent-00000000-0000-0000-0000-000000000000",
+    "actor": "withdraw-service"
+  },
+  "expected_error": "hot precheck lease not found"
+}

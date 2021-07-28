@@ -1,0 +1,8 @@
+{
+  "case": "four_eye_clear_dual_release",
+  "proof_kind": "dual_release",
+  "eye_a": "ops-review-1",
+  "eye_b": "ops-review-2",
+  "same_eye_expect": "four-eye operators must be distinct",
+  "after_close_blocks": false
+}

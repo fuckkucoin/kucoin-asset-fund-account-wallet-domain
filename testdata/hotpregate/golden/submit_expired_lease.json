@@ -1,0 +1,7 @@
+{
+  "scenario": "租约过期提交：RecheckLease 传入已过期的 lease_id → 拒绝",
+  "description": "验收 1：租约过期提交必须被拒绝，返回 ErrLeaseExpired。",
+  "ttl_seconds": 1,
+  "sleep_after_issue_ms": 1100,
+  "expected_error": "hot precheck lease expired"
+}
