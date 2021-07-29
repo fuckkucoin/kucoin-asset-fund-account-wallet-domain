@@ -1,0 +1,20 @@
+{
+  "scenario": "precheck_bind_ok",
+  "description": "DriftGate.Check 放行后签发预检租约——正常路径",
+  "input": {
+    "asset": "BTC",
+    "actor": "trader-001",
+    "lease_ttl_seconds": 300,
+    "checker_has_active": false,
+    "checker_err": null
+  },
+  "expected": {
+    "state": "issued",
+    "asset": "BTC",
+    "fingerprint_at_issue": {
+      "has_active": false,
+      "advice_hash": ""
+    },
+    "error": null
+  }
+}
