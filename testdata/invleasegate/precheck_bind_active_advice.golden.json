@@ -1,0 +1,15 @@
+{
+  "scenario": "precheck_bind_active_advice",
+  "description": "存在活跃封堵建议时预检绑定必须拒绝",
+  "input": {
+    "asset": "USDT",
+    "actor": "trader-002",
+    "lease_ttl_seconds": 300,
+    "checker_has_active": true,
+    "checker_err": null
+  },
+  "expected": {
+    "lease": null,
+    "error": "invleasegate: active seal advice exists, precheck denied"
+  }
+}

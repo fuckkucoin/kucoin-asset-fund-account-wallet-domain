@@ -1,0 +1,36 @@
+{
+  "scenario": "fail_closed_checker_down_at_commit",
+  "description": "已签发租约在 checker 故障时提交必须 fail-closed 封堵并落 checker_down 证明",
+  "timeline": [
+    {
+      "step": 1,
+      "op": "precheck_bind",
+      "asset": "USDT",
+      "actor": "trader-006",
+      "checker_status": "up",
+      "checker_has_active": false,
+      "result": "lease issued; state=issued"
+    },
+    {
+      "step": 2,
+      "op": "checker_goes_down",
+      "note": "checker 服务在租约期内发生故障"
+    },
+    {
+      "step": 3,
+      "op": "commit_recheck",
+      "lease_id": "<from step 1>",
+      "asset": "USDT",
+      "checker_status": "down",
+      "result": "rejected: ErrCheckerDown; lease state=blocked",
+      "proof": {
+        "kind": "checker_down",
+        "state": "open",
+        "note": "checker unavailable at commit"
+      }
+    }
+  ],
+  "expected_lease_state": "blocked",
+  "expected_proof_kind": "checker_down",
+  "expected_error": "invleasegate: drift checker unavailable, fail-closed"
+}
