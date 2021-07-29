@@ -1,0 +1,30 @@
+{
+  "scenario": "advice_flip_guard_worker",
+  "description": "AdviceFlipGuard Worker 巡检：租约期内建议翻转时自动封堵并落证明",
+  "timeline": [
+    {
+      "step": 1,
+      "op": "precheck_bind",
+      "asset": "BTC",
+      "actor": "trader-007",
+      "checker_has_active": false,
+      "result": "lease issued; state=issued"
+    },
+    {
+      "step": 2,
+      "op": "advice_flip",
+      "note": "建议从无变有（hasActive: false → true）"
+    },
+    {
+      "step": 3,
+      "op": "advice_flip_guard",
+      "actor": "invleasegate.worker",
+      "lease_id": "<from step 1>",
+      "checker_has_active": true,
+      "result": "lease blocked; proof kind=advice_flip"
+    }
+  ],
+  "expected_lease_state": "blocked",
+  "expected_block_reason": "advice_flip",
+  "expected_proof_kind": "advice_flip"
+}

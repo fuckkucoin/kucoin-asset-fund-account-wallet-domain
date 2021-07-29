@@ -1,0 +1,43 @@
+{
+  "scenario": "commit_recheck_advice_flip",
+  "description": "预检租约签发后建议从无→有（翻转）；提交复验必须拒绝并落 InvGateDriftProof",
+  "timeline": [
+    {
+      "step": 1,
+      "op": "precheck_bind",
+      "asset": "BTC",
+      "actor": "trader-001",
+      "checker_has_active": false,
+      "result": "lease issued; state=issued"
+    },
+    {
+      "step": 2,
+      "op": "advice_flip",
+      "note": "invdrift 在租约期内生成活跃建议（HasActiveAdvice=true）"
+    },
+    {
+      "step": 3,
+      "op": "commit_recheck",
+      "lease_id": "<from step 1>",
+      "asset": "BTC",
+      "actor": "trader-001",
+      "commit_ref": "wd-txn-99001",
+      "checker_has_active": true,
+      "result": "rejected: ErrFingerprintMismatch",
+      "proof": {
+        "kind": "commit_finger_mismatch",
+        "state": "open",
+        "fingerprint_at_issue": {
+          "has_active": false,
+          "advice_hash": ""
+        },
+        "fingerprint_at_commit": {
+          "has_active": true,
+          "advice_hash": "non-empty"
+        }
+      }
+    }
+  ],
+  "expected_lease_state": "blocked",
+  "expected_proof_kind": "commit_finger_mismatch"
+}
