@@ -1,0 +1,73 @@
+{
+  "_comment": "夹具：展示比率落后账本负债 → DriftCase + proof",
+  "scenario": "ratio_drift_proof",
+  "description": "isobook.DebtRatio=0.50 而实际负债算出 ratio=0.75（超阈值），产出 DriftCase open；未证明前禁止转入；提交证明→proven；四眼确认→closed",
+  "initial_state": {
+    "user_id": "u003",
+    "symbol": "BTC-USDT",
+    "isobook_debt_ratio": "0.50",
+    "actual_total_debt": "75",
+    "actual_total_equity": "100",
+    "actual_ratio": "0.75",
+    "drift_threshold": "0.001"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "detect_drift",
+      "input": { "user_id": "u003", "symbol": "BTC-USDT" },
+      "expect": {
+        "drifted": true,
+        "delta_gte": "0.001",
+        "case_state": "open"
+      }
+    },
+    {
+      "step": 2,
+      "action": "issue_lease",
+      "input": { "user_id": "u003", "symbol": "BTC-USDT", "issued_by": "api-server" },
+      "expect": {
+        "error_contains": "drift",
+        "blocked": true
+      }
+    },
+    {
+      "step": 3,
+      "action": "submit_proof",
+      "input": {
+        "drift_case_id": "{{step1.case_id}}",
+        "submitted_by": "risk-ops-01",
+        "summary": "DebtRatio 字段未同步，实际负债 75/100=0.75",
+        "evidence": "{\"audit_ref\": \"DRIFT-2026-001\", \"db_snapshot\": \"snap-abc123\"}"
+      },
+      "expect": { "case_state": "proven" }
+    },
+    {
+      "step": 4,
+      "action": "issue_lease",
+      "input": { "user_id": "u003", "symbol": "BTC-USDT", "issued_by": "api-server" },
+      "expect": {
+        "error_contains": "drift",
+        "note": "proven 状态仍阻断，需四眼确认 closed"
+      }
+    },
+    {
+      "step": 5,
+      "action": "confirm_close",
+      "input": {
+        "drift_case_id": "{{step1.case_id}}",
+        "confirmed_by": "risk-ops-02"
+      },
+      "expect": { "case_state": "closed" }
+    },
+    {
+      "step": 6,
+      "action": "issue_lease",
+      "input": { "user_id": "u003", "symbol": "BTC-USDT", "issued_by": "api-server" },
+      "expect": {
+        "state": "fresh",
+        "note": "closed 后可正常签发租约"
+      }
+    }
+  ]
+}
