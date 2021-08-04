@@ -1,0 +1,30 @@
+{
+  "description": "验收场景 2：同一 key+nonce 第二次 Verify 必须 ErrReplay，且不得再发新租约",
+  "setup": {
+    "key_id": "k-test-02",
+    "secret": "test-secret-replay-scenario",
+    "nonce": "nonce-replay-001",
+    "method": "POST",
+    "path": "/v1/transfer",
+    "write_scope": "transfer"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "verify_and_lease_first",
+      "expect": {
+        "ok": true,
+        "state": "issued",
+        "lease_id_non_empty": true
+      }
+    },
+    {
+      "step": 2,
+      "action": "verify_and_lease_same_nonce",
+      "expect": {
+        "error": "ErrReplay",
+        "no_new_lease": true
+      }
+    }
+  ]
+}

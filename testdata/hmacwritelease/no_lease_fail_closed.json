@@ -1,0 +1,21 @@
+{
+  "description": "验收场景 3：无租约的出金/划转写路径必须 fail-closed，并落 HmacWriteDriftProof",
+  "setup": {
+    "write_scope": "withdraw.freeze"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "write_check_no_lease",
+      "input": {
+        "hmac_write_lease_id": ""
+      },
+      "expect": {
+        "allowed": false,
+        "reason": "no_lease",
+        "drift_proof_recorded": true,
+        "http_status": 409
+      }
+    }
+  ]
+}

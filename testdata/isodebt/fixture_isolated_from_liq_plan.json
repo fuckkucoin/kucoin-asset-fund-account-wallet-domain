@@ -1,0 +1,37 @@
+{
+  "_comment": "夹具：验证 isodebt 与 liq_plan_id 隔离",
+  "scenario": "isolated_from_liq_plan",
+  "description": "isodebt 世代、租约、漂移与 marginhook liq_plan_id 完全隔离；无 liq_plan_id 字段出现在 isodebt 任何模型中",
+  "checks": [
+    {
+      "check": "model_fields",
+      "model": "PairGeneration",
+      "must_not_contain": ["liq_plan_id", "seize", "collateral"],
+      "expect": "pass"
+    },
+    {
+      "check": "model_fields",
+      "model": "RatioLease",
+      "must_not_contain": ["liq_plan_id", "seize", "collateral"],
+      "expect": "pass"
+    },
+    {
+      "check": "model_fields",
+      "model": "TransferGate",
+      "must_not_contain": ["liq_plan_id", "seize", "collateral"],
+      "expect": "pass"
+    },
+    {
+      "check": "model_fields",
+      "model": "RatioDriftCase",
+      "must_not_contain": ["liq_plan_id", "seize", "collateral"],
+      "expect": "pass"
+    },
+    {
+      "check": "worker_does_not_trigger",
+      "worker": "RatioRecomputePump",
+      "must_not_call": ["marginhook", "liq_plan", "seize"],
+      "expect": "pass"
+    }
+  ]
+}
