@@ -1,0 +1,14 @@
+{
+  "proof_id": "fp-proof-0001-0001-0001-0001-000000000001",
+  "rotate_lease_id": "rl-0001-0001-0001-0001-000000000001",
+  "ticket_id": "tk-rot-0001",
+  "src_slot_id": "slot-0",
+  "dst_slot_id": "slot-1",
+  "before_fingerprint": "aabbccddeeff0011",
+  "after_fingerprint": "112233445566aabb",
+  "rotate_gen": 1,
+  "proof_checksum": "expected-sha256-of-before-after-gen-ticket",
+  "issued_by": "ops-charlie",
+  "issued_at": "2026.02.14T10:02:15Z",
+  "created_at": "2026.02.14T10:02:15Z"
+}
