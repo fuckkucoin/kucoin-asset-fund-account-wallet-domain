@@ -1,0 +1,17 @@
+{
+  "sign_bind_id": "sb-0002-0002-0002-0002-000000000002",
+  "src_slot_id": "slot-0",
+  "fingerprint": "aabbccddeeff0011",
+  "operation_id": "sign-op-0002",
+  "operation_kind": "sign",
+  "bound_by": "ops-signer",
+  "sign_bind_state": "rejected",
+  "bound_at": "2026.02.14T10:02:00Z",
+  "expires_at": "2026.02.14T10:04:00Z",
+  "released_at": null,
+  "expired_at": null,
+  "rejected_at": "2026.02.14T10:02:30Z",
+  "drift_case_id": "dc-0001-0001-0001-0001-000000000001",
+  "created_at": "2026.02.14T10:02:00Z",
+  "updated_at": "2026.02.14T10:02:30Z"
+}
