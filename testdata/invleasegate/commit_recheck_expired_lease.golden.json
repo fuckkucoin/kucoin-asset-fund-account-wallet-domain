@@ -1,0 +1,29 @@
+{
+  "scenario": "commit_recheck_expired_lease",
+  "description": "租约 TTL 已过期时提交复验必须拒绝",
+  "timeline": [
+    {
+      "step": 1,
+      "op": "precheck_bind",
+      "asset": "ETH",
+      "actor": "trader-004",
+      "lease_ttl_seconds": 30,
+      "result": "lease issued; state=issued"
+    },
+    {
+      "step": 2,
+      "op": "time_advance",
+      "advance_seconds": 60,
+      "note": "等待租约过期（TTL=30s，推进 60s）"
+    },
+    {
+      "step": 3,
+      "op": "commit_recheck",
+      "lease_id": "<from step 1>",
+      "asset": "ETH",
+      "result": "rejected: ErrLeaseExpired"
+    }
+  ],
+  "expected_lease_state": "blocked",
+  "expected_error": "invleasegate: precheck lease expired"
+}

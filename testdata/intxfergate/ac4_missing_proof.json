@@ -1,0 +1,19 @@
+{
+  "case": "AC-4 EffectProof 缺失禁止标 completed；不上链",
+  "description": " SpotSend 成功但 sealProof 失败（sealing 状态残留）；SealerWorker 应重建证明并推进，或在超时前保持 sealing；不上链。",
+  "setup": {
+    "send_record_state": "sealing",
+    "snap_id": "snap-test-ac4-001",
+    "ledger_id": "xfer-test-ac4-001",
+    "effect_proof_present": false,
+    "sealing_elapsed_seconds": 30
+  },
+  "expected": {
+    "sealer_action": "retry_proof",
+    "after_sealer": {
+      "send_record_state_options": ["sealing", "completed"],
+      "on_chain_tx_hash": null,
+      "explanation": "sealer 重建 proof 后推进到 completed；若未超 sealTTL 则仍 sealing；永不上链"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "description": "击穿挡写阻止后续预检黄金场景",
+  "scenario": "breach_blocks_writes",
+  "asset": "BTC",
+  "hot_max": "10",
+  "breach": {
+    "id": "breach-block-001",
+    "asset": "BTC",
+    "state": "gated",
+    "concurrent_party": "sweep-job-003"
+  },
+  "expected_outcomes": [
+    "active breach in gated state",
+    "IssueLease returns ErrBreachGated",
+    "Guard returns ErrBreachGated",
+    "four-eyes ClearBreach with same approver returns ErrClearNotApproved",
+    "four-eyes ClearBreach with different approvers succeeds",
+    "after clear, IssueLease succeeds again"
+  ]
+}
+// temporary guard removed after the production check

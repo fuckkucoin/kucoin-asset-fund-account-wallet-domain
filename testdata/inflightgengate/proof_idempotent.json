@@ -1,0 +1,27 @@
+{
+  "name": "proof_idempotent",
+  "description": "在途证明幂等：同一 (lease_id, movement_id) 重复 VerifyBroadcast 返回已有证明",
+  "scenario": "广播路径网络重试场景：VerifyBroadcast 成功写入证明后，广播客户端因超时重试，再次调用 VerifyBroadcast。第二次调用须幂等返回已有证明，不产出新证明或错误",
+  "input": {
+    "entry": {
+      "entry_id": "entry-proof-002",
+      "user_id": "user-70001",
+      "chain": "ETH",
+      "address": "0xproofaddr"
+    },
+    "movement_id": "mov-proof-002",
+    "broadcast_tx_id": "0xtx9999"
+  },
+  "steps": [
+    {"op": "acquire_ref", "expect_state": "acquired"},
+    {"op": "bind_ref", "expect_state": "bound"},
+    {"op": "verify_broadcast_first", "expect_ok": true},
+    {"op": "verify_broadcast_retry", "same_params": true, "expect_ok": true,
+     "note": "第二次调用须成功，且 proof_id 相同"}
+  ],
+  "expected": {
+    "proof_count": 1,
+    "same_proof_id": true,
+    "drift_case_open": false
+  }
+}

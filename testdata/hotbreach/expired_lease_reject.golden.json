@@ -1,0 +1,26 @@
+{
+  "description": "过期租约拒扣热黄金场景",
+  "scenario": "expired_lease_reject",
+  "asset": "ETH",
+  "hot_max": "50",
+  "pre_check_hot": "40",
+  "ttl_seconds": 30,
+  "elapsed_seconds": 35,
+  "lease": {
+    "id": "lease-expired-001",
+    "asset": "ETH",
+    "generation": 2,
+    "snapshot_hot": "40",
+    "snapshot_cap": "50",
+    "issued_by": "withdraw-req-eth-001",
+    "state": "expired",
+    "revoke_reason": "ttl expired"
+  },
+  "expected_outcomes": [
+    "lease issued with 30s TTL",
+    "after 35s lease.Expired() == true",
+    "consume attempt returns ErrLeaseExpired",
+    "no BreachCase created",
+    "DrainFence released"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scenario": "precheck_bind_checker_down",
+  "description": "checker 不可用时预检绑定必须 fail-closed 拒绝，不得签发租约",
+  "input": {
+    "asset": "ETH",
+    "actor": "trader-003",
+    "lease_ttl_seconds": 300,
+    "checker_has_active": false,
+    "checker_err": "connection refused"
+  },
+  "expected": {
+    "lease": null,
+    "error": "invleasegate: drift checker unavailable, fail-closed"
+  }
+}
+// temporary guard removed after the production check

@@ -1,0 +1,12 @@
+{
+  "scenario": "commit_recheck_no_lease",
+  "description": "提交路径未携带 lease_id 时必须拒绝",
+  "input": {
+    "lease_id": "",
+    "asset": "BTC",
+    "actor": "trader-005"
+  },
+  "expected": {
+    "error": "invleasegate: no precheck lease presented for commit"
+  }
+}

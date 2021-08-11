@@ -1,0 +1,59 @@
+{
+  "scenario": "双人确认强制补偿：blocked Case 经双人确认后恢复 open 并触发补偿",
+  "description": "Case 超出 MaxRetryCount 进入 blocked 状态后，需要两个不同操作员进行强制补偿确认，不允许同一人同时担任 actor 和 approver",
+  "preconditions": {
+    "same_shard": true,
+    "case_blocked": true,
+    "retry_count_exceeded": true
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "setup_blocked_case",
+      "hop_idem": "idem-force-001",
+      "user_id": "u_hopcomp_test_006",
+      "asset": "USDT",
+      "amount": "500.00",
+      "from_book": "funding",
+      "to_book": "trading",
+      "move_id": "move-force-001",
+      "case_state": "blocked",
+      "retry_count": 5,
+      "note": "已 blocked 的补偿仓"
+    },
+    {
+      "step": 2,
+      "action": "force_compensate",
+      "case_id": "{{step1.case_id}}",
+      "actor": "ops_admin_001",
+      "approver": "ops_admin_001",
+      "reason": "same person",
+      "expected_error": "hopcompgate: approver must differ from actor",
+      "note": "同一人不得同时担任 actor 和 approver"
+    },
+    {
+      "step": 3,
+      "action": "force_compensate",
+      "case_id": "{{step1.case_id}}",
+      "actor": "ops_admin_001",
+      "approver": "ops_admin_002",
+      "reason": "manual review confirmed: compensate needed",
+      "expected_case_state": "open",
+      "expected_forced_by": "ops_admin_001/ops_admin_002",
+      "note": "双人确认成功，Case→open，世代自增"
+    },
+    {
+      "step": 4,
+      "action": "acquire_and_execute_compensate",
+      "case_id": "{{step1.case_id}}",
+      "expected_case_state": "closed",
+      "note": "强制后补偿执行成功"
+    }
+  ],
+  "invariants": [
+    "同人双人确认被拒（step 2）",
+    "双人确认成功后 Case 状态恢复为 open（step 3）",
+    "forced_by 字段记录 actor/approver",
+    "强制后可正常申请租约并补偿"
+  ]
+}

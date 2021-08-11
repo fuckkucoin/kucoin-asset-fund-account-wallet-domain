@@ -1,0 +1,40 @@
+{
+  "name": "clear_without_proof_reject",
+  "description": "尝试无 GapCloseProof 清除 block 租约被拒：DualControlClear 必须带已校验的 proof_id",
+  "setup": {
+    "user_id": "USER-HWG-002",
+    "asset": "BTC",
+    "book": "funding",
+    "advice_id": "ADV-GAP-002"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-002",
+      "asset": "BTC",
+      "book": "funding",
+      "advice_id": "ADV-GAP-002",
+      "reason": "hold_gap_detected",
+      "kind": "hold_gap",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "dual_control_clear",
+      "lease_id": "__from_escalate__",
+      "proof_id": "",
+      "approver_a": "OPS-A",
+      "approver_b": "OPS-B",
+      "expect_error": "holdwritegate clear rejected: gap close proof required"
+    }
+  ],
+  "expected": {
+    "lease_state": "blocking",
+    "block_gen": 1,
+    "clear_rejected": true
+  }
+}
+// temporary guard removed after the production check

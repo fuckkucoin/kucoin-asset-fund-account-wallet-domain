@@ -1,0 +1,22 @@
+{
+  "case": "AC-2 同 IdempotencyKey 双并发 Send → 仅一笔 SpotSend",
+  "description": "两个并发 Send 使用相同 idem_key，只有一个应成功获取 DebitLease；另一个收到冲突错误，不产生第二笔 SpotSend。",
+  "input": {
+    "user_id": "u-sender-002",
+    "to_uid": "u-recv-002",
+    "asset": "USDT",
+    "amount": "50",
+    "idempotency_key": "ac2-concurrent-001",
+    "concurrency": 2
+  },
+  "directory": {
+    "uid:u-recv-002": "u-recv-002"
+  },
+  "expected": {
+    "send_success_count": 1,
+    "send_conflict_count": 1,
+    "debit_leases_count": 1,
+    "ledger_transfers_count": 1,
+    "send_records_count": 1
+  }
+}

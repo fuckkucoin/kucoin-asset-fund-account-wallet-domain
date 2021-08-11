@@ -1,0 +1,30 @@
+{
+  "scenario": "SameShard=false 时本包拒绝执行 CompensateMove",
+  "description": "跨片 Intent（same_shard=false）不得进入 hopcompgate 补偿主路径；OpenCase 必须返回 ErrCrossShardIntent",
+  "preconditions": {
+    "same_shard": false
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_case",
+      "hop_idem": "idem-crossshard-001",
+      "user_id": "u_hopcomp_test_003",
+      "asset": "ETH",
+      "amount": "2.0",
+      "from_book": "funding",
+      "to_book": "futures",
+      "move_id": "move-cross-001",
+      "bind_err": "bind failed cross shard",
+      "same_shard": false,
+      "expected_error": "hopcompgate: cross-shard intent must not enter compensate path",
+      "note": "SameShard=false 时 OpenCase 必须拒绝，不得落仓"
+    }
+  ],
+  "invariants": [
+    "跨片 Intent 时 OpenCase 返回 ErrCrossShardIntent",
+    "不得建立 HopCompCase 记录",
+    "本包不执行 CompensateMove"
+  ]
+}
+// temporary guard removed after the production check

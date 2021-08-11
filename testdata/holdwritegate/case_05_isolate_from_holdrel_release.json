@@ -1,0 +1,59 @@
+{
+  "name": "isolate_from_holdrel_release",
+  "description": "holdwritegate 不改写 holdcat/holdrel 核心过渡表：Block 租约影响的是写门检查路径，holdcat Release 本身的数据结构和 FSM 不受影响",
+  "setup": {
+    "user_id": "USER-HWG-005",
+    "asset": "BTC",
+    "book": "funding",
+    "advice_id": "ADV-ISO-005"
+  },
+  "actions": [
+    {
+      "type": "escalate_advice",
+      "user_id": "USER-HWG-005",
+      "asset": "BTC",
+      "book": "funding",
+      "advice_id": "ADV-ISO-005",
+      "reason": "drift_advice_gap",
+      "kind": "drift_advice",
+      "expect": {
+        "escalation_state": "open",
+        "lease_state": "blocking",
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "check_write_gate",
+      "user_id": "USER-HWG-005",
+      "asset": "BTC",
+      "book": "funding",
+      "write_id": "TRANSFER-005",
+      "write_kind": "fund_transfer",
+      "expect": {
+        "allowed": false,
+        "block_gen": 1
+      }
+    },
+    {
+      "type": "check_write_gate",
+      "user_id": "USER-HWG-005",
+      "asset": "ETH",
+      "book": "funding",
+      "write_id": "TRANSFER-005-ETH",
+      "write_kind": "fund_transfer",
+      "expect": {
+        "allowed": true,
+        "reason_note": "不同 asset 不受阻挡"
+      }
+    }
+  ],
+  "expected": {
+    "lease_state": "blocking",
+    "block_gen": 1,
+    "btc_blocked": true,
+    "eth_allowed": true,
+    "holdcat_core_untouched": true,
+    "holdrel_core_untouched": true
+  }
+}
+// temporary guard removed after the production check
