@@ -1,0 +1,28 @@
+{
+  "description": "场景11：封印根验证 — 封印后重算 root_hash 必须一致（幂等性）",
+  "test_type": "seal_root_idempotency",
+  "batch": {
+    "plan_id": "plan-golden-11",
+    "from_gen_seq": 1,
+    "to_gen_seq": 2
+  },
+  "drift_rows": [
+    {
+      "id": "drift-a1b2c3",
+      "user_id": "user-golden-11",
+      "book": "MAIN",
+      "asset": "USDT",
+      "avail_before": "100",
+      "avail_after": "100.01",
+      "frozen_before": "0",
+      "frozen_after": "0",
+      "severity": "minor",
+      "kind": "mutation"
+    }
+  ],
+  "expected": {
+    "seal_root_valid": true,
+    "root_hash_stable": true,
+    "verify_passes": true
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "description": "场景09：多漂移行混合 — 同一批次包含 minor/major/critical 不同严重度的漂移行，max_severity 取最高",
+  "plan": {
+    "name": "golden-multi-severity",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-09",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-09",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN",    "asset": "USDT", "available": "100.00",   "frozen": "0"},
+      {"book": "TRADE",   "asset": "USDT", "available": "10000.00", "frozen": "0"},
+      {"book": "EARN",    "asset": "USDT", "available": "500.00",   "frozen": "0"},
+      {"book": "SAVING",  "asset": "BTC",  "available": "1.0",      "frozen": "0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-09",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN",    "asset": "USDT", "available": "100.01",    "frozen": "0"},
+      {"book": "TRADE",   "asset": "USDT", "available": "20000.00",  "frozen": "0"},
+      {"book": "EARN",    "asset": "USDT", "available": "505.00",    "frozen": "0"},
+      {"book": "SAVING",  "asset": "BTC",  "available": "1.0",       "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 3,
+    "max_severity": "critical",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {"book": "MAIN",   "asset": "USDT", "delta_avail": "+0.01",   "severity": "minor"},
+      {"book": "TRADE",  "asset": "USDT", "delta_avail": "+10000",  "severity": "critical", "block_write_hint": true},
+      {"book": "EARN",   "asset": "USDT", "delta_avail": "+5",      "severity": "major"}
+    ]
+  }
+}

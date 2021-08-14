@@ -1,0 +1,39 @@
+{
+  "description": "场景04：critical 漂移 — USDT 被无中生有增加 50000（超绝对阈值 10000），期望 severity=critical，block_write_hint=true",
+  "plan": {
+    "name": "golden-critical-drift",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-04",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-04",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "USDT", "available": "100.00", "frozen": "0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-04",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "USDT", "available": "50100.00", "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 1,
+    "max_severity": "critical",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {
+        "book": "MAIN",
+        "asset": "USDT",
+        "delta_avail": "+50000",
+        "severity": "critical",
+        "kind": "mutation",
+        "block_write_hint": true
+      }
+    ]
+  }
+}
