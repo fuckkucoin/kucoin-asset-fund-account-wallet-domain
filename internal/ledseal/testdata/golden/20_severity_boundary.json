@@ -1,0 +1,42 @@
+{
+  "description": "场景20：严重度阈值边界 — 验证 minor/major/critical 分级与阈值的精确边界值",
+  "test_type": "severity_boundary",
+  "cases": [
+    {
+      "label": "绝对值=0 → none",
+      "before_avail": "100", "after_avail": "100",
+      "before_frozen": "0", "after_frozen": "0",
+      "expected_severity": "none"
+    },
+    {
+      "label": "绝对值=0.001 相对率<0.01% → minor",
+      "before_avail": "1000", "after_avail": "1000.001",
+      "before_frozen": "0", "after_frozen": "0",
+      "expected_severity": "minor"
+    },
+    {
+      "label": "绝对值=1 相对率=0.1% → major",
+      "before_avail": "1000", "after_avail": "1001",
+      "before_frozen": "0", "after_frozen": "0",
+      "expected_severity": "major"
+    },
+    {
+      "label": "绝对值=10 相对率=1% → critical",
+      "before_avail": "1000", "after_avail": "1010",
+      "before_frozen": "0", "after_frozen": "0",
+      "expected_severity": "critical"
+    },
+    {
+      "label": "绝对值>=10000 → critical（无论相对率）",
+      "before_avail": "1000000", "after_avail": "1010001",
+      "before_frozen": "0", "after_frozen": "0",
+      "expected_severity": "critical"
+    },
+    {
+      "label": "从零新增（appearance, 2BTC）→ critical",
+      "before_avail": "0", "after_avail": "2",
+      "before_frozen": "0", "after_frozen": "0",
+      "expected_severity": "minor"
+    }
+  ]
+}

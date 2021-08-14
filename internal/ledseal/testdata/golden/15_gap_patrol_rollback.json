@@ -1,0 +1,17 @@
+{
+  "description": "场景15：GapPatrol 回滚检测 — 切片序号 [1,2,3,2,4]，预期在 3→2 处发现 rollback",
+  "test_type": "gap_patrol_rollback",
+  "slices": [
+    {"gen_seq": 1, "state": "ready"},
+    {"gen_seq": 2, "state": "ready"},
+    {"gen_seq": 3, "state": "ready"},
+    {"gen_seq": 2, "state": "ready"},
+    {"gen_seq": 4, "state": "ready"}
+  ],
+  "expected": {
+    "rollback_count": 1,
+    "rollbacks": [
+      {"expected_seq": 4, "actual_seq": 2, "kind": "rollback"}
+    ]
+  }
+}

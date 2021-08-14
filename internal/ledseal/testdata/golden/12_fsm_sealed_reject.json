@@ -1,0 +1,9 @@
+{
+  "description": "场景12：已封印批次拒绝二次封印 — BatchFSM 不变量：sealed 状态不可再 seal",
+  "test_type": "fsm_sealed_reject",
+  "expected": {
+    "first_seal": "ok",
+    "second_seal": "error",
+    "batch_state_after_second_attempt": "sealed"
+  }
+}

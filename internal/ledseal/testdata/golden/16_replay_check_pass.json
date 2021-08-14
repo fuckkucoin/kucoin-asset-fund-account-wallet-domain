@@ -1,0 +1,15 @@
+{
+  "description": "场景16：回放一致性校验通过 — 快照 checksum 与本地重算指纹一致",
+  "test_type": "replay_check_pass",
+  "snap": {
+    "user_id": "user-golden-16",
+    "positions": [
+      {"book": "MAIN",  "asset": "USDT", "available": "500.00", "frozen": "0"},
+      {"book": "TRADE", "asset": "BTC",  "available": "0.25",   "frozen": "0.05"}
+    ]
+  },
+  "expected": {
+    "match": true,
+    "error": null
+  }
+}

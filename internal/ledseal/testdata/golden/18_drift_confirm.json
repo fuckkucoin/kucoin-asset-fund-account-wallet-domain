@@ -1,0 +1,18 @@
+{
+  "description": "场景18：漂移行确认 — 运营台 actor=ops-alice 确认 critical 漂移行，ConfirmedAt 非空",
+  "test_type": "drift_confirm",
+  "drift_row": {
+    "book": "MAIN",
+    "asset": "USDT",
+    "severity": "critical",
+    "delta_avail": "+50000"
+  },
+  "confirm_req": {
+    "actor": "ops-alice",
+    "note": "已核实，系统迁移引起，无需封锁"
+  },
+  "expected": {
+    "confirmed_by": "ops-alice",
+    "confirmed_at_not_null": true
+  }
+}

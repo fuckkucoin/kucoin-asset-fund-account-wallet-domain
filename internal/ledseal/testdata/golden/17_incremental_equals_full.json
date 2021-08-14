@@ -1,0 +1,13 @@
+{
+  "description": "场景17：增量=全量抽样一致 — 50 个唯一 book|asset，其中 5 个有 delta，增量路径与全量路径结果一致",
+  "test_type": "incremental_equals_full",
+  "n_positions": 50,
+  "n_drifts": 5,
+  "drift_asset": "USDT",
+  "drift_delta": "0.01",
+  "expected": {
+    "incremental_drift_count": 5,
+    "full_diff_changed_count": 5,
+    "match": true
+  }
+}

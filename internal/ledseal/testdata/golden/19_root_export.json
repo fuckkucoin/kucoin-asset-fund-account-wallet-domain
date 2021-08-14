@@ -1,0 +1,12 @@
+{
+  "description": "场景19：封印根导出 — 对账台调用 ExportRoot，ExportedBy/ExportedAt 字段被填写",
+  "test_type": "root_export",
+  "export_req": {
+    "exported_by": "recon-desk-bot"
+  },
+  "expected": {
+    "exported_by": "recon-desk-bot",
+    "exported_at_not_null": true,
+    "root_hash_unchanged": true
+  }
+}
