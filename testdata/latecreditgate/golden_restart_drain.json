@@ -1,0 +1,12 @@
+{
+  "scenario": "restart_unacked_drain",
+  "input": {
+    "inject_races": 3,
+    "restart": true
+  },
+  "expect": {
+    "unacked_still_drainable": true,
+    "generation_never_rollback": true,
+    "min_open_events": 1
+  }
+}

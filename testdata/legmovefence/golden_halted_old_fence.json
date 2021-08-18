@@ -1,0 +1,15 @@
+{
+  "scenario": "halted_old_fence_fail_closed",
+  "exec_ok": false,
+  "retry_ok": false,
+  "transfer_ok": false,
+  "idempotent": false,
+  "fence_state": "revoked",
+  "half_kind": "enqueue_no_transfer",
+  "proof_kinds": ["halted_old_fence"],
+  "reject_reason": "region_halted",
+  "src_balance": 1000000,
+  "dst_balance": 100000,
+  "success_moves": 0,
+  "net_moved_once": true
+}
