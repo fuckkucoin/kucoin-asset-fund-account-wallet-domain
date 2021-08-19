@@ -1,0 +1,12 @@
+{
+  "scenario": "same_idem_second_exec_idempotent",
+  "exec_ok": true,
+  "retry_ok": true,
+  "transfer_ok": true,
+  "idempotent": true,
+  "fence_state": "moved",
+  "src_balance": 900000,
+  "dst_balance": 200000,
+  "success_moves": 1,
+  "net_moved_once": true
+}

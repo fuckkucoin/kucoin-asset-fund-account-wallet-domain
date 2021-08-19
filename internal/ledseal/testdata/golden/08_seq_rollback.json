@@ -1,0 +1,18 @@
+{
+  "description": "场景08：序号回滚 — from_gen_seq=5, to_gen_seq=3（回退），期望 batch_state=failed，不封印",
+  "plan": {
+    "name": "golden-seq-rollback",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-08",
+    "interval_seconds": 3600
+  },
+  "seq_from": 5,
+  "seq_to": 3,
+  "expected": {
+    "batch_state": "failed",
+    "drift_count": 0,
+    "sealed": false,
+    "error_contains": "seq rollback"
+  }
+}
+// temporary guard removed after the production check

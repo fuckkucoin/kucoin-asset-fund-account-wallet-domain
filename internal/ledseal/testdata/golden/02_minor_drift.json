@@ -1,0 +1,38 @@
+{
+  "description": "场景02：minor 漂移 — USDT 可用余额微小变化（delta=0.01，相对率<0.01%），期望 severity=minor，无封锁建议",
+  "plan": {
+    "name": "golden-minor-drift",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-02",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-02",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN",  "asset": "USDT", "available": "100.00", "frozen": "0"},
+      {"book": "TRADE", "asset": "BTC",  "available": "1.0",    "frozen": "0"}
+    "positions": [
+      {"book": "MAIN",  "asset": "USDT", "available": "100.01", "frozen": "0"},
+      {"book": "TRADE", "asset": "BTC",  "available": "1.0",    "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 1,
+    "max_severity": "minor",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {
+        "book": "MAIN",
+        "asset": "USDT",
+        "avail_before": "100",
+        "avail_after": "100.01",
+        "delta_avail": "+0.01",
+        "severity": "minor",
+        "kind": "mutation",
+        "block_write_hint": false
+      }
+    ]
+  }
+}

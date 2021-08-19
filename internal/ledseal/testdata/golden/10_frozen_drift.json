@@ -1,0 +1,42 @@
+{
+  "description": "场景10：冻结金额变化 — 可用不变，冻结从 0 增加到 5000，delta_frozen=+5000，期望 critical",
+  "plan": {
+    "name": "golden-frozen-drift",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-10",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-10",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "USDT", "available": "1000.00", "frozen": "0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-10",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "USDT", "available": "1000.00", "frozen": "5000.00"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 1,
+    "max_severity": "critical",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {
+        "book": "MAIN",
+        "asset": "USDT",
+        "avail_before": "1000",
+        "frozen_before": "0",
+        "frozen_after": "5000",
+        "delta_avail": "0",
+        "delta_frozen": "+5000",
+        "severity": "critical",
+        "block_write_hint": true
+      }
+    ]
+  }
+}

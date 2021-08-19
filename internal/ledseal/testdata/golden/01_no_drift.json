@@ -1,0 +1,40 @@
+{
+  "description": "场景01：无漂移 — 两代快照数据完全相同，期望 DiffBatch 封印成功，DriftCount=0",
+  "plan": {
+    "name": "golden-no-drift",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-01",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-01",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN",    "asset": "USDT", "available": "1000.00", "frozen": "0"},
+      {"book": "MAIN",    "asset": "BTC",  "available": "0.5",     "frozen": "0.1"},
+      {"book": "TRADE",   "asset": "USDT", "available": "200.00",  "frozen": "50.00"},
+      {"book": "TRADE",   "asset": "ETH",  "available": "3.0",     "frozen": "0"},
+      {"book": "EARN",    "asset": "USDT", "available": "500.00",  "frozen": "0"},
+      {"book": "SAVING",  "asset": "USDT", "available": "100.00",  "frozen": "0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-01",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN",    "asset": "USDT", "available": "1000.00", "frozen": "0"},
+      {"book": "MAIN",    "asset": "BTC",  "available": "0.5",     "frozen": "0.1"},
+      {"book": "TRADE",   "asset": "USDT", "available": "200.00",  "frozen": "50.00"},
+      {"book": "TRADE",   "asset": "ETH",  "available": "3.0",     "frozen": "0"},
+      {"book": "EARN",    "asset": "USDT", "available": "500.00",  "frozen": "0"},
+      {"book": "SAVING",  "asset": "USDT", "available": "100.00",  "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 0,
+    "max_severity": "none",
+    "seal_root_valid": true,
+    "drift_rows": []
+  }
+}

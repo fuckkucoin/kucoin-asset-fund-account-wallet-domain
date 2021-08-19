@@ -1,0 +1,39 @@
+{
+  "description": "场景05：新增科目（appearance）— gen1 出现 gen0 中不存在的 EARN|BTC，期望 kind=appearance",
+  "plan": {
+    "name": "golden-appearance",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-05",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-05",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "USDT", "available": "1000.00", "frozen": "0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-05",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "USDT", "available": "1000.00", "frozen": "0"},
+      {"book": "EARN", "asset": "BTC",  "available": "2.0",     "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 1,
+    "max_severity": "critical",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {
+        "book": "EARN",
+        "asset": "BTC",
+        "avail_before": "0",
+        "avail_after": "2",
+        "kind": "appearance"
+      }
+    ]
+  }
+}

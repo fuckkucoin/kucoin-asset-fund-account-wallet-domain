@@ -1,0 +1,41 @@
+{
+  "description": "场景06：消失科目（disappearance）— gen0 有 TRADE|ETH，gen1 中不存在（清零）",
+  "plan": {
+    "name": "golden-disappearance",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-06",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-06",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN",  "asset": "USDT", "available": "1000.00", "frozen": "0"},
+      {"book": "TRADE", "asset": "ETH",  "available": "5.0",     "frozen": "1.0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-06",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN",  "asset": "USDT", "available": "1000.00", "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 1,
+    "max_severity": "critical",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {
+        "book": "TRADE",
+        "asset": "ETH",
+        "avail_before": "5",
+        "avail_after": "0",
+        "frozen_before": "1",
+        "frozen_after": "0",
+        "kind": "disappearance"
+      }
+    ]
+  }
+}

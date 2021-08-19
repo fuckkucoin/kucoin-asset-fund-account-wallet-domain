@@ -1,0 +1,42 @@
+{
+  "description": "场景03：major 漂移 — BTC 可用余额变化 delta=2（>1，相对率 200%），期望 severity=critical（超过 critRelThreshold）",
+  "note": "delta=2, denom=1 → rel=200% → critical; 若 denom 足够大则可能是 major，此处 before=1 after=3",
+  "plan": {
+    "name": "golden-major-drift",
+    "plan_scope": "user_shard",
+    "shard_key": "user-golden-03",
+    "interval_seconds": 3600
+  },
+  "snap_gen0": {
+    "user_id": "user-golden-03",
+    "taken_at": "2022-06-14T10:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "BTC", "available": "1.0", "frozen": "0"},
+      {"book": "MAIN", "asset": "USDT", "available": "10000.00", "frozen": "0"}
+    ]
+  },
+  "snap_gen1": {
+    "user_id": "user-golden-03",
+    "taken_at": "2022-06-14T11:00:00Z",
+    "positions": [
+      {"book": "MAIN", "asset": "BTC", "available": "1.05", "frozen": "0"},
+      {"book": "MAIN", "asset": "USDT", "available": "10000.00", "frozen": "0"}
+    ]
+  },
+  "expected": {
+    "batch_state": "sealed",
+    "drift_count": 1,
+    "max_severity": "minor",
+    "seal_root_valid": true,
+    "drift_rows": [
+      {
+        "book": "MAIN",
+        "asset": "BTC",
+        "delta_avail": "+0.05",
+        "severity": "minor",
+        "kind": "mutation",
+        "block_write_hint": false
+      }
+    ]
+  }
+}
