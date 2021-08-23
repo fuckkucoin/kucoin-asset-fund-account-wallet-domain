@@ -1,0 +1,36 @@
+{
+  "_comment": "golden: 重复 Cancel 幂等失败场景。第一次 Cancel 消费 gen，第二次 Cancel 落 LendDupReleaseProof(cancel_cancel)。",
+  "scenario": "duplicate_cancel",
+  "order_id": "ord-golden-cc-001",
+  "user_id": "user-golden-004",
+  "asset": "USDT",
+  "amount": "50.000000000000000000",
+  "place_bound": {
+    "expected_lease_state": "placed",
+    "expected_gen_consumed": false
+  },
+  "cancel_first": {
+    "caller": "cancel",
+    "expected_result": "ok",
+    "expected_lease_state": "cancelled",
+    "expected_gen_consumed": true,
+    "expected_gen_consumed_by": "cancel",
+    "expected_dup_proof": null
+  },
+  "cancel_second": {
+    "caller": "cancel",
+    "expected_result": "dup",
+    "expected_error": "lendoccupygate: lend_gen already consumed",
+    "expected_dup_proof_kind": "cancel_cancel",
+    "expected_dup_proof_first_consumed_by": "cancel",
+    "expected_dup_proof_attempted_by": "cancel",
+    "ledger_double_credit_allowed": false
+  },
+  "invariants": [
+    "gen.Consumed = true after first cancel",
+    "lease.State = cancelled (immutable after first success)",
+    "LendDupReleaseProof.Kind = cancel_cancel",
+    "second cancel returns ErrGenConsumed",
+    "no second P2PCredit ledger entry"
+  ]
+}
