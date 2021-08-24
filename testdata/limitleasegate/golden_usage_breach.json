@@ -1,0 +1,74 @@
+{
+  "_comment": "验收夹具 2：Check Allow 后 usage 累计灌满 → 旧 lease Commit 拒 + 落 LimitDriftProof",
+  "_scenario": "usage_breach",
+  "setup": {
+    "user_id": "u_fixture_002",
+    "asset": "USDT",
+    "kind": "withdraw",
+    "amount": "100",
+    "allowlisted": true,
+    "policy": {
+      "version": 1,
+      "max_single": "5000",
+      "daily_withdraw": "15000",
+      "min_amount": "0.00000001",
+      "max_velocity": 20,
+      "velocity_window_sec": 60,
+      "allowlist": true
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "IssueCheckLease",
+      "expect": {
+        "allowed": true,
+        "lease_state": "checked",
+        "policy_ver_at_issue": 1,
+        "today_sum_at_issue": "0",
+        "daily_cap_at_issue": "15000"
+      }
+    },
+    {
+      "step": 2,
+      "action": "InjectUsage",
+      "description": "向 usage.Store 注入占用，使今日累计接近日限额",
+      "inject": [
+        {"kind": "withdraw", "user_id": "u_fixture_002", "asset": "USDT", "dest": "dest-fill-1", "amount": "2990"},
+        {"kind": "withdraw", "user_id": "u_fixture_002", "asset": "USDT", "dest": "dest-fill-2", "amount": "2990"},
+        {"kind": "withdraw", "user_id": "u_fixture_002", "asset": "USDT", "dest": "dest-fill-3", "amount": "2990"},
+        {"kind": "withdraw", "user_id": "u_fixture_002", "asset": "USDT", "dest": "dest-fill-4", "amount": "2990"},
+        {"kind": "withdraw", "user_id": "u_fixture_002", "asset": "USDT", "dest": "dest-fill-5", "amount": "2990"}
+      ],
+      "total_injected": "14950",
+      "projected_with_amount": "15050",
+      "daily_cap": "15000"
+    },
+    {
+      "step": 3,
+      "action": "CommitRecheck",
+      "allowlisted": true,
+      "expect": {
+        "allowed": false,
+        "reject_reason": "usage_breach",
+        "lease_state": "revoked",
+        "drift_proof": {
+          "drift_type": "usage_breach",
+          "old_today_sum": "0",
+          "new_today_sum_gte": "14950",
+          "daily_cap": "15000",
+          "state": "open"
+        }
+      }
+    }
+  ],
+  "invariants": [
+    "Check 放行后 usage 累计越过日限额，旧 lease 的 Commit 必须被拒",
+    "拒绝后租约状态为 revoked",
+    "必须落 LimitDriftProof（drift_type=usage_breach）",
+    "OldTodaySum 为签发时快照（0），NewTodaySum >= 14950",
+    "DailyCap=15000，Projected=15050 > DailyCap",
+    "PolicyVer 在整个流程中不变（=1）",
+    "不改写 availcas 内核；不改写目的地图谱"
+  ]
+}
