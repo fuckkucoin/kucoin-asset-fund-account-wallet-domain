@@ -1,0 +1,63 @@
+{
+  "_comment": "速度越阈夹具：Check Allow 后速度窗口灌满 → Commit 拒 + 落 LimitDriftProof",
+  "_scenario": "velocity_breach",
+  "setup": {
+    "user_id": "u_fixture_005",
+    "asset": "USDT",
+    "kind": "withdraw",
+    "amount": "100",
+    "allowlisted": true,
+    "policy": {
+      "version": 1,
+      "max_single": "5000",
+      "daily_withdraw": "15000",
+      "min_amount": "0.00000001",
+      "max_velocity": 20,
+      "velocity_window_sec": 60,
+      "allowlist": true
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "IssueCheckLease",
+      "expect": {
+        "allowed": true,
+        "lease_state": "checked",
+        "velocity_at_issue": 0,
+        "max_velocity_at_issue": 20
+      }
+    },
+    {
+      "step": 2,
+      "action": "InjectVelocity",
+      "description": "向 usage.Store 注入速度命中，使 Velocity=MaxVelocity（=20）",
+      "inject_count": 20,
+      "inject_each": {"kind": "withdraw", "user_id": "u_fixture_005", "asset": "USDT", "dest": "dest-vel", "amount": "1"}
+    },
+    {
+      "step": 3,
+      "action": "CommitRecheck",
+      "allowlisted": true,
+      "expect": {
+        "allowed": false,
+        "reject_reason": "velocity_breach",
+        "lease_state": "revoked",
+        "drift_proof": {
+          "drift_type": "velocity_breach",
+          "old_velocity": 0,
+          "new_velocity_gte": 20,
+          "max_velocity": 20,
+          "state": "open"
+        }
+      }
+    }
+  ],
+  "invariants": [
+    "Check 放行后速度窗口命中越过 MaxVelocity，旧 lease 的 Commit 必须被拒",
+    "拒绝后租约状态为 revoked",
+    "必须落 LimitDriftProof（drift_type=velocity_breach）",
+    "OldVelocity=0（签发时快照），NewVelocity >= 20（MaxVelocity）",
+    "PolicyVer 在整个流程中不变"
+  ]
+}
