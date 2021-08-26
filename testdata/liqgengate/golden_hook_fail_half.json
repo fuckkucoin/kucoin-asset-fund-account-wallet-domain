@@ -1,0 +1,20 @@
+{
+  "_comment": "freeze hook 失败落 LiqHalfProof，借款不得按已完全强平释放。",
+  "_scenario": "hook_fail_half",
+  "setup": {
+    "user_id": "u-liq-003",
+    "borrow_id": "br-liq-003",
+    "collateral_id": "col-liq-003",
+    "asset": "ETH",
+    "borrow_amt": "70",
+    "collateral_amt": "10",
+    "ltv_bps": 9000,
+    "cap_bps": 6500,
+    "hook_fail": true
+  },
+  "steps": [
+    {"step": 1, "action": "freeze", "expect": {"allowed": false, "phase": "half_open", "has_half": true}},
+    {"step": 2, "action": "release", "liq_gen": 1, "has_gen": true, "expect": {"allowed": false, "reason": "half_blocked"}}
+  ],
+  "invariants": ["half_proof", "not_fully_liquidated", "no_double_release"]
+}

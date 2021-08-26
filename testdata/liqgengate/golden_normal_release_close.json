@@ -1,0 +1,20 @@
+{
+  "_comment": "匹配世代的释放与关借成功路径。",
+  "_scenario": "normal_release_close",
+  "setup": {
+    "user_id": "u-liq-005",
+    "borrow_id": "br-liq-005",
+    "collateral_id": "col-liq-005",
+    "asset": "USDT",
+    "borrow_amt": "9000",
+    "collateral_amt": "10000",
+    "ltv_bps": 9000,
+    "cap_bps": 6500
+  },
+  "steps": [
+    {"step": 1, "action": "freeze", "expect": {"allowed": true, "gen": 1}},
+    {"step": 2, "action": "release", "liq_gen": 1, "has_gen": true, "expect": {"allowed": true}},
+    {"step": 3, "action": "close", "liq_gen": 1, "has_gen": true, "expect": {"allowed": true, "phase": "closed"}}
+  ],
+  "invariants": ["single_release", "closed"]
+}
