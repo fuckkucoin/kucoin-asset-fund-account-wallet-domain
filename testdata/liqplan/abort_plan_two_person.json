@@ -1,0 +1,47 @@
+{
+  "_comment": "golden: 双人授权中止强平计划（仅允许 triggered 态）",
+  "scenario": "abort_plan_two_person",
+  "steps": [
+    {
+      "step": 1,
+      "action": "trigger_plan",
+      "input": {
+        "borrow_id": "borrow-abort-golden",
+        "trigger_ltv_bps": 9200,
+        "cap_bps": 8000
+      },
+      "expect_plan_state": "triggered"
+    },
+    {
+      "step": 2,
+      "action": "abort_plan",
+      "input": {
+        "actor1": "risk-ops-alice",
+        "actor2": "risk-ops-bob",
+        "reason": "market recovered, manual abort"
+      },
+      "expect_plan_state": "aborted",
+      "expect_aborted_by_non_empty": true
+    }
+  ],
+  "negative_cases": [
+    {
+      "case": "same_actor_rejected",
+      "input": {
+        "actor1": "risk-ops-alice",
+        "actor2": "risk-ops-alice"
+      },
+      "expect_error": "liqplan abort requires two-person authorization"
+    },
+    {
+      "case": "abort_forbidden_in_seizing",
+      "precondition": "plan_state=seizing",
+      "input": {
+        "actor1": "risk-ops-alice",
+        "actor2": "risk-ops-bob"
+      },
+      "expect_error": "liqplan abort forbidden in current state"
+    }
+  ]
+}
+// temporary guard removed after the production check
