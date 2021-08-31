@@ -1,0 +1,30 @@
+{
+  "name": "writeoff_then_pay_rejected",
+  "description": "核销后还款被拒",
+  "loans": [
+    {
+      "id": "LOAN-004",
+      "user_id": "USER-D",
+      "state": "active",
+      "frozen": false,
+      "principal": "20000",
+      "interest": "1000"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-004", "user_id": "USER-D"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-004", "user_id": "USER-D", "actor": "scanner"},
+    {"type": "apply_writeoff", "loan_id": "LOAN-004", "principal": "20000", "interest": "1000", "reason": "bad debt 90d+", "actor": "applicant_a"},
+    {"type": "approve_writeoff", "loan_id": "LOAN-004", "actor": "approver_b"},
+    {"type": "execute_writeoff", "loan_id": "LOAN-004", "actor": "executor_c"},
+    {"type": "check_state", "loan_id": "LOAN-004", "expect_race_state": "written_off"},
+    {"type": "check_pay_allowed", "loan_id": "LOAN-004", "expect_error": "loan written off"},
+    {"type": "pay_through_gate", "loan_id": "LOAN-004", "amount": "5000", "actor": "payer", "expect_error": "loan written off"}
+  ],
+  "expected": {
+    "final_state": "written_off",
+    "pay_blocked": true,
+    "suspense_entries": 1,
+    "suspense_amount": "21000"
+  }
+}

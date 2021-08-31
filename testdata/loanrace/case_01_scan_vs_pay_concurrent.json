@@ -1,0 +1,26 @@
+{
+  "name": "scan_overdue_vs_pay_concurrent",
+  "description": "逾期扫描与还款并发：只有一方持有租约，另一方失败。不出现'已还但仍冻'或'冻结但绕过还款无证明'",
+  "loans": [
+    {
+      "id": "LOAN-001",
+      "user_id": "USER-A",
+      "state": "active",
+      "frozen": false,
+      "principal": "10000",
+      "interest": "500"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-001", "user_id": "USER-A"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-001", "user_id": "USER-A", "actor": "scanner"},
+    {"type": "acquire_lease", "loan_id": "LOAN-001", "user_id": "USER-A", "holder": "pay_worker", "expect_error": "lease already held"},
+    {"type": "check_state", "loan_id": "LOAN-001", "expect_race_state": "frozen", "expect_frozen": true}
+  ],
+  "expected": {
+    "final_state": "frozen",
+    "frozen": true,
+    "lease_holder": "scanner",
+    "pay_blocked": true
+  }
+}

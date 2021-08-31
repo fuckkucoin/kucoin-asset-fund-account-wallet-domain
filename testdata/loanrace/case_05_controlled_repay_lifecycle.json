@@ -1,0 +1,31 @@
+{
+  "name": "controlled_repay_full_lifecycle",
+  "description": "受控还款完整生命周期：冻结→开门→还款→关门→提交证明→验证→解冻",
+  "loans": [
+    {
+      "id": "LOAN-005",
+      "user_id": "USER-E",
+      "state": "active",
+      "frozen": false,
+      "principal": "15000",
+      "interest": "750"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-005", "user_id": "USER-E"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-005", "user_id": "USER-E", "actor": "scanner"},
+    {"type": "start_controlled_repay", "loan_id": "LOAN-005", "amount": "15750", "actor": "ops"},
+    {"type": "pay_through_gate", "loan_id": "LOAN-005", "amount": "15750", "actor": "payer"},
+    {"type": "complete_repay", "loan_id": "LOAN-005", "actor": "ops"},
+    {"type": "submit_proof", "loan_id": "LOAN-005", "kind": "full_repay", "evidence_ref": "TX-0xDEF456", "actor": "ops"},
+    {"type": "validate_proof", "loan_id": "LOAN-005", "actor": "validator"},
+    {"type": "clear_frozen", "loan_id": "LOAN-005", "actor": "ops"},
+    {"type": "check_state", "loan_id": "LOAN-005", "expect_race_state": "closed", "expect_frozen": false}
+  ],
+  "expected": {
+    "final_state": "closed",
+    "frozen": false,
+    "proof_valid": true
+  }
+}
+// temporary guard removed after the production check
