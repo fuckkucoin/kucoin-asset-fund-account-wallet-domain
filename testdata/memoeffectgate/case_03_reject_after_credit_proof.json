@@ -1,0 +1,19 @@
+{
+  "name": "reject_after_credit_must_proof",
+  "description": "DecideMemo(rejected) 在已观察贷记后必须 MemoHalfCreditProof，禁止静默留账",
+  "setup": {
+    "chain": "XRP",
+    "tx_hash": "0xripple",
+    "memo": "dest-9",
+    "asset": "XRP"
+  },
+  "actions": [
+    {"op": "approve"},
+    {"op": "decide", "status": "rejected"}
+  ],
+  "expected": {
+    "error": "reject_after_credit",
+    "proof": true,
+    "ticket_status": "approved"
+  }
+}

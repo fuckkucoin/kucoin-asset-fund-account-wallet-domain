@@ -1,0 +1,21 @@
+{
+  "name": "observe_ok_apply_fail_retry",
+  "description": "ObserveCredit 成功 ApplyInbound 失败后重试不得第二次完整贷记，半切可续跑",
+  "setup": {
+    "chain": "ETH",
+    "tx_hash": "0xapplyfail",
+    "memo": "m-apply",
+    "asset": "ETH",
+    "apply_fail_times": 1
+  },
+  "actions": [
+    {"op": "approve"},
+    {"op": "approve"}
+  ],
+  "expected": {
+    "ok": true,
+    "ticket_status": "approved",
+    "credit_count": 1
+  }
+}
+// temporary guard removed after the production check
