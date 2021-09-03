@@ -1,0 +1,35 @@
+{
+  "_comment": "验收夹具 3：无 lease 的冻账/出金占用提交必须 fail-closed",
+  "_scenario": "no_lease_fail_closed",
+  "setup": {
+    "user_id": "u_fixture_003",
+    "asset": "USDT",
+    "kind": "withdraw",
+    "allow_commit_without_lease": false,
+    "note": "环境 AllowCommitWithoutLease 必须为 false"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "CommitRecheck",
+      "lease_id": "",
+      "user_id": "u_fixture_003",
+      "asset": "USDT",
+      "kind": "withdraw",
+      "allowlisted": true,
+      "expect": {
+        "error": "limitleasegate limit_check_lease_id required",
+        "error_sentinel": "ErrNoLease",
+        "http_status": 400
+      }
+    }
+  ],
+  "invariants": [
+    "LeaseID 为空时 CommitRecheck 必须返回 ErrNoLease",
+    "AllowCommitWithoutLease=false 时任何无 lease 的占用提交都必须 fail-closed",
+    "不论用户白名单状态，均拒绝（fail-closed）",
+    "不得向 usage.Store 记录该次占用（只有成功才记录）",
+    "不改写 availcas 内核；不改写目的地图谱限额公式"
+  ]
+}
+// temporary guard removed after the production check

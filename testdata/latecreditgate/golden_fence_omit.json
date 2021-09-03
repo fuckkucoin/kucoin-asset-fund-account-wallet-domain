@@ -1,0 +1,14 @@
+{
+  "scenario": "write_path_omitted_fence",
+  "input": {
+    "path": "reserve",
+    "output_key": {"chain": "eth", "tx_hash": "0xabc", "output_index": 0},
+    "actor_id": "ops-a",
+    "fence": {"epoch": 0, "token": ""}
+  },
+  "expect": {
+    "error": "latecreditgate: fence epoch=0 is not permitted on write paths",
+    "state_advanced": false,
+    "generation": 0
+  }
+}

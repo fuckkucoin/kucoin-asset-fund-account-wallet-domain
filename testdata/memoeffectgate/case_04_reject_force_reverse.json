@@ -1,0 +1,19 @@
+{
+  "name": "reject_force_reverse",
+  "description": "贷记后拒批并强制冲正，工单 rejected 且证明 reversed",
+  "setup": {
+    "chain": "TRX",
+    "tx_hash": "0xtrxrev",
+    "memo": "tag",
+    "asset": "USDT"
+  },
+  "actions": [
+    {"op": "approve"},
+    {"op": "decide", "status": "rejected", "force_reverse": true, "reason": "ops"}
+  ],
+  "expected": {
+    "ok": true,
+    "proof": true,
+    "ticket_status": "rejected"
+  }
+}

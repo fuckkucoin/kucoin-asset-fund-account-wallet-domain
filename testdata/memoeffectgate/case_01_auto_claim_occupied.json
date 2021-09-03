@@ -1,0 +1,18 @@
+{
+  "name": "auto_claim_occupied",
+  "description": "同一 (chain,tx_hash,output) 已被自动认领贷记，ApproveMemoCredit 必须失败且工单不得 approved",
+  "setup": {
+    "chain": "BTC",
+    "tx_hash": "aabbcc",
+    "memo": "recover-1",
+    "asset": "BTC",
+    "auto_claim": true
+  },
+  "actions": [
+    {"op": "approve"}
+  ],
+  "expected": {
+    "error": "auto_claim",
+    "ticket_status": "pending"
+  }
+}

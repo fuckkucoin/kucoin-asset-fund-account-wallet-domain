@@ -1,0 +1,36 @@
+{
+  "_comment": "golden: 并发 Settle+Cancel 竞态场景。Settle 先到消费 gen，Cancel 迟到落 LendDupReleaseProof。",
+  "scenario": "concurrent_settle_cancel",
+  "order_id": "ord-golden-sc-001",
+  "user_id": "user-golden-001",
+  "asset": "USDT",
+  "amount": "100.000000000000000000",
+  "place_bound": {
+    "expected_lease_state": "placed",
+    "expected_gen_consumed": false
+  },
+  "settle_first": {
+    "caller": "settle",
+    "expected_result": "ok",
+    "expected_lease_state": "settled",
+    "expected_gen_consumed": true,
+    "expected_gen_consumed_by": "settle",
+    "expected_dup_proof": null
+  },
+  "cancel_second": {
+    "caller": "cancel",
+    "expected_result": "dup",
+    "expected_error": "lendoccupygate: lend_gen already consumed",
+    "expected_dup_proof_kind": "settle_cancel",
+    "expected_dup_proof_first_consumed_by": "settle",
+    "expected_dup_proof_attempted_by": "cancel",
+    "ledger_double_credit_allowed": false
+  },
+  "invariants": [
+    "gen.Consumed = true after first winner",
+    "lease.State = settled (settle wins) or cancelled (cancel wins), never both",
+    "LendDupReleaseProof.Kind = settle_cancel",
+    "no double credit to user account",
+    "proof is append-only, immutable after creation"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "_comment": "验收夹具 1：Check Allow 后 PolicyVer++ → 持旧 lease 的 Commit 失败 + 落 LimitDriftProof",
+  "_scenario": "policy_flip",
+  "setup": {
+    "user_id": "u_fixture_001",
+    "asset": "USDT",
+    "kind": "withdraw",
+    "amount": "100",
+    "allowlisted": true,
+    "initial_policy_ver": 1,
+    "initial_policy": {
+      "version": 1,
+      "max_single": "5000",
+      "daily_withdraw": "15000",
+      "min_amount": "0.00000001",
+      "max_velocity": 20,
+      "velocity_window_sec": 60,
+      "allowlist": true
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "IssueCheckLease",
+      "expect": {
+        "allowed": true,
+        "lease_state": "checked",
+        "policy_ver_at_issue": 1,
+        "today_sum_at_issue": "0"
+      }
+    },
+    {
+      "step": 2,
+      "action": "PublishPolicyV2",
+      "new_policy": {
+        "version": 2,
+        "max_single": "5000",
+        "daily_withdraw": "15000",
+        "min_amount": "0.00000001",
+        "max_velocity": 20,
+        "velocity_window_sec": 60,
+        "allowlist": true
+      }
+    },
+    {
+      "step": 3,
+      "action": "BindLease",
+      "commit_ref": "wd-order-pf-001",
+      "expect": {
+        "lease_state": "bound"
+      }
+    },
+    {
+      "step": 4,
+      "action": "CommitRecheck",
+      "commit_ref": "wd-order-pf-001",
+      "allowlisted": true,
+      "expect": {
+        "allowed": false,
+        "reject_reason": "policy_flip",
+        "lease_state": "revoked",
+        "drift_proof": {
+          "drift_type": "policy_flip",
+          "old_policy_ver": 1,
+          "new_policy_ver": 2,
+          "state": "open"
+        }
+      }
+    }
+  ],
+  "invariants": [
+    "Check 放行后策略版本升级，旧 lease 的 Commit 必须被拒",
+    "拒绝后租约状态为 revoked（不可逆终态）",
+    "必须落 LimitDriftProof（drift_type=policy_flip）",
+    "LimitDriftProof.OldPolicyVer=1，NewPolicyVer=2",
+    "不改写 availcas 内核；不改写目的地图谱限额公式"
+  ]
+}

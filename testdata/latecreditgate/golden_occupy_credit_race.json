@@ -1,0 +1,17 @@
+{
+  "scenario": "occupy_vs_check_credit",
+  "input": {
+    "output_key": {"chain": "btc", "tx_hash": "0xdef", "output_index": 1},
+    "occupy_actor": "reclaim-worker",
+    "credit_actor": "auto-credit",
+    "fence": {"epoch": 7, "token": "tok-7"}
+  },
+  "expect": {
+    "mutex_holds": true,
+    "credit_error": "latecreditgate: credit blocked; output_key occupied by reclaim; race proof opened",
+    "proof_kind": "occupy_vs_credit",
+    "fail_closed": true,
+    "occupy_state": "occupied"
+  }
+}
+// temporary guard removed after the production check
