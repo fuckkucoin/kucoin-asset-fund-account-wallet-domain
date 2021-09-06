@@ -1,0 +1,17 @@
+{
+  "_comment": "未携带 occ_seg_gen 的 Commit/Abort 必须 fail-closed。",
+  "_scenario": "missing_gen",
+  "setup": {
+    "user_id": "u-occ-3",
+    "asset": "ETH",
+    "amount": "2",
+    "grant_idem": "g-occ-miss-1"
+  },
+  "steps": [
+    {"step": 1, "action": "open_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 2, "action": "before_freeze", "expect": {"allowed": true}},
+    {"step": 3, "action": "commit", "has_gen": false, "expect": {"allowed": false, "reason": "missing_gen", "has_proof": true}},
+    {"step": 4, "action": "abort", "has_gen": false, "expect": {"allowed": false, "reason": "missing_gen", "has_proof": true}}
+  ],
+  "invariants": ["missing_gen_fail_closed"]
+}

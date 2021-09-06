@@ -1,0 +1,17 @@
+{
+  "_comment": "Abort 成功后 Commit 必须失败并证明化。",
+  "_scenario": "abort_then_commit",
+  "setup": {
+    "user_id": "u-occ-6",
+    "asset": "USDT",
+    "amount": "8",
+    "grant_idem": "g-occ-ab-1"
+  },
+  "steps": [
+    {"step": 1, "action": "open_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 2, "action": "before_freeze", "expect": {"allowed": true}},
+    {"step": 3, "action": "abort", "has_gen": true, "expect": {"allowed": true, "seg_state": "aborted"}},
+    {"step": 4, "action": "commit", "has_gen": true, "expect": {"allowed": false, "reason": "commit_after_abort", "has_proof": true}}
+  ],
+  "invariants": ["no_double_spend_occupancy"]
+}

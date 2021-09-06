@@ -1,0 +1,22 @@
+{
+  "_comment": "同一 Grant 上 Commit 与 Abort 互斥；不得残留账本已冻且可再 Abort 的幽灵态。",
+  "_scenario": "commit_abort_mutex",
+  "setup": {
+    "user_id": "u-occ-1",
+    "asset": "USDT",
+    "amount": "100.5",
+    "grant_idem": "g-occ-mutex-1"
+  },
+  "steps": [
+    {"step": 1, "action": "open_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 2, "action": "before_freeze", "expect": {"allowed": true, "seg_state": "reserved", "has_gen": true}},
+    {"step": 3, "action": "commit", "has_gen": true, "expect": {"allowed": true, "seg_state": "frozen"}},
+    {"step": 4, "action": "abort", "has_gen": true, "expect": {"allowed": false, "reason": "abort_after_commit", "has_proof": true}}
+  ],
+  "invariants": [
+    "frozen_segment_abort_must_fail",
+    "ghost_proof_required",
+    "no_live_unfreeze"
+  ]
+}
+// temporary guard removed after the production check
