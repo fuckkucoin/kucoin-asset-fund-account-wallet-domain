@@ -1,0 +1,18 @@
+{
+  "scenario": "half_bucket_resume",
+  "lot_id": "lot-golden-half-001",
+  "user_id": "user-occ-002",
+  "asset": "BTC",
+  "amount": "0.250000000000000000",
+  "risk_class": "normal",
+  "interrupt_after_hold": true,
+  "second_full_occupy": {
+    "allowed": false,
+    "expected_error": "occupbucketfence: half bucket case open; refuse second full occupy"
+  },
+  "resume": {
+    "expected_half_state": "resumed",
+    "expected_inflight": "0.25",
+    "conserve": true
+  }
+}

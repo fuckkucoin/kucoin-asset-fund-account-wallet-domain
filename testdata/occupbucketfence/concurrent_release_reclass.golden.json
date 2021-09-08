@@ -1,0 +1,25 @@
+{
+  "scenario": "concurrent_release_reclass",
+  "lot_id": "lot-golden-rr-001",
+  "user_id": "user-occ-001",
+  "asset": "USDT",
+  "amount": "100.000000000000000000",
+  "risk_class": "t2",
+  "hold": {
+    "expected_state": "bound",
+    "expected_inflight": "100",
+    "expected_available": "0",
+    "expected_void": "0"
+  },
+  "race": {
+    "one_winner": true,
+    "loser_error": "occupbucketfence: reclass/release mutex conflict",
+    "expect_break_proof": true,
+    "proof_kind_class": "mutex"
+  },
+  "invariants": [
+    "inflight+available+void == occupied_total",
+    "exactly one of release or reclass succeeds",
+    "no fund double-spend of the same hold"
+  ]
+}
