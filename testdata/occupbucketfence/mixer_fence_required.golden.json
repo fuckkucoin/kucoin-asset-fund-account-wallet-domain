@@ -1,0 +1,16 @@
+{
+  "scenario": "t4_mixer_no_bypass",
+  "lot_id": "lot-golden-mix-001",
+  "user_id": "user-occ-003",
+  "asset": "ETH",
+  "amount": "8.000000000000000000",
+  "risk_class": "mixer",
+  "direct_book_hold_without_fence": {
+    "allowed": false,
+    "expected_error": "depoccup: mixer/t4 path must enter via fence"
+  },
+  "hold_with_fence": {
+    "allowed": true,
+    "full_occupancy": true
+  }
+}
