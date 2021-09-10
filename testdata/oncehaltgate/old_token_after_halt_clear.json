@@ -1,0 +1,93 @@
+{
+  "_comment": "事故轨迹夹具：Halt 解除后，Halt 期间被吊销的旧 epoch/token 尝试复活投递，应被拒。",
+  "_fixture_version": "1",
+  "scenario": "old_token_after_halt_clear",
+  "description": "SetHalt(true) 吊销在途 Deliver（epoch=1, token=T1）；SetHalt(false) 解除 Halt；随后持旧 token T1 重试 Deliver，应收到 ErrStaleFenceRevive 而非成功。",
+  "steps": [
+    {
+      "step": 1,
+      "action": "enqueue",
+      "key": "txn-003",
+      "kind": "transfer",
+      "payload": "{\"amount\":\"50.00\",\"asset\":\"ETH\"}",
+      "expect_ok": true
+    },
+    {
+      "step": 2,
+      "action": "note_token",
+      "key": "txn-003",
+      "note": "记录此时的 epoch=1 与 token=T1，后续用旧 token 重试"
+    },
+    {
+      "step": 3,
+      "action": "lock_deliver",
+      "key": "txn-003",
+      "epoch": 1,
+      "note": " Deliver 已锁定但尚未 Mark"
+    },
+    {
+      "step": 4,
+      "action": "set_halt",
+      "on": true,
+      "actor": "ops-oncall",
+      "expect_generation": 1,
+      "expect_state": "blocking",
+      "expect_revoked_count": 1,
+      "note": "SetHalt(true)：吊销 step 3 在途 Deliver，(epoch=1, T1) 进入 revokedFences"
+    },
+    {
+      "step": 5,
+      "action": "set_halt",
+      "on": false,
+      "actor": "ops-oncall",
+      "expect_generation": 2,
+      "expect_state": "cleared",
+      "note": "SetHalt(false)：世代再次抬升至 2；revokedFences 保留 (epoch=1, T1)"
+    },
+    {
+      "step": 6,
+      "action": "deliver",
+      "key": "txn-003",
+      "epoch": 1,
+      "use_stale_token": "T1",
+      "expect_error": "outbox stale fence revive blocked",
+      "note": "Halt 解除后用旧 T1 重试，应被 ErrStaleFenceRevive 拒绝"
+    },
+    {
+      "step": 7,
+      "action": "check_cases",
+      "expect_kinds": ["halt_revoked"],
+      "note": "Halt 吊销证明已落 halt_revoked case"
+    },
+    {
+      "step": 8,
+      "action": "enqueue_new_token",
+      "key": "txn-003-new",
+      "kind": "transfer",
+      "payload": "{\"amount\":\"50.00\",\"asset\":\"ETH\"}",
+      "expect_ok": true,
+      "note": "新 key 可正常入箱（Halt 已解除，世代=2）"
+    },
+    {
+      "step": 9,
+      "action": "deliver",
+      "key": "txn-003-new",
+      "epoch": 1,
+      "use_event_token": true,
+      "expect_delivered": true,
+      "note": "新 key 新 token 可正常投递（Halt 解除后新世代）"
+    }
+  ],
+  "expected_proof_summary": {
+    "halt_gen": 2,
+    "total_cases": 1,
+    "cases": [
+      {
+        "kind": "halt_revoked",
+        "key": "txn-003",
+        "halt_gen": 1,
+        "epoch": 1
+      }
+    ]
+  }
+}

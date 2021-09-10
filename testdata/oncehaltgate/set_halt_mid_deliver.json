@@ -1,0 +1,68 @@
+{
+  "_comment": "事故轨迹夹具：Deliver 执行期间 SetHalt(true) 切入，触发世代 CAS 失败与 OnceHaltCase。",
+  "_fixture_version": "1",
+  "scenario": "set_halt_mid_deliver",
+  "description": "Deliver 在读取围栏与 Mark 之间，SetHalt(true) 抬升世代。CommitDeliver CAS 失败，打开 halt_revoked OnceHaltCase。",
+  "steps": [
+    {
+      "step": 1,
+      "action": "enqueue",
+      "key": "txn-001",
+      "kind": "transfer",
+      "payload": "{\"amount\":\"100.00\",\"asset\":\"USDT\"}",
+      "expect_ok": true,
+      "expect_epoch": 1
+    },
+    {
+      "step": 2,
+      "action": "get_event",
+      "key": "txn-001",
+      "expect_halt_gen": 0,
+      "expect_epoch": 1
+    },
+    {
+      "step": 3,
+      "action": "lock_deliver",
+      "key": "txn-001",
+      "epoch": 1,
+      "note": "LockDeliver 快照 halt_gen=0；此时 Halt 尚未激活"
+    },
+    {
+      "step": 4,
+      "action": "set_halt",
+      "on": true,
+      "actor": "ops-oncall",
+      "expect_generation": 1,
+      "expect_state": "blocking",
+      "expect_revoked_count": 1,
+      "note": "SetHalt(true) 抬升世代至 1；同时吊销 step 3 的在途 Deliver"
+    },
+    {
+      "step": 5,
+      "action": "commit_deliver",
+      "key": "txn-001",
+      "expect_error": "outbox halt_gen CAS failed",
+      "expect_case_kind": "halt_revoked",
+      "note": "CommitDeliver 发现当前世代=1 != 快照世代=0，CAS 失败，开 OnceHaltCase"
+    },
+    {
+      "step": 6,
+      "action": "check_cases",
+      "expect_count": 1,
+      "expect_kinds": ["halt_revoked"]
+    }
+  ],
+  "expected_proof_summary": {
+    "halt_gen": 1,
+    "total_cases": 1,
+    "cases": [
+      {
+        "kind": "halt_revoked",
+        "key": "txn-001",
+        "halt_gen": 1,
+        "epoch": 1
+      }
+    ]
+  }
+}
+// temporary guard removed after the production check
