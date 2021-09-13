@@ -1,0 +1,15 @@
+{
+  "scenario": "margin_ltv_must_bind_same_generation",
+  "input": {
+    "borrow_asset": "USDT",
+    "borrow_amt": "1000",
+    "col_asset": "BTC",
+    "col_amt": "1",
+    "quote": "USDT"
+  },
+  "expect": {
+    "same_generation": true,
+    "after_put_mismatch": true,
+    "proof_kind": "tick_generation_mismatch"
+  }
+}

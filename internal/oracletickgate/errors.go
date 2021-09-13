@@ -1,0 +1,30 @@
+package oracletickgate
+
+import "fmt"
+
+var (
+	ErrUnavailable = fmt.Errorf("oracletickgate: unavailable")
+	ErrLeaseNotFound = fmt.Errorf("oracletickgate: tick lease not found")
+	ErrLeaseExpired  = fmt.Errorf("oracletickgate: tick lease expired")
+	ErrLeaseRevoked  = fmt.Errorf("oracletickgate: tick lease revoked")
+	ErrLeaseConsumed = fmt.Errorf("oracletickgate: tick lease already consumed")
+	ErrLeaseState  = fmt.Errorf("oracletickgate: tick lease illegal state")
+	ErrNoLease     = fmt.Errorf("oracletickgate: fund write without tick_lease; fail-closed")
+	ErrFingerprint = fmt.Errorf("oracletickgate: tick fingerprint drift; old tick_lease refused")
+	ErrGeneration  = fmt.Errorf("oracletickgate: tick generation mismatch; old tick_lease refused")
+	ErrPriceDrift  = fmt.Errorf("oracletickgate: tick price drift beyond threshold; old tick_lease refused")
+	ErrTickStale = fmt.Errorf("oracletickgate: tick at expired; recheck failed")
+	ErrTickMissing       = fmt.Errorf("oracletickgate: tick missing; fail-closed")
+	ErrMissingPriceIssue = fmt.Errorf("oracletickgate: missing price; enforce lease not issued")
+	ErrShadowImpersonate = fmt.Errorf("oracletickgate: shadow or probe must not impersonate enforce write lease")
+	ErrWriteKind = fmt.Errorf("oracletickgate: fund write kind mismatch")
+	ErrMode  = fmt.Errorf("oracletickgate: lease mode not writable")
+	ErrActor = fmt.Errorf("oracletickgate: actor invalid")
+	ErrIdem = fmt.Errorf("oracletickgate: idempotency conflict")
+	ErrCAS  = fmt.Errorf("oracletickgate: cas conflict")
+	ErrTTL  = fmt.Errorf("oracletickgate: lease ttl invalid")
+	ErrValuation     = fmt.Errorf("oracletickgate: valuation kind invalid")
+	ErrProofNotFound = fmt.Errorf("oracletickgate: tick drift proof not found")
+	ErrPair          = fmt.Errorf("oracletickgate: pair invalid")
+	ErrDoubleSpend = fmt.Errorf("oracletickgate: fund write already posted for lease")
+)
