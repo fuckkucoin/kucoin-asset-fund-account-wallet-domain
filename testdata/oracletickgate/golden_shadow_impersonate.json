@@ -1,0 +1,9 @@
+{
+  "scenario": "shadow_must_not_impersonate_enforce_write",
+  "expect": {
+    "write_error": "oracletickgate: shadow or probe must not impersonate enforce write lease",
+    "proof_kind": "shadow_impersonate_enforce",
+    "fail_closed": true,
+    "posted": false
+  }
+}

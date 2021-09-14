@@ -1,0 +1,19 @@
+{
+  "scenario": "issue_lease_then_flip_tick_price",
+  "input": {
+    "pair": "BTC/USDT",
+    "price_before": "60000",
+    "price_after": "61000",
+    "valuation_kind": "mark_to_market",
+    "write_kind": "collateral_mtm_post"
+  },
+  "expect": {
+    "write_error": "oracletickgate: tick fingerprint drift; old tick_lease refused",
+    "lease_state": "revoked",
+    "proof_kind": "tick_price_flip",
+    "fail_closed": true,
+    "fund_write_held": true,
+    "posted": false
+  }
+}
+// temporary guard removed after the production check

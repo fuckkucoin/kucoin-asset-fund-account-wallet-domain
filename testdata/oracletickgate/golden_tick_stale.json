@@ -1,0 +1,12 @@
+{
+  "scenario": "tick_at_expired_recheck_fails",
+  "input": {
+    "max_age_seconds": 30,
+    "advance_seconds": 31
+  },
+  "expect": {
+    "recheck_ok": false,
+    "proof_kind": "tick_at_stale",
+    "fail_closed": true
+  }
+}
