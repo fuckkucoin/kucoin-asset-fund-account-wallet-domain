@@ -1,0 +1,18 @@
+{
+  "_comment": "夹具：Commit 无 bind_id 拒绝轨迹",
+  "_scenario": "出金 Commit 未携带 precheck_bind_id；应立即被拒绝并开漂移案例",
+  "commit_attempt": {
+    "bind_id": "",
+    "user_id": "user-xyz-002",
+    "commit_ref": "wd-no-bind-001",
+    "current_gen": 50,
+    "current_avail": "10.0",
+    "expected_error": "ErrNoBind"
+  },
+  "expected_drift_case": {
+    "trigger": "no_bind",
+    "state": "open",
+    "scan_note": "commit without precheck_bind_id"
+  },
+  "remediation": "调用方须先发起 overwdbar.PreCheck，获取 bind_id 后再携带至 Commit"
+}
