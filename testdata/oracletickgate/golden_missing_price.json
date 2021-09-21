@@ -1,0 +1,14 @@
+{
+  "scenario": "missing_price_convert_no_enforce_lease",
+  "input": {
+    "asset": "DOGE",
+    "quote": "USDT",
+    "mode": "enforce",
+    "valuation_kind": "convert"
+  },
+  "expect": {
+    "issue_error": "oracletickgate: missing price; enforce lease not issued",
+    "proof_kind": "missing_price_no_enforce_lease",
+    "fail_closed": true
+  }
+}
