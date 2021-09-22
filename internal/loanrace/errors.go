@@ -1,0 +1,30 @@
+package loanrace
+
+import "fmt"
+
+var (
+	ErrUnavailable = fmt.Errorf("loanrace: service unavailable")
+	ErrLoanNotFound = fmt.Errorf("loanrace: loan not found")
+	ErrLeaseConflict = fmt.Errorf("loanrace: lease already held by another party")
+	ErrLeaseNotFound = fmt.Errorf("loanrace: lease not found")
+	ErrLeaseExpired  = fmt.Errorf("loanrace: lease expired")
+	ErrLeaseReleased = fmt.Errorf("loanrace: lease already released")
+	ErrGateNotFound  = fmt.Errorf("loanrace: pay gate not found")
+	ErrGateBlocked   = fmt.Errorf("loanrace: pay blocked by freeze gate")
+	ErrGateClosed = fmt.Errorf("loanrace: pay gate already closed")
+	ErrWrittenOff     = fmt.Errorf("loanrace: loan written off, pay forbidden")
+	ErrWriteoffExists = fmt.Errorf("loanrace: writeoff case already exists")
+	ErrWriteoffState  = fmt.Errorf("loanrace: writeoff illegal state")
+	ErrProofRequired = fmt.Errorf("loanrace: unfreeze proof required before clearing frozen bit")
+	ErrProofNotFound = fmt.Errorf("loanrace: unfreeze proof not found")
+	ErrProofInvalid  = fmt.Errorf("loanrace: unfreeze proof invalid")
+	ErrProofExists = fmt.Errorf("loanrace: unfreeze proof already exists for this loan")
+	ErrActor       = fmt.Errorf("loanrace: actor invalid")
+	ErrDualControl = fmt.Errorf("loanrace: dual-control violation, applicant and approver must differ")
+	ErrState     = fmt.Errorf("loanrace: illegal state transition")
+	ErrAmount    = fmt.Errorf("loanrace: amount invalid")
+	ErrFrozenBit = fmt.Errorf("loanrace: frozen bit still set, cannot clear without proof")
+	ErrAlreadyFrozen = fmt.Errorf("loanrace: loan already frozen")
+	ErrNotFrozen = fmt.Errorf("loanrace: loan not frozen")
+	ErrSuspense  = fmt.Errorf("loanrace: suspense account error")
+)

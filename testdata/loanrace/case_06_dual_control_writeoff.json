@@ -1,0 +1,21 @@
+{
+  "name": "dual_control_writeoff_same_actor_rejected",
+  "description": "双控：核销申请人与批准人不得为同一人",
+  "loans": [
+    {
+      "id": "LOAN-006",
+      "user_id": "USER-F",
+      "state": "active"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-006", "user_id": "USER-F"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-006", "user_id": "USER-F", "actor": "scanner"},
+    {"type": "apply_writeoff", "loan_id": "LOAN-006", "principal": "5000", "interest": "250", "reason": "bad debt", "actor": "same_person"},
+    {"type": "approve_writeoff", "loan_id": "LOAN-006", "actor": "same_person", "expect_error": "dual-control violation"}
+  ],
+  "expected": {
+    "writeoff_state": "pending",
+    "dual_control_enforced": true
+  }
+}

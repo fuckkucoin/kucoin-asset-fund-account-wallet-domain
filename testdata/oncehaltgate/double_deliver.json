@@ -1,0 +1,63 @@
+{
+  "_comment": "事故轨迹夹具：同一 key 两次 Deliver（第二次为 Halt 期间），验证双投收口与证明产出。",
+  "_fixture_version": "1",
+  "scenario": "double_deliver",
+  "description": "首次 Deliver 成功（SentAt 置位）；随后 SetHalt(true) 切入；再次 Deliver 同 key（应被拒）。验证：Halt=true 期间新 Deliver 立即拒绝；SentAt 不变；无双投发生。",
+  "steps": [
+    {
+      "step": 1,
+      "action": "enqueue",
+      "key": "txn-002",
+      "kind": "withdraw",
+      "payload": "{\"amount\":\"200.00\",\"asset\":\"BTC\"}",
+      "expect_ok": true
+    },
+    {
+      "step": 2,
+      "action": "deliver",
+      "key": "txn-002",
+      "epoch": 1,
+      "use_event_token": true,
+      "expect_delivered": true,
+      "expect_replay": false,
+      "note": "首次 Deliver 成功，SentAt 置位"
+    },
+    {
+      "step": 3,
+      "action": "set_halt",
+      "on": true,
+      "actor": "ops-oncall",
+      "expect_generation": 1,
+      "expect_state": "blocking",
+      "expect_revoked_count": 0,
+      "note": "SetHalt(true)；此时无在途 Deliver，吊销数=0"
+    },
+    {
+      "step": 4,
+      "action": "deliver",
+      "key": "txn-002",
+      "epoch": 2,
+      "use_event_token": true,
+      "expect_error": "outbox halted",
+      "note": "Halt=true，新 Deliver 立即被拒"
+    },
+    {
+      "step": 5,
+      "action": "get_event",
+      "key": "txn-002",
+      "expect_sent_at_not_null": true,
+      "note": "SentAt 不变，未被二次覆盖"
+    },
+    {
+      "step": 6,
+      "action": "check_cases",
+      "expect_count": 0,
+      "note": "无双投证明（第一次正常，第二次被 ErrHalt 拦截）"
+    }
+  ],
+  "expected_proof_summary": {
+    "halt_gen": 1,
+    "total_cases": 0,
+    "cases": []
+  }
+}

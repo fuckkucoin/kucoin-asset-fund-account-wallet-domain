@@ -1,0 +1,22 @@
+{
+  "name": "lease_expiry_drift_patrol",
+  "description": "租约过期后漂移巡逻自动释放",
+  "loans": [
+    {
+      "id": "LOAN-007",
+      "user_id": "USER-G",
+      "state": "active"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-007", "user_id": "USER-G"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-007", "user_id": "USER-G", "actor": "scanner"},
+    {"type": "advance_clock", "duration": "60s"},
+    {"type": "drift_patrol"},
+    {"type": "check_lease_expired", "loan_id": "LOAN-007"}
+  ],
+  "expected": {
+    "lease_expired": true,
+    "drift_patrol_released": 1
+  }
+}

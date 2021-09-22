@@ -1,0 +1,23 @@
+{
+  "name": "repay_fail_rollback_to_frozen",
+  "description": "还款失败回退到冻结状态",
+  "loans": [
+    {
+      "id": "LOAN-008",
+      "user_id": "USER-H",
+      "state": "active"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-008", "user_id": "USER-H"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-008", "user_id": "USER-H", "actor": "scanner"},
+    {"type": "start_controlled_repay", "loan_id": "LOAN-008", "amount": "10000", "actor": "ops"},
+    {"type": "check_state", "loan_id": "LOAN-008", "expect_race_state": "repaying"},
+    {"type": "fail_repay", "loan_id": "LOAN-008", "actor": "ops"},
+    {"type": "check_state", "loan_id": "LOAN-008", "expect_race_state": "frozen"}
+  ],
+  "expected": {
+    "final_state": "frozen",
+    "frozen": true
+  }
+}
