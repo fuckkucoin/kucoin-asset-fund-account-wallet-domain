@@ -1,0 +1,23 @@
+{
+  "_comment": "夹具：bind TTL 超期后 Commit 拒绝轨迹",
+  "_scenario": "PreCheck 通过后超过 60s 才 Commit；bind 已过期（expired），需重新 PreCheck",
+  "precheck": {
+    "user_id": "user-ttl-003",
+    "asset": "ETH",
+    "amount": "1.0",
+    "lease_gen_at_precheck": 200,
+    "available_at_precheck": "5.0",
+    "bind_ttl_seconds": 60
+  },
+  "time_elapsed_before_commit_seconds": 90,
+  "commit_attempt": {
+    "current_gen": 200,
+    "current_avail": "5.0",
+    "expected_error": "ErrBindExpired"
+  },
+  "worker_action": {
+    "worker": "BindExpiryWorker",
+    "expected_bind_state_after_worker": "expired"
+  },
+  "remediation": "TTL 过期后需重新调用 overwdbar.PreCheck 获取新 bind_id"
+}

@@ -1,0 +1,8 @@
+{
+  "scenario": "fund_write_without_lease",
+  "expect": {
+    "write_error": "oracletickgate: fund write without tick_lease; fail-closed",
+    "proof_kind": "fund_write_without_lease",
+    "fail_closed": true
+  }
+}

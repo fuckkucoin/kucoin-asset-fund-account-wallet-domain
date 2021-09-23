@@ -1,0 +1,25 @@
+{
+  "_comment": "夹具：正常 PreCheck → Commit 路径（无漂移）",
+  "_scenario": "LeaseGen 和 Available 在 PreCheck 与 Commit 之间保持一致，Commit 通过",
+  "precheck": {
+    "user_id": "user-normal-005",
+    "asset": "BTC",
+    "amount": "0.01",
+    "lease_gen_at_precheck": 1000,
+    "available_at_precheck": "2.500000",
+    "bind_ttl_seconds": 60
+  },
+  "commit": {
+    "commit_gen": 1000,
+    "commit_avail": "2.500000",
+    "commit_ref": "wd-normal-20220815-001",
+    "expected_error": null,
+    "expected_bind_state": "committed"
+  },
+  "invariants": [
+    "不产生 VarianceProof",
+    "不产生 OverwdDriftCase",
+    "不修改 availcas.Submit 公式",
+    "不修改 hotbound cap"
+  ]
+}

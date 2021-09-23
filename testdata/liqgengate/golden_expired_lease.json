@@ -1,0 +1,21 @@
+{
+  "_comment": "过期租约不得进入释放成功路径。",
+  "_scenario": "expired_lease",
+  "setup": {
+    "user_id": "u-liq-006",
+    "borrow_id": "br-liq-006",
+    "collateral_id": "col-liq-006",
+    "asset": "USDT",
+    "borrow_amt": "8000",
+    "collateral_amt": "10000",
+    "ltv_bps": 8000,
+    "cap_bps": 6500,
+    "lease_ttl_ms": 1
+  },
+  "steps": [
+    {"step": 1, "action": "freeze", "expect": {"allowed": true}},
+    {"step": 2, "action": "sleep_ms", "sleep_ms": 5},
+    {"step": 3, "action": "release", "liq_gen": 1, "has_gen": true, "expect": {"allowed": false, "reason": "expired_lease"}}
+  ],
+  "invariants": ["fail_closed", "expired"]
+}

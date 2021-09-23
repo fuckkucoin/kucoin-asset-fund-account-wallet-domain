@@ -1,0 +1,36 @@
+{
+  "_comment": "夹具：VarianceProof open 期间同用户同资产 Commit 挡写轨迹",
+  "_scenario": "第一次 Commit 因 gen 漂移触发 VarianceProof(open)；第二次 Commit 被 open 证明挡写",
+  "step1_precheck": {
+    "user_id": "user-blocked-004",
+    "asset": "USDT",
+    "amount": "100.0",
+    "lease_gen_at_precheck": 300,
+    "available_at_precheck": "1000.0"
+  },
+  "step1_commit": {
+    "commit_gen": 305,
+    "commit_avail": "1000.0",
+    "expected_error": "ErrOverdrawBlocked",
+    "expected_proof_state": "open"
+  },
+  "step2_precheck": {
+    "user_id": "user-blocked-004",
+    "asset": "USDT",
+    "amount": "100.0",
+    "lease_gen_at_precheck": 305,
+    "available_at_precheck": "1000.0"
+  },
+  "step2_commit": {
+    "commit_gen": 305,
+    "commit_avail": "1000.0",
+    "expected_error": "ErrProofBlocked",
+    "note": "open VarianceProof 挡写，四眼确认前不允许再次 Commit"
+  },
+  "proof_unblock": {
+    "action": "confirm",
+    "confirmed_by": "ops-admin-C",
+    "close_reason": "漂移确认为系统更新导致，非超提",
+    "after_unblock_commit_expected": "committed"
+  }
+}

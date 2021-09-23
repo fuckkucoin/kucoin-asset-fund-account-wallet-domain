@@ -1,0 +1,20 @@
+{
+  "_comment": "缺世代 Release/Close fail-closed。",
+  "_scenario": "missing_gen_fail_closed",
+  "setup": {
+    "user_id": "u-liq-002",
+    "borrow_id": "br-liq-002",
+    "collateral_id": "col-liq-002",
+    "asset": "BTC",
+    "borrow_amt": "2",
+    "collateral_amt": "1",
+    "ltv_bps": 9000,
+    "cap_bps": 6500
+  },
+  "steps": [
+    {"step": 1, "action": "freeze", "expect": {"allowed": true, "gen": 1}},
+    {"step": 2, "action": "release", "has_gen": false, "expect": {"allowed": false, "reason": "missing_gen", "has_proof": true}},
+    {"step": 3, "action": "close", "has_gen": false, "expect": {"allowed": false, "reason": "missing_gen"}}
+  ],
+  "invariants": ["fail_closed", "no_release"]
+}

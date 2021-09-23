@@ -1,0 +1,20 @@
+{
+  "_comment": "Freeze 推进世代后，持旧世代 Release/Close 必须失败并落 LiqRaceProof。",
+  "_scenario": "stale_gen_release",
+  "setup": {
+    "user_id": "u-liq-001",
+    "borrow_id": "br-liq-001",
+    "collateral_id": "col-liq-001",
+    "asset": "USDT",
+    "borrow_amt": "8000",
+    "collateral_amt": "10000",
+    "ltv_bps": 8000,
+    "cap_bps": 6500
+  },
+  "steps": [
+    {"step": 1, "action": "freeze", "expect": {"allowed": true, "gen": 1}},
+    {"step": 2, "action": "release", "liq_gen": 0, "has_gen": true, "expect": {"allowed": false, "reason": "stale_gen", "has_proof": true}},
+    {"step": 3, "action": "close", "liq_gen": 0, "has_gen": true, "expect": {"allowed": false, "reason": "stale_gen"}}
+  ],
+  "invariants": ["fail_closed", "race_proof", "no_double_release"]
+}

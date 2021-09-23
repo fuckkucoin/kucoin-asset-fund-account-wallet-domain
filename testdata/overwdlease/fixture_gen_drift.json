@@ -1,0 +1,40 @@
+{
+  "_comment": "夹具：LeaseGen 漂移事故轨迹（gen_drift）",
+  "_scenario": "PreCheck 通过后 LeaseGen 从 100 漂移到 103；Commit 被超提屏障拒绝并升差异证明",
+  "precheck": {
+    "user_id": "user-abc-001",
+    "asset": "BTC",
+    "amount": "0.5",
+    "lease_gen_at_precheck": 100,
+    "available_at_precheck": "3.500000",
+    "bind_ttl_seconds": 60
+  },
+  "commit_attempt": {
+    "bind_id": "<<from precheck bind reply>>",
+    "commit_gen": 103,
+    "commit_avail": "3.500000",
+    "expected_error": "ErrOverdrawBlocked"
+  },
+  "expected_variance_proof": {
+    "trigger": "gen_drift",
+    "bind_lease_gen": 100,
+    "commit_gen": 103,
+    "drift_gen": 3,
+    "bind_avail": "3.500000",
+    "commit_avail": "3.500000",
+    "state": "open"
+  },
+  "expected_bind_state": "revoked",
+  "expected_drift_case": {
+    "trigger": "gen_drift",
+    "drift_gen": 3,
+    "state": "open"
+  },
+  "proof_closure": {
+    "action": "confirm",
+    "confirmed_by": "ops-admin-B",
+    "close_reason": "经核查：此次 LeaseGen 推进为并发出金导致，非恶意超提",
+    "expected_proof_state_after": "closed",
+    "expected_unblock": true
+  }
+}
