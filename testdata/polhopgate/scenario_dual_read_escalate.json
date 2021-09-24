@@ -1,0 +1,110 @@
+{
+  "_comment": "验收场景 2：DualRead 分歧超阈 → 对应 BizKind hop 挡写并升案。",
+  "scenario": "dual_read_escalate",
+  "description": "DualRead 分歧超过阈值时升级为资金挡写案例，不仅记日志",
+  "config": {
+    "dual_diverge_threshold": 3,
+    "dual_diverge_window_minutes": 5,
+    "token_ttl_seconds": 30
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "publish_global_version",
+      "input": { "published_by": "ops" },
+      "expected": { "gen": 1, "state": "active" }
+    },
+    {
+      "step": 2,
+      "action": "record_dual_read",
+      "comment": "第 1 次分歧：主库 Gen=5，副库 Gen=3，delta=2",
+      "input": {
+        "biz_kind": "deposit",
+        "primary_gen": 5,
+        "replica_gen": 3,
+        "trace_id": "trace-001"
+      },
+      "expected": { "result": "diverge", "escalated": false }
+    },
+    {
+      "step": 3,
+      "action": "record_dual_read",
+      "comment": "第 2 次分歧",
+      "input": {
+        "biz_kind": "deposit",
+        "primary_gen": 5,
+        "replica_gen": 3,
+        "trace_id": "trace-002"
+      },
+      "expected": { "result": "diverge", "escalated": false }
+    },
+    {
+      "step": 4,
+      "action": "record_dual_read",
+      "comment": "第 3 次分歧：达到阈值，触发升级",
+      "input": {
+        "biz_kind": "deposit",
+        "primary_gen": 5,
+        "replica_gen": 3,
+        "trace_id": "trace-003"
+      },
+      "expected": { "result": "diverge", "escalated": true }
+    },
+    {
+      "step": 5,
+      "action": "issue_token",
+      "comment": "IssueToken 应被 DualEscalate 挡写",
+      "input": {
+        "user_id": "user-deposit",
+        "biz_kind": "deposit",
+        "idem_key": "deposit-blocked-001"
+      },
+      "expected": {
+        "error": "polhopgate: dual-read escalation active; hop blocked"
+      }
+    },
+    {
+      "step": 6,
+      "action": "get_drift_case",
+      "comment": "漂移案例已开启，触发类型为 dual_read",
+      "expected": {
+        "state": "open",
+        "trigger": "dual_read",
+        "biz_kind": "deposit",
+        "trigger_gen": 5,
+        "replica_gen": 3,
+        "diverge_delta": 2
+      }
+    },
+    {
+      "step": 7,
+      "action": "check_other_biz_kinds",
+      "comment": "其他 BizKind（withdraw, transfer）不受影响",
+      "expected": {
+        "withdraw_escalate_active": false,
+        "transfer_escalate_active": false
+      }
+    }
+  ],
+  "golden_output": {
+    "escalate": {
+      "state": "active",
+      "biz_kind": "deposit",
+      "threshold_count": 3,
+      "max_diverge_delta": 2
+    },
+    "drift_case": {
+      "state": "open",
+      "trigger": "dual_read",
+      "trigger_gen": 5,
+      "replica_gen": 3,
+      "diverge_delta": 2
+    }
+  },
+  "invariants": [
+    "DualRead 分歧超阈后必须升级为 DualEscalate，不得仅记日志",
+    "升级后对应 BizKind 的 IssueToken 必须返回 ErrDualEscalateBlock",
+    "其他 BizKind 不受影响（键空间隔离）",
+    "cfgcenter rollout_id 键空间不得出现在 drift_case 字段中"
+  ]
+}
