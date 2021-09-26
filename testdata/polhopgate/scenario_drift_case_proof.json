@@ -1,0 +1,79 @@
+{
+  "_comment": "验收场景 3：PolDriftCase 证明通过后方可关闭（缺证明时 ErrProofMissing）。",
+  "scenario": "drift_case_proof_required",
+  "description": "PolDriftCase open→proven→closed FSM；缺证明不得关闭",
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_drift_case",
+      "comment": " DualRead 分歧触发开案",
+      "input": {
+        "trigger": "dual_read",
+        "biz_kind": "earn",
+        "trigger_gen": 10,
+        "replica_gen": 7,
+        "diverge_delta": 3
+      },
+      "expected": {
+        "state": "open",
+        "proof_id": ""
+      }
+    },
+    {
+      "step": 2,
+      "action": "confirm_drift_case",
+      "comment": "open 状态直接 Confirm（无证明）应返回 ErrProofMissing",
+      "input": {
+        "case_id": "$step1.case_id",
+        "confirmed_by": "admin-ops"
+      },
+      "expected": {
+        "error": "polhopgate: drift proof missing; cannot close case"
+      }
+    },
+    {
+      "step": 3,
+      "action": "run_proof_seal_worker",
+      "comment": "ProofSealWorker 产出证明，推进案例到 proven",
+      "expected": {
+        "proof_hash_pattern": "[0-9a-f]{64}",
+        "case_state": "proven"
+      }
+    },
+    {
+      "step": 4,
+      "action": "get_drift_case",
+      "expected": {
+        "state": "proven",
+        "proof_id_not_empty": true,
+        "proof_hash_not_empty": true
+      }
+    },
+    {
+      "step": 5,
+      "action": "confirm_drift_case",
+      "comment": "proven 状态 Confirm 可以关闭",
+      "input": {
+        "case_id": "$step1.case_id",
+        "confirmed_by": "admin-ops",
+        "close_reason": "drift confirmed and resolved"
+      },
+      "expected": {
+        "state": "closed",
+        "escalate_resolved": true
+      }
+    }
+  ],
+  "golden_proof_format": {
+    "proof_hash_algorithm": "SHA-256",
+    "proof_hash_input": "case_id ‖ ':' ‖ trigger_gen ‖ ':' ‖ replica_gen ‖ ':' ‖ sealed_at_unix",
+    "proof_hash_length": 64,
+    "proof_hash_encoding": "hex"
+  },
+  "invariants": [
+    "PolDriftCase 在 open 状态不得直接 closed（ErrProofMissing）",
+    "ProofSealWorker 必须先固化证明，推进到 proven",
+    "proven 状态 ConfirmDriftCase 后 state=closed，DualEscalate 解除",
+    "ProofHash = SHA-256(case_id:trigger_gen:replica_gen:sealed_at_unix)"
+  ]
+}

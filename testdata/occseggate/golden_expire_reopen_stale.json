@@ -1,0 +1,22 @@
+{
+  "_comment": "Expire 重开后旧 occ_seg_gen / Grant 不得再 Commit 或 Abort。",
+  "_scenario": "expire_reopen_stale",
+  "setup": {
+    "user_id": "u-occ-2",
+    "asset": "BTC",
+    "amount": "0.25",
+    "grant_idem": "g-occ-expire-1"
+  },
+  "steps": [
+    {"step": 1, "action": "open_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 2, "action": "before_freeze", "expect": {"allowed": true, "has_gen": true}},
+    {"step": 3, "action": "expire_revoke", "expect": {"revoked": true}},
+    {"step": 4, "action": "reopen_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 5, "action": "commit_old", "has_gen": true, "expect": {"allowed": false, "has_proof": true}},
+    {"step": 6, "action": "abort_old", "has_gen": true, "expect": {"allowed": false, "has_proof": true}}
+  ],
+  "invariants": [
+    "old_grant_fail_closed",
+    "new_epoch_requires_new_occupy"
+  ]
+}

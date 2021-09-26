@@ -1,0 +1,11 @@
+{
+  "description": "场景13：Plan FSM 完整生命周期 — active→paused→active，重复操作拒绝",
+  "test_type": "plan_fsm_lifecycle",
+  "transitions": [
+    {"op": "create",   "expected_state": "active"},
+    {"op": "pause",    "expected_state": "paused"},
+    {"op": "pause",    "expected_error": true},
+    {"op": "activate", "expected_state": "active"},
+    {"op": "activate", "expected_error": true}
+  ]
+}

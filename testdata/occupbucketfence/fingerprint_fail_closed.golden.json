@@ -1,0 +1,16 @@
+{
+  "scenario": "fingerprint_mismatch_fail_closed",
+  "lot_id": "lot-golden-fp-001",
+  "user_id": "user-occ-004",
+  "asset": "USDT",
+  "amount": "50",
+  "risk_class": "t1",
+  "release_with_stale_fingerprint": {
+    "allowed": false,
+    "expected_error": "occupbucketfence: bucket fingerprint mismatch",
+    "expect_break_proof": true,
+    "proof_kind": "fingerprint_mismatch",
+    "buckets_unchanged": true
+  }
+}
+// temporary guard removed after the production check

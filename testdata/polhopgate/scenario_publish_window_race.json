@@ -1,0 +1,80 @@
+{
+  "_comment": "验收场景 1：Gate.Check 后策略 Publish 抬升世代，hop 执行复验失败，不改账。",
+  "scenario": "publish_window_race",
+  "description": "acctpol Publish/Pin 与 Gate.Check 非原子窗口竞态收口",
+  "steps": [
+    {
+      "step": 1,
+      "action": "publish_global_version",
+      "input": {
+        "asset": "",
+        "published_by": "ops-alice",
+        "allow_biz_kinds": [],
+        "require_token": true
+      },
+      "expected": {
+        "gen": 1,
+        "state": "active"
+      }
+    },
+    {
+      "step": 2,
+      "action": "issue_token",
+      "input": {
+        "user_id": "user-bob",
+        "biz_kind": "withdraw",
+        "idem_key": "idem-wd-race-001"
+      },
+      "expected": {
+        "state": "issued",
+        "policy_gen": 1
+      }
+    },
+    {
+      "step": 3,
+      "action": "publish_global_version",
+      "comment": "策略世代被 Publish 抬升到 Gen=2，此时 Bob 持有的令牌仍是 Gen=1",
+      "input": {
+        "asset": "",
+        "published_by": "ops-alice",
+        "allow_biz_kinds": []
+      },
+      "expected": {
+        "gen": 2,
+        "superseded_gen": 1,
+        "state": "active"
+      }
+    },
+    {
+      "step": 4,
+      "action": "bind_hop",
+      "comment": "Bob 尝试用旧 Gen=1 令牌执行 hop，应因世代不匹配被拒绝，不改账",
+      "input": {
+        "token_id": "$step2.token_id",
+        "hop_ref": "wd-order-100",
+        "user_id": "user-bob"
+      },
+      "expected": {
+        "error": "polhopgate: token policy_gen mismatch; hop re-check required",
+        "account_change": false
+      }
+    },
+    {
+      "step": 5,
+      "action": "get_token",
+      "comment": "验证令牌已被标记为 blocked（世代不符）",
+      "input": {
+        "token_id": "$step2.token_id"
+      },
+      "expected": {
+        "state": "blocked",
+        "block_reason_contains": "gen mismatch"
+      }
+    }
+  ],
+  "invariants": [
+    "token.PolicyGen 不符时 BindHop 必须返回 ErrGenMismatch",
+    "BindHop 失败时账本不得有任何变更（no account change）",
+    "令牌被 blocked 后不可再消费（终态）"
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "_comment": "golden: SeizeLeg 中途失败 → Residue 非空；续跑后证明可校验",
+  "scenario": "partial_seize_residue",
+  "steps": [
+    {
+      "step": 1,
+      "action": "trigger_plan",
+      "input": {
+        "borrow_id": "borrow-residue-001",
+        "user_id": "user-residue",
+        "borrow_asset": "USDT",
+        "borrow_amount": "8500",
+        "collateral_asset": "ETH",
+        "collateral_amount": "10000",
+        "trigger_ltv_bps": 8500,
+        "cap_bps": 8000
+      },
+      "expect_plan_state": "triggered"
+    },
+    {
+      "step": 2,
+      "action": "add_seize_leg",
+      "input": {
+        "asset": "ETH",
+        "target_amount": "10000",
+        "hold_id": "hold-residue-001"
+      },
+      "expect_leg_state": "pending",
+      "expect_plan_state": "seizing"
+    },
+    {
+      "step": 3,
+      "action": "start_leg",
+      "expect_leg_state": "executing"
+    },
+    {
+      "step": 4,
+      "action": "fail_leg",
+      "input": {
+        "partial_amount": "3000",
+        "reason": "network timeout during seize"
+      },
+      "expect_leg_state": "failed",
+      "expect_leg_has_residue": true,
+      "expect_plan_state": "residued"
+    },
+    {
+      "step": 5,
+      "action": "resume_leg",
+      "expect_leg_state": "executing"
+    },
+    {
+      "step": 6,
+      "action": "complete_leg",
+      "input": {
+        "seized_amount": "10000"
+      },
+      "expect_leg_state": "done"
+    },
+    {
+      "step": 7,
+      "action": "settle_borrow",
+      "input": {
+        "settled_amount": "8500"
+      },
+      "expect_plan_state": "closed"
+    },
+    {
+      "step": 8,
+      "action": "build_proof",
+      "expect": {
+        "status": "draft",
+        "digest_non_empty": true,
+        "occupy_token_matches_plan": true,
+        "residue_legs_empty": true
+      }
+    },
+    {
+      "step": 9,
+      "action": "validate_proof",
+      "input": {
+        "actor1": "ops-alice",
+        "actor2": "ops-bob"
+      },
+      "expect": {
+        "status": "validated"
+      }
+    }
+  ]
+}

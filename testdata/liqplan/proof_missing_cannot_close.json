@@ -1,0 +1,30 @@
+{
+  "_comment": "golden: 计划未到 closed/residued 时不得构建证明；证明缺失不得视为 closed",
+  "scenario": "proof_missing_cannot_close",
+  "cases": [
+    {
+      "case": "build_proof_on_triggered_plan",
+      "precondition": "plan_state=triggered",
+      "action": "build_proof",
+      "expect_error": "liqplan illegal state transition",
+      "expect_proof_created": false
+    },
+    {
+      "case": "build_proof_on_seizing_plan",
+      "precondition": "plan_state=seizing",
+      "action": "build_proof",
+      "expect_error": "liqplan illegal state transition",
+      "expect_proof_created": false
+    },
+    {
+      "case": "validate_nonexistent_proof",
+      "action": "validate_proof",
+      "input": {
+        "proof_id": "nonexistent-proof-id",
+        "actor1": "ops-a",
+        "actor2": "ops-b"
+      },
+      "expect_error": "liqplan proof not found"
+    }
+  ]
+}

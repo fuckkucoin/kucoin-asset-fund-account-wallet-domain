@@ -1,0 +1,25 @@
+{
+  "name": "frozen_without_paygate_pay_must_fail",
+  "description": "冻结中无 PayGate 时还款必须失败",
+  "loans": [
+    {
+      "id": "LOAN-002",
+      "user_id": "USER-B",
+      "state": "active",
+      "frozen": false,
+      "principal": "5000",
+      "interest": "250"
+    }
+  ],
+  "actions": [
+    {"type": "register", "loan_id": "LOAN-002", "user_id": "USER-B"},
+    {"type": "freeze_for_overdue", "loan_id": "LOAN-002", "user_id": "USER-B", "actor": "scanner"},
+    {"type": "check_pay_allowed", "loan_id": "LOAN-002", "expect_error": "pay blocked by freeze gate"},
+    {"type": "pay_through_gate", "loan_id": "LOAN-002", "amount": "1000", "actor": "payer", "expect_error": "pay blocked by freeze gate"}
+  ],
+  "expected": {
+    "final_state": "frozen",
+    "frozen": true,
+    "pay_blocked": true
+  }
+}

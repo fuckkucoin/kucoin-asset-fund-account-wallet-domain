@@ -1,0 +1,26 @@
+{
+  "_comment": "golden: 过期标价 → 触发失败即关（fail-closed）；不得用过期价开计划",
+  "scenario": "stale_mark_blocks_trigger",
+  "mark_gate": {
+    "id": "mg-stale-golden",
+    "asset": "BTC",
+    "mark_price": "48000",
+    "generation": 3,
+    "observed_at_offset_seconds": -120,
+    "max_age_seconds": 60,
+    "poisoned": false,
+    "comment": "observed_at 比 now 早 120s，超过 max_age_seconds=60，已过期"
+  },
+  "request": {
+    "borrow_id": "borrow-stale-001",
+    "idempotency_key": "idem-stale-001",
+    "user_id": "user-stale",
+    "collateral_asset": "BTC",
+    "trigger_ltv_bps": 9000,
+    "cap_bps": 8000
+  },
+  "expect": {
+    "error": "liqplan mark generation stale or poisoned",
+    "plan_created": false
+  }
+}

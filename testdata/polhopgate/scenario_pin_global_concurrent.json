@@ -1,0 +1,111 @@
+{
+  "_comment": "验收场景 4：Pin 用户与全局 Publish 并发；各自持有不同 Gen，复验正确。",
+  "scenario": "pin_global_concurrent",
+  "description": "个人 Pin 与全局 Publish 并发竞态，世代隔离验证",
+  "steps": [
+    {
+      "step": 1,
+      "action": "publish_global_version",
+      "input": { "asset": "BTC", "published_by": "ops" },
+      "expected": { "gen": 1, "state": "active" }
+    },
+    {
+      "step": 2,
+      "action": "pin_version",
+      "comment": "user-charlie 个人钉版，Gen 抬升为 2",
+      "input": {
+        "version_id": "$step1.version_id",
+        "user_id": "user-charlie",
+        "pinned_by": "user-charlie"
+      },
+      "expected": {
+        "gen": 2,
+        "prev_gen": 1,
+        "state": "pinned",
+        "user_id": "user-charlie"
+      }
+    },
+    {
+      "step": 3,
+      "action": "issue_token_charlie",
+      "comment": "user-charlie 使用 pinned Gen=2 签发令牌",
+      "input": {
+        "user_id": "user-charlie",
+        "asset": "BTC",
+        "biz_kind": "transfer",
+        "idem_key": "charlie-xfer-concurrent"
+      },
+      "expected": {
+        "policy_gen": 2,
+        "state": "issued"
+      }
+    },
+    {
+      "step": 4,
+      "action": "publish_global_version",
+      "comment": "全局再次 Publish，Gen=3",
+      "input": { "asset": "BTC", "published_by": "ops" },
+      "expected": { "gen": 3, "superseded_gen": 1 }
+    },
+    {
+      "step": 5,
+      "action": "issue_token_dave",
+      "comment": "user-dave（无钉版）使用全局新 Gen=3 签发令牌",
+      "input": {
+        "user_id": "user-dave",
+        "asset": "BTC",
+        "biz_kind": "transfer",
+        "idem_key": "dave-xfer-concurrent"
+      },
+      "expected": {
+        "policy_gen": 3,
+        "state": "issued"
+      }
+    },
+    {
+      "step": 6,
+      "action": "unpin",
+      "comment": "user-charlie 卸钉，Gen 不回滚（仍为 2）",
+      "input": {
+        "user_id": "user-charlie",
+        "asset": "BTC"
+      },
+      "expected": {
+        "pinned_version_state": "active",
+        "gen_unchanged": true
+      }
+    },
+    {
+      "step": 7,
+      "action": "bind_hop_charlie_stale",
+      "comment": "charlie 旧令牌（Gen=2）在全局 active Gen=3 时应被拒（ErrGenMismatch）",
+      "input": {
+        "token_id": "$step3.token_id",
+        "hop_ref": "charlie-xfer-100"
+      },
+      "expected": {
+        "error": "polhopgate: token policy_gen mismatch",
+        "account_change": false
+      }
+    },
+    {
+      "step": 8,
+      "action": "bind_hop_dave",
+      "comment": "dave 令牌（Gen=3）正常绑定",
+      "input": {
+        "token_id": "$step5.token_id",
+        "hop_ref": "dave-xfer-100"
+      },
+      "expected": {
+        "state": "consumed",
+        "policy_gen": 3
+      }
+    }
+  ],
+  "invariants": [
+    "个人 Pin 与全局 Publish 均分配新 Gen（单调递增）",
+    "Pin 后 Unpin，Gen 不回滚",
+    "令牌 PolicyGen 必须与消费时的生效版本 Gen 一致，否则 ErrGenMismatch",
+    "不写 cfgcenter 主链；不改 holdcat 分层"
+  ]
+}

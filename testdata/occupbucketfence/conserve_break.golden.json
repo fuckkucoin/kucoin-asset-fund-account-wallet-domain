@@ -1,0 +1,14 @@
+{
+  "scenario": "triple_bucket_conserve_break",
+  "lot_id": "lot-golden-cv-001",
+  "user_id": "user-occ-005",
+  "asset": "USDT",
+  "amount": "10",
+  "risk_class": "t3",
+  "expected_proof_kind_class": "conserve",
+  "invariants": [
+    "write blocked when sum != occupied_total",
+    "OccupancyBreakProof opened",
+    "audit reason not swallowed"
+  ]
+}

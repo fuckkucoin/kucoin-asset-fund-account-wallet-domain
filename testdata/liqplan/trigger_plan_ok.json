@@ -1,0 +1,33 @@
+{
+  "_comment": "golden: LTV>cap 正常触发 LiqPlan，占用令牌非空，状态=triggered",
+  "request": {
+    "borrow_id": "borrow-golden-001",
+    "idempotency_key": "idem-golden-001",
+    "user_id": "user-golden",
+    "borrow_asset": "USDT",
+    "borrow_amount": "9000",
+    "collateral_id": "hold-golden-001",
+    "collateral_asset": "BTC",
+    "collateral_amount": "10000",
+    "trigger_ltv_bps": 9000,
+    "cap_bps": 8000
+  },
+  "mark_gate": {
+    "id": "mg-golden-001",
+    "asset": "BTC",
+    "mark_price": "50000",
+    "generation": 1,
+    "max_age_seconds": 60,
+    "poisoned": false
+  },
+  "expect": {
+    "state": "triggered",
+    "occupy_token_non_empty": true,
+    "trigger_ltv_bps": 9000,
+    "cap_bps": 8000,
+    "user_id": "user-golden",
+    "borrow_id": "borrow-golden-001",
+    "collateral_asset": "BTC",
+    "borrow_asset": "USDT"
+  }
+}

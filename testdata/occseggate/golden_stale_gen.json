@@ -1,0 +1,16 @@
+{
+  "_comment": "持落后世代提交必须失败并落 stale 证明。",
+  "_scenario": "stale_gen",
+  "setup": {
+    "user_id": "u-occ-4",
+    "asset": "KCS",
+    "amount": "50",
+    "grant_idem": "g-occ-stale-1"
+  },
+  "steps": [
+    {"step": 1, "action": "open_admit", "expect": {"ticket_state": "admitted"}},
+    {"step": 2, "action": "before_freeze", "expect": {"allowed": true}},
+    {"step": 3, "action": "commit_stale", "occ_seg_gen": 99, "expect": {"allowed": false, "reason": "stale_gen", "has_proof": true}}
+  ],
+  "invariants": ["stale_gen_fail_closed"]
+}

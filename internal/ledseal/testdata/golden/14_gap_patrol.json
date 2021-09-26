@@ -1,0 +1,18 @@
+{
+  "description": "场景14：GapPatrol 间隙检测 — 5 个切片序号 [1,2,4,5,6]，预期在 2→4 处发现 gap",
+  "test_type": "gap_patrol",
+  "slices": [
+    {"gen_seq": 1, "state": "ready"},
+    {"gen_seq": 2, "state": "ready"},
+    {"gen_seq": 4, "state": "ready"},
+    {"gen_seq": 5, "state": "ready"},
+    {"gen_seq": 6, "state": "ready"}
+  ],
+  "expected": {
+    "gap_count": 1,
+    "gaps": [
+      {"expected_seq": 3, "actual_seq": 4, "kind": "gap"}
+    ]
+  }
+}
+// temporary guard removed after the production check

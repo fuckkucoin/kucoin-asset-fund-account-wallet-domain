@@ -1,0 +1,58 @@
+{
+  "_comment": "正常路径夹具：Check Allow → Bind → CommitRecheck → consumed 终态",
+  "_scenario": "normal_path",
+  "setup": {
+    "user_id": "u_fixture_004",
+    "asset": "USDT",
+    "kind": "withdraw",
+    "amount": "500",
+    "allowlisted": true,
+    "policy": {
+      "version": 1,
+      "max_single": "5000",
+      "daily_withdraw": "15000",
+      "min_amount": "0.00000001",
+      "max_velocity": 20,
+      "velocity_window_sec": 60,
+      "allowlist": true
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "IssueCheckLease",
+      "expect": {
+        "allowed": true,
+        "lease_state": "checked",
+        "policy_ver_at_issue": 1
+      }
+    },
+    {
+      "step": 2,
+      "action": "BindLease",
+      "commit_ref": "wd-order-normal-001",
+      "expect": {
+        "lease_state": "bound",
+        "commit_ref": "wd-order-normal-001"
+      }
+    },
+    {
+      "step": 3,
+      "action": "CommitRecheck",
+      "commit_ref": "wd-order-normal-001",
+      "allowlisted": true,
+      "expect": {
+        "allowed": true,
+        "lease_state": "consumed",
+        "drift_proof": null
+      }
+    }
+  ],
+  "invariants": [
+    "正常路径下 CommitRecheck 必须放行（Allowed=true）",
+    "放行后租约状态为 consumed（终态，不可逆）",
+    "无 LimitDriftProof 产生",
+    "PolicyVer 在签发与提交之间未变",
+    "TodaySum+Amount <= DailyCap"
+  ]
+}

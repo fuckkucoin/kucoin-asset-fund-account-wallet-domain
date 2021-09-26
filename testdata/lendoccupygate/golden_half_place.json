@@ -1,0 +1,33 @@
+{
+  "_comment": "golden: Place 借记成功但 hold 失败（半截补偿）场景。Engine 自动补偿贷记并落 LendResidueProof。",
+  "scenario": "half_place_compensation",
+  "order_id": "ord-golden-hp-001",
+  "user_id": "user-golden-003",
+  "asset": "ETH",
+  "amount": "1.000000000000000000",
+  "place_bound_injected_hold_error": "holdcat: store unavailable",
+  "place_bound": {
+    "expected_result": "err",
+    "expected_error": "lendoccupygate: holdcat place failed; residue compensation required",
+    "expected_compensate_debit_called": true,
+    "expected_residue_proof_kind": "hold_failed",
+    "expected_residue_proof_debit_idem_key": "lend-ord:ord-golden-hp-001",
+    "expected_residue_proof_compensate_idem_key": "lend-residue-comp:ord-golden-hp-001"
+  },
+  "gen_state_after": {
+    "expected_consumed": true,
+    "expected_consumed_by": "residue"
+  },
+  "lease_state_after": {
+    "expected_state": "residue_closed"
+  },
+  "invariants": [
+    "P2PCredit (compensate) called with same amount as P2PDebit",
+    "LendResidueProof.Kind = hold_failed",
+    "LendResidueProof.DebitIdemKey = 'lend-ord:' + order_id",
+    "LendResidueProof.CompensateIdemKey = 'lend-residue-comp:' + order_id",
+    "lease.State = residue_closed after compensation",
+    "no open hold remains in holdcat",
+    "proof is idempotent: second scan sees same proof, no re-compensation"
+  ]
+}

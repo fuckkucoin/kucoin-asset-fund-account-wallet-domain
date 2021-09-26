@@ -1,0 +1,36 @@
+{
+  "_comment": "golden: 重复 Settle 幂等失败场景。第一次 Settle 消费 gen，第二次 Settle 落 LendDupReleaseProof。",
+  "scenario": "duplicate_settle",
+  "order_id": "ord-golden-ds-001",
+  "user_id": "user-golden-002",
+  "asset": "BTC",
+  "amount": "0.500000000000000000",
+  "place_bound": {
+    "expected_lease_state": "placed",
+    "expected_gen_consumed": false
+  },
+  "settle_first": {
+    "caller": "settle",
+    "expected_result": "ok",
+    "expected_lease_state": "settled",
+    "expected_gen_consumed": true,
+    "expected_gen_consumed_by": "settle",
+    "expected_dup_proof": null
+  },
+  "settle_second": {
+    "caller": "settle",
+    "expected_result": "dup",
+    "expected_error": "lendoccupygate: lend_gen already consumed",
+    "expected_dup_proof_kind": "settle_settle",
+    "expected_dup_proof_first_consumed_by": "settle",
+    "expected_dup_proof_attempted_by": "settle",
+    "ledger_double_credit_allowed": false
+  },
+  "invariants": [
+    "gen.Consumed = true after first settle",
+    "lease.State = settled (immutable after first success)",
+    "LendDupReleaseProof.Kind = settle_settle",
+    "second settle returns ErrGenConsumed, not nil",
+    "no second P2PCredit ledger entry"
+  ]
+}
