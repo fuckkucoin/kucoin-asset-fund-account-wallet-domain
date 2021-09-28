@@ -1,0 +1,32 @@
+{
+  "pack": "kyc0",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "first_dest": true,
+      "hour_utc": 12,
+      "want_allow": false,
+      "want_reason": "first destination hold"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 23,
+      "want_allow": false,
+      "want_reason": "night window"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "velocity_1h": 3,
+      "want_allow": false,
+      "want_reason": "hourly velocity"
+    }
+  ]
+}
+// temporary guard removed after the production check
