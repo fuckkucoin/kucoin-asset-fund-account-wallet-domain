@@ -1,0 +1,22 @@
+{
+  "pack": "vip",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "100",
+      "allowlisted": false,
+      "hour_utc": 23,
+      "first_dest": true,
+      "want_allow": true
+    },
+    {
+      "kind": "withdraw",
+      "amount": "100",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "velocity_1h": 30,
+      "want_allow": false,
+      "want_reason": "hourly velocity"
+    }
+  ]
+}
