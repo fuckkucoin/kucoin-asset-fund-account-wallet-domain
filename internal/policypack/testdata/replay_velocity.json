@@ -1,0 +1,30 @@
+{
+  "pack": "kyc1",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "50",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "velocity_1h": 8,
+      "want_allow": false,
+      "want_reason": "hourly velocity"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "50",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "velocity_24h": 20,
+      "want_allow": false,
+      "want_reason": "daily velocity"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "50",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "want_allow": true
+    }
+  ]
+}
