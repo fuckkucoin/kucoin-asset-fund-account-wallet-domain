@@ -1,0 +1,22 @@
+{
+  "pack": "kyc0",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 23,
+      "want_allow": false,
+      "want_reason": "night window"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "first_dest": true,
+      "want_allow": false,
+      "want_reason": "first destination hold"
+    }
+  ]
+}

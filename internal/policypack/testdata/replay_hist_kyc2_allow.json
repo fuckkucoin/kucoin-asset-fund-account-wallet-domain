@@ -1,0 +1,28 @@
+{
+  "pack": "kyc2",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "25",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "want_allow": true
+    },
+    {
+      "kind": "withdraw",
+      "amount": "25",
+      "allowlisted": false,
+      "hour_utc": 12,
+      "want_allow": false,
+      "want_reason": "not allowlisted"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "25",
+      "allowlisted": true,
+      "hour_utc": 3,
+      "first_dest": true,
+      "want_allow": true
+    }
+  ]
+}

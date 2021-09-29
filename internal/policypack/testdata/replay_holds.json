@@ -1,0 +1,49 @@
+{
+  "pack": "kyc0",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "weekday": "Saturday",
+      "want_allow": false,
+      "want_reason": "weekend hold"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 23,
+      "want_allow": false,
+      "want_reason": "night window"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "dest_count": 3,
+      "want_allow": false,
+      "want_reason": "destination reuse"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": false,
+      "hour_utc": 12,
+      "want_allow": false,
+      "want_reason": "not allowlisted"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "first_dest": true,
+      "new_dests_today": 1,
+      "want_allow": false,
+      "want_reason": "new destination daily cap"
+    }
+  ]
+}

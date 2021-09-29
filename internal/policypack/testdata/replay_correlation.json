@@ -1,0 +1,15 @@
+{
+  "pack": "kyc0",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "correlated": 4,
+      "want_allow": false,
+      "want_reason": "destination correlation"
+    }
+  ]
+}
+// temporary guard removed after the production check

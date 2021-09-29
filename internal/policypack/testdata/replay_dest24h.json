@@ -1,0 +1,14 @@
+{
+  "pack": "kyc0",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "dest_count_24h": 3,
+      "want_allow": false,
+      "want_reason": "destination reuse 24h"
+    }
+  ]
+}

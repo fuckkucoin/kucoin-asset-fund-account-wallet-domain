@@ -1,0 +1,40 @@
+{
+  "pack": "kyc1",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 2,
+      "want_allow": false,
+      "want_reason": "night window"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "dest_count_24h": 6,
+      "want_allow": false,
+      "want_reason": "destination reuse 24h"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "velocity_24h": 20,
+      "want_allow": false,
+      "want_reason": "daily velocity"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "10",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "cluster_size": 8,
+      "want_allow": false,
+      "want_reason": "destination cluster"
+    }
+  ]
+}

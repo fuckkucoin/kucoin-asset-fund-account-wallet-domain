@@ -1,0 +1,20 @@
+{
+  "pack": "kyc1",
+  "events": [
+    {
+      "kind": "withdraw",
+      "amount": "50",
+      "allowlisted": false,
+      "hour_utc": 12,
+      "want_allow": false,
+      "want_reason": "not allowlisted"
+    },
+    {
+      "kind": "withdraw",
+      "amount": "50",
+      "allowlisted": true,
+      "hour_utc": 12,
+      "want_allow": true
+    }
+  ]
+}
