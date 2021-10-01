@@ -1,0 +1,24 @@
+{
+  "scenario": "broker_fence_isolated",
+  "description": "prefroute 产出 pref_lease_id / route_snap_id 供他包只读；不涉及 brokerbook Fence 与 fundint UID 解析",
+  "isolation_assertions": [
+    {
+      "assertion": "no_fence_gen_write",
+      "description": "prefroute 不写 brokerbook.fence_gen 或 FenceRecord；只输出 pref_lease_id",
+      "packages_checked": ["internal/prefroute", "internal/fundpref"],
+      "forbidden_symbols": ["FenceRecord", "FenceGen", "fence_gen"]
+    },
+    {
+      "assertion": "no_internal_uid_resolve",
+      "description": "prefroute 不调用 fundint UID 解析接口；只消费 AccountBook 枚举",
+      "packages_checked": ["internal/prefroute", "internal/fundpref"],
+      "forbidden_symbols": ["ResolveUID", "fundint.Resolve", "InternalTransfer"]
+    },
+    {
+      "assertion": "readonly_account_book",
+      "description": "AccountBook 枚举只读，不改写账户归属",
+      "packages_checked": ["internal/fundpref"],
+      "readonly_symbols": ["BookMain", "BookTrade", "BookMargin", "BookFutures", "BookEarn"]
+    }
+  ]
+}
