@@ -1,0 +1,39 @@
+{
+  "scenario": "stale_generation_lease_rejected",
+  "description": "世代推进后，旧世代租约绑定路由快照应被拒绝（ErrGenerationMismatch）",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_pref_lease",
+      "input": {
+        "user_id": "user_dave",
+        "credit_txn_id": "deposit-txn-dave-001"
+      },
+      "expect": {
+        "state": "open",
+        "generation": 1
+      }
+    },
+    {
+      "step": 2,
+      "action": "put_default_account",
+      "input": {
+        "user_id": "user_dave",
+        "book": "TRADE"
+      },
+      "note": "此操作推进世代到 2，租约世代 1 变为 stale"
+    },
+    {
+      "step": 3,
+      "action": "bind_route_snap",
+      "input": {
+        "lease_id": "<lease_id_from_step1>",
+        "credit_txn_id": "deposit-txn-dave-001",
+        "asset": "ETH",
+        "amount": "2.0"
+      },
+      "expect": "error",
+      "error_code": "generation_mismatch"
+    }
+  ]
+}

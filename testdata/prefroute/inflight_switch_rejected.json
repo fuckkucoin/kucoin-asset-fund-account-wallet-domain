@@ -1,0 +1,45 @@
+{
+  "scenario": "inflight_deposit_then_switch_trade_to_main",
+  "description": "存在在途存款贷记时，切换 DefaultAccount TRADE→MAIN 应失败或进入 pending 队列",
+  "steps": [
+    {
+      "step": 1,
+      "action": "register_inflight_credit",
+      "input": {
+        "user_id": "user_alice",
+        "txn_id": "deposit-txn-001",
+        "asset": "USDT",
+        "amount": "1000.00",
+        "state": "pending"
+      },
+      "expect": "ok"
+    },
+    {
+      "step": 2,
+      "action": "put_default_account",
+      "input": {
+        "user_id": "user_alice",
+        "book": "MAIN",
+        "from_book": "TRADE",
+        "enqueue_on_inflight": false
+      },
+      "expect": "error",
+      "error_code": "inflight_credit"
+    },
+    {
+      "step": 3,
+      "action": "put_default_account",
+      "input": {
+        "user_id": "user_alice",
+        "book": "MAIN",
+        "from_book": "TRADE",
+        "enqueue_on_inflight": true
+      },
+      "expect": "ok",
+      "result": {
+        "applied": false,
+        "pending_switch_state": "queued"
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "scenario": "drift_case_close_requires_proof",
+  "description": "PrefDriftCase 必须经过证明提交（proven）后方可关闭（closed）；直接关闭应失败",
+  "steps": [
+    {
+      "step": 1,
+      "action": "open_drift_case",
+      "input": {
+        "user_id": "user_carol",
+        "bound_book": "TRADE",
+        "credited_book": "MAIN",
+        "state": "open"
+      }
+    },
+    {
+      "step": 2,
+      "action": "confirm_drift_close_without_proof",
+      "input": {
+        "drift_case_id": "<case_id_from_step1>",
+        "confirmed_by": "ops_manager"
+      },
+      "expect": "error",
+      "error_code": "drift_unproven"
+    },
+    {
+      "step": 3,
+      "action": "submit_drift_proof",
+      "input": {
+        "drift_case_id": "<case_id_from_step1>",
+        "submitted_by": "ops_user",
+        "summary": "贷记科目确认错误，已追回补录",
+        "evidence": "{\"correction_txn\": \"txn-correction-001\", \"verified_by\": \"audit\"}"
+      },
+      "expect": {
+        "drift_case_state": "proven"
+      }
+    },
+    {
+      "step": 4,
+      "action": "confirm_drift_close",
+      "input": {
+        "drift_case_id": "<case_id_from_step1>",
+        "confirmed_by": "ops_manager"
+      },
+      "expect": {
+        "drift_case_state": "closed"
+      }
+    }
+  ]
+}

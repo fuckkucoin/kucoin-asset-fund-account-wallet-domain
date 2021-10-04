@@ -1,0 +1,69 @@
+{
+  "scenario": "route_snap_bound_then_drift_detected",
+  "description": "路由快照绑定后，偏好切换世代推进；旧贷记按快照科目落账但实际串 TRADE→MAIN，产出 PrefDriftCase",
+  "steps": [
+    {
+      "step": 1,
+      "action": "set_default_account",
+      "input": {
+        "user_id": "user_bob",
+        "book": "TRADE",
+        "generation": 1
+      }
+    },
+    {
+      "step": 2,
+      "action": "issue_pref_lease",
+      "input": {
+        "user_id": "user_bob",
+        "credit_txn_id": "deposit-txn-bob-001"
+      },
+      "expect": {
+        "state": "open",
+        "generation": 1,
+        "default_book": "TRADE"
+      }
+    },
+    {
+      "step": 3,
+      "action": "bind_route_snap",
+      "input": {
+        "lease_id": "<lease_id_from_step2>",
+        "credit_txn_id": "deposit-txn-bob-001",
+        "asset": "BTC",
+        "amount": "0.5"
+      },
+      "expect": {
+        "lease_state": "bound",
+        "snap_bound_book": "TRADE"
+      }
+    },
+    {
+      "step": 4,
+      "action": "put_default_account",
+      "input": {
+        "user_id": "user_bob",
+        "book": "MAIN"
+      },
+      "expect": {
+        "applied": true,
+        "generation": 2
+      }
+    },
+    {
+      "step": 5,
+      "action": "confirm_credit",
+      "input": {
+        "route_snap_id": "<snap_id_from_step3>",
+        "credited_book": "MAIN",
+        "credit_txn_id": "deposit-txn-bob-001"
+      },
+      "expect": {
+        "has_drift": true,
+        "drift_case_state": "open",
+        "bound_book": "TRADE",
+        "credited_book": "MAIN"
+      }
+    }
+  ]
+}
