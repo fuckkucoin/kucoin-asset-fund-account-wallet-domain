@@ -1,0 +1,28 @@
+{
+  "_comment": "验收夹具：正常联合 Check + 签发联合租约。探针未活跃（IsProbing=false），令牌世代=0，无毒价挡写。",
+  "scenario": "joint_check_ok",
+  "input": {
+    "scope_kind": "withdraw",
+    "subject_id": "user-001",
+    "chain": "ETH",
+    "asset": "USDT",
+    "idem_key": "idem-check-001",
+    "probe_state": {
+      "is_probing": false,
+      "pair_id": "",
+      "state_fingerprint": ""
+    },
+    "token_state": {
+      "generation": 0,
+      "state": "active",
+      "token_hash": ""
+    },
+    "has_active_poison": false
+  },
+  "expected": {
+    "allowed": true,
+    "lease_state": "checked",
+    "is_probing_at_issue": false,
+    "token_generation": 0
+  }
+}

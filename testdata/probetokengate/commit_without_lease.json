@@ -1,0 +1,23 @@
+{
+  "_comment": "验收夹具 3：无 lease_id 的写提交必须拒绝（fail-closed）。AllowCommitWithoutLease=false（模式）。",
+  "scenario": "commit_without_lease",
+  "steps": [
+    {
+      "step": 1,
+      "action": "CommitCheck（无 lease_id）",
+      "request": {
+        "lease_id": "",
+        "commit_ref": "wd-batch-001",
+        "scope_kind": "withdraw",
+        "subject_id": "user-001"
+      },
+      "expected_error": "probetokengate probe_token_lease_id required",
+      "expected_http_status": 400
+    }
+  ],
+  "invariants": [
+    "fail-closed：任何缺少 probe_token_lease_id 的写提交请求必须被拒绝",
+    "AllowCommitWithoutLease 值必须为 false",
+    "不得因缺少 lease 而静默放行写路径"
+  ]
+}

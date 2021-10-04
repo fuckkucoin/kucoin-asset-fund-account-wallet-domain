@@ -1,0 +1,20 @@
+{
+  "_comment": "验收夹具：活跃毒价挡写 → JointCheck 拒绝，不签发租约（ErrPoisonBlock）。",
+  "scenario": "poison_block_check",
+  "input": {
+    "scope_kind": "withdraw",
+    "subject_id": "user-004",
+    "chain": "ETH",
+    "asset": "USDC",
+    "has_active_poison": true
+  },
+  "expected": {
+    "allowed": false,
+    "reject_reason": "poison_block",
+    "lease_issued": false
+  },
+  "invariants": [
+    "有活跃 PoisonProof 时 JointCheck 必须拒绝，不得签发 probe_token_lease_id",
+    "拒绝理由必须为 poison_block，不得模糊返回 check_error"
+  ]
+}
