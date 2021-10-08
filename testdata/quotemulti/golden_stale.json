@@ -1,0 +1,9 @@
+{
+  "id": "GM-T09",
+  "age_ns": 16000000000,
+  "ttl_ns": 15000000000,
+  "rate": "64000",
+  "pair": "BTC/USDT",
+  "want_err": "quote stale",
+  "ledger_writes": 0
+}

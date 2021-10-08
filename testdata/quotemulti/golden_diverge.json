@@ -1,0 +1,11 @@
+{
+  "id": "GM-T02",
+  "kind": "rate",
+  "max_spread_bps": 30,
+  "ticks": [
+    {"venue": "spot_alpha", "rate": "64000", "pair": "BTC/USDT"},
+    {"venue": "spot_beta", "rate": "68000", "pair": "BTC/USDT"}
+  ],
+  "want_err": "quote diverge",
+  "ledger_writes": 0
+}

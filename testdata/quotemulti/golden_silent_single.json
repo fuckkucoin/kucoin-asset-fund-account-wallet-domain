@@ -1,0 +1,10 @@
+{
+  "id": "GM-T10",
+  "profile": "prod",
+  "allow_silent_single": false,
+  "ticks": [
+    {"venue": "spot_alpha", "pair": "BTC/USDT", "rate": "64000", "status": "ok"}
+  ],
+  "want_err": "quote timeout",
+  "comment": "档仅一家到齐视为缺源，禁止静默成交"
+}
