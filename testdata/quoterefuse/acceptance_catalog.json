@@ -1,0 +1,18 @@
+{
+  "package": "quoterefuse",
+  "ttl_rule": "stale iff age > TTL; age == TTL remains fresh",
+  "cases": [
+    {"id": "G-T01", "area": "feeoracle", "summary": "空费价确认提现费", "expect": "失败且无 ledger 写"},
+    {"id": "G-T02", "area": "feeoracle", "summary": "过期费价", "expect": "ErrQuoteStale"},
+    {"id": "G-T03", "area": "feeoracle", "summary": "新鲜有效费价", "expect": "成功（假依赖）"},
+    {"id": "G-T04", "area": "fxmark", "summary": "空标记确认闪兑", "expect": "ConfirmConvert 失败"},
+    {"id": "G-T05", "area": "fxmark", "summary": "过期标记", "expect": "失败"},
+    {"id": "G-T06", "area": "swap", "summary": "空报价确认", "expect": "失败"},
+    {"id": "G-T07", "area": "swap", "summary": "过期确认", "expect": "失败"},
+    {"id": "G-T08", "area": "quote", "summary": "TTL 边界表", "expect": "age==TTL 有效，age>TTL 过期"},
+    {"id": "G-T09", "area": "quote", "summary": "禁止 house 伪装", "expect": "Empty 时不得以 Source=market 成功"},
+    {"id": "G-T10", "area": "quote", "summary": "非法数值", "expect": "ErrQuoteIllegal"},
+    {"id": "G-T11", "area": "confirm", "summary": "过期前后连续 Confirm", "expect": "前成功后失败"},
+    {"id": "G-T12", "area": "book", "summary": "多币对隔离", "expect": "空的一对不影响另一对"}
+  ]
+}
