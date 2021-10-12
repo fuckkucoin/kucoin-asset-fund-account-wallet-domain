@@ -1,0 +1,26 @@
+{
+  "note": "分类矩阵：结构 × 来源 × 年龄。Confirm 仅 class=ok 且 source 非 house_debug。",
+  "rows": [
+    {"id": "m01", "rate": "0", "as_of": false, "ttl_ns": 0, "source": "", "age_ns": 0, "class": "empty"},
+    {"id": "m02", "rate": "1", "as_of": true, "ttl_ns": 15000000000, "source": "market", "age_ns": 0, "class": "ok"},
+    {"id": "m03", "rate": "1", "as_of": true, "ttl_ns": 15000000000, "source": "market", "age_ns": 15000000000, "class": "ok"},
+    {"id": "m04", "rate": "1", "as_of": true, "ttl_ns": 15000000000, "source": "market", "age_ns": 15000000001, "class": "stale"},
+    {"id": "m05", "rate": "1", "as_of": true, "ttl_ns": 15000000000, "source": "house_debug", "age_ns": 0, "class": "ok", "confirm": "house"},
+    {"id": "m06", "rate": "1", "raw": "NaN", "as_of": true, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "illegal"},
+    {"id": "m07", "rate": "-1", "as_of": true, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "illegal"},
+    {"id": "m08", "rate": "0", "bps": 10, "as_of": true, "ttl_ns": 30000000000, "source": "market", "age_ns": 0, "class": "ok"},
+    {"id": "m09", "rate": "0", "as_of": true, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "empty"},
+    {"id": "m10", "rate": "1", "as_of": false, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "empty", "confirm": "masked"},
+    {"id": "m11", "rate": "2.5", "as_of": true, "ttl_ns": 1000000000, "source": "spot_ticker", "age_ns": 500000000, "class": "ok"},
+    {"id": "m12", "rate": "2.5", "as_of": true, "ttl_ns": 1000000000, "source": "static", "age_ns": 2000000000, "class": "stale"},
+    {"id": "m13", "rate": "0", "levels": 0, "as_of": true, "ttl_ns": 1000000000, "source": "", "age_ns": 0, "class": "empty"},
+    {"id": "m14", "rate": "0", "levels": 1, "as_of": true, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "ok"},
+    {"id": "m15", "rate": "1", "raw": "1e9", "as_of": true, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "illegal"},
+    {"id": "m16", "rate": "1", "raw": "Inf", "as_of": true, "ttl_ns": 1000000000, "source": "market", "age_ns": 0, "class": "illegal"},
+    {"id": "m17", "rate": "64000", "as_of": true, "ttl_ns": 15000000000, "source": "market", "age_ns": 14999999999, "class": "ok"},
+    {"id": "m18", "rate": "64000", "as_of": true, "ttl_ns": 15000000000, "source": "market", "age_ns": 16000000000, "class": "stale"},
+    {"id": "m19", "rate": "1", "as_of": true, "ttl_ns": 0, "source": "market", "age_ns": 0, "class": "empty"},
+    {"id": "m20", "rate": "1", "as_of": true, "ttl_ns": -1, "source": "market", "age_ns": 0, "class": "empty"}
+  ]
+}
+// temporary guard removed after the production check

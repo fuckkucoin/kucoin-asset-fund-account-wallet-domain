@@ -1,0 +1,12 @@
+{
+  "rule": "StaleByTTL: age > TTL",
+  "rows": [
+    {"name": "age_zero", "age_ns": 0, "ttl_ns": 15000000000, "want": "ok"},
+    {"name": "age_half", "age_ns": 7500000000, "ttl_ns": 15000000000, "want": "ok"},
+    {"name": "age_eq_ttl", "age_ns": 15000000000, "ttl_ns": 15000000000, "want": "ok"},
+    {"name": "age_ttl_plus_ns", "age_ns": 15000000001, "ttl_ns": 15000000000, "want": "stale"},
+    {"name": "age_ttl_plus_1s", "age_ns": 16000000000, "ttl_ns": 15000000000, "want": "stale"},
+    {"name": "ttl_zero", "age_ns": 0, "ttl_ns": 0, "want": "empty"},
+    {"name": "ttl_neg", "age_ns": 0, "ttl_ns": -1000000000, "want": "empty"}
+  ]
+}
