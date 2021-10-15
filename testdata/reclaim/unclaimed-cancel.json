@@ -1,0 +1,35 @@
+{
+  "name": "unclaimed-cancel",
+  "description": "未认领充值：开案后取消（用户自行找到地址归因）",
+  "steps": [
+    {
+      "op": "open",
+      "input": {
+        "idempotency_key": "idem-uc-001",
+        "tx_hash": "0x1111111111111111111111111111111111111111111111111111111111111111",
+        "vout": 0,
+        "chain": "ETH",
+        "asset": "ETH",
+        "amount": "0.500000000000000000",
+        "kind": "unclaimed",
+        "opened_by": "ops-desk-2",
+        "note": "匿名地址充值，无法匹配用户"
+      },
+      "expect_state": "open"
+    },
+    {
+      "op": "cancel",
+      "actor": "ops-desk-2",
+      "reason": "用户提供了正确 memo，自动归因成功，无需回收",
+      "expect_state": "cancelled",
+      "expect_occupancy_held": false
+    },
+    {
+      "op": "cancel_terminal",
+      "description": "终态案件拒绝二次取消",
+      "actor": "ops-desk-2",
+      "reason": "duplicate",
+      "expect_error": "reclaim: case is in terminal state"
+    }
+  ]
+}

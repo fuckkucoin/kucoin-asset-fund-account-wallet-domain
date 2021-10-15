@@ -1,0 +1,43 @@
+{
+  "name": "late-credit-race",
+  "description": "竞态场景：充值 Credit 路径与 ReclaimOccupancy 发生竞态，Credit 被阻塞",
+  "steps": [
+    {
+      "op": "open",
+      "input": {
+        "idempotency_key": "idem-race-001",
+        "tx_hash": "0x3333333333333333333333333333333333333333333333333333333333333333",
+        "vout": 0,
+        "chain": "ETH",
+        "asset": "USDT",
+        "amount": "200.000000000000000000",
+        "kind": "wrong_chain",
+        "user_id": "u-carol",
+        "opened_by": "ops-desk-1"
+      },
+      "expect_state": "open"
+    },
+    {
+      "op": "reserve",
+      "actor": "ops-desk-1",
+      "expect_state": "reserved",
+      "expect_occupancy_held": true
+    },
+    {
+      "op": "check_credit",
+      "description": "充值路径尝试对已占用输出贷记，应被阻塞",
+      "output_key": "0x3333333333333333333333333333333333333333333333333333333333333333:0",
+      "chain": "ETH",
+      "asset": "USDT",
+      "amount": "200.000000000000000000",
+      "transfer_id": "tr-late-001",
+      "expect_error": "reclaim: late credit blocked by active reclaim occupancy",
+      "expect_race_event_count": 1
+    },
+    {
+      "op": "drain_race_events",
+      "expect_count": 1,
+      "expect_event_reason": "credit_blocked_by_reclaim"
+    }
+  ]
+}
