@@ -1,0 +1,21 @@
+{
+  "scenario": "new_user_epoch_match_credits",
+  "input": {
+    "chain": "ETH",
+    "address": "0xdddddddddddddddddddddddddddddddddddddddd",
+    "prev_user": "userA",
+    "next_user": "userB",
+    "carried_gen": 1,
+    "asset": "ETH",
+    "amount": "0.5",
+    "tx_hash": "0xnewusercredit01"
+  },
+  "expect": {
+    "credit_posted": true,
+    "outcome": "credited",
+    "fail_closed": false,
+    "epoch_state": "assigned",
+    "generation": 1,
+    "bind_user": "userB"
+  }
+}

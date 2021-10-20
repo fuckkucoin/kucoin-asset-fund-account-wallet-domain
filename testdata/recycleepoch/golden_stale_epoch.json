@@ -1,0 +1,19 @@
+{
+  "scenario": "observe_carries_old_generation",
+  "input": {
+    "chain": "ETH",
+    "address": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "prev_user": "userA",
+    "next_user": "userB",
+    "carried_gen": 1,
+    "current_gen": 2
+  },
+  "expect": {
+    "credit_posted": false,
+    "error": "recycleepoch: observe carries stale recycle_epoch; fail-closed",
+    "proof_kind": "stale_epoch",
+    "fail_closed": true,
+    "generation": 2
+  }
+}
+// temporary guard removed after the production check

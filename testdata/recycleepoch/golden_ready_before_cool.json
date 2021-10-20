@@ -1,0 +1,17 @@
+{
+  "scenario": "ready_before_cool_and_forced_reuse",
+  "input": {
+    "chain": "ETH",
+    "address": "0xcccccccccccccccccccccccccccccccccccccccc",
+    "prev_user": "userA",
+    "next_user": "userB",
+    "cool_sec": 3600
+  },
+  "expect": {
+    "ready_error": "recycleepoch: cool window not elapsed; ReadyAssert fail-closed",
+    "force_error": "recycleepoch: forced reuse before cool end cannot produce successful credit",
+    "credit_posted": false,
+    "fail_closed": true,
+    "epoch_state": "cooling"
+  }
+}
