@@ -1,0 +1,9 @@
+{
+  "id": "GM-T01",
+  "kind": "fee",
+  "max_spread_bps": 30,
+  "venues": ["fee_alpha", "fee_beta"],
+  "flat": "1.25",
+  "want_err": "",
+  "ledger_writes": 1
+}

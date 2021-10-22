@@ -1,0 +1,17 @@
+{
+  "suite": "quote-multi-source-gate",
+  "cases": [
+    {"id": "GM-T01", "entry": "feeoracle", "scene": "双源费价一致", "want": "ConfirmWithdrawFee 成功且 ledger 写 1"},
+    {"id": "GM-T02", "entry": "feeoracle", "scene": "费价分叉超阈", "want": "ErrQuoteDiverge 且无写"},
+    {"id": "GM-T03", "entry": "feeoracle", "scene": "费价采集超时", "want": "ErrQuoteTimeout 且无写"},
+    {"id": "GM-T04", "entry": "fxmark", "scene": "双源标记一致", "want": "ConfirmConvert 成功"},
+    {"id": "GM-T05", "entry": "fxmark", "scene": "标记分叉", "want": "ErrQuoteDiverge"},
+    {"id": "GM-T06", "entry": "swap", "scene": "双源兑换一致", "want": "ConfirmSwap 成功"},
+    {"id": "GM-T07", "entry": "swap", "scene": "兑换缺源", "want": "ErrQuoteTimeout"},
+    {"id": "GM-T08", "entry": "swap", "scene": "空报价", "want": "ErrQuoteEmpty"},
+    {"id": "GM-T09", "entry": "swap", "scene": "过期报价", "want": "ErrQuoteStale"},
+    {"id": "GM-T10", "entry": "prod", "scene": "档静默取一家", "want": "ErrQuoteTimeout"},
+    {"id": "GM-T11", "entry": "journal", "scene": "重启重入同指纹", "want": "ledger 不二次写"},
+    {"id": "GM-T12", "entry": "journal", "scene": "重入指纹变化", "want": "ErrQuoteDiverge"}
+  ]
+}

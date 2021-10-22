@@ -1,0 +1,11 @@
+{
+  "id": "GM-T03",
+  "elapsed_ms": 1200,
+  "deadline_ms": 800,
+  "ticks": [
+    {"venue": "spot_alpha", "status": "timeout", "rate": "64000", "pair": "BTC/USDT"},
+    {"venue": "spot_beta", "status": "ok", "rate": "64000", "pair": "BTC/USDT"}
+  ],
+  "want_err": "quote timeout",
+  "ledger_writes": 0
+}

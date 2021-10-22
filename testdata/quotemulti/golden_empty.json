@@ -1,0 +1,10 @@
+{
+  "id": "GM-T08",
+  "ticks": [
+    {"venue": "spot_alpha", "pair": "BTC/USDT", "rate": "0", "status": "empty"},
+    {"venue": "spot_beta", "pair": "BTC/USDT", "rate": "64000"}
+  ],
+  "want_err": "quote empty",
+  "ledger_writes": 0
+}
+// temporary guard removed after the production check
