@@ -1,0 +1,7 @@
+{
+  "name": "open-allow",
+  "rows": [
+    {"user_id": "alice", "asset": "USDT", "amount": "3", "chain": "ETH", "dest": "0xabc", "want": "allow", "release": true},
+    {"user_id": "bob", "asset": "USDT", "amount": "7", "want": "allow", "release": true}
+  ]
+}
