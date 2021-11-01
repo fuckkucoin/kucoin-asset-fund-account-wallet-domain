@@ -1,0 +1,7 @@
+saga_run_id,idem,asset,amount,partial_done,partial_undone,partial_cause,residue_idem_key,ledger_state,expected_items,expected_severity
+run-golden-001,idem-g001,USDT,500.00,"freeze,move","","undo move: timeout","idem-g001-move",credited,1,medium
+run-golden-002,idem-g002,BTC,0.005,"freeze,move,sign","sign","undo move: db error","idem-g002-move",confirmed,1,low
+run-golden-003,idem-g003,USDT,50000.00,"freeze,move","","undo move: unavailable","idem-g003-move",credited,1,high
+run-golden-004,idem-g004,ETH,1.0,"freeze","","undo freeze: timeout","idem-g004-move",credited,0,""
+run-golden-005,idem-g005,USDT,200.00,"freeze,move","freeze,move","compensated","","",0,""
+run-golden-006,idem-g006,USDT,100.00,"freeze,move","","undo move: ctx canceled","idem-g006-move",rolled_back,0,""
