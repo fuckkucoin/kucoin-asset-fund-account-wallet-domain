@@ -1,0 +1,15 @@
+{
+  "name": "eval-allow-then-halt-submit-denied",
+  "user_id": "u-score-halt-01",
+  "chain": "ETH",
+  "dest": "0xscorehalt01aaaa",
+  "asset": "USDT",
+  "amount": "12.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-halt-01",
+  "ticket": "wd-score-halt",
+  "actor": "wd-actor-halt",
+  "operator": "ops-halt-01",
+  "expect_proof": "halt_flip",
+  "expect_error": "halt generation drifted after allow"
+}

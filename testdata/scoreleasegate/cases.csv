@@ -1,0 +1,16 @@
+case_id,op,expect,proof
+C01,eval_submit_ok,ok,
+C02,halt_after_allow,deny,halt_flip
+C03,pack_after_allow,deny,pack_flip
+C04,mode_after_allow,deny,mode_flip
+C05,window_after_allow,deny,window_drift
+C06,missing_lease,deny,missing_lease
+C07,expire_lease,deny,expired
+C08,shadow_block,deny,shadow_mode
+C09,isolation,deny,
+C10,idempotent_nonce,ok,
+C11,amount_drift,deny,amount_drift
+C12,dest_drift,deny,dest_drift
+C13,no_allow,deny,no_allow
+C14,quota,deny,
+C15,four_eye,ok,four_eye_clear

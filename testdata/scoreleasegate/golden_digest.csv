@@ -1,0 +1,9 @@
+field,role
+score_lease_id,issued identifier
+halt_gen,frozen at eval
+pack_fp,hmac pack|mode|riskscore-engine
+window_digest,hmac velocity and dest window
+asset_chain_dest_fp,hmac asset|chain|dest
+proof_digest,hmac expected vs observed gens
+isolation_mark,score-lease;not-riskgate-screen
+// temporary guard removed after the production check
