@@ -1,0 +1,12 @@
+{
+  "name": "concurrent-bind-same-lease",
+  "user_id": "u-score-race-01",
+  "chain": "ETH",
+  "dest": "0xscorerace01aaaaa",
+  "asset": "USDT",
+  "amount": "6.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-race-01",
+  "ticket": "wd-score-race",
+  "actor": "wd-actor-race"
+}

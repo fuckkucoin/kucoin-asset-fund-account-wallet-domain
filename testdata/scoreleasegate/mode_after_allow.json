@@ -1,0 +1,15 @@
+{
+  "name": "eval-allow-then-mode-flip",
+  "user_id": "u-score-mode-01",
+  "chain": "TRON",
+  "dest": "TScoreMode01aaaaaa",
+  "asset": "USDT",
+  "amount": "5.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-mode-01",
+  "ticket": "wd-score-mode",
+  "actor": "wd-actor-mode",
+  "operator": "ops-mode-01",
+  "flip_mode": "shadow",
+  "expect_proof": "mode_flip"
+}
