@@ -1,0 +1,7 @@
+{
+  "no_gen": "outbox pump mark-fence deliver_effect_gen required",
+  "expired": "outbox pump mark-fence deliver_effect_gen expired",
+  "fingerprint": "outbox pump mark-fence payload fingerprint mismatch",
+  "lag": "outbox pump mark-fence lag snapshot is read-only",
+  "cas": "outbox pump mark-fence generation cas failed"
+}

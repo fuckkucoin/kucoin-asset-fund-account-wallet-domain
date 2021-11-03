@@ -1,0 +1,47 @@
+{
+  "name": "double-claim-rejected",
+  "description": "双重认领防护：同一输出不得同时开两个活跃案件",
+  "steps": [
+    {
+      "op": "open",
+      "input": {
+        "idempotency_key": "idem-dc-001",
+        "tx_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "vout": 0,
+        "chain": "SOL",
+        "asset": "USDT",
+        "amount": "250.000000000000000000",
+        "kind": "unclaimed",
+        "opened_by": "ops-desk-1"
+      },
+      "expect_state": "open"
+    },
+    {
+      "op": "open_duplicate",
+      "description": "相同 tx_hash:vout 再次开案应返回 ErrDuplicate",
+      "input": {
+        "idempotency_key": "idem-dc-002",
+        "tx_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "vout": 0,
+        "chain": "SOL",
+        "asset": "USDT",
+        "amount": "250.000000000000000000",
+        "kind": "unclaimed",
+        "opened_by": "ops-desk-2"
+      },
+      "expect_error": "reclaim: duplicate active case for output"
+    },
+    {
+      "op": "reserve",
+      "actor": "ops-desk-1",
+      "expect_state": "reserved"
+    },
+    {
+      "op": "occupy_duplicate",
+      "description": "不同 caseID 尝试 Occupy 相同 output_key 应返回 ErrOccupancyLocked",
+      "case_id": "other-case-id",
+      "output_key": "0x5555555555555555555555555555555555555555555555555555555555555555:0",
+      "expect_error": "reclaim: output already occupied by another case"
+    }
+  ]
+}

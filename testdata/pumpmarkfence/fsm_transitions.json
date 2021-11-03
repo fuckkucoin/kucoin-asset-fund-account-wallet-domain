@@ -1,0 +1,21 @@
+{
+  "gen": [
+    ["issued", "delivered"],
+    ["issued", "expired"],
+    ["delivered", "marked"],
+    ["delivered", "expired"]
+  ],
+  "half": [
+    ["open", "resumed"],
+    ["open", "abandoned"]
+  ],
+  "forbidden_gen": [
+    ["marked", "issued"],
+    ["marked", "delivered"],
+    ["expired", "issued"],
+    ["expired", "delivered"],
+    ["expired", "marked"],
+    ["delivered", "issued"],
+    ["marked", "expired"]
+  ]
+}

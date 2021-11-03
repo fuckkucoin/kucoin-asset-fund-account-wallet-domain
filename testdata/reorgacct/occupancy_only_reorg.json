@@ -1,0 +1,65 @@
+{
+  "_comment": "场景：BTC 链回退，输出尚未贷记（Face 未找到），但 r4 风险占用单已建立。",
+  "_scenario": "occupancy_only_reorg",
+  "ingest_req": {
+    "chain": "BTC",
+    "pivot_tx_hash": "btc_tx_hash_000000000000000000000000000000000000000000000000000000000001",
+    "depth_before": 3,
+    "depth_after": 1,
+    "source_kind": "confirm_rollback",
+    "affected_outputs": [
+      {
+        "tx_hash": "btc_tx_hash_000000000000000000000000000000000000000000000000000000000001",
+        "output_index": 0,
+        "transfer_id": "tr-btc-occ-001",
+        "user_id": "user-C",
+        "asset": "BTC",
+        "amount": "0.05"
+      }
+    ],
+    "affected_tracks": [],
+    "evidence": [
+      {
+        "kind": "orphan_observe",
+        "ref": "orphan_block:000000000000000ab12345",
+        "note": "orphan block observed on BTC"
+      }
+    ],
+    "note": "BTC 链孤块，输出未贷记但占用单已建"
+  },
+  "expected_event": {
+    "chain": "BTC",
+    "depth_before": 3,
+    "depth_after": 1,
+    "rollback_depth": 2,
+    "state": "pending",
+    "source_kind": "confirm_rollback"
+  },
+  "mock_deposit_faces": {},
+  "mock_occupancy": {
+    "tr-btc-occ-001": {
+      "occupancy_id": "occ-btc-001",
+      "amount": "0.05"
+    }
+  },
+  "expected_impact_rows": [
+    {
+      "user_id": "user-C",
+      "asset": "BTC",
+      "kind": "occupied",
+      "reference_id": "occ-btc-001",
+      "affected_amount": "0.05"
+    }
+  ],
+  "expected_summary": {
+    "total_credited": "0",
+    "total_occupied": "0.05",
+    "total_freeze": "0",
+    "total_hop_partial": "0",
+    "live_hash_count": 0,
+    "row_count": 1
+  },
+  "expected_legs": [
+    {"kind": "occupancy_release", "state": "pending", "execution_order": 2, "amount": "0.05"}
+  ]
+}

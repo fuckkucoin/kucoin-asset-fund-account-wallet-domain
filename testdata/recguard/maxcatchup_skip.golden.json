@@ -1,0 +1,40 @@
+{
+  "_comment": "验收场景 1：MaxCatchUp 边界——超额 tick 必须 skip，无额外借记。",
+  "_scenario": "plan.MaxCatchUp=3, perTick=100 USDT → cap=300 USDT; 尝试 5 次 tick；前 3 次 filled，后 2 次 skip(cap_exceeded)。",
+  "setup": {
+    "plan_id": "plan-maxcap-001",
+    "max_catch_up": 3,
+    "per_tick": "100",
+    "generation": 1,
+    "cap": "300"
+  },
+  "ticks": [
+    {"seq": 1, "expected_state": "filled",  "expected_cause": "",              "debited_amt": "100"},
+    {"seq": 2, "expected_state": "filled",  "expected_cause": "",              "debited_amt": "100"},
+    {"seq": 3, "expected_state": "filled",  "expected_cause": "",              "debited_amt": "100"},
+    {"seq": 4, "expected_state": "skipped", "expected_cause": "cap_exceeded",  "debited_amt": "0"},
+    {"seq": 5, "expected_state": "skipped", "expected_cause": "cap_exceeded",  "debited_amt": "0"}
+  ],
+  "expected_window": {
+    "state": "capped",
+    "debited": "300",
+    "cap": "300",
+    "filled_count": 3,
+    "skip_count": 2,
+    "tick_count": 5
+  },
+  "expected_proof": {
+    "intended_ticks": 5,
+    "filled_ticks": 3,
+    "skip_ticks": 2,
+    "total_debited": "300",
+    "cap_amount": "300",
+    "half_debit_count": 0
+  },
+  "invariants": [
+    "total_debited <= cap",
+    "filled + skip == intended",
+    "no extra debit beyond cap",
+    "proof_hash non-empty"
+  ]
+}

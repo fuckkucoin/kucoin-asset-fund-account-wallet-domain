@@ -1,0 +1,11 @@
+{
+  "name": "reject-screen-lease-fields",
+  "user_id": "u-score-iso-01",
+  "chain": "ETH",
+  "dest": "0xscoreiso01aaaaaa",
+  "asset": "USDT",
+  "amount": "1.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "screen_lease_id-forbidden",
+  "expect_error": "isolation violation"
+}

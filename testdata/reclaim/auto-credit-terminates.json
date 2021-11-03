@@ -1,0 +1,45 @@
+{
+  "name": "auto-credit-terminates-case",
+  "description": "同链自动贷记成功后案件自动切换到 auto_credited 终态",
+  "steps": [
+    {
+      "op": "open",
+      "input": {
+        "idempotency_key": "idem-ac-001",
+        "tx_hash": "0x4444444444444444444444444444444444444444444444444444444444444444",
+        "vout": 1,
+        "chain": "ETH",
+        "asset": "USDC",
+        "amount": "100.000000000000000000",
+        "kind": "expired_address",
+        "user_id": "u-dave",
+        "opened_by": "ops-desk-1"
+      },
+      "expect_state": "open"
+    },
+    {
+      "op": "reserve",
+      "actor": "ops-desk-1",
+      "expect_state": "reserved",
+      "expect_occupancy_held": true
+    },
+    {
+      "op": "auto_credit",
+      "description": "正常充值路径已完成贷记，触发 auto_credited 终态",
+      "transfer_id": "tr-auto-001",
+      "actor": "system",
+      "expect_state": "auto_credited",
+      "expect_occupancy_held": false
+    },
+    {
+      "op": "check_credit_after_terminal",
+      "description": "案件终态后，该输出的占用已释放，充值路径可以正常贷记",
+      "output_key": "0x4444444444444444444444444444444444444444444444444444444444444444:1",
+      "chain": "ETH",
+      "asset": "USDC",
+      "amount": "100.000000000000000000",
+      "transfer_id": "tr-second-001",
+      "expect_error": null
+    }
+  ]
+}
