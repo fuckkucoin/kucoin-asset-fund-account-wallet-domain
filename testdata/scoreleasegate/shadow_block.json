@@ -1,0 +1,12 @@
+{
+  "name": "shadow-allow-cannot-mint-enforce",
+  "user_id": "u-score-shd-01",
+  "chain": "ETH",
+  "dest": "0xscoreshadow01aaa",
+  "asset": "USDT",
+  "amount": "2.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-shd-01",
+  "mode": "shadow",
+  "expect_error": "shadow allow cannot issue enforce lease"
+}
