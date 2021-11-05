@@ -1,0 +1,12 @@
+{
+  "name": "isolation",
+  "forbidden_keys": [
+    "triple_pin_gen",
+    "wd_triple_id",
+    "challenge_lease_id",
+    "otp_code",
+    "dualctl_ticket",
+    "dual_control_gen"
+  ],
+  "isolation_mark": "screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula"
+}

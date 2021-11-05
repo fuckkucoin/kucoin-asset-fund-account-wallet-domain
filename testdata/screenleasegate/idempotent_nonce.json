@@ -1,0 +1,9 @@
+{
+  "name": "idempotent_nonce",
+  "user_id": "u-screen-05",
+  "asset": "USDT",
+  "amount": "8.000000000000000000",
+  "dest": "0xidemp0123456789",
+  "pack": "kyc0",
+  "nonce": "nonce-idemp-0001"
+}
