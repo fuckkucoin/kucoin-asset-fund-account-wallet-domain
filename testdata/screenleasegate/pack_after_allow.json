@@ -1,0 +1,14 @@
+{
+  "name": "pack_after_allow",
+  "user_id": "u-screen-02",
+  "asset": "BTC",
+  "amount": "0.150000000000000000",
+  "dest": "bc1qscreenlease01",
+  "pack": "kyc0",
+  "flip_pack": "kyc2",
+  "nonce": "nonce-pack-0001",
+  "ticket": "wd-ticket-pack-01",
+  "actor": "wd-actor-b",
+  "operator": "ops-pack-a",
+  "expect_proof": "pack_flip"
+}
