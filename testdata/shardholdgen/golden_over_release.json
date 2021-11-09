@@ -1,0 +1,11 @@
+{
+  "scenario": "over_release_denied",
+  "advance_ok": true,
+  "release_ok": false,
+  "gen_state": "held",
+  "proof_kinds": ["over_release"],
+  "reject_reason": "over_release",
+  "active_holds": 1,
+  "single_winner": true,
+  "no_double_spend": true
+}
