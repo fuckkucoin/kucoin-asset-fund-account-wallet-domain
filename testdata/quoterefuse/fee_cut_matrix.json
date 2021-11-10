@@ -1,0 +1,14 @@
+{
+  "rows": [
+    {"id": "f01", "gross": "100", "bps": 10, "flat": "0", "ok": true, "fee": "0.1"},
+    {"id": "f02", "gross": "100", "bps": 25, "flat": "0", "ok": true, "fee": "0.25"},
+    {"id": "f03", "gross": "1000", "bps": 1, "flat": "0", "ok": true, "fee": "0.1"},
+    {"id": "f04", "gross": "50", "bps": 0, "flat": "0.5", "ok": true, "fee": "0.5"},
+    {"id": "f05", "gross": "10", "bps": 0, "flat": "0.01", "ok": true, "fee": "0.01"},
+    {"id": "f06", "gross": "1", "bps": 0, "flat": "1", "ok": false, "fee": "0"},
+    {"id": "f07", "gross": "1", "bps": 0, "flat": "2", "ok": false, "fee": "0"},
+    {"id": "f08", "gross": "10", "bps": 0, "flat": "0", "ok": false, "fee": "0"},
+    {"id": "f09", "gross": "200", "bps": 50, "flat": "0", "ok": true, "fee": "1"},
+    {"id": "f10", "gross": "80", "bps": 0, "flat": "0.8", "ok": true, "fee": "0.8"}
+  ]
+}

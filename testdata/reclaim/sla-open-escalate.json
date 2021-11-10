@@ -1,0 +1,41 @@
+{
+  "name": "sla-open-escalate",
+  "description": "SLA 超时：open 状态超过 72h 自动升级到 escalated",
+  "now_base": "2026-04-01T00:00:00Z",
+  "steps": [
+    {
+      "op": "open",
+      "input": {
+        "idempotency_key": "idem-sla-001",
+        "tx_hash": "0x2222222222222222222222222222222222222222222222222222222222222222",
+        "vout": 0,
+        "chain": "TRX",
+        "asset": "USDT",
+        "amount": "1000.000000000000000000",
+        "kind": "memo_mismatch",
+        "user_id": "u-bob",
+        "opened_by": "ops-desk-1"
+      },
+      "expect_state": "open"
+    },
+    {
+      "op": "tick_sla",
+      "advance_hours": 0,
+      "expect_escalated": 0
+    },
+    {
+      "op": "tick_sla",
+      "description": "推进 73h，超过 72h SLA 截止",
+      "advance_hours": 73,
+      "expect_escalated": 1,
+      "expect_state": "escalated"
+    },
+    {
+      "op": "reclaim",
+      "description": "escalated 案件仍可完成回收",
+      "actor": "senior-ops-1",
+      "reclaimed_tx_hash": "0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "expect_state": "reclaimed"
+    }
+  ]
+}

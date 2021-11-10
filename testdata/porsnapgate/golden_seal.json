@@ -1,0 +1,15 @@
+{
+  "description": "封印世代黄金夹具：两用户三科目快照",
+  "users": ["user-001", "user-002"],
+  "leaves": [
+    {"user_id": "user-001", "book": "trading", "asset": "BTC", "available": "1.50000000", "frozen": "0.10000000"},
+    {"user_id": "user-001", "book": "trading", "asset": "ETH", "available": "10.00000000", "frozen": "0.00000000"},
+    {"user_id": "user-002", "book": "trading", "asset": "BTC", "available": "0.80000000", "frozen": "0.20000000"},
+    {"user_id": "user-002", "book": "funding", "asset": "USDT", "available": "500.00000000", "frozen": "0.00000000"}
+  ],
+  "expected_leaf_count": 4,
+  "expected_user_count": 2,
+  "state_after_seal": "sealed",
+  "ttl_seconds": 86400,
+  "note": "封印后改 user-001 BTC available → 2.00000000；Prove 原 gen 根不变；CompareWithProof 产出 drift_proof"
+}
