@@ -1,0 +1,12 @@
+{
+  "name": "double_seal",
+  "movement_id": "mv-ds-01",
+  "job_id": "job-ds-01",
+  "chain": "ETH",
+  "to": "0xabc9",
+  "amount": "9.000000000000000000",
+  "nonce": "nonce-ds-01",
+  "actor": "signer-k",
+  "sig_hex": "aabbccddeeff0011",
+  "expect": {"first": "sealed", "second_err": "double spend"}
+}
