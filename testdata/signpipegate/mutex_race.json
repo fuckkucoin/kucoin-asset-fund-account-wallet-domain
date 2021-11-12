@@ -1,0 +1,10 @@
+{
+  "name": "mutex_race",
+  "movement_id": "mv-race-01",
+  "job_id": "job-race-01",
+  "chain": "TRX",
+  "to": "Tdest001",
+  "amount": "10.000000000000000000",
+  "actors": ["signer-c1", "signer-c2", "signer-c3", "signer-c4", "signer-c5", "signer-c6", "signer-c7", "signer-c8"],
+  "expect": {"winners": 1, "losers_err": "inflight lease occupies"}
+}
