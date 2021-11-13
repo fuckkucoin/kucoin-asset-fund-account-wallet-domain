@@ -1,0 +1,15 @@
+{
+  "name": "fault_matrix",
+  "cases": [
+    {"kind": "signer", "expect_err": "injected fault must fail"},
+    {"kind": "expire", "expect_err": "expired"},
+    {"kind": "fence", "expect_err": "fence stale"},
+    {"kind": "actor", "expect_err": "dual control"},
+    {"kind": "hsm_timeout", "expect_err": "unavailable"},
+    {"kind": "canonical_mismatch", "expect_err": "canonical"},
+    {"kind": "dual_broadcast", "expect_err": "double spend"},
+    {"kind": "retry_exhausted", "expect_err": "retries exhausted"},
+    {"kind": "generation_stale", "expect_err": "stale retry generation"},
+    {"kind": "inflight_race", "expect_err": "concurrent retry"}
+  ]
+}

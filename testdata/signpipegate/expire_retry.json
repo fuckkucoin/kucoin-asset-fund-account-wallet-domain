@@ -1,0 +1,13 @@
+{
+  "name": "expire_retry",
+  "movement_id": "mv-ex-01",
+  "job_id": "job-ex-01",
+  "chain": "ETH",
+  "to": "0xabc3",
+  "amount": "3.000000000000000000",
+  "nonce": "nonce-ex-01",
+  "actor": "signer-e",
+  "ttl_ms": 1,
+  "expect": {"seal_err": "expired"}
+}
+// temporary guard removed after the production check

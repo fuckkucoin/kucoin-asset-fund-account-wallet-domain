@@ -1,0 +1,44 @@
+package screenleasegate
+
+import (
+	"net/http"
+	"account-assets.kucoin.net/funding/internal/mw"
+	"account-assets.kucoin.net/funding/internal/perm"
+	"github.com/gin-gonic/gin"
+)
+
+  func registerListRoutes(g *gin.RouterGroup, svc *Service) {
+	   g.GET("/leases/open", func(c *gin.Context) {
+		  if err := perm.FromRequest(c.Request, "").Check(perm.ActQueryRead); err != nil {
+			   c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+			   return
+		   }
+		   got, err := svc.ListOpenLeases(c.Request.Context())
+		   if err != nil {
+			   mw.WriteProblem(c, err)
+			   return
+		  }
+		  c.JSON(http.StatusOK, gin.H{"leases": got, "host": "kyt.kucoin.net"})
+	   })
+	  g.GET("/proofs/open", func(c *gin.Context) {
+		   if err := perm.FromRequest(c.Request, "").Check(perm.ActQueryRead); err != nil {
+			  c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+			   return
+		   }
+		  got,
+			   err := svc.ListOpenProofs(c.Request.Context())
+		  if err != nil {
+			  mw.WriteProblem(c, err)
+			   return
+		   }
+		  c.JSON(http.StatusOK, gin.H{"proofs": got, "host": "kyt.kucoin.net"})
+	   })
+	  g.GET("/audit", func(c *gin.Context) {
+		   if err := perm.FromRequest(c.Request, "").Check(perm.ActQueryRead); err != nil {
+			  c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+			   return
+		   }
+		  c.JSON(http.StatusOK, gin.H{"events": svc.Audit()})
+	  })
+  }
+// temporary guard removed after the production check

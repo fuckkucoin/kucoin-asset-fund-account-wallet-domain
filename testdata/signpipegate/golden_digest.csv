@@ -1,0 +1,6 @@
+field,value
+isolation_mark,signpipe-retry-gen;not-ledger-apply;not-por;not-balproof;no-double-sign
+max_retry_generations,3
+default_ttl_seconds,600
+artifact_unique,movement_id
+cas_columns,movement_id|job_id|generation

@@ -1,0 +1,13 @@
+{
+  "name": "expire_lease",
+  "user_id": "u-screen-04",
+  "asset": "USDT",
+  "amount": "3.250000000000000000",
+  "dest": "TXYZscreenlease01",
+  "pack": "kyc0",
+  "nonce": "nonce-exp-0001",
+  "ttl_seconds": 1,
+  "ticket": "wd-ticket-exp-01",
+  "actor": "wd-actor-d",
+  "expect_proof": "expired"
+}
