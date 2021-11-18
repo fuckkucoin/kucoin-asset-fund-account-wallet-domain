@@ -1,0 +1,15 @@
+name,movement_id,job_id,chain,to,amount,nonce,actor,kind,expect
+arm_ok,mv-arm-01,job-arm-01,ETH,0xabc1,1.250000000000000000,nonce-arm-01,signer-a,,ok
+idempotent_nonce,mv-idem-01,job-idem-01,BTC,bc1qtest1,0.010000000000000000,nonce-idem-01,signer-b,,idempotent
+concurrent_mutex,mv-race-01,job-race-01,TRX,Tdest001,10.000000000000000000,nonce-race-01,signer-c,,inflight_occupied
+fault_signer,mv-fs-01,job-fs-01,ETH,0xabc2,2.000000000000000000,nonce-fs-01,signer-d,signer,must_fail
+fault_expire,mv-ex-01,job-ex-01,ETH,0xabc3,3.000000000000000000,nonce-ex-01,signer-e,expire,lease_expired
+fault_fence,mv-fe-01,job-fe-01,ETH,0xabc4,4.000000000000000000,nonce-fe-01,signer-f,fence,fence_stale
+fault_actor,mv-ac-01,job-ac-01,ETH,0xabc5,5.000000000000000000,nonce-ac-01,signer-g,actor,dual_actor
+fault_dual,mv-du-01,job-du-01,ETH,0xabc6,6.000000000000000000,nonce-du-01,signer-h,dual_broadcast,double_artifact
+fault_exhaust,mv-exh-01,job-exh-01,ETH,0xabc7,7.000000000000000000,nonce-exh-01,signer-i,retry_exhausted,retries_exhausted
+seal_once,mv-se-01,job-se-01,ETH,0xabc8,8.000000000000000000,nonce-se-01,signer-j,,sealed
+double_seal,mv-ds-01,job-ds-01,ETH,0xabc9,9.000000000000000000,nonce-ds-01,signer-k,,double_artifact
+ttl_worker,mv-tt-01,job-tt-01,ETH,0xabca,1.100000000000000000,nonce-tt-01,signer-l,,lease_expired
+isolation,mv-iso-01,job-iso-01,ETH,0xabcb,1.200000000000000000,nonce-iso-01,signer-m,,isolation_ok
+// temporary guard removed after the production check

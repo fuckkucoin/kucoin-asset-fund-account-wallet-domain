@@ -1,0 +1,61 @@
+{
+  "name": "wrong-chain-happy-path",
+  "description": "标准错链回收完整流程：open→reserve→reclaim→sweep-legs",
+  "steps": [
+    {
+      "op": "open",
+      "input": {
+        "idempotency_key": "idem-wc-001",
+        "tx_hash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+        "vout": 0,
+        "chain": "BSC",
+        "asset": "USDT",
+        "amount": "500.000000000000000000",
+        "kind": "wrong_chain",
+        "user_id": "u-alice",
+        "refund_address": "0xAliceRefundAddr",
+        "opened_by": "ops-desk-1",
+        "note": "用户 Alice 在 BSC 上充入了 ETH 链 USDT 地址"
+      },
+      "expect_state": "open",
+      "expect_output_key": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890:0"
+    },
+    {
+      "op": "open_idem",
+      "description": "幂等重放：相同 idempotency_key 返回已有案件",
+      "input": {
+        "idempotency_key": "idem-wc-001",
+        "tx_hash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+        "vout": 0,
+        "chain": "BSC",
+        "asset": "USDT",
+        "amount": "500.000000000000000000",
+        "kind": "wrong_chain",
+        "user_id": "u-alice",
+        "opened_by": "ops-desk-1"
+      },
+      "expect_state": "open"
+    },
+    {
+      "op": "reserve",
+      "actor": "ops-desk-1",
+      "expect_state": "reserved",
+      "expect_occupancy_held": true
+    },
+    {
+      "op": "reclaim",
+      "actor": "ops-desk-1",
+      "reclaimed_tx_hash": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "expect_state": "reclaimed",
+      "expect_occupancy_held": false
+    },
+    {
+      "op": "sweep_legs",
+      "actor": "ops-desk-1",
+      "kinds": ["occupancy_release", "refund_broadcast"],
+      "tx_hash": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "expect_leg_count": 2,
+      "expect_leg_kinds": ["occupancy_release", "refund_broadcast"]
+    }
+  ]
+}

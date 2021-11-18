@@ -1,0 +1,166 @@
+[
+  {
+    "case": "two_steps_partial_compensate_mid_fail",
+    "description": "Partial 已落两步（freeze+move），Compensate 在 move undo 失败中断",
+    "input": {
+      "saga_run_id": "run-aabbcc-001",
+      "saga_idem": "idem-aabbcc-001",
+      "saga_asset": "USDT",
+      "saga_amount": "500.00",
+      "partial": {
+        "id": "run-aabbcc-001",
+        "done": ["freeze", "move"],
+        "undone": [],
+        "cause": "undo move: ledger service unavailable",
+        "closed": false
+      },
+      "ledger_hops": [
+        {
+          "idem_key": "idem-aabbcc-001-move",
+          "transfer_id": "txf-001-move",
+          "state": "credited",
+          "amount": "500.00",
+          "asset": "USDT",
+          "direction": "funding_to_trading"
+        }
+      ]
+    },
+    "expected_report": {
+      "items_count": 1,
+      "items": [
+        {
+          "step": "move",
+          "idem_key": "idem-aabbcc-001-move",
+          "ledger_entry_id": "txf-001-move",
+          "amount": "500.00",
+          "asset": "USDT",
+          "hop_state": "credited",
+          "is_confirmed": false
+        }
+      ],
+      "total_amount": "500.00",
+      "severity": "medium"
+    },
+    "expected_proof_digest_inputs": {
+      "intent_steps": ["freeze", "move"],
+      "residue_items_idem_keys": ["idem-aabbcc-001-move"],
+      "note": "proof_digest = SHA256(intent_hash:residue_hash:leg_hash)"
+    }
+  },
+  {
+    "case": "three_steps_partial_one_undone",
+    "description": "Partial 已落三步，Compensate 仅 sign undo 成功，move/freeze 均残留",
+    "input": {
+      "saga_run_id": "run-bbccdd-002",
+      "saga_idem": "idem-bbccdd-002",
+      "saga_asset": "BTC",
+      "saga_amount": "0.05",
+      "partial": {
+        "id": "run-bbccdd-002",
+        "done": ["freeze", "move", "sign"],
+        "undone": ["sign"],
+        "cause": "undo move: timeout",
+        "closed": false
+      },
+      "ledger_hops": [
+        {
+          "idem_key": "idem-bbccdd-002-move",
+          "transfer_id": "txf-002-move",
+          "state": "confirmed",
+          "amount": "0.05",
+          "asset": "BTC",
+          "direction": "funding_to_trading"
+        },
+        {
+          "idem_key": "idem-bbccdd-002-sign",
+          "transfer_id": "txf-002-sign",
+          "state": "rolled_back",
+          "amount": "0.05",
+          "asset": "BTC",
+          "direction": "wallet_withdraw"
+        }
+      ]
+    },
+    "expected_report": {
+      "items_count": 1,
+      "items": [
+        {
+          "step": "move",
+          "idem_key": "idem-bbccdd-002-move",
+          "ledger_entry_id": "txf-002-move",
+          "amount": "0.05",
+          "asset": "BTC",
+          "hop_state": "confirmed",
+          "is_confirmed": false
+        }
+      ],
+      "total_amount": "0.05",
+      "severity": "low",
+      "note": "sign 已 rolled_back 不计入残留；仅 move 构成残留"
+    }
+  },
+  {
+    "case": "already_fully_compensated",
+    "description": "Done == Undone，无残留",
+    "input": {
+      "saga_run_id": "run-ccddee-003",
+      "saga_idem": "idem-ccddee-003",
+      "partial": {
+        "id": "run-ccddee-003",
+        "done": ["freeze", "move"],
+        "undone": ["freeze", "move"],
+        "cause": "compensated",
+        "closed": true
+      },
+      "ledger_hops": []
+    },
+    "expected_error": "ErrNoResidues"
+  },
+  {
+    "case": "no_fail_cause",
+    "description": "Partial.Cause 为空（saga 正常进行），Detector 拒绝扫描",
+    "input": {
+      "saga_run_id": "run-ddeeff-004",
+      "partial": {
+        "id": "run-ddeeff-004",
+        "done": ["freeze"],
+        "undone": [],
+        "cause": "",
+        "closed": false
+      }
+    },
+    "expected_error": "ErrNoResidues"
+  },
+  {
+    "case": "high_severity_large_amount",
+    "description": "残留金额超过 HighThreshold(10000)，级别应为 high",
+    "input": {
+      "saga_run_id": "run-eeffgg-005",
+      "saga_idem": "idem-eeffgg-005",
+      "saga_asset": "USDT",
+      "saga_amount": "50000.00",
+      "partial": {
+        "id": "run-eeffgg-005",
+        "done": ["freeze", "move"],
+        "undone": [],
+        "cause": "undo move: db write failed",
+        "closed": false
+      },
+      "ledger_hops": [
+        {
+          "idem_key": "idem-eeffgg-005-move",
+          "transfer_id": "txf-005-move",
+          "state": "credited",
+          "amount": "50000.00",
+          "asset": "USDT",
+          "direction": "funding_to_trading"
+        }
+      ]
+    },
+    "expected_report": {
+      "items_count": 1,
+      "total_amount": "50000.00",
+      "severity": "high"
+    }
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "description": "live 模式标记黄金夹具",
+  "scenario": "live_snapshot_must_carry_tag",
+  "expected_tag": {
+    "mode": "live",
+    "non_forensic": true,
+    "non_attestation": true,
+    "disclaimer": "live read: not a sealed attestation; root may not be reproduced; must not be used as then-root"
+  },
+  "invariants": [
+    "LiveSnapshot 结果不得写入 por_attestations 表",
+    "LiveSnapshot 结果不得写入 por_snap_gens 表",
+    "tag.non_attestation 必须为 true",
+    "tag.non_forensic 必须为 true"
+  ],
+  "note": "验收 3：live 模式读取打标非法医/非公证，不得写入 attestation 表"
+}

@@ -1,0 +1,17 @@
+{
+  "description": "缺 snap_gen_id 公证请求拒绝黄金夹具",
+  "scenario": "attest_without_gen_must_reject",
+  "test_cases": [
+    {
+      "name": "empty_snap_gen_id",
+      "request": {"snap_gen_id": "", "requester": "ops-001"},
+      "expect_error": "porsnapgate: formal operation requires snap_gen binding"
+    },
+    {
+      "name": "missing_snap_gen_id",
+      "request": {"requester": "ops-001"},
+      "expect_error": "porsnapgate: formal operation requires snap_gen binding"
+    }
+  ],
+  "note": "验收 2：缺 gen 的 Attest/导出 API 必须拒绝（ErrNoGen）"
+}

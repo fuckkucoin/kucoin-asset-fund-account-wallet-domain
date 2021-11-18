@@ -1,0 +1,11 @@
+case_id,op,expect,proof
+halt_after_allow,submit_after_halt,deny,halt_flip
+pack_after_allow,submit_after_pack,deny,pack_flip
+missing_lease,submit_no_id,deny,missing_lease
+expired_lease,submit_after_ttl,deny,expired
+happy_consume,submit_consume,ok,
+idempotent_nonce,issue_twice,ok,
+amount_drift,submit_wrong_amt,deny,amount_drift
+dest_drift,submit_wrong_dest,deny,dest_drift
+no_allow,issue_deny,deny,no_allow
+four_eye,close_proof,ok,

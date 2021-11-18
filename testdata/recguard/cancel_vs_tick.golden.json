@@ -1,0 +1,47 @@
+{
+  "_comment": "验收场景 2：Cancel 与 Tick 并发——旧世代 tick 失败；无双扣；半扣可收口。",
+  "_scenario": "plan gen=1 下有一个 debiting tick；并发取消将 gen 抬至 2；旧 gen=1 的 tick 请求失败（ErrGenMismatch）；debiting tick 标 reverted，产生 HalfDebitResidue；回滚后 no double debit。",
+  "setup": {
+    "plan_id": "plan-cancel-001",
+    "generation_before_cancel": 1,
+    "in_flight_tick": {
+      "tick_id": "tick-001",
+      "state": "debiting",
+      "amount": "100",
+      "ledger_entry_id": "ledger-001"
+    }
+  },
+  "cancel_request": {
+    "plan_id": "plan-cancel-001",
+    "generation": 1,
+    "actor": "ops-agent"
+  },
+  "expected_cancel_response": {
+    "generation": 2,
+    "prev_generation": 1,
+    "state": "cancelling",
+    "half_debits": 1
+  },
+  "old_gen_tick_attempt": {
+    "plan_id": "plan-cancel-001",
+    "generation": 1,
+    "expected_error": "recguard generation mismatch"
+  },
+  "expected_residue": {
+    "state": "open",
+    "cause": "plan_cancelled",
+    "original_amount": "100",
+    "ledger_entry_id": "ledger-001"
+  },
+  "after_rollback": {
+    "residue_state": "rolled_back",
+    "plan_guard_state": "cancelled",
+    "no_double_debit": true
+  },
+  "invariants": [
+    "old-gen tick fails with ErrGenMismatch",
+    "cancel produces HalfDebitResidue for in-flight ticks",
+    "no double debit (residue rollback is idempotent)",
+    "plan guard state transitions: active → cancelling → cancelled"
+  ]
+}

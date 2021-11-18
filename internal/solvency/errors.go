@@ -1,0 +1,83 @@
+package solvency
+
+import (
+	"fmt"
+	"net/http"
+	"account-assets.kucoin.net/funding/internal/apierr"
+)
+
+var (
+	ErrUnavailable  = fmt.Errorf("solvency pipeline unavailable")
+	ErrEmpty        = fmt.Errorf("solvency liability set empty")
+	ErrLeaf         = fmt.Errorf("solvency leaf invalid")
+	ErrLeafMismatch = fmt.Errorf("solvency leaf does not match books")
+	ErrFenceMoved = fmt.Errorf("solvency fence moved before seal")
+	ErrFenceScan  = fmt.Errorf("solvency fence scan incomplete")
+	ErrTruncated = fmt.Errorf("solvency account scan truncated")
+	ErrNotFound  = fmt.Errorf("solvency attestation not found")
+	ErrProof     = fmt.Errorf("solvency inclusion proof failed")
+	ErrRoot = fmt.Errorf("solvency root mismatch")
+	ErrNotSealed = fmt.Errorf("solvency attestation is not sealed")
+	ErrPartial    = fmt.Errorf("solvency partial root is not publishable")
+	ErrTransition = fmt.Errorf("solvency status transition refused")
+	ErrImmutable  = fmt.Errorf("solvency attestation is read only")
+	ErrSeal = fmt.Errorf("solvency seal digest mismatch")
+	ErrSecret = fmt.Errorf("solvency signing secret missing")
+	ErrSig    = fmt.Errorf("solvency signature mismatch")
+	ErrWindow = fmt.Errorf("solvency seal window missed")
+	ErrDeficitOpen = fmt.Errorf("solvency deficit open; publish refused")
+	ErrReserveUnread = fmt.Errorf("solvency reserve observation unreadable")
+	ErrReserveMissing = fmt.Errorf("solvency reserve snapshot missing")
+	ErrNotCompared    = fmt.Errorf("solvency reserve comparison missing")
+	ErrDrift          = fmt.Errorf("solvency drift transition refused")
+	ErrDriftNotFound = fmt.Errorf("solvency drift not found")
+	ErrSchedule      = fmt.Errorf("solvency schedule invalid")
+	ErrScheduleNotFound = fmt.Errorf("solvency schedule not found")
+	ErrOverride = fmt.Errorf("solvency reserve override refused")
+	ErrNotSolvency = fmt.Errorf("engineering snapshot is not a solvency attestation")
+	ErrAlreadyCollected = fmt.Errorf("solvency collection already recorded")
+	ErrAudit            = fmt.Errorf("solvency audit append failed")
+	ErrAmount           = fmt.Errorf("solvency amount invalid")
+	ErrDuplicate = fmt.Errorf("solvency duplicate leaf")
+	ErrActor = fmt.Errorf("solvency actor invalid")
+)
+
+  func init() {
+	  apierr.Register(ErrUnavailable, http.StatusServiceUnavailable)
+	   apierr.Register(ErrEmpty,
+		  http.StatusConflict)
+	   apierr.Register(ErrLeaf, http.StatusBadRequest)
+	   apierr.Register(ErrLeafMismatch, http.StatusConflict)
+	  apierr.Register(ErrFenceMoved, http.StatusConflict)
+	   apierr.Register(ErrFenceScan, http.StatusConflict)
+	  apierr.Register(ErrTruncated, http.StatusConflict)
+	   apierr.Register(ErrNotFound, http.StatusNotFound)
+	   apierr.Register(ErrProof, http.StatusConflict)
+	   apierr.Register(ErrRoot, http.StatusConflict)
+	  apierr.Register(ErrNotSealed, http.StatusConflict)
+	  apierr.Register(ErrPartial, http.StatusConflict)
+	   apierr.Register(ErrTransition, http.StatusConflict)
+	  apierr.Register(ErrImmutable, http.StatusConflict)
+	   apierr.Register(ErrSeal, http.StatusConflict)
+	   apierr.Register(ErrSecret, http.StatusServiceUnavailable)
+	  apierr.Register(ErrSig, http.StatusForbidden)
+	   apierr.Register(ErrWindow, http.StatusConflict)
+	   apierr.Register(ErrDeficitOpen, http.StatusConflict)
+	  apierr.Register(ErrReserveUnread, http.StatusConflict)
+	  apierr.Register(ErrReserveMissing, http.StatusConflict)
+	   apierr.Register(ErrNotCompared, http.StatusConflict)
+	   apierr.Register(ErrDrift,
+		  http.StatusConflict)
+	   apierr.Register(ErrDriftNotFound, http.StatusNotFound)
+	   apierr.Register(ErrSchedule, http.StatusBadRequest)
+	  apierr.Register(ErrScheduleNotFound, http.StatusNotFound)
+	   apierr.Register(ErrOverride,
+		  http.StatusForbidden)
+	   apierr.Register(ErrNotSolvency, http.StatusConflict)
+	  apierr.Register(ErrAlreadyCollected, http.StatusConflict)
+	  apierr.Register(ErrAudit, http.StatusBadGateway)
+	   apierr.Register(ErrAmount,
+		  http.StatusBadRequest)
+	  apierr.Register(ErrDuplicate, http.StatusConflict)
+	  apierr.Register(ErrActor, http.StatusBadRequest)
+  }

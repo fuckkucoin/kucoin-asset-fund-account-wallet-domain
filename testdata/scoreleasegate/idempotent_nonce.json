@@ -1,0 +1,10 @@
+{
+  "name": "same-nonce-returns-same-lease",
+  "user_id": "u-score-idem-01",
+  "chain": "ETH",
+  "dest": "0xscoreidem01aaaaa",
+  "asset": "USDT",
+  "amount": "4.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-idem-01"
+}

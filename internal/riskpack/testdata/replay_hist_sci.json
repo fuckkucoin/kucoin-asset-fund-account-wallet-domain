@@ -1,0 +1,7 @@
+{
+  "name": "sci-fail-closed",
+  "rows": [
+    {"user_id": "alice", "asset": "USDT", "amount": "1e2", "want": "allow"},
+    {"user_id": "alice", "asset": "USDT", "amount": "-3", "want": "deny"}
+  ]
+}

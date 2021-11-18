@@ -1,0 +1,44 @@
+{
+  "_comment": "验收场景 4：与 r6 CAS / 闪兑占用并行——本包键空间为 recbuy plan，不改写其租约/路径内核。",
+  "_scenario": "recguard 和 r6 A（CAS 租约）/ r6 F（闪兑占用）同时运行；两者键空间不重叠；recguard 仅操作 rec_plan_gens/catchup_windows/half_debit_residues/debit_proofs；r6 操作 aa_quota_hop_lease 等。不存在竞争写入。",
+  "key_space_isolation": {
+    "recguard_keys": ["rec_plan_gens", "catchup_windows", "half_debit_residues", "debit_proofs", "guard_tick_records"],
+    "r6_cas_keys": ["aa_quota_hop_lease"],
+    "r6_flash_keys": ["aa_flash_paths"],
+    "overlap": false
+  },
+  "concurrent_operations": [
+    {
+      "thread": "recguard",
+      "op": "BumpGeneration",
+      "target": "plan-001",
+      "modifies": ["rec_plan_gens"]
+    },
+    {
+      "thread": "r6_cas",
+      "op": "AcquireLease",
+      "target": "user-001:USDT",
+      "modifies": ["aa_quota_hop_lease"]
+    },
+    {
+      "thread": "r6_flash",
+      "op": "OccupyPath",
+      "target": "USDT→BTC",
+      "modifies": ["aa_flash_paths"]
+    }
+  ],
+  "expected_results": {
+    "recguard_gen_bumped": true,
+    "r6_cas_lease_acquired": true,
+    "r6_flash_path_occupied": true,
+    "no_cross_write": true,
+    "no_deadlock": true
+  },
+  "invariants": [
+    "recguard 仅写 rec_plan_gens/catchup_windows/half_debit_residues/debit_proofs",
+    "不修改 aa_quota_hop_lease（r6 A CAS 内核）",
+    "不修改 aa_flash_paths（r6 F 闪兑占用内核）",
+    "不修改 ledger Apply 内核",
+    "并行运行时无键冲突"
+  ]
+}

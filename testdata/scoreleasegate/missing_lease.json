@@ -1,0 +1,11 @@
+{
+  "name": "submit-without-score-lease",
+  "user_id": "u-score-miss-01",
+  "chain": "ETH",
+  "dest": "0xscoremiss01aaaa",
+  "asset": "USDT",
+  "amount": "1.000000000000000000",
+  "ticket": "wd-score-miss",
+  "actor": "wd-actor-miss",
+  "expect_proof": "missing_lease"
+}

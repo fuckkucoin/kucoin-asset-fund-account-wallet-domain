@@ -1,0 +1,76 @@
+[
+  {
+    "case": "single_worker_acquires_lock",
+    "description": "单 worker 成功获取世代锁",
+    "input": {
+      "saga_run_id": "run-mutex-001",
+      "worker_id": "worker-A",
+      "ttl_seconds": 90
+    },
+    "expected": {
+      "generation": 1,
+      "status": "locked",
+      "holder": "worker-A",
+      "acquire_ok": true
+    }
+  },
+  {
+    "case": "dual_worker_second_blocked",
+    "description": "两个 worker 同时争锁：第二个应得到 ErrGenLocked",
+    "input": {
+      "saga_run_id": "run-mutex-002",
+      "worker_a": "worker-A",
+      "worker_b": "worker-B",
+      "ttl_seconds": 90
+    },
+    "expected": {
+      "worker_a_generation": 1,
+      "worker_a_acquire_ok": true,
+      "worker_b_error": "ErrGenLocked",
+      "no_double_closeout": true
+    }
+  },
+  {
+    "case": "lock_expires_second_worker_succeeds",
+    "description": "第一个 worker 的锁 TTL 到期后，第二个 worker 成功获取（世代递增）",
+    "input": {
+      "saga_run_id": "run-mutex-003",
+      "worker_a": "worker-A",
+      "worker_b": "worker-B",
+      "ttl_seconds": 1,
+      "wait_seconds": 2
+    },
+    "expected": {
+      "worker_a_generation": 1,
+      "worker_b_generation": 2,
+      "worker_b_acquire_ok": true,
+      "note": "generation 递增防止 worker_a 用旧 generation 误操作"
+    }
+  },
+  {
+    "case": "stale_refresh_after_expiry",
+    "description": "worker 锁过期后尝试 Refresh，应返回 ErrStaleGen",
+    "input": {
+      "saga_run_id": "run-mutex-004",
+      "worker_id": "worker-A",
+      "ttl_seconds": 1,
+      "wait_before_refresh": 2,
+      "generation": 1
+    },
+    "expected": {
+      "refresh_error": "ErrStaleGen"
+    }
+  },
+  {
+    "case": "compensate_blocked_while_closeout_active",
+    "description": "Closeout 持锁期间，safesaga Compensate 调用 CheckCompensateAllowed 应被拒绝",
+    "input": {
+      "saga_run_id": "run-mutex-005",
+      "closeout_worker": "closeout-worker",
+      "compensate_caller": "saga-compensator"
+    },
+    "expected": {
+      "compensate_error": "ErrCompensateBlock"
+    }
+  }
+]

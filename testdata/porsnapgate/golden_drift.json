@@ -1,0 +1,41 @@
+{
+  "description": "漂移证明黄金夹具：封印后活账变动场景",
+  "scenario": "seal_then_mutate_then_compare",
+  "steps": [
+    {
+      "step": 1,
+      "action": "BuildWithGen",
+      "users": ["user-001"],
+      "leaves": [
+        {"user_id": "user-001", "book": "trading", "asset": "BTC", "available": "1.00000000", "frozen": "0.00000000"}
+      ],
+      "expect_state": "sealed"
+    },
+    {
+      "step": 2,
+      "action": "MutateLedger",
+      "description": "向 user-001 BTC trading 账户存入 0.50000000",
+      "after_leaves": [
+        {"user_id": "user-001", "book": "trading", "asset": "BTC", "available": "1.50000000", "frozen": "0.00000000"}
+      ]
+    },
+    {
+      "step": 3,
+      "action": "CompareWithProof",
+      "snap_gen_id": "<from_step_1>",
+      "expect_drifted": true,
+      "expect_drift_proof_kind": "compare",
+      "expect_drift_assets": [
+        {"asset": "BTC", "note": "live amount differs from sealed"}
+      ]
+    },
+    {
+      "step": 4,
+      "action": "ProveAttested",
+      "snap_gen_id": "<from_step_1>",
+      "expect_error": "porsnapgate: root mismatch on replay/compare",
+      "note": "根不一致，ProveAttested 应返回 ErrRootMismatch 并触发 replay drift_proof"
+    }
+  ],
+  "note": "验收 1：Build 钉 gen 后变更 ledger 活账；Prove 原 gen 根不变（即 ErrRootMismatch 被返回并记录漂移）；Compare vs live 必须产出 PorSnapDriftProof"
+}

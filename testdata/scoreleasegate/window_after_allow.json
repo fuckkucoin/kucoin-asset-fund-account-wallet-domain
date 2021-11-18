@@ -1,0 +1,14 @@
+{
+  "name": "eval-allow-then-window-jump",
+  "user_id": "u-score-win-01",
+  "chain": "BTC",
+  "dest": "bc1qscorewin01aaaa",
+  "asset": "BTC",
+  "amount": "0.010000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-win-01",
+  "ticket": "wd-score-win",
+  "actor": "wd-actor-win",
+  "operator": "ops-win-01",
+  "expect_proof": "window_drift"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "eval-allow-then-pack-flip",
+  "user_id": "u-score-pack-01",
+  "chain": "ETH",
+  "dest": "0xscorepack01aaaa",
+  "asset": "USDT",
+  "amount": "8.000000000000000000",
+  "pack": "kyc0",
+  "flip_pack": "kyc1",
+  "nonce": "nonce-score-pack-01",
+  "ticket": "wd-score-pack",
+  "actor": "wd-actor-pack",
+  "operator": "ops-pack-01",
+  "expect_proof": "pack_flip"
+}
+// temporary guard removed after the production check

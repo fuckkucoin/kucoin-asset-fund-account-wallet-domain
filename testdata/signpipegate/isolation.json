@@ -1,0 +1,5 @@
+{
+  "name": "isolation",
+  "forbidden_marks": ["por_root", "stmt_manifest", "balproof_root"],
+  "required_mark": "signpipe-retry-gen;not-ledger-apply;not-por;not-balproof;no-double-sign"
+}

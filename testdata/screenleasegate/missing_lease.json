@@ -1,0 +1,11 @@
+{
+  "name": "missing_lease",
+  "user_id": "u-screen-03",
+  "asset": "ETH",
+  "amount": "1.000000000000000000",
+  "dest": "0xdef0123456789abc",
+  "ticket": "wd-ticket-miss-01",
+  "actor": "wd-actor-c",
+  "expect_proof": "missing_lease"
+}
+// temporary guard removed after the production check

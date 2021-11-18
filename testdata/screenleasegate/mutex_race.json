@@ -1,0 +1,11 @@
+{
+  "name": "mutex_race",
+  "user_id": "u-screen-06",
+  "asset": "USDT",
+  "amount": "5.000000000000000000",
+  "dest": "0xmutex0123456789",
+  "pack": "kyc0",
+  "nonce": "nonce-mutex-0001",
+  "tickets": ["wd-ticket-m1", "wd-ticket-m2"],
+  "actor": "wd-actor-e"
+}

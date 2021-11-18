@@ -1,0 +1,12 @@
+{
+  "scenario": "half_advance_resume",
+  "advance_ok": true,
+  "release_ok": false,
+  "gen_state": "held",
+  "half_kind": "freeze_no_broadcast",
+  "half_state": "resumed",
+  "proof_kinds": [],
+  "active_holds": 1,
+  "single_winner": true,
+  "no_double_spend": true
+}
