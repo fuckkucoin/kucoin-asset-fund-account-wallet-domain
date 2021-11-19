@@ -1,0 +1,18 @@
+{
+  "name": "concurrent_reexport_mutex",
+  "description": "两个进程并发 re-export：仅一个获得 IssueProof，另一个被互斥拒绝",
+  "user_id": "USER-MUTEX-003",
+  "initial_bills": [
+    {"movement_id": "MV-201", "user_id": "USER-MUTEX-003", "book": "margin", "subject": "available", "asset": "USDT", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "5000", "seq": 1},
+    {"movement_id": "MV-202", "user_id": "USER-MUTEX-003", "book": "margin", "subject": "frozen", "asset": "USDT", "type": "freeze", "app_type": "margin_freeze", "debit": "1000", "credit": "0", "seq": 2}
+  ],
+  "actions": [
+    {"type": "concurrent_issue", "user_id": "USER-MUTEX-003", "format": "json", "ttl_sec": 3600, "concurrency": 2},
+    {"type": "check_mutex", "expect_one_success": true, "expect_one_fail": true}
+  ],
+  "expected": {
+    "total_issued": 1,
+    "total_rejected": 1,
+    "reject_reason_contains": "concurrent export"
+  }
+}
