@@ -1,0 +1,12 @@
+{
+  "case": "attest_expiry_blocks_mint",
+  "kind": "mint",
+  "asset": "USDC",
+  "ttl_sec": 2,
+  "advance": "3s",
+  "expect": {
+    "issue_after_expiry": false,
+    "mint_after_expiry": false,
+    "outcome": "blocked_attest_expired"
+  }
+}
