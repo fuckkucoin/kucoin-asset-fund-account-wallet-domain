@@ -1,0 +1,20 @@
+{
+  "legal": [
+    ["issued", "posting"],
+    ["issued", "expired"],
+    ["issued", "revoked"],
+    ["posting", "posted"],
+    ["posting", "consumed"],
+    ["posting", "expired"],
+    ["posting", "revoked"],
+    ["posted", "consumed"]
+  ],
+  "illegal": [
+    ["consumed", "issued"],
+    ["expired", "posting"],
+    ["revoked", "posted"],
+    ["posted", "issued"],
+    ["issued", "consumed"]
+  ],
+  "half": [["open", "resolved"]]
+}
