@@ -1,0 +1,17 @@
+{
+  "dup_case_id": "dc-0001-0001-0001-0001-000000000001",
+  "transfer_id": "tr-stuck-0001",
+  "generation": 1,
+  "first_lease_id": "a1b2c3d4-0001-0001-0001-000000000001",
+  "dup_lease_id": "a1b2c3d4-0001-0001-0001-000000000003",
+  "state": "open",
+  "dup_proof_id": null,
+  "confirmed_by": null,
+  "co_confirmed_by": null,
+  "detected_at": "2025-11-22T10:00:01Z",
+  "proven_at": null,
+  "closed_at": null,
+  "close_note": null,
+  "created_at": "2025-11-22T10:00:01Z",
+  "updated_at": "2025-11-22T10:00:01Z"
+}
