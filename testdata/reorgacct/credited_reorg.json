@@ -1,0 +1,94 @@
+{
+  "_comment": "场景：ETH 链确认数从 12 回退到 4，两笔提前入账已贷记。",
+  "_scenario": "credited_reorg",
+  "ingest_req": {
+    "chain": "ETH",
+    "pivot_tx_hash": "0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1",
+    "depth_before": 12,
+    "depth_after": 4,
+    "source_kind": "confirm_rollback",
+    "affected_outputs": [
+      {
+        "tx_hash": "0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1",
+        "output_index": 0,
+        "transfer_id": "tr-eth-001",
+        "user_id": "user-A",
+        "asset": "ETH",
+        "amount": "1.5"
+      },
+      {
+        "tx_hash": "0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1",
+        "output_index": 1,
+        "transfer_id": "tr-eth-002",
+        "user_id": "user-B",
+        "asset": "ETH",
+        "amount": "0.3"
+      }
+    ],
+    "affected_tracks": [],
+    "evidence": [
+      {
+        "kind": "confirm_rollback",
+        "ref": "fundsafety:AdvanceConfirm:ETH:depth_before=12:depth_after=4",
+        "note": "AdvanceConfirm returned ErrReorg"
+      }
+    ],
+    "note": "ETH 链确认数回退 12→4，两笔提前入账需冲正"
+  },
+  "expected_event": {
+    "chain": "ETH",
+    "depth_before": 12,
+    "depth_after": 4,
+    "rollback_depth": 8,
+    "state": "pending",
+    "source_kind": "confirm_rollback"
+  },
+  "mock_deposit_faces": {
+    "ETH:0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1:0": {
+      "phase": "confirming",
+      "reversed": false,
+      "confirming": true,
+      "amount": "1.5",
+      "user_id": "user-A",
+      "asset": "ETH",
+      "transfer_id": "tr-eth-001"
+    },
+    "ETH:0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1:1": {
+      "phase": "credited",
+      "reversed": false,
+      "confirming": false,
+      "amount": "0.3",
+      "user_id": "user-B",
+      "asset": "ETH",
+      "transfer_id": "tr-eth-002"
+    }
+  },
+  "expected_impact_rows": [
+    {
+      "user_id": "user-A",
+      "asset": "ETH",
+      "kind": "credited",
+      "reference_id": "tr-eth-001",
+      "affected_amount": "1.5"
+    },
+    {
+      "user_id": "user-B",
+      "asset": "ETH",
+      "kind": "credited",
+      "reference_id": "tr-eth-002",
+      "affected_amount": "0.3"
+    }
+  ],
+  "expected_summary": {
+    "total_credited": "1.8",
+    "total_occupied": "0",
+    "total_freeze": "0",
+    "total_hop_partial": "0",
+    "live_hash_count": 0,
+    "row_count": 2
+  },
+  "expected_legs": [
+    {"kind": "debit_reversal", "state": "pending", "execution_order": 1, "amount": "1.5"},
+    {"kind": "debit_reversal", "state": "pending", "execution_order": 1, "amount": "0.3"}
+  ]
+}

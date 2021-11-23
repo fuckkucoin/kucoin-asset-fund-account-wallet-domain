@@ -1,0 +1,13 @@
+{
+  "effect_proof_id": "ep-0001-0001-0001-0001-000000000001",
+  "transfer_id": "tr-stuck-0001",
+  "lease_id": "a1b2c3d4-0001-0001-0001-000000000002",
+  "generation": 1,
+  "intent": "RecoverStuck:tr-stuck-0001:gen=1",
+  "action": "recover",
+  "ledger_ref": "bc-broadcast-ref-001",
+  "checksum": "computed-sha256-see-note",
+  "issued_by": "incdef:tr-stuck-0001:try01",
+  "issued_at": "2025-11-22T10:00:05Z",
+  "_note": "checksum = SHA-256('RecoverStuck:tr-stuck-0001:gen=1|recover|bc-broadcast-ref-001'); computed at runtime by BuildEffectProof"
+}

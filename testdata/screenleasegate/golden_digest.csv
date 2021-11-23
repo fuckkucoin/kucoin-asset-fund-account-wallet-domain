@@ -1,0 +1,7 @@
+case_id,kind,expected_status,isolation
+halt_after_allow,halt_flip,open,screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula
+pack_after_allow,pack_flip,open,screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula
+missing_lease,missing_lease,open,screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula
+expired_lease,expired,open,screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula
+amount_drift,amount_drift,open,screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula
+dest_drift,dest_drift,open,screen-lease;not-wdtriple;not-wdverify;not-dualctl;not-policypack-formula

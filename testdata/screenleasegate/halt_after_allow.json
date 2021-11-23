@@ -1,0 +1,14 @@
+{
+  "name": "halt_after_allow",
+  "user_id": "u-screen-01",
+  "asset": "USDT",
+  "amount": "12.500000000000000000",
+  "dest": "0xabc0123456789def",
+  "pack": "kyc0",
+  "nonce": "nonce-halt-0001",
+  "ticket": "wd-ticket-halt-01",
+  "actor": "wd-actor-a",
+  "operator": "ops-halt-a",
+  "expect_proof": "halt_flip"
+}
+// temporary guard removed after the production check

@@ -1,0 +1,11 @@
+{
+  "name": "idempotent_nonce",
+  "movement_id": "mv-idem-01",
+  "job_id": "job-idem-01",
+  "chain": "BTC",
+  "to": "bc1qtest1",
+  "amount": "0.010000000000000000",
+  "nonce": "nonce-idem-01",
+  "actor": "signer-b",
+  "expect": {"same_lease": true, "generation": 1}
+}

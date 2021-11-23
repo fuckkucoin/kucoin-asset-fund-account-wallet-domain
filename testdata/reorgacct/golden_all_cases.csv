@@ -1,0 +1,16 @@
+scenario,chain,pivot_tx_hash,depth_before,depth_after,rollback_depth,source_kind,affected_kind,reference_id,user_id,asset,affected_amount,expected_leg_kind,expected_leg_order,live_hash,note
+credited_reorg_userA,ETH,0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1,12,4,8,confirm_rollback,credited,tr-eth-001,user-A,ETH,1.5,debit_reversal,1,false,ETH确认回退12→4，用户A已贷记需冲正
+credited_reorg_userB,ETH,0xabc123def456abc123def456abc123def456abc123def456abc123def456abc1,12,4,8,confirm_rollback,credited,tr-eth-002,user-B,ETH,0.3,debit_reversal,1,false,ETH确认回退12→4，用户B已贷记需冲正
+occupancy_only_btc,BTC,btc_tx_hash_000000000000000000000000000000000000000000000000000000000001,3,1,2,confirm_rollback,occupied,occ-btc-001,user-C,BTC,0.05,occupancy_release,2,false,BTC孤块，仅占用单未贷记
+live_hash_normal_freeze,ETH,0xdeadbeef00000000000000000000000000000000000000000000000000000001,12,3,9,orphan_observe,freeze,freeze-wd-001,user-D,ETH,2.0,freeze_rollback,3,false,普通冻结出金需回滚
+live_hash_live_hash,ETH,0xdeadbeef00000000000000000000000000000000000000000000000000000001,12,3,9,orphan_observe,live_hash,wd-livehash-002,user-E,ETH,1.0,incident,5,true,live-hash出金只开事故单不解冻
+hop_half_done_credited,TRON,tron_tx_aaaa0000000000000000000000000000000000000000000000000000000001,20,10,10,confirm_rollback,credited,tr-tron-hop-001,user-F,USDT,500,debit_reversal,1,false,TRON已贷记需冲正（关联hop）
+hop_half_done_hop,TRON,tron_tx_aaaa0000000000000000000000000000000000000000000000000000000001,20,10,10,confirm_rollback,hop_partial,hop-001,user-F,USDT,500,hop_close,4,false,hop半截需收口通知
+multi_asset_btc_credited,BTC,btc_multi_001,6,2,4,confirm_rollback,credited,tr-btc-multi-001,user-G,BTC,0.01,debit_reversal,1,false,BTC多资产
+multi_asset_btc_occupied,BTC,btc_multi_001,6,2,4,confirm_rollback,occupied,occ-btc-multi-001,user-G,BTC,0.01,occupancy_release,2,false,BTC占用同时存在
+multi_asset_usdt_credited,ETH,eth_multi_001,15,7,8,confirm_rollback,credited,tr-usdt-multi-001,user-H,USDT,1000,debit_reversal,1,false,ETH链USDT已贷记
+double_reverse_guard,ETH,eth_guard_001,12,5,7,confirm_rollback,credited,tr-guard-001,user-I,ETH,0.5,debit_reversal,1,false,第二次冲正被护栏拒绝（ErrGuardConflict）
+sol_confirm_rollback,SOL,sol_tx_hash_001,32,20,12,confirm_rollback,credited,tr-sol-001,user-J,SOL,10,debit_reversal,1,false,SOL链确认数32→20
+tron_orphan_observe,TRON,tron_orphan_001,20,15,5,orphan_observe,freeze,freeze-tron-001,user-K,TRX,500,freeze_rollback,3,false,TRON孤块观察冻结回滚
+matic_rollback,MATIC,matic_tx_001,12,8,4,confirm_rollback,credited,tr-matic-001,user-L,USDC,50,debit_reversal,1,false,MATIC链已贷记冲正
+arb_rollback,ARB,arb_tx_001,12,3,9,orphan_observe,credited,tr-arb-001,user-M,ETH,0.8,debit_reversal,1,false,ARB链孤块已贷记冲正

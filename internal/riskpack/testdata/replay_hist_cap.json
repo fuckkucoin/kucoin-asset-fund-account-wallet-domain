@@ -1,0 +1,10 @@
+{
+  "name": "exposure-cap",
+  "caps": [
+    {"user_id": "alice", "asset": "USDT", "max": "20"}
+  ],
+  "rows": [
+    {"user_id": "alice", "asset": "USDT", "amount": "10", "want": "allow", "release": false},
+    {"user_id": "alice", "asset": "USDT", "amount": "15", "want": "deny"}
+  ]
+}

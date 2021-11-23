@@ -1,0 +1,11 @@
+{
+  "name": "dest-cluster",
+  "rows": [
+    {"user_id": "alice", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0xclust", "want": "allow", "release": true},
+    {"user_id": "alice", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0xclust", "want": "allow", "release": true},
+    {"user_id": "alice", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0xclust", "want": "allow", "release": true},
+    {"user_id": "alice", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0xclust", "want": "allow", "release": true},
+    {"user_id": "alice", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0xclust", "want": "allow", "release": true},
+    {"user_id": "alice", "asset": "USDT", "amount": "1", "chain": "ETH", "dest": "0xclust", "want": "hold", "release": true}
+  ]
+}

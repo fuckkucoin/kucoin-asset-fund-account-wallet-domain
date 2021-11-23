@@ -1,0 +1,9 @@
+{
+  "case": "reattest_changes_fingerprint",
+  "kind": "redeem",
+  "asset": "USDT",
+  "expect": {
+    "old_lease_assert": false,
+    "outcome": "blocked_fingerprint_drift"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "ttl-elapsed-fail-closed",
+  "user_id": "u-score-exp-01",
+  "chain": "ETH",
+  "dest": "0xscoreexp01aaaaaa",
+  "asset": "USDT",
+  "amount": "3.000000000000000000",
+  "pack": "kyc0",
+  "nonce": "nonce-score-exp-01",
+  "ticket": "wd-score-exp",
+  "actor": "wd-actor-exp",
+  "ttl_seconds": 1,
+  "advance": "2s",
+  "expect_proof": "expired"
+}

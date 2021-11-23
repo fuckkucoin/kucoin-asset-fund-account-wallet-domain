@@ -1,0 +1,12 @@
+{
+  "case": "issue_then_clear_attest_then_mint",
+  "kind": "mint",
+  "asset": "USDT",
+  "expect": {
+    "issue_ok": true,
+    "clear_ok": true,
+    "mint_ok": false,
+    "outcome": "blocked_clear_attest",
+    "proof_required": true
+  }
+}

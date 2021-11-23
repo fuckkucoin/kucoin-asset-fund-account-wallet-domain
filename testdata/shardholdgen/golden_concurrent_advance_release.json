@@ -1,0 +1,10 @@
+{
+  "scenario": "concurrent_advance_release",
+  "advance_ok": false,
+  "release_ok": true,
+  "gen_state": "released",
+  "proof_kinds": ["conflict"],
+  "active_holds": 0,
+  "single_winner": true,
+  "no_double_spend": true
+}
