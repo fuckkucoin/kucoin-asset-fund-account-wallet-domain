@@ -1,0 +1,38 @@
+{
+  "proof": {
+    "effect_proof_id": "ep-0001-0001-0001-0001-000000000001",
+    "transfer_id": "tr-stuck-0001",
+    "lease_id": "a1b2c3d4-0001-0001-0001-000000000002",
+    "generation": 1,
+    "intent": "RecoverStuck:tr-stuck-0001:gen=1",
+    "action": "recover",
+    "ledger_ref": "bc-broadcast-ref-001",
+    "checksum": "computed-sha256",
+    "issued_by": "incdef:tr-stuck-0001:try01",
+    "issued_at": "2025-11-22T10:00:05Z"
+  },
+  "lease": {
+    "lease_id": "a1b2c3d4-0001-0001-0001-000000000002",
+    "transfer_id": "tr-stuck-0001",
+    "generation": 1,
+    "state": "recovered",
+    "holder_key": "incdef:tr-stuck-0001:try01",
+    "opened_at": "2025-11-22T10:00:00Z",
+    "acting_at": "2025-11-22T10:00:00Z",
+    "recovered_at": "2025-11-22T10:00:05Z",
+    "expires_at": "2025-11-22T10:02:00Z",
+    "effect_proof_id": "ep-0001-0001-0001-0001-000000000001",
+    "created_at": "2025-11-22T10:00:00Z",
+    "updated_at": "2025-11-22T10:00:05Z"
+  },
+  "generation": {
+    "stuck_gen_id": "gen:tr-stuck-0001",
+    "transfer_id": "tr-stuck-0001",
+    "current_gen": 1,
+    "last_acting_at": "2025-11-22T10:00:00Z",
+    "created_at": "2025-11-22T10:00:00Z",
+    "updated_at": "2025-11-22T10:00:00Z"
+  },
+  "exported_at": "2025-11-22T10:05:00Z"
+}
+// temporary guard removed after the production check

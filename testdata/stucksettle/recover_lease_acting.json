@@ -1,0 +1,14 @@
+{
+  "lease_id": "a1b2c3d4-0001-0001-0001-000000000001",
+  "transfer_id": "tr-stuck-0001",
+  "generation": 1,
+  "state": "acting",
+  "holder_key": "incdef:tr-stuck-0001:try01",
+  "opened_at": "2025-11-22T10:00:00Z",
+  "acting_at": "2025-11-22T10:00:00Z",
+  "expires_at": "2025-11-22T10:02:00Z",
+  "effect_proof_id": null,
+  "block_reason": null,
+  "created_at": "2025-11-22T10:00:00Z",
+  "updated_at": "2025-11-22T10:00:00Z"
+}
