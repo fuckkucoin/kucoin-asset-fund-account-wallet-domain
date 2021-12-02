@@ -1,0 +1,27 @@
+{
+  "case": "ClearWithGen_DoubleClear",
+  "description": "同一 gen 被第二次 FourEyesClear；第二次须落 SuspenseDriftProof（OutcomeDoubleCleared）且返回错误",
+  "setup": {
+    "suspend": {
+      "case_id": "case-003",
+      "user_id": "user-grace",
+      "asset": "USDT",
+      "actor": "ops-henry"
+    },
+    "first_clear": {
+      "actor_1": "ops-ivan",
+      "actor_2": "ops-judy",
+      "gen_value": 1
+    }
+  },
+  "second_clear": {
+    "actor_1": "ops-kyle",
+    "actor_2": "ops-lena",
+    "gen_value": 1
+  },
+  "expect": {
+    "error": "suspgate: gen already cleared",
+    "drift_proof_outcome": "double_cleared",
+    "drift_proof_not_nil": true
+  }
+}
