@@ -1,0 +1,14 @@
+{
+  "_comment": "验收夹具 2：调查导出缺 snapshot_gen 必须拒绝（fail-closed）。",
+  "_scenario": "快照创建时未分配 snapshot_gen；尝试 Export 时必须返回 ErrNoSnapshot",
+  "user_id": "user-002",
+  "asset": "ETH",
+  "snapshot_id": "snap-no-gen-placeholder",
+  "snapshot_gen": "",
+  "status": "sealed",
+  "expected_outcome": {
+    "export_error": "trace_snapshot_gen required for forensic export",
+    "http_status": 422,
+    "bundle_returned": false
+  }
+}
