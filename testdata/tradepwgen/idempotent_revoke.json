@@ -1,0 +1,16 @@
+{
+  "_comment": "功能：多次 Change 幂等性——连续三次 Change 后 gen=4，每次吊销都安全完成。重点：每次 BumpGeneration 必须以当前 gen 为 expected，CAS 冲突时返回 ErrGenConflict。",
+  "scenario": "multiple_changes_idempotent",
+  "user_id": "user-idem-001",
+  "step_sequence": [
+    {"step": "set",    "pin": "100001", "expected_error": null, "expected_gen": 1},
+    {"step": "change", "old_pin": "100001", "new_pin": "200002", "expected_error": null, "expected_gen": 2},
+    {"step": "change", "old_pin": "200002", "new_pin": "300003", "expected_error": null, "expected_gen": 3},
+    {"step": "change", "old_pin": "300003", "new_pin": "400004", "expected_error": null, "expected_gen": 4},
+    {"step": "assert_gen", "expected_generation": 4},
+    {"step": "assert_no_open_leases"}
+  ],
+  "expected_final_generation": 4,
+  "expected_total_revoked": 0,
+  "note": "每次 Change 时无在途 Lease，RevokeInflight 返回 0，属正常路径。"
+}
