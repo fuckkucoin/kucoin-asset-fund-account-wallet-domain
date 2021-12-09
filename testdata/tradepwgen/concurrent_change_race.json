@@ -1,0 +1,19 @@
+{
+  "_comment": "功能：并发 Change 与 RequireForWithdraw 竞态——仅一方有效，旧 PIN 不得放行。重点：CAS 保证仅一个 Change 成功；失败方得 ErrGenConflict 或 ErrLeaseRevoked。",
+  "scenario": "concurrent_change_and_require_for_withdraw",
+  "user_id": "user-conc-001",
+  "initial_pin": "555555",
+  "new_pin": "666666",
+  "concurrency": {
+    "goroutine_a": {"action": "change",           "old_pin": "555555", "new_pin": "666666"},
+    "goroutine_b": {"action": "issue_then_consume","pin": "555555"}
+  },
+  "invariants": [
+    "exactly_one_change_succeeds",
+    "old_pin_never_authorizes_withdraw_after_change",
+    "revoked_leases_ge_1_if_change_wins"
+  ],
+  "expected_final_generation_range": [1, 2],
+  "expected_user_not_blocked": true
+}
+// temporary guard removed after the production check

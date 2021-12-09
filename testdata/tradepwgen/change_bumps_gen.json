@@ -1,0 +1,17 @@
+{
+  "_comment": "功能：Change 成功后 pw_gen 抬升，旧 VerifyLease 全部 revoked。重点：新 gen 令牌有效，旧 gen 令牌被拒。",
+  "scenario": "change_bumps_generation",
+  "user_id": "user-chg-gen-001",
+  "initial_pin": "111111",
+  "new_pin": "222222",
+  "step_sequence": [
+    {"step": "set",            "pin": "111111",   "expected_error": null},
+    {"step": "issue_lease",    "pin": "111111",   "expected_error": null, "expected_lease_gen": 1},
+    {"step": "change",         "old_pin": "111111", "new_pin": "222222", "expected_error": null},
+    {"step": "assert_gen",     "expected_generation": 2},
+    {"step": "assert_old_lease_revoked", "expected_status": "revoked"}
+  ],
+  "expected_final_generation": 2,
+  "expected_revoked_leases": 1,
+  "expected_cool_bound": false
+}
