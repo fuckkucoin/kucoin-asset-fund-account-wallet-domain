@@ -1,0 +1,26 @@
+{
+  "name": "issue_then_bill_append_drift",
+  "description": "签发导出后，同窗口内追加 Bill 导致 Root 漂移，原 Manifest Verify 被外部拒绝",
+  "user_id": "USER-DRIFT-001",
+  "initial_bills": [
+    {"movement_id": "MV-001", "user_id": "USER-DRIFT-001", "book": "funding", "subject": "available", "asset": "USDT", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "1000", "seq": 1},
+    {"movement_id": "MV-002", "user_id": "USER-DRIFT-001", "book": "funding", "subject": "available", "asset": "USDT", "type": "withdraw", "app_type": "withdraw", "debit": "200", "credit": "0", "seq": 2},
+    {"movement_id": "MV-003", "user_id": "USER-DRIFT-001", "book": "funding", "subject": "available", "asset": "BTC", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "0.5", "seq": 3}
+  ],
+  "appended_bills": [
+    {"movement_id": "MV-004", "user_id": "USER-DRIFT-001", "book": "funding", "subject": "available", "asset": "USDT", "type": "transfer", "app_type": "transfer", "debit": "100", "credit": "0", "seq": 4}
+  ],
+  "actions": [
+    {"type": "issue_export", "user_id": "USER-DRIFT-001", "format": "json", "ttl_sec": 3600},
+    {"type": "append_bills", "bills_ref": "appended_bills"},
+    {"type": "detect_drift", "expect_drift": true},
+    {"type": "verify_export", "expect_error": true}
+  ],
+  "expected": {
+    "final_lease_state": "revoked",
+    "drift_count": 1,
+    "drift_state": "proven",
+    "revocation_kind": "root_drift",
+    "verify_rejected": true
+  }
+}

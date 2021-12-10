@@ -1,0 +1,23 @@
+{
+  "name": "revoke_then_reissue_lifecycle",
+  "description": "撤销后允许重新签发（新租约、新证明），旧租约不可恢复",
+  "user_id": "USER-REISSUE-008",
+  "initial_bills": [
+    {"movement_id": "MV-701", "user_id": "USER-REISSUE-008", "book": "funding", "subject": "available", "asset": "USDT", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "2000", "seq": 1},
+    {"movement_id": "MV-702", "user_id": "USER-REISSUE-008", "book": "funding", "subject": "available", "asset": "USDT", "type": "withdraw", "app_type": "withdraw", "debit": "500", "credit": "0", "seq": 2}
+  ],
+  "actions": [
+    {"type": "issue_export", "user_id": "USER-REISSUE-008", "format": "json", "ttl_sec": 3600},
+    {"type": "manual_revoke", "reason": "regulatory request", "actor": "compliance_bot"},
+    {"type": "verify_export", "expect_error": true},
+    {"type": "reissue_export", "user_id": "USER-REISSUE-008", "format": "csv", "ttl_sec": 1800},
+    {"type": "verify_new_export", "expect_error": false}
+  ],
+  "expected": {
+    "first_lease_state": "revoked",
+    "second_lease_state": "issued",
+    "old_verify_rejected": true,
+    "new_verify_valid": true,
+    "different_lease_ids": true
+  }
+}

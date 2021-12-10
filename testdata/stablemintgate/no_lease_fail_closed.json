@@ -1,0 +1,10 @@
+{
+  "case": "mint_without_lease",
+  "kind": "mint",
+  "asset": "USDT",
+  "expect": {
+    "allowed": false,
+    "error": "mint/redeem requires mint_lease_id",
+    "outcome": "blocked_no_lease"
+  }
+}

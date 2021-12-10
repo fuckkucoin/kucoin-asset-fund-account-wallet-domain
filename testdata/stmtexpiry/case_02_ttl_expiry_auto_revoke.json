@@ -1,0 +1,22 @@
+{
+  "name": "ttl_expiry_auto_revoke",
+  "description": "TTL 过期自动撤销；新签发仅在 Root 重算后才允许",
+  "user_id": "USER-TTL-002",
+  "initial_bills": [
+    {"movement_id": "MV-101", "user_id": "USER-TTL-002", "book": "trading", "subject": "available", "asset": "ETH", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "10.5", "seq": 1},
+    {"movement_id": "MV-102", "user_id": "USER-TTL-002", "book": "trading", "subject": "available", "asset": "ETH", "type": "trade", "app_type": "trade", "debit": "2.3", "credit": "0", "seq": 2}
+  ],
+  "actions": [
+    {"type": "issue_export", "user_id": "USER-TTL-002", "format": "csv", "ttl_sec": 1},
+    {"type": "wait_ttl_expiry", "seconds": 2},
+    {"type": "ttl_scan", "expect_revoked_count": 1},
+    {"type": "verify_export", "expect_error": true},
+    {"type": "reissue_export", "user_id": "USER-TTL-002", "format": "json", "ttl_sec": 3600}
+  ],
+  "expected": {
+    "first_lease_state": "revoked",
+    "revocation_kind": "ttl_expiry",
+    "second_lease_state": "issued",
+    "second_lease_valid": true
+  }
+}
