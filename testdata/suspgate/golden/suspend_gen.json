@@ -1,0 +1,16 @@
+{
+  "case": "SuspendWithGen_FirstSuspend",
+  "request": {
+    "case_id": "case-001",
+    "user_id": "user-alice",
+    "asset": "USDT",
+    "actor": "ops-bob",
+    "note": "initial suspend"
+  },
+  "expect": {
+    "gen_value": 1,
+    "state": "active",
+    "active_count": 1,
+    "error": null
+  }
+}

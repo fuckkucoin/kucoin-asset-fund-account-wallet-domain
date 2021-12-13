@@ -1,0 +1,26 @@
+{
+  "case": "ClearWithGen_Success",
+  "setup": {
+    "suspend": {
+      "case_id": "case-002",
+      "user_id": "user-carol",
+      "asset": "USDC",
+      "actor": "ops-dan"
+    }
+  },
+  "request": {
+    "case_id": "case-002",
+    "user_id": "user-carol",
+    "asset": "USDC",
+    "gen_value": 1,
+    "actor_1": "ops-eve",
+    "actor_2": "ops-frank",
+    "note": "four-eyes clear"
+  },
+  "expect": {
+    "state": "cleared",
+    "has_lease": true,
+    "drift_proof": null,
+    "error": null
+  }
+}

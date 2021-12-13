@@ -1,0 +1,23 @@
+{
+  "_comment": "功能：PwDriftCase open 时阻断新核验令牌颁发；证明通过后方可关闭。重点：proven 态须双人确认；closed 后解除阻断。",
+  "scenario": "drift_case_blocks_lease_issuance",
+  "user_id": "user-drift-001",
+  "lease_id": "lease-stale-001",
+  "verify_gen": 1,
+  "current_gen": 2,
+  "step_sequence": [
+    {"step": "set",                "pin": "777777", "expected_error": null},
+    {"step": "issue_lease",        "pin": "777777", "expected_error": null, "expected_lease_gen": 1},
+    {"step": "change",             "old_pin": "777777", "new_pin": "888888", "expected_error": null},
+    {"step": "consume_old_lease",  "expected_error": "ErrLeaseRevoked"},
+    {"step": "detect_drift",       "expected_drift_status": "open"},
+    {"step": "issue_lease_blocked","pin": "888888", "expected_error": "ErrDriftOpen"},
+    {"step": "prove_drift",        "approver": "ops-alice", "approver2": "ops-bob", "proof_payload": "{\"summary\":\"gen1 lease used after gen2 bump\",\"hash\":\"abc123\"}", "expected_error": null},
+    {"step": "assert_drift_status","expected_status": "proven"},
+    {"step": "close_drift",        "approver": "ops-alice", "expected_error": null},
+    {"step": "assert_drift_status","expected_status": "closed"},
+    {"step": "issue_lease_ok",     "pin": "888888", "expected_error": null, "expected_lease_gen": 2}
+  ],
+  "expected_drift_proven_requires_dual_approval": true,
+  "expected_drift_close_requires_proven": true
+}
