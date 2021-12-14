@@ -1,0 +1,25 @@
+{
+  "desc": "完整正常生命周期：BindLease → Recheck(pass) → MarkSentGate → AckLease。",
+  "input": {
+    "plan_id": "plan-btc-full-001",
+    "exec_id": "exec-btc-full-001",
+    "asset": "BTC",
+    "amount": "50"
+  },
+  "hot_avail_at_record": "75",
+  "hot_avail_at_recheck": "72",
+  "band": {
+    "asset": "BTC",
+    "low": "5",
+    "target": "20",
+    "high": "80"
+  },
+  "expected": {
+    "bind_state": "bound",
+    "recheck_passed": true,
+    "recheck_state": "rechecked",
+    "mark_sent_state": "sent",
+    "ack_state": "acked",
+    "proof_decision": "pass"
+  }
+}

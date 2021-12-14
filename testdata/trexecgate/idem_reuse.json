@@ -1,0 +1,15 @@
+{
+  "desc": "幂等复用路径：同 plan_id + asset 重复 BindLease，第二次必须复用第一次的租约（reused=true），不得新建。",
+  "input": {
+    "plan_id": "plan-usdt-idem-001",
+    "exec_id": "exec-usdt-idem-001",
+    "asset": "USDT",
+    "amount": "300000"
+  },
+  "second_call_exec_id": "exec-usdt-idem-001",
+  "expected": {
+    "first_call_reused": false,
+    "second_call_reused": true,
+    "same_lease_id": true
+  }
+}
