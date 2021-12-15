@@ -1,0 +1,28 @@
+{
+  "name": "window_hits_change_then_old_lease_reject",
+  "description": "Snapshot 后其他路径 Add 改写窗口，旧 usage_lease 复核失败",
+  "setup": {
+    "user_id": "U-ULG-002",
+    "asset": "USDT",
+    "dest": "0xdestB",
+    "kind": "withdraw",
+    "daily_cap": "1000",
+    "amount": "10",
+    "ttl": "2m"
+  },
+  "actions": [
+    {"type": "snapshot", "amount": "10", "id": "old", "expect": {"has_lease_id": true, "reserved": true}},
+    {"type": "foreign_add", "amount": "5"},
+    {"type": "record", "id": "old", "expect": {"committed": false, "error_contains": "window", "has_proof": true, "proof_kind": "window_changed"}}
+  ],
+  "expected": {
+    "committed": false,
+    "drift_proof_exists": true,
+    "old_lease_rejected": true
+  },
+  "invariants": [
+    "窗口命中变化后旧租约不得提交",
+    "必须出具 UsageDriftProof"
+  ]
+}
+// temporary guard removed after the production check

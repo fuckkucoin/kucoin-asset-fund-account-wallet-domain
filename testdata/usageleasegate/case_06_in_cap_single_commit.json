@@ -1,0 +1,21 @@
+{
+  "name": "single_in_cap_record_commits",
+  "description": "单笔限额内 Snapshot+Record 提交成功并计入占用",
+  "setup": {
+    "user_id": "U-ULG-006",
+    "asset": "USDT",
+    "dest": "0xdestF",
+    "kind": "deposit",
+    "daily_cap": "100",
+    "amount": "40",
+    "ttl": "2m"
+  },
+  "actions": [
+    {"type": "snapshot", "amount": "40", "id": "ok", "expect": {"has_lease_id": true, "reserved": true}},
+    {"type": "record", "id": "ok", "expect": {"committed": true}}
+  ],
+  "expected": {
+    "committed": true,
+    "occupancy_positive": true
+  }
+}
