@@ -1,0 +1,17 @@
+{
+  "desc": "过期租约路径：TTL 超时后 MarkSent 和 Acked 均须拒绝，返回 ErrLeaseExpired。",
+  "input": {
+    "plan_id": "plan-usdt-expire-001",
+    "exec_id": "exec-usdt-expire-001",
+    "asset": "USDT",
+    "amount": "300000"
+  },
+  "hot_avail_at_record": "480000",
+  "ttl_seconds": 1,
+  "advance_clock_seconds": 10,
+  "expected": {
+    "mark_sent_error": "trexecgate: plan exec lease expired",
+    "ack_error": "trexecgate: plan exec lease expired",
+    "lease_state": "expired"
+  }
+}

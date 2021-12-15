@@ -1,0 +1,21 @@
+{
+  "desc": "正常绑定路径：Record 后立即 BindLease，热账水位在 band 内，返回 bound 状态租约。",
+  "input": {
+    "plan_id": "plan-usdt-001",
+    "exec_id": "exec-usdt-001",
+    "asset": "USDT",
+    "amount": "300000"
+  },
+  "hot_avail_at_record": "480000",
+  "band": {
+    "asset": "USDT",
+    "low": "50000",
+    "target": "200000",
+    "high": "500000"
+  },
+  "expected": {
+    "state": "bound",
+    "reused": false,
+    "drift_exceeded": false
+  }
+}

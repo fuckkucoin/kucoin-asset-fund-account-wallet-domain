@@ -1,0 +1,23 @@
+{
+  "desc": "相对漂移超限路径：热账从 400000 跌至 370000，跌幅 7.5%（超过 5% 容忍率），且仍高于 target=200000。\n    预期：Recheck 拒绝，decision=blocked，reason 含 'relative drift'。",
+  "input": {
+    "plan_id": "plan-usdt-reldrift-001",
+    "exec_id": "exec-usdt-reldrift-001",
+    "asset": "USDT",
+    "amount": "200000"
+  },
+  "hot_avail_at_record": "400000",
+  "hot_avail_at_recheck": "370000",
+  "band": {
+    "asset": "USDT",
+    "low": "50000",
+    "target": "200000",
+    "high": "500000"
+  },
+  "expected": {
+    "recheck_passed": false,
+    "proof_decision": "blocked",
+    "proof_reason_contains": "relative drift",
+    "drift_ratio_approx": "0.075"
+  }
+}
