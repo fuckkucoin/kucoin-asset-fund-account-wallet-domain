@@ -1,0 +1,58 @@
+{
+  "_comment": "场景04：与 r11 F isobook 并行隔离——utamodegate 扫描源为 utabook 模式事件，不改写 DebtRatio/TransferIn",
+  "scenario": "isobook_isolation_proof",
+  "user_id": "u-2004",
+  "initial_mode": "UNIFIED",
+  "initial_generation": 1,
+  "isolation_assertions": [
+    {
+      "assertion": "utamodegate_scan_source",
+      "description": "漂移扫描仅读 uta_liability_binds 与 uta_mode_drift_cases；不读 iso_debt_ratio_leases",
+      "tables_read": [
+        "uta_mode_generations",
+        "uta_mode_leases",
+        "uta_liability_binds",
+        "uta_mode_drift_cases",
+        "uta_mode_drift_proofs"
+      ],
+      "tables_not_touched": [
+        "iso_debt_ratio_leases",
+        "iso_transfer_in_binds",
+        "iso_debt_ratio_cases",
+        "aa_ltv_liq_hold",
+        "ledger_entries"
+      ],
+      "expected": "pass"
+    },
+    {
+      "assertion": "no_debtRatio_write",
+      "description": "utamodegate.SetMode 不更新 isobook 的 DebtRatio 字段",
+      "expected": "pass"
+    },
+    {
+      "assertion": "no_transfer_in_touch",
+      "description": "utamodegate 不调用 isobook.TransferIn 互斥接口",
+      "expected": "pass"
+    }
+  ],
+  "concurrent_scenario": {
+    "description": "isobook r11 F 并行执行 DebtRatio 切换，utamodegate 同时执行模式世代切换；两者互不干扰",
+    "utamodegate_op": {
+      "type": "set_mode",
+      "user_id": "u-2004",
+      "to_mode": "CLASSIC",
+      "expected_result": "success_or_inflight_blocked"
+    },
+    "isobook_op": {
+      "type": "update_debt_ratio",
+      "user_id": "u-2004",
+      "description": "逐仓 DebtRatio 更新（r11 F 路径），不受 utamodegate 世代影响",
+      "expected_result": "independent_success"
+    },
+    "interference": "none"
+  },
+  "proof_summary": {
+    "description": "utamodegate 与 isobook r11 F 硬边界验证：本包只读消费 utabook 模式事件（uta_* 表），不改写 isobook DebtRatio、TransferIn 或任何逐仓保证金计算路径。",
+    "invariant": "utamodegate 扫描源 = utabook 模式事件；不得改写 DebtRatio/TransferIn"
+  }
+}
