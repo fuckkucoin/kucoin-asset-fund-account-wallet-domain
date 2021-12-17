@@ -1,0 +1,3 @@
+case_id,old_key_snapshot,new_agg_snapshot,drift_case_id,expected_delta_digest
+proof-01,"{"user_id":"u-2003","mode":"UNIFIED","currency":"USDT","principal":"12000","generation":6}","{"user_id":"u-2003","mode":"CLASSIC","currency":"USDT","principal":"0","generation":7}","dc-2003-usdt","auto_computed_by_sha256"
+proof-02,"{"user_id":"u-2004","mode":"UNIFIED","currency":"BTC","principal":"0.5","generation":1}","{"user_id":"u-2004","mode":"CLASSIC","currency":"BTC","principal":"0","generation":2}","dc-2004-btc","auto_computed_by_sha256"
