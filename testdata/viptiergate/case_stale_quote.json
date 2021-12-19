@@ -1,0 +1,84 @@
+{
+  "_comment": "案例：旧世代 QuoteBind 拒结算——完整轨迹与期望证明摘要",
+  "_scenario": "用户在 VIP+ 档位颁发 QuoteBind（世代 7），档位切换至 VIP（世代 8）后旧 Quote 尝试结算，被拒绝并自动开立 DriftCase，DriftProof 摘要验证轨迹如下。",
+  "_version": "R11-A",
+  "proof_digest_calculation": {
+    "_formula": "SHA-256(drift_case_id \\x00 user_id \\x00 asset \\x00 observed_bps \\x00 expected_bps \\x00 amount \\x00 quote_bind_id \\x00 lease_id \\x00 generation)",
+    "inputs": {
+      "drift_case_id": "dc-stale-001",
+      "user_id": "u-stale-quote-001",
+      "asset": "ETH",
+      "observed_bps": "8",
+      "expected_bps": "0",
+      "amount": "5.0",
+      "quote_bind_id": "qb-stale-001",
+      "lease_id": "lease-stale-001",
+      "generation": "8"
+    },
+    "expected_digest_hex": "computed_at_test_runtime",
+    "_note": "实际 digest 在运行时通过 computeProofDigest 计算并，此 fixture 提供输入字段供离线验证"
+  },
+  "lifecycle": [
+    {
+      "seq": 1,
+      "action": "IssueQuote",
+      "user_id": "u-stale-quote-001",
+      "asset": "ETH",
+      "bps": 4,
+      "tier": "vip+",
+      "generation_snapshot": 7,
+      "quote_bind_id": "qb-stale-001",
+      "expires_at": "+5min"
+    },
+    {
+      "seq": 2,
+      "action": "GatedUpgrade",
+      "from_tier": "vip+",
+      "to_tier": "vip",
+      "trigger_kind": "clear_pin",
+      "expected_gen": 7,
+      "new_generation": 8,
+      "quotes_voided": 1,
+      "comment": "VoidAll 将 qb-stale-001 标记为 voided"
+    },
+    {
+      "seq": 3,
+      "action": "SettleQuote",
+      "quote_bind_id": "qb-stale-001",
+      "current_gen_from_client": 7,
+      "actual_current_gen": 8,
+      "result": "ErrQuoteGenMismatch",
+      "quote_status": "voided"
+    },
+    {
+      "seq": 4,
+      "action": "DriftDetector.Open（自动）",
+      "drift_case_id": "dc-stale-001",
+      "kind": "quote_gen_stale",
+      "observed_bps": 4,
+      "status": "open"
+    },
+    {
+      "seq": 5,
+      "action": "BuildAndVerifyProof",
+      "drift_case_id": "dc-stale-001",
+      "proof_id": "proof-dc-stale-001",
+      "digest_verified": true,
+      "drift_case_new_status": "proven"
+    },
+    {
+      "seq": 6,
+      "action": "ConfirmDriftClose × 2",
+      "operators": ["ops-alice", "ops-bob"],
+      "drift_case_new_status": "closed"
+    }
+  ],
+  "assertions": [
+    "SettleQuote with generation_mismatch returns ErrQuoteGenMismatch",
+    "DriftCase auto-opened with kind=quote_gen_stale",
+    "DriftCase.IsBlocking() == true when status=open or proven",
+    "GatedUpgrade returns ErrDriftBlocked while DriftCase is open/proven",
+    "After four-eye close, IsSettlementBlocked returns false",
+    "DriftProof.Digest matches SHA-256 of concatenated fields"
+  ]
+}
