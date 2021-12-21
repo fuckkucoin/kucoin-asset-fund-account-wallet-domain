@@ -1,0 +1,11 @@
+run_id,transfer_id,user_id,step,idem,asset,amount,chain,debit_once,fail_sealed
+r-frozen,tr-frozen,u1,frozen,idem-frozen,USDT,10,ETH,1,0
+r-sub,tr-sub,u1,submitted,idem-sub,USDT,2.5,ETH,1,0
+r-ok,tr-ok,u2,confirmed,idem-ok,BTC,0.01,BTC,1,0
+r-fail,tr-fail,u3,failed,idem-fail,USDT,1,TRX,1,1
+r-rev,tr-rev,u1,review,idem-rev,USDT,8,ETH,1,0
+r-kyt,tr-kyt,u4,kyt,idem-kyt,ETH,0.2,ETH,1,0
+r-sign,tr-sign,u5,signed,idem-sign,USDT,3,ETH,1,0
+r-alw,tr-alw,u6,allowlisted,idem-alw,USDT,4,ETH,1,0
+r-dec,tr-dec,u7,decrypted,idem-dec,USDT,5,ETH,1,0
+r-req,tr-req,u8,requested,idem-req,USDT,6,ETH,0,0
