@@ -1,0 +1,24 @@
+{
+  "desc": "漂移拒绝路径：Record 后热账从 480000 跌至 150000（低于 target=200000），MarkSent 必须被拒，TreasDriftProof.Decision=blocked。",
+  "input": {
+    "plan_id": "plan-usdt-drift-001",
+    "exec_id": "exec-usdt-drift-001",
+    "asset": "USDT",
+    "amount": "280000"
+  },
+  "hot_avail_at_record": "480000",
+  "hot_avail_at_recheck": "150000",
+  "band": {
+    "asset": "USDT",
+    "low": "50000",
+    "target": "200000",
+    "high": "500000"
+  },
+  "expected": {
+    "recheck_passed": false,
+    "lease_state_after_recheck": "blocked",
+    "proof_decision": "blocked",
+    "proof_reason_contains": "below band target",
+    "mark_sent_error": "trexecgate: illegal lease state transition"
+  }
+}

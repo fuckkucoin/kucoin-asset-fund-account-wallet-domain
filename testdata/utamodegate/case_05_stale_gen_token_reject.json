@@ -1,0 +1,70 @@
+{
+  "_comment": "场景05：旧世代令牌拒写——模式切换后旧世代借还请求必须被 ValidateToken 拒绝",
+  "scenario": "stale_gen_token_borrow_reject",
+  "user_id": "u-2005",
+  "initial_mode": "UNIFIED",
+  "steps": [
+    {
+      "step": 1,
+      "op": "issue_token",
+      "user_id": "u-2005",
+      "expected": {
+        "generation": 0,
+        "mode": "UNIFIED"
+      },
+      "token_captured": "token-gen0"
+    },
+    {
+      "step": 2,
+      "op": "set_mode",
+      "user_id": "u-2005",
+      "to_mode": "CLASSIC",
+      "expected": {
+        "new_generation": 1,
+        "lease_status": "bound"
+      }
+      "token_gen": 0,
+      "current_gen": 1,
+      "expected_error": "utamodegate: stale generation: CAS conflict, retry with latest gen",
+      "borrow_allowed": false
+    },
+    {
+      "step": 4,
+      "op": "register_bind_rejected",
+      "user_id": "u-2005",
+      "token_gen": 0,
+      "currency": "ETH",
+      "margin_mode": "UNIFIED",
+      "amount": "2.500000000000000000",
+      "expected_error": "utamodegate: stale generation: CAS conflict, retry with latest gen",
+      "bind_registered": false
+    },
+    {
+      "step": 5,
+      "op": "issue_new_token",
+      "user_id": "u-2005",
+      "expected": {
+        "generation": 1,
+        "mode": "CLASSIC"
+      },
+      "token_captured": "token-gen1"
+    },
+    {
+      "step": 6,
+      "op": "register_bind_success",
+      "user_id": "u-2005",
+      "token_gen": 1,
+      "currency": "ETH",
+      "margin_mode": "CLASSIC",
+      "amount": "2.500000000000000000",
+      "expected": {
+        "bind_registered": true,
+        "status": "open"
+      }
+    }
+  ],
+  "proof_summary": {
+    "description": "用户从 UNIFIED（gen=0）切换至 CLASSIC（gen=1）。旧令牌（gen=0）的借出请求被 ValidateToken 拒绝，绑定不落账。重新颁发新令牌（gen=1）后，借出请求在 CLASSIC 模式键下正常注册。",
+    "invariant": "旧世代令牌不得注册新借还/抵押绑定"
+  }
+}
