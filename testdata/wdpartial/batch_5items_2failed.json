@@ -1,0 +1,88 @@
+{
+  "_comment": "5 笔批次中 2 笔 failed 的事故基线夹具。验收 1 使用此夹具。",
+  "batch_id": "batch-residue-test-001",
+  "requested": "500",
+  "submitted": "300",
+  "skipped": "50",
+  "failed": "150",
+  "items": [
+    {
+      "seq": 1,
+      "user_id": "user-alpha-001",
+      "asset": "USDT",
+      "amount": "100",
+      "chain": "ETH",
+      "to_address": "0xaAbBcCdDeEfF00112233445566778899aAbBcCdD",
+      "idempotency_key": "wd-batch-001-item-1",
+      "status": "submitted",
+      "ledger_id": "ledger-001-item-1"
+    },
+    {
+      "seq": 2,
+      "user_id": "user-alpha-002",
+      "asset": "USDT",
+      "amount": "100",
+      "chain": "ETH",
+      "to_address": "0x1122334455667788990011223344556677889900",
+      "idempotency_key": "wd-batch-001-item-2",
+      "status": "submitted",
+      "ledger_id": "ledger-001-item-2"
+    },
+    {
+      "seq": 3,
+      "user_id": "user-alpha-003",
+      "asset": "USDT",
+      "amount": "100",
+      "chain": "ETH",
+      "to_address": "0xfFeEdDcCbBaA99887766554433221100fFeEdDcC",
+      "idempotency_key": "wd-batch-001-item-3",
+      "status": "submitted",
+      "ledger_id": "ledger-001-item-3"
+    },
+    {
+      "seq": 4,
+      "user_id": "user-beta-001",
+      "asset": "USDT",
+      "amount": "50",
+      "chain": "ETH",
+      "to_address": "0xaA1122334455667788990011223344556677889900",
+      "idempotency_key": "wd-batch-001-item-4",
+      "status": "skipped",
+      "reason": "frozen"
+    },
+    {
+      "seq": 5,
+      "user_id": "user-beta-002",
+      "asset": "USDT",
+      "amount": "150",
+      "chain": "ETH",
+      "to_address": "0xbB1122334455667788990011223344556677889900",
+      "idempotency_key": "wd-batch-001-item-5",
+      "status": "failed",
+      "reason": "withdraw conserve gate unbound"
+    }
+  ],
+  "conserve_check": {
+    "requested": "500",
+    "submitted": "300",
+    "skipped": "50",
+    "failed": "150",
+    "equation": "500 = 300 + 50 + 150",
+    "ok": true
+  },
+  "expected_residues": 2,
+  "expected_residue_items": [
+    {
+      "seq": 4,
+      "origin": "skipped",
+      "amount": "50",
+      "expected_status": "open"
+    },
+    {
+      "seq": 5,
+      "origin": "failed",
+      "amount": "150",
+      "expected_status": "open"
+    }
+  ]
+}
