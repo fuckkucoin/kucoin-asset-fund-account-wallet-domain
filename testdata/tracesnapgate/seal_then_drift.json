@@ -1,0 +1,76 @@
+{
+  "_comment": "验收夹具 1：Seal 后活账 hop/余额变更，Replay 必须报漂移。",
+  "_scenario": "user U1 有资产 BTC；密封后活账增加一个 hop（新划转）",
+  "user_id": "user-001",
+  "asset": "BTC",
+  "sealed_hops": [
+    {
+      "transfer_id": "tr-aaa-001",
+      "from_book": "funding",
+      "to_book": "trading",
+      "asset": "BTC",
+      "amount_hex": "f7bc9c394d7f5e87"
+    }
+  ],
+  "sealed_books": [
+    {
+      "book": "funding",
+      "subject": "available",
+      "asset": "BTC",
+      "available": "0.9",
+      "frozen": "0"
+    },
+    {
+      "book": "trading",
+      "subject": "available",
+      "asset": "BTC",
+      "available": "0.1",
+      "frozen": "0"
+    }
+  ],
+  "live_hops_after_drift": [
+    {
+      "transfer_id": "tr-aaa-001",
+      "from_book": "funding",
+      "to_book": "trading",
+      "asset": "BTC",
+      "amount_hex": "f7bc9c394d7f5e87"
+    },
+    {
+      "transfer_id": "tr-bbb-002",
+      "from_book": "trading",
+      "to_book": "margin",
+      "asset": "BTC",
+      "amount_hex": "a1b2c3d4e5f60011"
+    }
+  ],
+  "live_books_after_drift": [
+    {
+      "book": "funding",
+      "subject": "available",
+      "asset": "BTC",
+      "available": "0.9",
+      "frozen": "0"
+    },
+    {
+      "book": "trading",
+      "subject": "available",
+      "asset": "BTC",
+      "available": "0",
+      "frozen": "0"
+    },
+    {
+      "book": "margin",
+      "subject": "available",
+      "asset": "BTC",
+      "available": "0.1",
+      "frozen": "0"
+    }
+  ],
+  "expected_outcome": {
+    "replay_consistent": false,
+    "drift_type": "both_changed",
+    "drift_proof_created": true,
+    "returns_live_view_as_forensic": false
+  }
+}

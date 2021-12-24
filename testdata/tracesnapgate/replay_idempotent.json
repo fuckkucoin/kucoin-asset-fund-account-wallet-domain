@@ -1,0 +1,38 @@
+{
+  "_comment": "验收夹具 3：同一 snapshot 多次 Replay 结果摘要一致（幂等）。",
+  "_scenario": "密封后活账无变化；多次 Replay 返回相同摘要根",
+  "user_id": "user-003",
+  "asset": "USDT",
+  "hops": [
+    {
+      "transfer_id": "tr-usdt-001",
+      "from_book": "funding",
+      "to_book": "earn",
+      "asset": "USDT",
+      "amount_hex": "deadbeef0011aabb"
+    }
+  ],
+  "books": [
+    {
+      "book": "funding",
+      "subject": "available",
+      "asset": "USDT",
+      "available": "900",
+      "frozen": "0"
+    },
+    {
+      "book": "earn",
+      "subject": "available",
+      "asset": "USDT",
+      "available": "100",
+      "frozen": "0"
+    }
+  ],
+  "expected_outcome": {
+    "replay_count": 3,
+    "all_consistent": true,
+    "transfers_root_stable": true,
+    "books_root_stable": true,
+    "drift_proofs_created": 0
+  }
+}

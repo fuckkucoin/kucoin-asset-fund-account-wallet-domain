@@ -1,0 +1,24 @@
+{
+  "suite": "depth3-A",
+  "natural_key": ["transfer_id"],
+  "idem_key": ["idem"],
+  "fee": "N/A",
+  "cases": [
+    {"id": "A-T01", "profile": "prod", "mem": true, "sql_bound": false, "want": "ErrMemBook"},
+    {"id": "A-T02", "profile": "mem", "mem": true, "sql_bound": false, "want": "put_ok"},
+    {"id": "A-T03", "profile": "prod", "mem": false, "sql_bound": true, "want": "put_get_eq"},
+    {"id": "A-T04", "idem": "same", "transfers": ["tr-a", "tr-b"], "want": "ErrIdemTaken"},
+    {"id": "A-T05", "from": "confirmed", "to": "frozen", "want": "illegal"},
+    {"id": "A-T06", "steps": ["frozen", "confirmed", "failed", "submitted", "requested"], "pending": ["frozen", "submitted"]},
+    {"id": "A-T07", "restart": true, "step": "frozen", "debit_once": true, "want": "survive_no_redebit"},
+    {"id": "A-T08", "restart": true, "step": "failed", "fail_sealed": true, "want": "not_pending"},
+    {"id": "A-T09", "claim": "other_idem_xfer", "want": "ErrTaken"},
+    {"id": "A-T10", "claim": "same_xfer", "want": "idempotent"},
+    {"id": "A-T11", "fail_seal": "frozen", "want": "unfreeze_required"},
+    {"id": "A-T12", "fail_seal": "submitted", "want": "submitted_live"},
+    {"id": "A-T13", "attach": "prod_unbound", "want": "not_healthy"},
+    {"id": "A-T14", "recover": "frozen", "want": "resume_hook"},
+    {"id": "A-T15", "fail_seal": "confirmed", "want": "refuse"},
+    {"id": "A-T16", "persist_fault": true, "want": "no_silent_success"}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "_comment": "验收夹具 5：同用户/同资产新 Seal 时，旧 sealed 快照被置 superseded。",
+  "_scenario": "用户 U5 有两个 open 快照 S-old 和 S-new；Seal S-new 后 S-old 变 superseded",
+  "user_id": "user-005",
+  "asset": "ETH",
+  "old_snapshot_id": "snap-old-placeholder",
+  "new_snapshot_id": "snap-new-placeholder",
+  "expected_outcome": {
+    "old_status_after_new_seal": "superseded",
+    "new_status": "sealed",
+    "superseded_by_matches_new_id": true,
+    "export_old_fails_with": "trace snapshot superseded: use latest sealed snapshot"
+  }
+}

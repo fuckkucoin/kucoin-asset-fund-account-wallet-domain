@@ -1,0 +1,78 @@
+{
+  "_comment": "双进程 Resume 互斥夹具。验收 2 使用此夹具。",
+  "batch_id": "batch-mutex-test-001",
+  "scenario": "两个 worker 竞争同一批次的 Resume 世代锁",
+  "steps": [
+    {
+      "step": 1,
+      "actor": "worker-A",
+      "action": "AcquireResumeLease",
+      "input": {
+        "batch_id": "batch-mutex-test-001",
+        "holder": "worker-A"
+      },
+      "expected_result": {
+        "ok": true,
+        "gen": 1,
+        "holder": "worker-A"
+      }
+    },
+    {
+      "step": 2,
+      "actor": "worker-B",
+      "action": "AcquireResumeLease",
+      "input": {
+        "batch_id": "batch-mutex-test-001",
+        "holder": "worker-B"
+      },
+      "expected_result": {
+        "ok": false,
+        "error": "ErrLeaseConflict",
+        "reason": "worker-A 的租约未过期，worker-B 被拒绝"
+      }
+    },
+    {
+      "step": 3,
+      "actor": "worker-A",
+      "action": "Release",
+      "input": {
+        "batch_id": "batch-mutex-test-001",
+        "holder": "worker-A",
+        "gen": 1
+      },
+      "expected_result": {
+        "ok": true
+      }
+    },
+    {
+      "step": 4,
+      "actor": "worker-B",
+      "action": "AcquireResumeLease",
+      "input": {
+        "batch_id": "batch-mutex-test-001",
+        "holder": "worker-B"
+      },
+      "expected_result": {
+        "ok": true,
+        "gen": 2,
+        "holder": "worker-B",
+        "note": "worker-A 释放后，worker-B 抢占，Gen 递进到 2"
+      }
+    },
+    {
+      "step": 5,
+      "actor": "worker-A",
+      "action": "VerifyLease",
+      "input": {
+        "batch_id": "batch-mutex-test-001",
+        "holder": "worker-A",
+        "gen": 1
+      },
+      "expected_result": {
+        "ok": false,
+        "error": "ErrNoLease",
+        "reason": "worker-A 已不是持有者，Holder 不匹配"
+      }
+    }
+  ]
+}

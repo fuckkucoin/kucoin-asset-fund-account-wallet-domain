@@ -1,0 +1,17 @@
+{
+  "_comment": "功能：旧 gen 令牌出金核验被拒。重点：令牌 PwGen=1 但账本 gen=2 时，ConsumeLease 返回 ErrLeaseGenMismatch 并产出 PwDriftCase。",
+  "scenario": "stale_token_rejected_and_drift_detected",
+  "user_id": "user-stale-001",
+  "initial_pin": "123456",
+  "new_pin": "654321",
+  "step_sequence": [
+    {"step": "set",            "pin": "123456",   "expected_error": null},
+    {"step": "issue_lease",    "pin": "123456",   "expected_error": null, "expected_lease_gen": 1, "save_as": "old_lease"},
+    {"step": "change",         "old_pin": "123456", "new_pin": "654321", "expected_error": null},
+    {"step": "assert_gen",     "expected_generation": 2},
+    {"step": "consume_lease",  "lease_ref": "old_lease", "expected_error": "ErrLeaseRevoked"},
+    {"step": "assert_no_drift_case"}
+  ],
+  "note": "Change 后旧令牌直接 revoked，consume 得 ErrLeaseRevoked；仅在令牌 open+gen 漂移时才产出 PwDriftCase。",
+  "expected_drift_cases": 0
+}
