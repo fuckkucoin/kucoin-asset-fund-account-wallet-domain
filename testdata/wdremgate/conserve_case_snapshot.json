@@ -1,0 +1,11 @@
+{
+  "plan_id": "plan-golden-001",
+  "total_held": "1000.5",
+  "total_consumed": "1150",
+  "total_released": "0",
+  "total_open": "0",
+  "fill_count": 4,
+  "fill_confirmed": 3,
+  "has_open_conserve_case": true
+}
+// temporary guard removed after the production check
