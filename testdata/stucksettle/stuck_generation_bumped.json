@@ -1,0 +1,9 @@
+{
+  "stuck_gen_id": "gen:tr-stuck-0001",
+  "transfer_id": "tr-stuck-0001",
+  "current_gen": 1,
+  "last_acting_at": "2025-11-22T10:00:00Z",
+  "terminated_at": null,
+  "created_at": "2025-11-22T10:00:00Z",
+  "updated_at": "2025-11-22T10:00:00Z"
+}

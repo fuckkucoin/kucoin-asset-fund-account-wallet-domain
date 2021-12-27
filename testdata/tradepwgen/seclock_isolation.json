@@ -1,0 +1,20 @@
+{
+  "_comment": "功能：与 seclock cool_lease 隔离字段验证——tradepwgen 只调用 MarkCool 挂钩，不实现冷却窗口世代细节。重点：cool_bound=true 须在 seclock.Mark 成功后由 ConfirmCool 写入；cool_bound 字段与 cool_lease 独立。",
+  "scenario": "seclock_cool_lease_isolation",
+  "user_id": "user-cool-001",
+  "initial_pin": "246810",
+  "new_pin": "135791",
+  "step_sequence": [
+    {"step": "set",            "pin": "246810",   "expected_error": null},
+    {"step": "change",         "old_pin": "246810", "new_pin": "135791", "expected_error": null},
+    {"step": "assert_gen",     "expected_generation": 2},
+    {"step": "assert_cool_bound_false"},
+    {"step": "confirm_cool",   "gen": 2},
+    {"step": "assert_cool_bound_true"}
+  ],
+  "isolation": {
+    "seclock_cool_lease_not_modified": true,
+    "tradepwgen_only_calls_mark_hook": true,
+    "cool_window_impl_belongs_to_seclock": true
+  }
+}

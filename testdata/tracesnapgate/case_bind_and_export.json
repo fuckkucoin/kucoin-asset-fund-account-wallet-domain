@@ -1,0 +1,15 @@
+{
+  "_comment": "验收夹具 4：调查案绑定快照后，导出携带同一 snapshot_gen。",
+  "_scenario": "案件 C1 绑定密封快照 S1；Export 返回 bundle 携带 bind 记录",
+  "user_id": "user-004",
+  "asset": "BTC",
+  "case_id": "case-c1-placeholder",
+  "snapshot_id": "snap-s1-placeholder",
+  "snapshot_gen": "gen-s1-placeholder",
+  "expected_outcome": {
+    "bind_created": true,
+    "export_snapshot_gen_matches_bind": true,
+    "bundle_has_bind": true,
+    "export_error": null
+  }
+}
