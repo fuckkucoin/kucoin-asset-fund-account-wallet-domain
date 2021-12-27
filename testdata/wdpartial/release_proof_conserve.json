@@ -1,0 +1,92 @@
+{
+  "_comment": "释放证明后 Conserve 仍成立、再提失败项不双冻夹具。验收 3 使用此夹具。",
+  "batch_id": "batch-proof-conserve-001",
+  "requested": "500",
+  "submitted": "300",
+  "skipped": "50",
+  "failed": "150",
+  "residue_items": [
+    {
+      "id": "residue-skipped-001",
+      "seq": 4,
+      "origin": "skipped",
+      "amount": "50",
+      "user_id": "user-beta-001",
+      "asset": "USDT",
+      "idem_key": "wd-batch-001-item-4",
+      "status": "open"
+    },
+    {
+      "id": "residue-failed-001",
+      "seq": 5,
+      "origin": "failed",
+      "amount": "150",
+      "user_id": "user-beta-002",
+      "asset": "USDT",
+      "idem_key": "wd-batch-001-item-5",
+      "status": "open"
+    }
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "RecordProof for skipped item",
+      "residue_id": "residue-skipped-001",
+      "kind": "freeze_release",
+      "expected_status_after": "released"
+    },
+    {
+      "step": 2,
+      "action": "RecordProof for failed item",
+      "residue_id": "residue-failed-001",
+      "kind": "freeze_release",
+      "expected_status_after": "released"
+    },
+    {
+      "step": 3,
+      "action": "CheckConserve",
+      "expected": {
+        "requested": "500",
+        "submitted": "300",
+        "skipped_released": "50",
+        "failed_released": "150",
+        "equation": "500 = 300 + 50 + 150",
+        "balanced": true
+      }
+    },
+    {
+      "step": 4,
+      "action": "CloseOut",
+      "expected_status": "closed",
+      "expected_conserve_ok": true
+    },
+    {
+      "step": 5,
+      "action": "AssertNoDoubleFreezeOnRetry",
+      "retry_items": [
+        {
+          "idem_key": "wd-batch-001-item-5",
+          "_note": "同 key，未加 -retry 后缀"
+        }
+      ],
+      "expected_result": {
+        "ok": false,
+        "error": "ErrConserve",
+        "reason": "idem_key 与已 released 残留项相同，禁止双冻"
+      }
+    },
+    {
+      "step": 6,
+      "action": "AssertNoDoubleFreezeOnRetry",
+      "retry_items": [
+        {
+          "idem_key": "wd-batch-001-item-5-retry",
+          "_note": "加了 -retry 后缀，允许"
+        }
+      ],
+      "expected_result": {
+        "ok": true
+      }
+    }
+  ]
+}
