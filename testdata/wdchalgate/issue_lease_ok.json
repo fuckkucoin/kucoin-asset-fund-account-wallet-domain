@@ -1,0 +1,19 @@
+{
+  "_comment": "验收夹具：正常签发挑战租约。因子 totp，combo_gen=0（初始世代），无目标地址绑定。",
+  "scenario": "issue_lease_ok",
+  "input": {
+    "user_id": "user-001",
+    "factor": "totp",
+    "extra_key": "totp-secret-hash-abc123",
+    "dest_chain": "",
+    "dest_addr": "",
+    "idem_key": "idem-issue-001"
+  },
+  "expected": {
+    "state": "issued",
+    "factor": "totp",
+    "combo_gen": 0,
+    "dest_chain": "",
+    "dest_addr": ""
+  }
+}

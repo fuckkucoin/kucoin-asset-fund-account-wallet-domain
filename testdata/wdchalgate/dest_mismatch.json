@@ -1,0 +1,36 @@
+{
+  "_comment": "目标地址绑定不符时 CheckWithdraw 拒绝（ErrDestMismatch）。",
+  "scenario": "dest_mismatch",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": {
+        "user_id": "user-006",
+        "factor": "totp",
+        "extra_key": "key-006",
+        "dest_chain": "ETH",
+        "dest_addr": "0xaaaa000000000000000000000000000000000001",
+        "idem_key": "idem-006-001"
+      },
+      "expected": {
+        "state": "issued",
+        "dest_chain": "ETH",
+        "dest_addr": "0xaaaa000000000000000000000000000000000001"
+      }
+    },
+    {
+      "step": 2,
+      "action": "present_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-006",
+        "factor": "totp",
+        "extra_key": "key-006",
+        "dest_chain": "ETH",
+        "dest_addr": "0xbbbb000000000000000000000000000000000002"
+      },
+      "expected_error": "destination mismatch"
+    }
+  ]
+}

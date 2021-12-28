@@ -1,0 +1,35 @@
+{
+  "_comment": "源 ID 隔离夹具。验收 4：与账本孤儿/单笔补偿并行时源必须是 wdbatch ID。",
+  "scenario": "wdpartial 与 ledbatch/withdraw 并行操作时的 ID 隔离",
+  "rules": [
+    {
+      "rule": "wdpartial BatchCloseout.WDBatchID 必须是 wdbatch 批次 ID 前缀",
+      "valid_example": "batch-wdbatch-uuid-xxxx",
+      "invalid_example": "ledbatch-hop-xxxx",
+      "error_on_invalid": "ErrSourceMismatch"
+    },
+    {
+      "rule": "ResidueItem.WDBatchID 不得是 ledbatch hop ID",
+      "note": "ledbatch 孤儿由 r8 A 处理，本包不消费 ledbatch hop ID"
+    },
+    {
+      "rule": "ReleaseProof.LedgerRef 可关联账本 ID 用于审计，但不驱动账本 FSM",
+      "note": "只读观察，不写账本"
+    }
+  ],
+  "parallel_scenarios": [
+    {
+      "name": "与 ledbatch 孤儿检测并行",
+      "wdpartial_source": "wd_residues.wd_batch_id → wdbatch 批次 ID",
+      "ledbatch_source": "ledbatch_orphans.batch_id → ledbatch 批次 ID",
+      "isolation": "两者通过 batch_id 前缀/命名空间隔离，不交叉写入"
+    },
+    {
+      "name": "与单笔出金失败补偿（r5 G）并行",
+      "wdpartial_source": "wd_residues.wd_batch_id → wdbatch 批次 ID",
+      "r5g_source": "withdraw_compensations.run_id → withdraw run ID",
+      "isolation": "wdpartial 只处理 wdbatch 维度；r5 G 只处理单笔 withdraw 维度"
+    }
+  ]
+}
+// temporary guard removed after the production check
