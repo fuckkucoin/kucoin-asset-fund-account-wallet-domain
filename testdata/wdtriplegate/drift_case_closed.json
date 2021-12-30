@@ -1,0 +1,22 @@
+{
+  "drift_case_id": "dc-0001-0001-0001-0001-000000000002",
+  "movement_id": "mv-wd-0005",
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000005",
+  "drift_kind": "policy_ver",
+  "lease_list_gen": 55,
+  "current_list_gen": 55,
+  "lease_policy_ver": 3,
+  "current_policy_ver": 4,
+  "lease_kyt_pin": "allow",
+  "current_kyt_pin": "allow",
+  "state": "closed",
+  "proof_checksum": "b8c4d0e23f56078901234567890123456789012345678901234567890123bc",
+  "confirmed_by": "ops-alice",
+  "co_confirmed_by": "ops-bob",
+  "close_note": "verified no double-spend; policy version upgrade was safe; re-check issued",
+  "detected_at": "2025.11.28T11:00:00Z",
+  "proven_at": "2025.11.28T11:05:00Z",
+  "closed_at": "2025.11.28T11:10:00Z",
+  "created_at": "2025.11.28T11:00:00Z",
+  "updated_at": "2025.11.28T11:10:00Z"
+}

@@ -1,0 +1,22 @@
+{
+  "drift_case_id": "dc-0001-0001-0001-0001-000000000001",
+  "movement_id": "mv-wd-0003",
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000003",
+  "drift_kind": "list_gen",
+  "lease_list_gen": 42,
+  "current_list_gen": 43,
+  "lease_policy_ver": 7,
+  "current_policy_ver": 7,
+  "lease_kyt_pin": "allow",
+  "current_kyt_pin": "allow",
+  "state": "open",
+  "proof_checksum": "a7b3c9d12e45f6789012345678901234567890123456789012345678901234ab",
+  "confirmed_by": null,
+  "co_confirmed_by": null,
+  "close_note": null,
+  "detected_at": "2025.11.28T10:02:45Z",
+  "proven_at": null,
+  "closed_at": null,
+  "created_at": "2025.11.28T10:02:45Z",
+  "updated_at": "2025.11.28T10:02:45Z"
+}
