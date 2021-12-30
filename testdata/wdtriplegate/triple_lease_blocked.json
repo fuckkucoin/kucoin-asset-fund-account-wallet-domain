@@ -1,0 +1,23 @@
+{
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000003",
+  "movement_id": "mv-wd-0003",
+  "user_id": "u-10003",
+  "chain": "ETH",
+  "dest": "0xCCCC3333CCCC3333CCCC3333CCCC3333CCCC3333",
+  "ticket_clear": true,
+  "kyt_pin": "allow",
+  "list_gen": 42,
+  "policy_ver": 7,
+  "state": "blocked",
+  "issued_at": "2025.11.28T10:02:00Z",
+  "expires_at": "2025.11.28T10:07:00Z",
+  "bound_at": null,
+  "consumed_at": null,
+  "expired_at": null,
+  "blocked_at": "2025.11.28T10:02:45Z",
+  "drift_case_id": "dc-0001-0001-0001-0001-000000000001",
+  "block_reason": "wdtriplegate generation drift detected",
+  "issued_by": "ops-preflight",
+  "created_at": "2025.11.28T10:02:00Z",
+  "updated_at": "2025.11.28T10:02:45Z"
+}

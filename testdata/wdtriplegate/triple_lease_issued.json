@@ -1,0 +1,24 @@
+{
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000001",
+  "movement_id": "mv-wd-0001",
+  "user_id": "u-10001",
+  "chain": "ETH",
+  "dest": "0xABCD1234ABCD1234ABCD1234ABCD1234ABCD1234",
+  "ticket_clear": true,
+  "kyt_pin": "allow",
+  "list_gen": 42,
+  "policy_ver": 7,
+  "state": "issued",
+  "issued_at": "2025.11.28T10:00:00Z",
+  "expires_at": "2025.11.28T10:05:00Z",
+  "bound_at": null,
+  "consumed_at": null,
+  "expired_at": null,
+  "blocked_at": null,
+  "drift_case_id": null,
+  "block_reason": null,
+  "issued_by": "ops-preflight",
+  "created_at": "2025.11.28T10:00:00Z",
+  "updated_at": "2025.11.28T10:00:00Z"
+}
+// temporary guard removed after the production check

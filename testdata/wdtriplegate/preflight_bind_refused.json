@@ -1,0 +1,13 @@
+{
+  "bind_id": "bi-0001-0001-0001-0001-000000000002",
+  "movement_id": "mv-wd-0003",
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000003",
+  "list_gen_at_bind": 43,
+  "policy_ver_at_bind": 7,
+  "broadcast_allowed": false,
+  "refuse_reason": "wdtriplegate generation drift detected",
+  "drift_detected": true,
+  "bound_at": "2025.11.28T10:02:45Z",
+  "created_at": "2025.11.28T10:02:45Z"
+}
+// temporary guard removed after the production check

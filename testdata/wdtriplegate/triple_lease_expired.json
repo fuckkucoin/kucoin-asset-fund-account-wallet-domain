@@ -1,0 +1,23 @@
+{
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000004",
+  "movement_id": "mv-wd-0004",
+  "user_id": "u-10004",
+  "chain": "BTC",
+  "dest": "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
+  "ticket_clear": true,
+  "kyt_pin": "allow",
+  "list_gen": 38,
+  "policy_ver": 5,
+  "state": "expired",
+  "issued_at": "2025.11.28T09:50:00Z",
+  "expires_at": "2025.11.28T09:55:00Z",
+  "bound_at": null,
+  "consumed_at": null,
+  "expired_at": "2025.11.28T09:55:01Z",
+  "blocked_at": null,
+  "drift_case_id": null,
+  "block_reason": null,
+  "issued_by": "ops-preflight",
+  "created_at": "2025.11.28T09:50:00Z",
+  "updated_at": "2025.11.28T09:55:01Z"
+}
