@@ -12,6 +12,11 @@ func registerDelegateCatalog(v1 *gin.RouterGroup, rt *app.Runtime) {
 	_ = rt
 	// 路径元数据权威在 Java platform-funding-depth；本端点仅供运维探测。
 	v1.GET("/platform/delegate-route", func(c *gin.Context) {
+		path := strings.TrimSpace(c.Query("path"))
+		method := strings.TrimSpace(c.DefaultQuery("method", http.MethodGet))
+		if path == "" {
+			samples := make([]gin.H, 0, len(config.DelegateRouteSamples()))
+			for _, s := range config.DelegateRouteSamples() {
 				samples = append(samples, gin.H{
 					"hostKey": s.HostKey,
 					"host":    config.DelegateHostName(s.HostKey),
