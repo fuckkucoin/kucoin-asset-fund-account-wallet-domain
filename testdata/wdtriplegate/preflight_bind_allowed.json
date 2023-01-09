@@ -1,0 +1,12 @@
+{
+  "bind_id": "bi-0001-0001-0001-0001-000000000001",
+  "movement_id": "mv-wd-0002",
+  "triple_lease_id": "tl-0001-0001-0001-0001-000000000002",
+  "list_gen_at_bind": 42,
+  "policy_ver_at_bind": 7,
+  "broadcast_allowed": true,
+  "refuse_reason": null,
+  "drift_detected": false,
+  "bound_at": "2025.11.28T10:01:30Z",
+  "created_at": "2025.11.28T10:01:30Z"
+}
