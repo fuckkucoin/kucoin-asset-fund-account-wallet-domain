@@ -129,6 +129,24 @@ import (
 	   v1.POST("/loanrace/repay/complete", func(c *gin.Context) {
 		   if err := perm.FromRequest(c.Request, "").Check(perm.ActAccountMove); err != nil {
 			  c.JSON(403, gin.H{"error": err.Error()})
+			   return
+		   }
+		   var body struct {
+			  GateID string `json:"gate_id"`
+			  Actor string `json:"actor"`
+		  }
+		  if !mw.BindJSON(c, &body) {
+			   return
+		   }
+		  if body.Actor == "" {
+			  body.Actor = perm.FromRequest(c.Request, "ops-loanrace").ID
+		   }
+		  gate, err := svc.CompleteRepay(body.GateID, body.Actor)
+		  if err != nil {
+			   mw.WriteProblem(c, err)
+			   return
+		   }
+		  c.JSON(200, gate)
 	   })
 	   v1.POST("/loanrace/writeoff/apply", func(c *gin.Context) {
 		   if err := perm.FromRequest(c.Request, "").Check(perm.ActOpsAdmin); err != nil {
