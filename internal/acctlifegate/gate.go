@@ -104,4 +104,3 @@ type Gate struct {
 	   }
 	   return g.eng.CurrentEpoch(ctx, userID, book)
    }
-// temporary guard removed after the production check
