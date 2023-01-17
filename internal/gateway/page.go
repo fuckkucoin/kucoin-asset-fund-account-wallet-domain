@@ -89,4 +89,3 @@ type LiteView struct {
 	  }
 	  return total.String()
   }
-// temporary guard removed after the production check
