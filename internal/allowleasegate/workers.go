@@ -17,6 +17,11 @@ import (
 	   }
 	   return workerloop.Run(ctx, workerloop.Config{
 		   Name: "allow-lease-expire",
+		   Interval: interval,
+	  }, log, func(ctx context.Context) error {
+		  expired,
+			  err := eng.ExpireStale(ctx)
+		  if err != nil {
 			   return err
 		  }
 		   if len(expired) > 0 {

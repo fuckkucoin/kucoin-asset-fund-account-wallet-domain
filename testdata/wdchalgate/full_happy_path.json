@@ -1,0 +1,56 @@
+{
+  "_comment": "全链路正常路径：Issue → Present（issued→presented）→ Consume（presented→consumed）。",
+  "scenario": "full_happy_path",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": {
+        "user_id": "user-007",
+        "factor": "totp",
+        "extra_key": "secret-hash-007",
+        "idem_key": "idem-007-001"
+      },
+      "expected": {
+        "state": "issued",
+        "combo_gen": 0,
+        "factor": "totp"
+      }
+    },
+    {
+      "step": 2,
+      "action": "present_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-007",
+        "factor": "totp",
+        "extra_key": "secret-hash-007"
+      },
+      "expected": {
+        "state": "presented",
+        "drifted": false
+      }
+    },
+    {
+      "step": 3,
+      "action": "consume_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-007"
+      },
+      "expected": {
+        "state": "consumed"
+      }
+    },
+    {
+      "step": 4,
+      "action": "consume_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-007"
+      },
+      "expected_error": "already consumed",
+      "_comment": "重复消费必须拒绝（幂等返回 ErrLeaseConsumed）"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "_comment": "验收夹具 3：FailLocked 解锁后吊销挑战必须不得复活。",
+  "scenario": "faillock_revoke_no_revive",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": {
+        "user_id": "user-004",
+        "factor": "email",
+        "extra_key": "",
+        "idem_key": "idem-004-001"
+      },
+      "expected": {
+        "state": "issued",
+        "combo_gen": 0
+      }
+    },
+    {
+      "step": 2,
+      "action": "notify_faillock_unlock",
+      "input": {
+        "user_id": "user-004",
+        "actor": "system"
+      },
+      "expected": {
+        "new_gen": 1
+      }
+    },
+    {
+      "step": 3,
+      "action": "get_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}"
+      },
+      "expected": {
+        "state": "revoked",
+        "revoke_reason": "faillock_revoke"
+      }
+    },
+    {
+      "step": 4,
+      "action": "present_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-004",
+        "factor": "email"
+      },
+      "expected_error": "challenge lease revoked"
+    }
+  ]
+}

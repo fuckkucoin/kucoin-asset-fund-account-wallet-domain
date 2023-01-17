@@ -1,0 +1,35 @@
+{
+  "_comment": "旧挑战过期后 CheckWithdraw 拒绝（ErrLeaseExpired）。",
+  "scenario": "lease_expire",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": {
+        "user_id": "user-005",
+        "factor": "sms",
+        "extra_key": "",
+        "idem_key": "idem-005-001",
+        "ttl_override_ms": 100
+      },
+      "expected": {
+        "state": "issued"
+      }
+    },
+    {
+      "step": 2,
+      "action": "sleep_ms",
+      "duration_ms": 200
+    },
+    {
+      "step": 3,
+      "action": "present_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-005",
+        "factor": "sms"
+      },
+      "expected_error": "challenge lease expired"
+    }
+  ]
+}

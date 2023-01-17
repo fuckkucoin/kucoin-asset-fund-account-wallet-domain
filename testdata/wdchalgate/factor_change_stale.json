@@ -1,0 +1,41 @@
+{
+  "_comment": "验收夹具 2：租约内因子/组合变更 → 旧租约 stale 并拒。",
+  "scenario": "factor_change_stale",
+  "steps": [
+    {
+      "step": 1,
+      "action": "issue_lease",
+      "input": {
+        "user_id": "user-003",
+        "factor": "totp",
+        "extra_key": "old-secret-hash",
+        "idem_key": "idem-003-old"
+      },
+      "expected": {
+        "state": "issued",
+      "action": "notify_factor_change",
+      "input": {
+        "user_id": "user-003",
+        "factor": "totp",
+        "extra_key": "new-secret-hash",
+        "change_reason": "totp_rebind",
+        "actor": "user"
+      },
+      "expected": {
+        "new_gen": 1
+      }
+    },
+    {
+      "step": 3,
+      "action": "present_lease",
+      "input": {
+        "lease_id": "{{step1.lease_id}}",
+        "user_id": "user-003",
+        "factor": "totp",
+        "extra_key": "old-secret-hash"
+      },
+      "expected_error": "challenge lease stale",
+      "expected_drifted": true
+    }
+  ]
+}
