@@ -1,0 +1,20 @@
+scenario,user_id,asset,from_tier,to_tier,trigger_kind,expected_gen,new_gen,result,drift_case_kind,observed_bps,expected_bps,drift_status,proof_verified,first_confirm,second_confirm,final_case_status,settlement_blocked
+normal_upgrade_no_drift,u-csv-001,BTC,standard,vip,pin,0,1,ok,,,,,,,,,false
+normal_upgrade_no_drift,u-csv-001,BTC,vip,vip+,volume,1,2,ok,,,,,,,,,false
+downgrade_freeze_blocked,u-csv-002,ETH,vip,standard,clear_pin,0,,ErrInflightFreeze,,,,,,,,,
+downgrade_quote_blocked,u-csv-003,USDT,vip,standard,clear_pin,0,,ErrInflightQuote,,,,,,,,,
+upgrade_stale_gen,u-csv-004,SOL,standard,vip,volume,0,1,ok,,,,,,,,,false
+upgrade_stale_gen_conflict,u-csv-004,SOL,standard,vip,volume,0,,ErrStaleGen,,,,,,,,,
+quote_gen_mismatch_autodrift,u-csv-005,BTC,vip+,vip,clear_pin,2,3,ErrQuoteGenMismatch,quote_gen_stale,4,0,open,false,,,, true
+quote_gen_mismatch_proof_close,u-csv-005,BTC,,,,,,ok_after_close,quote_gen_stale,4,0,closed,true,ops-alice,ops-bob,closed,false
+freeze_stale_drift,u-csv-006,ETH,vip,vip+,pin,1,2,ok_then_drift_detected,freeze_stale,5,2,open,false,,,, true
+freeze_stale_proof_close,u-csv-006,ETH,,,,,,ok,freeze_stale,5,2,closed,true,ops-carol,ops-dave,closed,false
+bps_stale_drift,u-csv-007,USDT,standard,vip,pin,0,1,drift_detected,bps_stale,10,5,open,false,,,, true
+bps_stale_proof_close,u-csv-007,USDT,,,,,,ok,bps_stale,10,5,closed,true,ops-eve,ops-frank,closed,false
+bps_reverse_drift,u-csv-008,BTC,vip+,vip,clear_pin,3,4,drift_detected,bps_reverse,4,5,open,false,,,, true
+concurrent_cas_user_A,u-conc-A,BTC,standard,vip,volume,0,1,ok,,,,,,,,,false
+concurrent_cas_user_A_retry,u-conc-A,BTC,standard,vip,volume,0,,ErrStaleGen,,,,,,,,,
+drift_block_upgrade,u-csv-007,USDT,standard,vip,pin,1,,ErrDriftBlocked,,,,,,,,,
+duplicate_confirm_same_operator,u-csv-007,USDT,,,,,,ErrDuplicateConfirm,bps_stale,10,5,proven,,ops-eve,,proven, true
+proof_missing_close,u-csv-009,SOL,standard,vip,pin,0,1,ok,bps_stale,10,5,open,false,,,,true
+proof_missing_close_attempt,u-csv-009,SOL,,,,,,ErrProofMissing,bps_stale,,,open,false,ops-zara,,open, true

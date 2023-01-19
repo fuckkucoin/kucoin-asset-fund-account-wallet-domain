@@ -1,0 +1,76 @@
+{
+  "_comment": "案例：清钉（ClearPin）与 QuoteWithdraw 并发——旧世代 Quote 拒结算",
+  "_scenario": "用户在 VIP 钉档下发起 QuoteWithdraw（世代 3，BPS=5）；与此同时 ops 执行 ClearPin（世代 3→4）；旧世代 QuoteBind 在后续结算时被 ErrQuoteGenMismatch 拦截，自动开立 DriftQuoteGenStale 案件。",
+  "_version": "R11-A",
+  "initial_state": {
+    "user_id": "u-concurrent-quote-001",
+    "current_tier": "vip",
+    "current_generation": 3,
+    "active_quote_bind": null
+  },
+  "concurrent_events": [
+    {
+      "goroutine": "G1_QuoteWithdraw",
+      "seq": 1,
+      "event": "IssueQuote",
+      "user_id": "u-concurrent-quote-001",
+      "asset": "BTC",
+      "gross": "1.0",
+      "fee": "0.005",
+      "net": "0.995",
+      "bps": 5,
+      "tier": "vip",
+      "generation_snapshot": 3,
+      "result": "ok",
+      "quote_bind_id": "qb-conc-001"
+    },
+    {
+      "to_tier": "standard",
+      "expected_gen": 3,
+      "inflight_quote_count": 1,
+      "result": "ErrInflightQuote",
+      "comment": "QueueWithdraw 已颁发活跃 QuoteBind，降档被拦截"
+    },
+    {
+      "goroutine": "G2_ClearPin_retry",
+      "seq": 3,
+      "event": "GatedDowngrade（QuoteBind 过期后重试）",
+      "trigger_kind": "clear_pin",
+      "from_tier": "vip",
+      "to_tier": "standard",
+      "expected_gen": 3,
+      "inflight_quote_count": 0,
+      "result": "ok",
+      "new_generation": 4,
+      "comment": "等待 QuoteBind TTL=5min 过期后重试成功"
+    }
+  ],
+  "settle_attempt": {
+    "goroutine": "G1_settle_old_quote",
+    "seq": 4,
+    "event": "SettleQuote",
+    "quote_bind_id": "qb-conc-001",
+    "quote_generation": 3,
+    "current_generation": 4,
+    "result": "ErrQuoteGenMismatch",
+    "auto_drift_case_opened": {
+      "drift_case_id": "dc-conc-001",
+      "kind": "quote_gen_stale",
+      "observed_tier": "vip",
+      "expected_tier": "standard",
+      "observed_bps": 5,
+      "expected_bps": 0,
+      "quote_bind_id": "qb-conc-001",
+      "generation": 4,
+      "status": "open"
+    }
+  },
+  "expected_final_state": {
+    "user_id": "u-concurrent-quote-001",
+    "generation": 4,
+    "last_tier": "standard",
+    "quote_bind_status": "voided",
+    "drift_case_status": "open",
+    "settlement_blocked": true
+  }
+}
