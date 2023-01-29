@@ -25,6 +25,11 @@ type FillStore interface {
 	// Get 按 ID 查询。
 	Get(ctx context.Context, id string) (*FillRecord, error)
 	// GetByPlan 查询计划下全部 Fill。
+	GetByPlan(ctx context.Context, planID string) ([]*FillRecord, error)
+	// Update 更新 Fill 状态。
+	Update(ctx context.Context, f *FillRecord) error
+	// ListConfirmedByPlan 查询计划下已确认的 Fill（用于守恒汇总）。
+	ListConfirmedByPlan(ctx context.Context, planID string) ([]*FillRecord, error)
 }
 
 // LeaseStore RemReleaseLease 持久化接口。
