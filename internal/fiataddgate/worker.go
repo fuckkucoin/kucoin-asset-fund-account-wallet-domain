@@ -92,6 +92,24 @@ type noopMetrics struct{}
 	  }
 	   if len(cases) > 0 {
 		   w.log.Error().Int("count", len(cases)).Msg("fiataddgate: open fork cases require attention")
+	   }
+	   return nil
+   }
+
+// RecycleConfig 未决 confirming 回收配置。
+
+type RecycleConfig struct {
+	Interval   time.Duration
+	BatchLimit int
+	// StaleAfter confirming 超过此时长且租约已过期才纳入回收。
+	StaleAfter time.Duration
+}
+
+// PendingConfirmingRecycler 回收长时间停留在 confirming 的 Session。
+// 策略：
+// 1. 拉取已过期（ExpiresAt < now）且 state=issued 的 ConfirmLease。
+// 2. 读取对应 Session：若已是 credited/forked，将租约推进到 credited/forked。
+// 3. 若 Session 仍在 confirming 且探测无 ledger 贷记，将 Session 回滚到 pending，租约推进到 expired。
 // 4. 若 Session 仍在 confirming 且探测到 ledger 贷记，打开 ForkCase，租约推进到 forked。
 
 type PendingConfirmingRecycler struct {
