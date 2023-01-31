@@ -1,0 +1,22 @@
+{
+  "misclear_id": "mc:global::1731579000000000000",
+  "scope": "global",
+  "chain": "",
+  "asset": "",
+  "trigger": "forced_clear",
+  "state": "reengaged",
+  "detected_at": "2025-11-14T10:30:00Z",
+  "open_diff_count": 3,
+  "open_diff_keys": [
+    "recon:ETH:tx-0xabc007",
+    "recon:ETH:tx-0xabc008",
+    "recon:BTC:tx-def009"
+  ],
+  "forced_audit_id": "fa:1731579000000000001:ops-alice",
+  "clear_plan_id": "",
+  "reengaged_at": "2025-11-14T10:31:00Z",
+  "reengage_actor_id": "system",
+  "reengage_leg_id": "leg:mc:global::1731579000000000000:1731579060000000000",
+  "created_at": "2025-11-14T10:30:00Z",
+  "updated_at": "2025-11-14T10:31:00Z"
+}
