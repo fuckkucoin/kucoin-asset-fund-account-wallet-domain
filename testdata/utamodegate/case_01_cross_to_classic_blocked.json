@@ -1,0 +1,60 @@
+{
+  "_comment": "场景01：用户存在 CROSS 负债时切 CLASSIC 被阻塞，ModeLease 进入 blocked 队列",
+  "scenario": "cross_liability_blocks_classic_switch",
+  "user_id": "u-2001",
+  "initial_mode": "UNIFIED",
+  "initial_generation": 0,
+  "setup": {
+    "liability_binds": [
+      {
+        "id": "bind-2001-usdt",
+        "user_id": "u-2001",
+        "bind_kind": "borrow",
+        "currency": "USDT",
+        "margin_mode": "CROSS",
+        "amount": "5000.000000000000000000",
+        "generation": 0,
+        "ref_id": "borrow-order-2001",
+        "status": "open",
+        "expires_at": "2026-04-29T10:00:00.000Z",
+        "created_at": "2026-04-28T10:00:00.000Z",
+        "updated_at": "2026-04-28T10:00:00.000Z"
+      },
+      {
+        "id": "bind-2001-btc",
+        "user_id": "u-2001",
+        "bind_kind": "collateral",
+        "currency": "BTC",
+        "margin_mode": "CROSS",
+        "amount": "0.100000000000000000",
+        "generation": 0,
+        "ref_id": "collateral-order-2001",
+        "status": "open",
+        "expires_at": "2026-04-29T10:00:00.000Z",
+        "created_at": "2026-04-28T10:00:00.000Z",
+        "updated_at": "2026-04-28T10:00:00.000Z"
+      }
+    ]
+  },
+  "action": {
+    "type": "set_mode",
+    "user_id": "u-2001",
+    "to_mode": "CLASSIC",
+    "trigger_kind": "user_request",
+    "trigger_ref": "u-2001|mode|UNIFIED→CLASSIC|1726912800000"
+  },
+  "expected": {
+    "error": "utamodegate: inflight liability/collateral mutex: mode switch blocked",
+    "error_code": "inflight_liability",
+    "lease_status": "blocked",
+    "generation_unchanged": true,
+    "generation_value": 0,
+    "inflight_bind_count": 2,
+    "mode_unchanged": true,
+    "current_mode": "UNIFIED"
+  },
+  "proof_summary": {
+    "description": "存在 CROSS 模式键下的 USDT 借贷（5000 USDT）和 BTC 抵押（0.1 BTC）两条在途绑定。ModeLease 进入 blocked 状态（不得静默切换模式）。世代保持为 0，不递增。",
+    "invariant": "SetMode 必须拒绝或进入待切换队列；不得静默改 mode map"
+  }
+}

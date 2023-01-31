@@ -1,0 +1,74 @@
+{
+  "_comment": "场景02：两进程并发 SetMode 与 Repay，仅一方获得新世代；旧世代借还拒写",
+  "scenario": "concurrent_setmode_repay_cas_race",
+  "user_id": "u-2002",
+  "initial_mode": "UNIFIED",
+  "initial_generation": 3,
+  "setup": {
+    "mode_generation": {
+      "id": "gen-2002",
+      "user_id": "u-2002",
+      "generation": 3,
+      "current_mode": "UNIFIED",
+      "updated_at": "2026-04-28T09:00:00.000Z"
+    },
+    "liability_binds": []
+  },
+  "race_sequence": [
+    {
+      "step": 1,
+      "actor": "process-A",
+      "op": "read_generation",
+      "user_id": "u-2002",
+      "observed_gen": 3,
+      "intent": "switch to CLASSIC"
+    },
+    {
+      "step": 2,
+      "actor": "process-B",
+      "op": "read_generation",
+      "user_id": "u-2002",
+      "observed_gen": 3,
+      "intent": "borrow USDT with gen=3"
+    },
+    {
+      "step": 3,
+      "actor": "process-A",
+      "op": "set_mode_cas",
+      "expected_gen": 3,
+      "to_mode": "CLASSIC",
+      "result": "success",
+      "new_generation": 4
+    },
+    {
+      "step": 4,
+      "actor": "process-B",
+      "op": "validate_token",
+      "token_gen": 3,
+      "current_gen": 4,
+      "result": "ErrStaleGen",
+      "error": "utamodegate: stale generation: CAS conflict, retry with latest gen"
+    },
+    {
+      "step": 5,
+      "actor": "process-B",
+      "op": "register_bind_rejected",
+      "token_gen": 3,
+      "current_gen": 4,
+      "result": "rejected",
+      "note": "旧世代令牌拒写，借还不落账"
+    }
+  ],
+  "expected": {
+    "winner": "process-A",
+    "final_generation": 4,
+    "final_mode": "CLASSIC",
+    "process_b_bind_registered": false,
+    "process_b_error": "ErrStaleGen",
+    "lease_status": "bound"
+  },
+  "proof_summary": {
+    "description": "两进程并发竞争世代 3：process-A 抢先通过 CAS 切至 CLASSIC（世代 3→4）。process-B 携带旧令牌（gen=3）请求借还，ValidateToken 返回 ErrStaleGen，绑定注册被拒绝。",
+    "invariant": "任意时刻至多一方成功递增世代；旧世代令牌的写操作必须被拒绝"
+  }
+}

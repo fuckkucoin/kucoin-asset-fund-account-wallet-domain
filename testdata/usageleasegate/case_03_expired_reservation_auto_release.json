@@ -1,0 +1,27 @@
+{
+  "name": "expired_reservation_auto_release",
+  "description": "过期预约由 ExpireRelease 自动释放，之后 Record 失败即关",
+  "setup": {
+    "user_id": "U-ULG-003",
+    "asset": "BTC",
+    "dest": "bc1qold",
+    "kind": "withdraw",
+    "daily_cap": "10",
+    "amount": "1",
+    "ttl": "1ms"
+  },
+  "actions": [
+    {"type": "snapshot", "amount": "1", "id": "exp", "expect": {"has_lease_id": true}},
+    {"type": "sleep_ms", "ms": 5},
+    {"type": "expire_release", "expect": {"released_gte": 1}},
+    {"type": "record", "id": "exp", "expect": {"committed": false, "has_proof": true}}
+  ],
+  "expected": {
+    "committed": false,
+    "reservation_released": true
+  },
+  "invariants": [
+    "过期预约自动释放",
+    "释放后不得提交占用"
+  ]
+}

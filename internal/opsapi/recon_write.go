@@ -112,4 +112,3 @@ import (
 		  c.JSON(http.StatusOK, gin.H{"synced": n, "host": "ledger-transfer-freeze-reconciliation.kucoin.net"})
 	  })
    }
-// temporary guard removed after the production check

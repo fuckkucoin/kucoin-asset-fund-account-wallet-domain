@@ -1,0 +1,107 @@
+{
+  "_comment": "场景03：ModeDriftCase 证明通过后方可关闭；证明缺失保持 blocked",
+  "scenario": "drift_proof_required_before_close",
+  "user_id": "u-2003",
+  "initial_mode": "CLASSIC",
+  "initial_generation": 7,
+  "setup": {
+    "drift_case": {
+      "id": "dc-2003-usdt",
+      "user_id": "u-2003",
+      "asset": "USDT",
+      "kind": "liability_key",
+      "old_mode": "UNIFIED",
+      "new_mode": "CLASSIC",
+      "old_generation": 6,
+      "new_generation": 7,
+      "liability_amount": "12000.000000000000000000",
+      "bind_id": "bind-2003-stale",
+      "lease_id": "lease-2003",
+      "proof_id": "",
+      "status": "open",
+      "detect_at": "2026-04-28T08:00:00.000Z",
+      "updated_at": "2026-04-28T08:00:00.000Z"
+    }
+  },
+  "test_steps": [
+    {
+      "step": 1,
+      "op": "confirm_close_without_proof",
+      "request": {
+        "drift_case_id": "dc-2003-usdt",
+        "operator": "ops-alice"
+      },
+      "expected_error": "utamodegate: drift proof missing: cannot close case without verified proof",
+      "case_status_after": "open",
+      "note": "证明缺失，四眼收口被拒"
+    },
+    {
+      "step": 2,
+      "op": "build_proof",
+      "request": {
+        "drift_case_id": "dc-2003-usdt",
+        "old_key_snapshot": "{\"user_id\":\"u-2003\",\"mode\":\"UNIFIED\",\"currency\":\"USDT\",\"principal\":\"12000\",\"generation\":6}",
+        "new_agg_snapshot": "{\"user_id\":\"u-2003\",\"mode\":\"CLASSIC\",\"currency\":\"USDT\",\"principal\":\"0\",\"generation\":7}",
+        "built_by": "ops-alice"
+      },
+      "expected": {
+        "proof_built": true,
+        "case_status_after": "proven",
+        "delta_digest_non_empty": true
+      }
+    },
+    {
+      "step": 3,
+      "op": "confirm_close_first",
+      "request": {
+        "drift_case_id": "dc-2003-usdt",
+        "operator": "ops-alice"
+      },
+      "expected": {
+        "case_status_after": "proven",
+        "confirm1_by": "ops-alice",
+        "note": "第一次确认，等待第二操作员"
+      }
+    },
+    {
+      "step": 4,
+      "op": "confirm_close_duplicate",
+      "request": {
+        "drift_case_id": "dc-2003-usdt",
+        "operator": "ops-alice"
+      },
+      "expected_error": "utamodegate: duplicate four-eye confirm from same operator",
+      "case_status_after": "proven"
+    },
+    {
+      "step": 5,
+      "op": "confirm_close_second",
+      "request": {
+        "drift_case_id": "dc-2003-usdt",
+        "operator": "ops-bob"
+      },
+      "expected": {
+        "case_status_after": "closed",
+        "confirm1_by": "ops-alice",
+        "confirm2_by": "ops-bob",
+        "blocking": false
+      }
+    },
+    {
+      "step": 6,
+      "op": "set_mode_after_close",
+      "request": {
+        "user_id": "u-2003",
+        "to_mode": "UNIFIED"
+      },
+      "expected": {
+        "allowed": true,
+        "drift_blocked": false
+      }
+    }
+  ],
+  "proof_summary": {
+    "description": "用户 u-2003 的 USDT 负债（12000）在 UNIFIED→CLASSIC 切换后键漂移（旧键 UNIFIED 记账，新键 CLASSIC 聚合读面为 0）。证明缺失时四眼收口被拒。Build 证明后推进至 proven，两名不同操作员（alice、bob）四眼收口后关闭漂移案，后续 SetMode 恢复允许。",
+    "invariant": "DriftCase proven+proof 才可四眼收口；closed 后挡写解除"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "concurrent_record_after_snapshot_only_in_cap_succeeds",
+  "description": "Snapshot 通过后并发两笔 Record，仅限额内成功，超限失败并出具 UsageDriftProof",
+  "setup": {
+    "user_id": "U-ULG-001",
+    "asset": "USDT",
+    "dest": "0xdestA",
+    "kind": "withdraw",
+    "daily_cap": "100",
+    "amount_a": "80",
+    "amount_b": "80",
+    "ttl": "2m"
+  },
+  "actions": [
+    {"type": "snapshot", "amount": "80", "id": "a", "expect": {"has_lease_id": true, "reserved": true}},
+    {"type": "snapshot", "amount": "80", "id": "b", "expect": {"has_lease_id": true, "reserved": true}},
+    {"type": "record_concurrent", "ids": ["a", "b"], "expect": {"committed": 1, "failed": 1, "has_proof": true}}
+  ],
+  "expected": {
+    "committed_count": 1,
+    "failed_count": 1,
+    "drift_proof_exists": true,
+    "failed_orders_not_in_occupancy": true
+  },
+  "invariants": [
+    "并发 Record 不得刺穿日限额",
+    "超限必须出具 UsageDriftProof",
+    "失败单不计占用"
+  ]
+}
