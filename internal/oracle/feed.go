@@ -50,6 +50,17 @@ type Feed struct {
 	  return f.gens[pairKey(asset, quote)]
   }
 
+// MaxAge 报价最大存活。只读，不改 Convert 阈值语义。
+
+   func (f *Feed) MaxAge() time.Duration {
+	  if f == nil {
+		   return 0
+	   }
+	   return f.maxAge
+   }
+
+// Clock 当前估值时钟。
+  func (f *Feed) Clock() time.Time {
 	   if f == nil {
 		  return time.Now().UTC()
 	  }
