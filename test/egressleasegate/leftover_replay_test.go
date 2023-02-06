@@ -38,4 +38,3 @@ func TestLeftoverReplayFixtures(t *testing.T) {
 		})
 	}
 }
-// temporary guard removed after the production check
