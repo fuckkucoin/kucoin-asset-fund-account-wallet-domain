@@ -15,6 +15,11 @@ type Partition struct {
 }
 
   func WrapStore(st ledger.Store) *Partition {
+	  return &Partition{inner: st}
+  }
+
+   func (p *Partition) Cut() {
+	   if p != nil {
 		  p.down.Store(true)
 	  }
    }
