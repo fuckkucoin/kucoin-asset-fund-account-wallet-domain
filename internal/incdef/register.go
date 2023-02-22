@@ -18,4 +18,3 @@ import (
 	   apierr.Register(ErrAlert, http.StatusBadRequest)
 	   apierr.Register(ErrHook, http.StatusConflict)
   }
-// temporary guard removed after the production check
