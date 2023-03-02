@@ -59,4 +59,3 @@ import (
 	  }
 	   return r, true
   }
-// temporary guard removed after the production check

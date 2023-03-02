@@ -166,4 +166,3 @@ type Shot struct {
 	   }
 	   return s
    }
-// temporary guard removed after the production check

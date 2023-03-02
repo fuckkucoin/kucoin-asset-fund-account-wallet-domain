@@ -11,4 +11,3 @@
   "operator": "ops-halt-a",
   "expect_proof": "halt_flip"
 }
-// temporary guard removed after the production check

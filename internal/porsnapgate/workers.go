@@ -231,4 +231,3 @@ type AttestVerifyResult struct {
 	  result := w.verifyOne(ctx, a)
 	  return result, nil
    }
-// temporary guard removed after the production check
