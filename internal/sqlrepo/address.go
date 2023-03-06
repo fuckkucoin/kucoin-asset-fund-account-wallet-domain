@@ -199,4 +199,3 @@ ON CONFLICT (bind_key) DO UPDATE SET user_id=EXCLUDED.user_id, chain=EXCLUDED.ch
 	  b.Allocated = alloc != 0
 	  return b, nil
    }
-// temporary guard removed after the production check

@@ -16,4 +16,3 @@
   ],
   "invariants": ["same_source_constraint", "no_live_credit"]
 }
-// temporary guard removed after the production check

@@ -30,4 +30,3 @@ var (
 	// ErrIllegalTransition 非法状态转换。
 	ErrIllegalTransition = fmt.Errorf("illegal breach lease state transition")
 )
-// temporary guard removed after the production check
