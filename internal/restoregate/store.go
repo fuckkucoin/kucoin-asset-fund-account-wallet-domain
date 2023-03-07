@@ -111,6 +111,24 @@ type MemStore struct {
 	  sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.After(out[j].CreatedAt) })
 	  if limit > 0 && len(out) > limit {
 		  out = out[:limit]
+	   }
+	   return out, nil
+  }
+
+  func (s *MemStore) ListActivePlans(_ context.Context) ([]RestorePlan, error) {
+	  s.mu.RLock()
+	   defer s.mu.RUnlock()
+	  var out []RestorePlan
+	  for _, p := range s.plans {
+		   if IsActive(p.State) {
+			  out = append(out, p)
+		   }
+	  }
+	   return out, nil
+  }
+
+   func (s *MemStore) CreateGenGate(_ context.Context, g GenGate) error {
+	   s.mu.Lock()
 	   defer s.mu.Unlock()
 	  s.genGates = append(s.genGates, g)
 	   return nil
