@@ -29,6 +29,12 @@ import "context"
    }
 
    func (e *Engine) finishReplay(ctx context.Context, req OutboundRequest, rec *OutboundRecord, fp string, parts IdemKeyParts) (OutboundResult, error) {
+	   st := ReplayStateFor(rec)
+	  code := ReplayCodeFor(rec)
+	   e.noteOutboundProof(proofKindForReplay(st), rec.WithdrawID, rec.IdempotencyKey, fp, string(rec.Phase), rec.Code, "replay same terminal", 0, true)
+	  req.WithdrawID = rec.WithdrawID
+	   req.IdempotencyKey = rec.IdempotencyKey
+	   res := OutboundResult{
 		   WithdrawID: rec.WithdrawID,
 		  IdempotencyKey: rec.IdempotencyKey,
 		   Fingerprint: rec.Fingerprint,
