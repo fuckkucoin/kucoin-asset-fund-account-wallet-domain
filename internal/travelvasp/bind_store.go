@@ -20,6 +20,11 @@ type WithdrawBind struct {
 	CreatedAt string `json:"created_at"`
 }
 
+type BindStore struct {
+	kv persist.KV
+}
+
+  func NewBindStore(kv persist.KV) *BindStore {
 	  return &BindStore{kv: kv}
    }
 
