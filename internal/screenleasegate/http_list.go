@@ -41,4 +41,3 @@ import (
 		  c.JSON(http.StatusOK, gin.H{"events": svc.Audit()})
 	  })
   }
-// temporary guard removed after the production check

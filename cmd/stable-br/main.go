@@ -13,4 +13,3 @@ import (
   func main() {
 	   svcboot.Main("stable-br", config.HostLedger, stablebr.Register)
   }
-// temporary guard removed after the production check
