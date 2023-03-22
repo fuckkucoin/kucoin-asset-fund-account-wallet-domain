@@ -38,6 +38,14 @@ var leaseTransitions = map[LeaseStatus][]LeaseStatus{
 				  // 只有终态才记录 WinnerLeg；此分支理论上不触发，留作防御。
 				  return nil
 			   }
+			   return nil
+		  }
+	   }
+	   return fmt.Errorf("%w: cannot transit Lease from %q to %q", ErrLeaseConflict, lease.Status, to)
+   }
+
+// TransitLeaseWithLeg 执行 Lease 转换并同时记录胜出终态腿。
+// settle 调用时 leg=BindLegSettle；failUnfreeze 调用时 leg=BindLegFailUnfreeze。
 
   func TransitLeaseWithLeg(lease *FreezeLease, to LeaseStatus, leg BindLeg, now time.Time) error {
 	  if err := TransitLease(lease, to, now); err != nil {

@@ -37,4 +37,3 @@ package fundmesh
    func HomologousCancelStill() bool {
 	   return true
    }
-// temporary guard removed after the production check

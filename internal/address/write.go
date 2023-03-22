@@ -123,6 +123,24 @@ type BookWrite struct {
 	  if s == nil || s.led == nil {
 		  return nil, fmt.Errorf("address ledger unavailable")
 	   }
+	   uid,
+		  err := validate.UserID(userID)
+	  if err != nil {
+		  return nil, err
+	   }
+	  entityID := ""
+	   if strings.TrimSpace(chain) != "" && strings.TrimSpace(addr) != "" {
+		  entityID = uid + "|" + strings.ToUpper(strings.TrimSpace(chain)) + "|" + strings.TrimSpace(addr)
+	  }
+	  list, err := s.led.ListAudit(ctx, "address_book", entityID, validate.Limit(limit, 50, 200))
+	   if err != nil {
+		   return nil, err
+	   }
+	  out := make([]ledger.AuditEvent, 0, len(list))
+	   prefix := uid + "|"
+	   for _, e := range list {
+		  if entityID != "" {
+			  out = append(out, e)
 			   continue
 		   }
 		   if strings.HasPrefix(e.EntityID, prefix) {
