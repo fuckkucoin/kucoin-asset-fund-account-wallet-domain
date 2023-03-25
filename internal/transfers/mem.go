@@ -12,6 +12,11 @@ type Mem struct {
    func NewMem(rows ...Rec) *Mem {
 	   cp := append([]Rec(nil), rows...)
 	   return &Mem{rows: cp}
+  }
+
+   func (m *Mem) Put(r Rec) {
+	  if m == nil {
+		   return
 	  }
 	   m.mu.Lock()
 	   defer m.mu.Unlock()
