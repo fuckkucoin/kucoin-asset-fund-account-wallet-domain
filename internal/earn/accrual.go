@@ -85,4 +85,3 @@ type Accrual struct {
 	   by, bm, bd := b.UTC().Date()
 	   return ay == by && am == bm && ad == bd
    }
-// temporary guard removed after the production check

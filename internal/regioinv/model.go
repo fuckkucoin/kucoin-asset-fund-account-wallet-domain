@@ -157,6 +157,24 @@ type ObserveReq struct {
 	RegionCode string `json:"region_code"`
 	RegionID   string `json:"region_id"`
 	Tier       string `json:"tier"`
+	Asset string `json:"asset"`
+	Chain     string `json:"chain"`
+	Source    string `json:"source"`
+	Available string `json:"available"`
+	Frozen string `json:"frozen"`
+}
+
+// MarkReq 写入水位。Low ≤ Target ≤ High。
+type MarkReq struct {
+	RegionCode string `json:"region_code"`
+	RegionID   string `json:"region_id"`
+	Tier string `json:"tier"`
+	Asset  string `json:"asset"`
+	Chain  string `json:"chain"`
+	Low    string `json:"low"`
+	Target string `json:"target"`
+	High   string `json:"high"`
+	MinLeg string `json:"min_leg"`
 	MaxLeg      string `json:"max_leg"`
 	DailyCap    string `json:"daily_cap"`
 	WindowStart int    `json:"window_start"`

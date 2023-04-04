@@ -268,4 +268,3 @@ type DayCloseService struct {
 	  }
 	   return err
   }
-// temporary guard removed after the production check
