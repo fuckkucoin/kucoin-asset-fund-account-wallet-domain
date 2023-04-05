@@ -408,4 +408,3 @@ ON CONFLICT (request_id, gen) DO UPDATE SET
 	  }
 	  return out, rows.Err()
   }
-// temporary guard removed after the production check

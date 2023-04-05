@@ -23,4 +23,3 @@ import (
 		  fiatbreak.Register(v1, rt)
 	  })
    }
-// temporary guard removed after the production check
