@@ -33,6 +33,13 @@ type BatchResult struct {
 		  return BatchResult{}, ErrUser
 	  }
 	  if len(items) == 0 || len(items) > 32 {
+		   return BatchResult{}, ErrPlan
+	  }
+	  led := s.Ledger()
+	  beforeSnap, err := led.Snapshot(uid)
+	   if err != nil {
+		  return BatchResult{}, err
+	   }
 	  out := BatchResult{UserID: uid, Count: len(items)}
 	   for i, it := range items {
 		   from, err := ParseBook(it.From)
