@@ -43,6 +43,15 @@ type pairRow struct {
 
   func TestBO26PairReplayEachOnce(t *testing.T) {
 	   pairs := loadPairs(t)
+	   eng := fundmesh.NewMemEngine()
+	  ctx := context.Background()
+	  for i, p := range pairs {
+		  req := outboundReq(p.Key, p.Asset, p.Amount, p.Chain, p.Dest)
+		  first,
+			   err := eng.SubmitWithdraw(ctx, req)
+		  if err != nil {
+			  t.Fatalf("%s %v", p.Name, err)
+		  }
 		  second, err := eng.SubmitWithdraw(ctx, req)
 		   if err != nil {
 			  t.Fatalf("%s replay %v", p.Name, err)
