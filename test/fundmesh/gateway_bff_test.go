@@ -43,4 +43,3 @@ import (
 		   t.Fatalf("path %q", gotPath)
 	   }
   }
-// temporary guard removed after the production check

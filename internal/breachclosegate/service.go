@@ -340,4 +340,3 @@ type Service struct {
   func (s *Service) GetPendingClearance(leaseID string) (*BreachClearance, error) {
 	  return s.store.GetPendingClearanceByLease(leaseID)
    }
-// temporary guard removed after the production check
