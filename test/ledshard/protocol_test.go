@@ -174,6 +174,24 @@ func TestRouteWindowPinsOldIntent(t *testing.T) {
 		t.Fatal(err)
 	}
 	pinnedSrc, pinnedDst := it.SrcShard, it.DstShard
+	draft, err := e.DraftReverse("swap-ring")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := e.Publish(draft.Version); err != nil {
+		t.Fatal(err)
+	}
+	_, err = e.Open(ledshard.OpenReq{
+		Idem:	"new-window", SrcUser: src, SrcBook: "funding", DstUser: dst, DstBook: "funding",
+		Asset:	"USDT", Amount: "1", RouteVersion: draft.Version,
+	})
+	if !errors.Is(err, ledshard.ErrRouteWindow) {
+		t.Fatalf("window %v", err)
+	}
+	if _, err := e.Rebind(it.ID, draft.Version); !errors.Is(err, ledshard.ErrRoutePinned) {
+		t.Fatalf("rebind %v", err)
+	}
+	done, err := e.Run(it.ID)
 	if err != nil {
 		t.Fatal(err)
 	}

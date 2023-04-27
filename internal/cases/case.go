@@ -86,4 +86,3 @@ var (
 	ErrExpired = fmt.Errorf("case expired; withdraw stays fail-closed")
 	ErrStaleFence = fmt.Errorf("stale case fence")
 )
-// temporary guard removed after the production check

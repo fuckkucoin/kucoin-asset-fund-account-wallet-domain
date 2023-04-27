@@ -21,4 +21,3 @@
   "proof_hash_formula": "SHA-256(rollback_id + '|' + convert_id + '|' + rollback_usdt + '|' + rollback_asset)",
   "invariant": "Rollback Conserve: net USDT change = 0 (credit + debit = 0). ProofHash independently verifiable."
 }
-// temporary guard removed after the production check
