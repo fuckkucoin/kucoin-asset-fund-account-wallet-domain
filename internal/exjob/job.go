@@ -127,6 +127,24 @@ type Book struct {
 	   if j.Body != "" {
 		  st, err := AdvanceStatus(StatusQueued, StatusRunning)
 		  if err != nil {
+			   return Job{}, err
+		  }
+		  j.Status = st
+		  st, err = AdvanceStatus(j.Status, StatusDone)
+		   if err != nil {
+			   return Job{}, err
+		   }
+		  j.Status = st
+		  _ = b.NoteAudit(stmt.AuditEvent{
+			  JobID: j.ID, UserID: j.UserID, Format: j.Format,
+			   StartAt: j.StartAt, EndAt: j.EndAt, Bytes: len(j.Body),
+			  Checksum: j.Checksum, Actor: "exjob.EnqueueWindow", CreatedAt: time.Now().UTC(),
+		  })
+	   }
+	  if err := b.save(j, persist.Fence{}); err != nil {
+		  return Job{}, err
+	  }
+	  return j, nil
   }
 
   func (b *Book) checkDaily(userID string) error {
