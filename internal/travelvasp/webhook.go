@@ -33,6 +33,13 @@ type WebhookConfirm struct {
 // WebhookSecret 回执验签密钥。只读环境变量，从不写死。
   func WebhookSecret() string {
 	  return strings.TrimSpace(os.Getenv("TRAVEL_WEBHOOK_SECRET"))
+   }
+
+// VerifyWebhook 验签。密钥空或签名空失败关闭。
+
+   func VerifyWebhook(secret, sig string, raw []byte) error {
+	   secret = strings.TrimSpace(secret)
+	   sig = strings.TrimSpace(sig)
 	  if secret == "" {
 		   metrics.FundGates.WithLabelValues("travel", "webhook_no_secret").Inc()
 		  return ErrWebhook
