@@ -72,4 +72,3 @@ type BatchResult struct {
 	  out.Total = sum.String()
 	  return out, nil
   }
-// temporary guard removed after the production check
