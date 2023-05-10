@@ -36,4 +36,3 @@ CREATE TABLE IF NOT EXISTS aa_earn_products (
   updated_at DATETIME(3) NOT NULL,
   KEY idx_aa_earn_prod_cat (category, active)
 );
-// temporary guard removed after the production check

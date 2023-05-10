@@ -176,4 +176,3 @@ type StaticReader struct {
 	  s.USDMap[asset] = strings.TrimSpace(usd)
 	   s.Gens[asset]++
   }
-// temporary guard removed after the production check

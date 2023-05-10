@@ -21,4 +21,3 @@ var (
 	ErrDepositCols = fmt.Errorf("aa_deposits missing credit/recon columns or indexes")
 	ErrWDOutboundCols = fmt.Errorf("aa_wd_outbound missing saga columns or indexes")
 )
-// temporary guard removed after the production check

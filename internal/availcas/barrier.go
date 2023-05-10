@@ -298,4 +298,3 @@ type barrierImpl struct {
 	  }
 	   return uuid.NewString()
   }
-// temporary guard removed after the production check

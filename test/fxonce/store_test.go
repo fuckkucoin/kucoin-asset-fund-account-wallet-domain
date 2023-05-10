@@ -328,4 +328,3 @@ func TestMemStore_ConcurrentWrites(t *testing.T) {
 		t.Errorf("concurrent writes: expected at most %d effects, got %d", n, len(effects))
 	}
 }
-// temporary guard removed after the production check
