@@ -48,6 +48,16 @@ import (
    }
 
   func run() error {
+	  ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	  defer cancel()
+	  kv, err := openKV(ctx)
+	  if err != nil {
+		  return fmt.Errorf("open store: %w", err)
+	   }
+	   cfg := holdpatrol.Config{
+		  ReleasingTimeout: parseDuration("HOLD_PATROL_RELEASING_TTL", 15*time.Minute),
+		  ActiveMaxAge:          parseDuration("HOLD_PATROL_ACTIVE_MAX_AGE", 72*time.Hour),
+		   ScanLimit:             parseInt("HOLD_PATROL_SCAN_LIMIT", 500),
 		   AutoReleaseOrphanTags: false,
 	   }
 	   tokens := holdcat.NewTokenBook(kv)
