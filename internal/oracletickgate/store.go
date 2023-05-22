@@ -14,6 +14,11 @@ type Store interface {
 	ListOpenLeasesByPair(ctx context.Context, pair string) ([]TickLease, error)
 	ListExpiredOpen(ctx context.Context, now time.Time, limit int) ([]TickLease, error)
 	ListOpenLeases(ctx context.Context, limit int) ([]TickLease, error)
+	UpsertGeneration(ctx context.Context,
+		g TickGeneration) error
+	GetGeneration(ctx context.Context, pair string) (*TickGeneration, error)
+	ListGenerations(ctx context.Context, limit int) ([]TickGeneration, error)
+	InsertProof(ctx context.Context, p TickDriftProof) error
 	GetProof(ctx context.Context,
 		id string) (*TickDriftProof, error)
 	ListProofs(ctx context.Context, limit int) ([]TickDriftProof, error)

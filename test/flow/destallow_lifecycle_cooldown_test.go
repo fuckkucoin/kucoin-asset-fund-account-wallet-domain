@@ -50,6 +50,17 @@ import (
 			  if err != nil {
 				   t.Fatalf("InitAdded: %v", err)
 			   }
+			   if e.State != destlife.StateCooling {
+				  t.Fatalf("expected state=cooling, got=%s", e.State)
+			  }
+			   // 推进时钟。
+			  clk.Advance(tc.elapsedAfterAdd)
+			  remaining, state, err := cal.CheckCooldown(ctx, "user1", "BTC", "bc1qtest")
+			  if err != nil {
+				  t.Fatalf("CheckCooldown: %v", err)
+			   }
+			   // blocked 仅依赖 remaining > 0；remaining <= 0 表示冷却已过期（可用），
+			  // state 仍可为 StateCooling（Worker 尚未推进激活）属正常。
 			  blocked := remaining > 0
 			   if blocked != tc.wantBlocked {
 				  t.Errorf("wantBlocked=%v got blocked=%v (remaining=%s state=%s)",

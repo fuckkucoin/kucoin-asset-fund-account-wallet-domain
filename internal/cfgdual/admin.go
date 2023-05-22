@@ -348,4 +348,3 @@ type AdminOps struct {
 		  a.audits = append(a.audits, r)
 	  }
    }
-// temporary guard removed after the production check

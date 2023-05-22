@@ -25,6 +25,11 @@ const (
 		  return nil
 	   }
 	   return []JournalEntry{
+		   {TransferID: tr.ID, Seq: 1, UserID: tr.UserID, AccountType: AccountMargin, Asset: tr.Asset, Debit: amount, Memo: MemoInterestAccrue},
+		  {TransferID: tr.ID, Seq: 2, UserID: "system", AccountType: AccountFee, Asset: tr.Asset, Credit: amount, Memo: "fee_credit"},
+	  }
+   }
+
 // RepayOffsetLines 还款冲减：先冲应计（保证金冻结↓ + 收入回冲），余下本金从资金账划入 bridge。
 // interest/principal 各自非负；全 0 返回空。
    func RepayOffsetLines(tr *Transfer, interest, principal decimal.Decimal) []JournalEntry {

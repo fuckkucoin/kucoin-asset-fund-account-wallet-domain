@@ -65,6 +65,20 @@ type goldenStep struct {
 	   return b, ok
   }
 
+   func expectStr(m map[string]interface{}, k string) (string, bool) {
+	   v, ok := m[k]
+	   if !ok {
+		  return "", false
+	  }
+	   s, ok := v.(string)
+	   return s, ok
+  }
+
+  func TestGoldenFixtures(t *testing.T) {
+	  cases := []string{
+		   "golden_commit_abort_mutex.json",
+		   "golden_expire_reopen_stale.json",
+		  "golden_missing_gen_fail_closed.json",
 		   "golden_stale_gen.json",
 		  "golden_refuse_live_unfreeze.json",
 		   "golden_abort_then_commit.json",

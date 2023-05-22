@@ -113,4 +113,3 @@ var (
 // RefuseLiveUnfreeze 拒绝任何活链解冻旁路。
 
    func RefuseOccLiveUnfreeze() error { return ErrRefuseLiveUnfreeze }
-// temporary guard removed after the production check

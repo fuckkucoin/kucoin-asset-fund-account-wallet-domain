@@ -85,6 +85,24 @@ type ReclaimOccupancy struct {
 	  o.mu.Lock()
 	  defer o.mu.Unlock()
 	   rec, ok := o.holds[outputKey]
+	  if !ok {
+		   return ""
+	  }
+	   return rec.CaseID
+  }
+
+// OutputKeyOf 返回 caseID 当前占用的 OutputKey；不存在时返回空字符串。
+
+  func (o *ReclaimOccupancy) OutputKeyOf(caseID string) string {
+	   if o == nil {
+		   return ""
+	   }
+	   o.mu.Lock()
+	  defer o.mu.Unlock()
+	   return o.byCase[caseID]
+   }
+
+// TryAutoCredit 检查 OutputKey 是否被 reserved 状态案件占用。
 // 若是，返回 (caseID, true)；调用方应接着贷记并发起 EventAutoCredit。
 // 若否（未占用或占用方非 reserved 状态），返回 ("", false)。
 // states 参数接受一个"状态查找函数"，避免包内循环依赖（由 Service 提供）。

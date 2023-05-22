@@ -24,4 +24,3 @@ type FieldSpec struct {
 		  {Name: "open_token_count", Source: "shadow_token", Note: "Close 拒因"},
 	  }
   }
-// temporary guard removed after the production check

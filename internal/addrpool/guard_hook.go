@@ -19,6 +19,11 @@ type AllocateGuardHook interface {
 }
 
 // BindGuardHook 挂载防护钩子到地址池。
+// 一次设置，不可并发替换。
+
+  func (p *Pool) BindGuardHook(h AllocateGuardHook) {
+	   if p != nil {
+		  p.mu.Lock()
 		   p.guardHook = h
 		  p.mu.Unlock()
 	  }

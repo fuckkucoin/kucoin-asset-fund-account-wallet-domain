@@ -14,6 +14,11 @@
       "intent_idem_keys": ["idem-a", "idem-b", "idem-c"],
       "ledger_idem_keys": ["idem-a", "idem-b", "idem-c"],
       "seal_idem_keys":   [],
+      "_note": "意图集合 == 落账集合，完美批次，封堵集合为空"
+    },
+    {
+      "case": "1 个 hanging 孤儿已 sealed",
+      "intent_idem_keys": ["batch-001-hop-1", "batch-001-hop-2"],
       "ledger_idem_keys": ["batch-001-hop-1"],
       "seal_idem_keys":   ["batch-001-hop-2"],
       "_note": "hop-2 为 hanging 孤儿，已封堵；意图集合 = 落账集合 ∪ 封堵集合"

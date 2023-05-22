@@ -206,4 +206,3 @@ type FloorGuard struct {
    func PolicyGenLabel(asset string, gen uint64) string {
 	   return fmt.Sprintf("%s#%d", strings.ToUpper(strings.TrimSpace(asset)), gen)
    }
-// temporary guard removed after the production check
