@@ -225,6 +225,24 @@ type hopSaga struct {
    }
 
 // RecoverHop 崩溃后续跑：读 KV 相位，冲正未完成跳或续做剩余跳。
+
+   func RecoverHop(ctx context.Context, led *ledger.Service, svc *subacct.Service, clientOid string) (subacct.HopRec, error) {
+	   if svc == nil {
+		  return subacct.HopRec{}, subacct.ErrUnavailable
+	  }
+	  if err := svc.Hydrate(ctx); err != nil {
+		   return subacct.HopRec{}, err
+	   }
+	   saga, _, err := loadHopSaga(ctx, svc.KV(), strings.TrimSpace(clientOid))
+	   if err != nil {
+		  return subacct.HopRec{}, err
+	  }
+	  amt, err := ledger.ParseAmount(saga.Amount)
+	  if err != nil {
+		   return subacct.HopRec{}, err
+	   }
+	  return HopFunds(ctx, led, svc, HopFundsReq{
+		  UserID: saga.UserID, Kind: saga.Kind, ClientOid: saga.ClientOid,
 		  Currency: saga.Currency, Amount: amt, AmountRaw: saga.AmountRaw,
 		  FromOwner: saga.FromOwner, ToOwner: saga.ToOwner,
 	  })

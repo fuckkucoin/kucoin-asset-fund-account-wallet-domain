@@ -28,6 +28,12 @@ CREATE TABLE IF NOT EXISTS lend_gens (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='放贷世代令牌（lend_gen）';
 
 -- ── lend_occupies ─────────────────────────────────────────────────────────────
+-- 放贷挂单占用租约：Place→settled|cancelled|residue_closed 状态机。
+-- 同 order_id 至多一条租约（uq_lo_order_id）；状态为终态后不可变更。
+CREATE TABLE IF NOT EXISTS lend_occupies (
+    lease_id            VARCHAR(36)     NOT NULL,
+    gen_id              VARCHAR(36)     NOT NULL,       -- 绑定的 lend_gens.gen_id
+    order_id            VARCHAR(64)     NOT NULL,       -- 放贷挂单外部 ID
     user_id             VARCHAR(64)     NOT NULL,
     asset               VARCHAR(16)     NOT NULL,
     amount              DECIMAL(36,18)  NOT NULL,

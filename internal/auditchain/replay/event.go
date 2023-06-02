@@ -28,6 +28,12 @@ type Event struct {
 	Kind   string `json:"kind"`
 	Effect string `json:"effect"`
 	UserID string `json:"user_id"`
+	Asset   string `json:"asset"`
+	Amount  string `json:"amount"`
+	RefID   string `json:"ref_id"`
+	IdemKey string `json:"idem_key"`
+	OccurredAt time.Time `json:"occurred_at"`
+}
 
 // Snap 只读账面。重放拿它做差，不负责把它写回去。
 
