@@ -76,4 +76,3 @@ import "account-assets.kucoin.net/funding/internal/holdcat"
 		  return false
 	   }
    }
-// temporary guard removed after the production check
