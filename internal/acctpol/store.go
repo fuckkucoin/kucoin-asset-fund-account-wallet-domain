@@ -194,4 +194,3 @@ type Store struct {
 	  }
 	  return tx.Commit()
    }
-// temporary guard removed after the production check
