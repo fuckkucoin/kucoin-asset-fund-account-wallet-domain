@@ -328,4 +328,3 @@ type Handler struct {
 		   errors.Is(err, wdpartial.ErrGuardGenInvalid) ||
 		   errors.Is(err, wdpartial.ErrConserveCaseOpen)
    }
-// temporary guard removed after the production check
