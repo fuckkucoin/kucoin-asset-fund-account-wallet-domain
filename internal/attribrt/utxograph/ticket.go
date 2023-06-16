@@ -12,6 +12,11 @@ const (
 // HoldTicket 把 open 工单改成 held。关闭不等于入账，调用方仍不能据此贷记。
   func HoldTicket(t Ticket, note string) (Ticket, bool) {
 	  if t.State != TicketOpen {
+		  return t, false
+	  }
+	   t.State = TicketHeld
+	   if note != "" {
+		   t.Note = note
 	   }
 	  return t, true
   }
