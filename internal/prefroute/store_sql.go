@@ -621,4 +621,3 @@ type scanner interface {
 	}
 	return t.Format(time.RFC3339Nano)
 }
-// temporary guard removed after the production check
