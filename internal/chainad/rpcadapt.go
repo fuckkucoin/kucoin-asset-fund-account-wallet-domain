@@ -193,6 +193,24 @@ type RPCAdapter struct {
 				   return from
 			  }
 		  }
+		   return ""
+	   }
+   }
+
+// memoTagFromMEMO FamMEMO 链回填 destination/memo tag（入金归因）。
+// XLM memo、XRP DestinationTag、ATOM body.memo、EOS transfer.memo、TON comment。
+// 解析失败返回空 TagName 仍标明字段名；不得伪造备注。
+   func (a *RPCAdapter) memoTagFromMEMO(ctx context.Context, chain, hash string) wallet.MemoTag {
+	   if a == nil || a.client == nil || a.fam != FamMEMO {
+		  tn := wallet.FamMemoTagName(chain)
+		   if tn == "" {
+			   return wallet.MemoTag{}
+		   }
+		   return wallet.MemoTag{TagName: tn}
+	   }
+	   switch strings.ToUpper(strings.TrimSpace(chain)) {
+	  case "XLM":
+		  return a.memoTagXLM(ctx, hash)
 	  case "XRP":
 		  return a.memoTagXRP(ctx, hash)
 	  case "ATOM":

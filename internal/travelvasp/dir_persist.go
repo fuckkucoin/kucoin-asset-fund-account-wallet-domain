@@ -115,4 +115,3 @@ import (
 		   CreatedAt: r.CreatedAt, UpdatedAt: r.UpdatedAt,
 	  }
    }
-// temporary guard removed after the production check
