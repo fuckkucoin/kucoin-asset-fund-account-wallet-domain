@@ -1,0 +1,35 @@
+{
+  "_comment": "验收夹具：JointCheck 幂等性。相同 idem_key 重复调用返回原租约（不新建）。",
+  "scenario": "idempotent_check",
+  "steps": [
+    {
+      "step": 1,
+      "action": "JointCheck",
+      "input": {
+        "scope_kind": "withdraw",
+        "subject_id": "user-003",
+        "chain": "BTC",
+        "asset": "BTC",
+        "idem_key": "idem-idem-001"
+      },
+      "expected_allowed": true
+    },
+    {
+      "step": 2,
+      "action": "JointCheck（相同 idem_key）",
+      "input": {
+        "scope_kind": "withdraw",
+        "subject_id": "user-003",
+        "chain": "BTC",
+        "asset": "BTC",
+        "idem_key": "idem-idem-001"
+      },
+      "expected_same_lease_id_as_step1": true,
+      "expected_allowed": true
+    }
+  ],
+  "invariants": [
+    "相同 idem_key 的两次 JointCheck 返回同一 lease_id",
+    "第二次调用不插入新租约记录"
+  ]
+}
