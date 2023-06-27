@@ -301,4 +301,3 @@ type handler struct {
 	   c.JSON(http.StatusOK,
 		   h.svc.Stats())
   }
-// temporary guard removed after the production check
