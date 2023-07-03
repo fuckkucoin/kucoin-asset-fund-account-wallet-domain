@@ -88,4 +88,3 @@ type NonceBook struct {
 	  }
 	   return s.nonces
   }
-// temporary guard removed after the production check
