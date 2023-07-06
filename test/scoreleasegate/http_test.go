@@ -32,4 +32,3 @@ func TestHTTPEvalAndMissingSubmit(t *testing.T) {
 		t.Fatalf("submit status %d", w2.Code)
 	}
 }
-// temporary guard removed after the production check
