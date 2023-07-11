@@ -96,6 +96,24 @@ type DiffClass struct {
 // ActionKind 动作类型枚举。
 type ActionKind string
 
+const (
+	ActKindNoop       ActionKind = "noop"        // 无操作，记录用
+	ActKindOpenTicket ActionKind = "open_ticket" // 在 recon.Book 开工单
+	ActKindFreezeUser ActionKind = "freeze_user" // 冻结用户（须人工放行）
+	ActKindSuggestPost ActionKind = "suggest_post" // 生成建议记录（不写账）
+	ActKindRequestCircuit ActionKind = "request_circuit" // 向 fundcircuit 请求熔断
+	ActKindEscalateHuman ActionKind = "escalate_human" // 升级人工处置队列
+	ActKindCloseFlow ActionKind = "close_flow" // 关闭当前流水
+	ActKindNotify    ActionKind = "notify"     // 发送通知
+)
+
+// RiskLevel 动作风险等级。高风险动作须在 waiting_human 放行后才执行。
+type RiskLevel string
+
+const (
+	RiskLow RiskLevel = "low" // 只读/记录，可自动
+	RiskMedium RiskLevel = "medium" // 建议类，低置信须人工
+	RiskHigh   RiskLevel = "high"   // 写账/熔断，必须人工放行
 )
 
 // ActionDef 动作定义（目录条目）。
