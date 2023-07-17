@@ -36,6 +36,14 @@ import (
 	   }
 	  row := Fill{
 		   ID: uuid.NewString(), SubID: sub.ID, Asset: as,
+		   Realized: amt.String(), Note: strings.TrimSpace(note), At: s.now(),
+	  }
+	  s.fills = append(s.fills, row)
+	  return row, nil
+   }
+
+   func (s *Service) Rollup(masterID, asset string) (Rollup, error) {
+	  if s == nil {
 		  return Rollup{}, ErrUnavailable
 	   }
 	  if _, err := s.GetMaster(masterID); err != nil {
