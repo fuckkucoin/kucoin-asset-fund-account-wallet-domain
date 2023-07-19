@@ -90,6 +90,24 @@ ON CONFLICT (parent_id, asset) DO UPDATE SET daily_limit=EXCLUDED.daily_limit, p
 	  } else {
 		   rows, err = r.db.Conn(ctx).QueryContext(ctx,
 			   `SELECT parent_id, asset, daily_limit, per_tx_limit, used_today, day, updated_at FROM aa_subacct_transfer_quotas WHERE parent_id=?`, parentID)
+	   }
+	  if err != nil {
+		  return nil, err
+	  }
+	   defer rows.Close()
+	  out := make([]SubTransferQuota, 0)
+	  for rows.Next() {
+		  var q SubTransferQuota
+		   if err := rows.Scan(&q.ParentID, &q.Asset, &q.DailyLimit, &q.PerTxLimit, &q.UsedToday, &q.Day, &q.UpdatedAt); err != nil {
+			  return nil, err
+		   }
+		   out = append(out, q)
+	  }
+	  return out, rows.Err()
+   }
+
+// ReserveTransferQuotaCAS 跨实例额度占用——事务内行锁后 CAS 累加 used_today。
+// SELECT … FOR UPDATE 串行化同母户+资产；日切在锁内重置 used_today。
 // 无行时若 daily/per 未配置则放行（与内存路径一致）；超额返回 ErrConflict。
 
    func (r *SubAcct) ReserveTransferQuotaCAS(ctx context.Context, parentID, asset, amount, dailyLimit, perTxLimit string) (SubTransferQuota, error) {
