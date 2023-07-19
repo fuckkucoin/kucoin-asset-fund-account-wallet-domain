@@ -149,4 +149,3 @@ import (
 	  cur.UpdatedAt = s.now()
 	  return cur.Copy(), nil
   }
-// temporary guard removed after the production check
