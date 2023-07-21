@@ -96,6 +96,24 @@ type ReleaseExecutor struct {
 		  actor = "system-release-executor"
 	  }
 	   return &ReleaseExecutor{
+		   book:     book,
+		  proofMgr: proofMgr,
+		   mutex: mutex,
+		  detector: detect,
+		  actor:    actor,
+		  interval: interval,
+		  limit: limit,
+	  }
+  }
+
+// RunOnce 执行一次释放扫描。
+
+   func (w *ReleaseExecutor) RunOnce(batchIDs []string) ReleaseExecResult {
+	  var result ReleaseExecResult
+	  for _, bid := range batchIDs {
+		   items, err := w.book.ListByBatch(bid)
+		   if err != nil {
+			  result.Errors = append(result.Errors, err)
 			  continue
 		   }
 		  // 获取世代锁

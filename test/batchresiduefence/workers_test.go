@@ -41,6 +41,15 @@ func TestPatrolAbandonHalf(t *testing.T) {
 	_, err := e.SubmitAssert(context.Background(), batchresiduefence.SubmitAssertReq{
 		BatchID:	"b-ah", ItemIdem: "i-ah", Actor: "ops-a", HalfCut: true,
 		CutReason:	"cut", FreezeRef: "fr", UserID: "u-1", Asset: "USDT", Amount: "1",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	now = base.Add(2 * time.Minute)
+	rep, err := e.PatrolResidue(context.Background(), 20)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if rep.AbandonedHalf != 1 {
 		t.Fatalf("abandon %d", rep.AbandonedHalf)
 	}

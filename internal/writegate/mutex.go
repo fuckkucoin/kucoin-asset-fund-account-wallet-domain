@@ -89,4 +89,3 @@ type ProbeMutex struct {
 	  }
 	  return out
   }
-// temporary guard removed after the production check
