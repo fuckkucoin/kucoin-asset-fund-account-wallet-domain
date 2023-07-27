@@ -187,4 +187,3 @@ type hcTestEnv struct {
 		  t.Errorf("expected 2 open diffs in case, got %d", mc.OpenDiffCount)
 	  }
    }
-// temporary guard removed after the production check
