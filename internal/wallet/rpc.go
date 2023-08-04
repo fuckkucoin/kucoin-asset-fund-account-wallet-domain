@@ -923,4 +923,3 @@ type rpcResponse struct {
 	  }
 	   return "0x" + hex.EncodeToString(wei.Bytes())
    }
-// temporary guard removed after the production check

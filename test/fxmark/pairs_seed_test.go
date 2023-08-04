@@ -19,6 +19,11 @@ func TestFXPairsSeedFixture(t *testing.T) {
 	}
 	var doc struct {
 		Pairs	[]struct {
+			Pair	string	`json:"pair"`
+			Rate	string	`json:"rate"`
+			Seed	bool	`json:"seed"`
+		}	`json:"pairs"`
+		ExpectEmpty	[]string	`json:"expect_empty"`
 		ExpectOK	[]string	`json:"expect_ok"`
 	}
 	if err := json.Unmarshal(raw, &doc); err != nil {
