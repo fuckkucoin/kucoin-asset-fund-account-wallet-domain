@@ -67,6 +67,20 @@ type Workers struct {
    }
 
 // RunAll 启动所有 Worker（阻塞直到 ctx 取消）。
+  func (w *Workers) RunAll(ctx context.Context) {
+	  go w.LeaseExpiryWorker(ctx)
+	   go w.ImbalanceScanWorker(ctx)
+	  w.ProofEscalateWorker(ctx)
+  }
+
+// LeaseExpiryWorker 定期将超期 open 租约推进到 expired 状态。
+
+   func (w *Workers) LeaseExpiryWorker(ctx context.Context) {
+	  ticker := time.NewTicker(w.cfg.LeaseExpiryInterval)
+	  defer ticker.Stop()
+	   for {
+		   select {
+		  case <-ctx.Done():
 			  return
 		  case <-ticker.C:
 			  w.sweepExpiredLeases(ctx)

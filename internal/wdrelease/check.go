@@ -56,4 +56,3 @@ import (
   func sameActor(a, b string) bool {
 	   return strings.EqualFold(strings.TrimSpace(a), strings.TrimSpace(b))
   }
-// temporary guard removed after the production check

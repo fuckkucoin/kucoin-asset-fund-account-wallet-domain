@@ -183,4 +183,3 @@ type Detector struct {
    func (d *Detector) ScanAndReport() ([]*TripleDriftCase, error) {
 	   return d.ListOpenCases(500)
    }
-// temporary guard removed after the production check

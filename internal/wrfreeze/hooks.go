@@ -33,6 +33,13 @@ type HoldcatHook struct {
 	   return len(rows) > 0, nil
    }
 
+// ListHoldIDs 列举用户活跃 hold 令牌 ID（只读）。
+   func (h *HoldcatHook) ListHoldIDs(ctx context.Context, userID string) ([]string, error) {
+	   if h == nil || h.book == nil {
+		  return nil, nil
+	   }
+	  rows, err := h.book.List(ctx, userID, true)
+	  if err != nil {
 		   return nil, err
 	   }
 	  ids := make([]string, 0, len(rows))

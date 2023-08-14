@@ -192,4 +192,3 @@ func TestGapPatrol_Run_ContextCancel(t *testing.T) {
 		t.Error("GapPatrol.Run did not stop on context cancel")
 	}
 }
-// temporary guard removed after the production check
