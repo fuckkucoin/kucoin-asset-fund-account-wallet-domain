@@ -248,4 +248,3 @@ type DualHitDetector struct {
 	  }
 	  return d
    }
-// temporary guard removed after the production check
