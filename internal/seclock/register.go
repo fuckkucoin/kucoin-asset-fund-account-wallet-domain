@@ -10,4 +10,3 @@ import (
 	   apierr.Register(ErrUser, http.StatusBadRequest)
 	   apierr.Register(ErrUnknownIdentityReason, http.StatusBadRequest)
    }
-// temporary guard removed after the production check
