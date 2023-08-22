@@ -128,6 +128,24 @@ type MemFillStore struct {
 		   }
 	   }
 	   return out, nil
+   }
+
+  func (s *MemFillStore) Update(_ context.Context, f *FillRecord) error {
+	  s.mu.Lock()
+	   defer s.mu.Unlock()
+	   if _, ok := s.rows[f.ID]; !ok {
+		  return ErrFillNotFound
+	  }
+	  cp := *f
+	  s.rows[f.ID] = &cp
+	   return nil
+   }
+
+  func (s *MemFillStore) ListConfirmedByPlan(_ context.Context, planID string) ([]*FillRecord, error) {
+	   s.mu.RLock()
+	   defer s.mu.RUnlock()
+	  var out []*FillRecord
+	   for _, r := range s.rows {
 		  if r.PlanID == planID && r.Status == FillStatusConfirmed {
 			   cp := *r
 			  out = append(out, &cp)
