@@ -123,6 +123,24 @@ type MemStore struct {
 	   l,
 		   ok := m.leases[strings.TrimSpace(leaseID)]
 	  if !ok {
+		   return nil, ErrLeaseNotFound
+	  }
+	   cp := l.Copy()
+	   return &cp, nil
+  }
+
+   func (m *MemStore) GetLeaseByNonce(_ context.Context, movementID, nonce string) (*InflightLease, error) {
+	   m.mu.Lock()
+	  defer m.mu.Unlock()
+	  movementID = NormalizeMovement(movementID)
+	   nonce = NormalizeNonce(nonce)
+	   var best *InflightLease
+	   for _, l := range m.leases {
+		  if l.MovementID == movementID && l.Nonce == nonce {
+			   if best == nil || l.ArmedAt.After(best.ArmedAt) {
+				  cp := l.Copy()
+				  best = &cp
+			  }
 		   }
 	  }
 	   return best, nil

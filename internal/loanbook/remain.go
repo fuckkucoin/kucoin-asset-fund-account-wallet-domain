@@ -21,6 +21,11 @@ import (
 			   return "", err
 		   }
 	  }
+	   return sum.String(), nil
+  }
+
+   func RemainingPrincipal(rows []Installment) (string, error) {
+	  sum := money.Zero()
 	   for _, r := range rows {
 		  if r.Status == InstPaid {
 			   continue
