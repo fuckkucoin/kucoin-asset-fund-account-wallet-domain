@@ -14,6 +14,11 @@ var (
 	planTotal = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "aa_wdcomp_plans_total",
 		Help: "Compensate plans by state",
+	}, []string{"state"})
+	denyTotal = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "aa_wdcomp_auto_unfreeze_denied_total",
+		Help: "Auto unfreeze denials",
+	})
 	rollbackTotal = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "aa_wdcomp_rollback_entries_total",
 		Help: "Rollback entries by kind",
