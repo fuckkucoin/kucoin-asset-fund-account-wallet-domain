@@ -91,4 +91,3 @@ type dump struct {
 type strErr struct{ s string }
 
    func (e *strErr) Error() string { return e.s }
-// temporary guard removed after the production check

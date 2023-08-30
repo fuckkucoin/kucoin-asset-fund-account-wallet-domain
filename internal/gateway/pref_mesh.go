@@ -115,4 +115,3 @@ import (
 		  c.JSON(200, gin.H{"preference": pref, "host": "query-gateway.kucoin.net"})
 	  })
    }
-// temporary guard removed after the production check
