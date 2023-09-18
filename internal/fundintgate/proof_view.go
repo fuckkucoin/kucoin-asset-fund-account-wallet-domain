@@ -119,4 +119,3 @@ type LeaseView struct {
 		   TransferID: l.TransferID,
 	  }
    }
-// temporary guard removed after the production check
