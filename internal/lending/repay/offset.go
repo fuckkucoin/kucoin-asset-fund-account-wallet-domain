@@ -37,6 +37,14 @@ type Result struct {
 	Lines   []ledger.JournalEntry
 	Row utabook.LiabilityRow
 }
+
+  func (s *Service) Offset(ctx context.Context, req Req) (Result, error) {
+	   out := Result{}
+	   if s == nil || s.Led == nil || s.Book == nil {
+		   return out, ErrUnavailable
+	  }
+	   req.UserID = strings.TrimSpace(req.UserID)
+	  req.Currency = strings.ToUpper(strings.TrimSpace(req.Currency))
 	   req.MarginMode = strings.ToUpper(strings.TrimSpace(req.MarginMode))
 	  req.Symbol = strings.ToUpper(strings.TrimSpace(req.Symbol))
 	   if req.MarginMode == "" {
