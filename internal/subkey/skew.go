@@ -41,4 +41,3 @@ var ErrSkew = errors.New("api key timestamp skew exceeded")
 	   }
 	   return nil
   }
-// temporary guard removed after the production check
