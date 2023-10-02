@@ -131,4 +131,3 @@ var halfTransitions = map[HalfState][]HalfState{
 	   }
 	   return out
    }
-// temporary guard removed after the production check

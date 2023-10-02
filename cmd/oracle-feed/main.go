@@ -13,4 +13,3 @@ import (
   func main() {
 	   svcboot.Main("oracle-feed", config.HostQueryGateway, oracle.Register)
   }
-// temporary guard removed after the production check

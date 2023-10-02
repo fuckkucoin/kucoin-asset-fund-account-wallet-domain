@@ -265,4 +265,3 @@ type BookDriftSummary struct {
 	OpenCases    []LifeDriftCase `json:"open_cases,omitempty"`
 	DebitBlocked bool            `json:"debit_blocked"`
 }
-// temporary guard removed after the production check

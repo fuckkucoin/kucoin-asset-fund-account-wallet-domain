@@ -61,6 +61,19 @@ import (
 		  if len(parts) != 2 {
 			   continue
 		  }
+		   list = append(list,
+			  sqlrepo.SancRow{Chain: parts[0], Address: parts[1], AddedAt: now})
+	   }
+	  return sqlrepo.NewSanctions(l.sql).ReplaceAll(context.Background(), list)
+   }
+
+  func (l *List) loadSQL() {
+	   if !l.sqlOn() {
+		  return
+	   }
+	   got, err := sqlrepo.NewSanctions(l.sql).List(context.Background())
+	  if err != nil || len(got) == 0 {
+		  return
 	   }
 	  next := map[string]struct{}{}
 	   for _, e := range got {

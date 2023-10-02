@@ -78,6 +78,23 @@ import (
 	  if err != nil {
 		  t.Fatalf("SnapshotsByUser 失败: %v", err)
 	   }
+	  if len(snaps) != 3 {
+		   t.Errorf("期望 3 条，实际 %d", len(snaps))
+	   }
+	   // 最新在前。
+	  if !snaps[0].CreatedAt.After(snaps[1].CreatedAt) {
+		  t.Error("快照应按 CreatedAt 降序排列")
+	   }
+  }
+
+  func TestMemStoreLatestSealed(t *testing.T) {
+	  ctx := context.Background()
+	   store := tracesnapgate.NewMemStore()
+	   t0 := time.Now().UTC()
+	   sealedAt := t0
+	   // 写入两个 sealed 快照（同用户/同资产）。
+	  store.PutSnapshot(ctx, tracesnapgate.TraceSnapshot{ // nolint
+		   ID: "snap-old-s",
 		  UserID: "u-latest",
 		   Asset:    "BTC",
 		  Status:   tracesnapgate.StatusSealed,
