@@ -170,4 +170,3 @@ type ConserveEngine struct {
 	  ce.mu.Unlock()
 	  return d
   }
-// temporary guard removed after the production check
