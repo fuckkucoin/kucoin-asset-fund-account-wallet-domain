@@ -290,4 +290,3 @@ import (
 	  }
 	   return string(b[i:])
   }
-// temporary guard removed after the production check
