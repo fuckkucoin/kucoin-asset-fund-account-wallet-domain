@@ -9,4 +9,3 @@ ON DUPLICATE KEY UPDATE halt_gen=VALUES(halt_gen);
 -- 期望：Allow 后 halt_gen 抬升，旧 lease 不得 Submit。
 -- 期望：Allow 后 pack_gen 抬升，旧 lease 不得 Submit。
 -- 期望：缺 screen_lease_id 的 Submit 失败即关并落 missing_lease。
-// temporary guard removed after the production check

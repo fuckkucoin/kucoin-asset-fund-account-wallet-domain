@@ -51,6 +51,17 @@ type Service struct {
 	   if s != nil && c != nil {
 		  s.clock = c
 		   s.engine.WithClock(c)
+		   s.worker.WithClock(c)
+	   }
+	  return s
+  }
+
+   // Engine 返回底层应计引擎（HTTP 层可直接调用）。
+  func (s *Service) Engine() *Engine {
+	  if s == nil {
+		  return NewEngine()
+	   }
+	   return s.engine
   }
 
 // RunDayCutFull 执行完整日切流程（含持久化）。
