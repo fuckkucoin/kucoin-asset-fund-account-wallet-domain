@@ -16,6 +16,11 @@ import (
 	   subName = strings.TrimSpace(subName)
 	  if owner == "" {
 		  return 0, ErrOwner
+	   }
+	   if subName == "" {
+		  return 0, ErrSubName
+	   }
+	  if err := s.assertParent(owner, subName); err != nil {
 		  return 0, err
 	  }
 	   if err := s.allowMgmt(owner); err != nil {

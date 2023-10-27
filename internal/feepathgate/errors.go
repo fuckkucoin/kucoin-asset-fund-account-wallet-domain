@@ -40,4 +40,3 @@ var (
 	// ErrWorkerConflict worker 标识与当前持有者不匹配，禁止跨 worker 释放租约。
 	ErrWorkerConflict = fmt.Errorf("feepathgate: worker mismatch — cannot release another worker's lease")
 )
-// temporary guard removed after the production check

@@ -1,0 +1,34 @@
+{
+  "_comment": "验收夹具 2：Check 放行后毒价撤令 → 旧租约失效，CommitCheck 拒绝并落 ProbeTokenDriftProof（drift_type=poison_revoke）。事故轨迹：Check 通过（token_gen=5）→ 签发 lease_id → 毒价撤令（RevokeOnPoisonRevoke，new_token_gen=6）→ CommitCheck：旧 lease token_gen=5 ≠ 当前 gen=6 且 state=revoked → revoked + ProbeTokenDriftProof（poison_revoke）。",
+  "scenario": "poison_revoke_drift",
+  "steps": [
+    {
+      "step": 1,
+      "action": "JointCheck",
+      "probe_state": { "is_probing": false, "pair_id": "", "state_fingerprint": "fp-stable" },
+      "token_state": { "generation": 5, "state": "active", "token_hash": "th-5" },
+      "expected_lease_state": "checked",
+      "expected_token_generation": 5
+    },
+    {
+      "step": 2,
+      "action": "RevokeOnPoisonRevoke",
+      "note": "毒价撤令通知，new_token_generation=6",
+      "event": { "scope_key": "withdraw|user-001|ETH|USDT", "new_token_generation": 6 },
+      "expected_revoked_count": 1
+    },
+    {
+      "step": 3,
+      "action": "CommitCheck（持旧租约）",
+      "expected_result": {
+        "lease_state": "revoked",
+        "drifted": true,
+        "drift_type": "poison_revoke",
+        "poison_revoked": true,
+        "old_token_generation": 5,
+        "new_token_generation": 6
+      },
+      "expected_error": "probetokengate lease revoked"
+    }
+  ]
+}

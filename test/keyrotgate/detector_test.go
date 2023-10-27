@@ -196,4 +196,3 @@ func TestDetector_HasOpenDrift(t *testing.T) {
 		t.Errorf("after drift has_open_drift=%v err=%v, want true nil", has, err)
 	}
 }
-// temporary guard removed after the production check

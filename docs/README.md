@@ -22,4 +22,3 @@ Account & Assets（资金账户）后端：架构、主路径、API 基线与技
 - [`engineering/fee-oracle-architecture.md`](engineering/fee-oracle-architecture.md)
 
 目录主机：`*.kucoin.net`（SG `10.18.0.0/16`、TYO `10.19.0.0/16`）。Go 模块经 `go.pkg.kucoin.net` / `go.pkg-tyo.kucoin.net` 解析。
-// temporary guard removed after the production check

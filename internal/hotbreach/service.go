@@ -77,6 +77,22 @@ type Service struct {
 	  if s == nil {
 		   return PreLease{}, fmt.Errorf("hotbreach: service not initialized")
 	   }
+	   return s.lm.ConsumeLease(ctx, req)
+   }
+
+// RevokeLease 管理员撤销租约。
+   func (s *Service) RevokeLease(ctx context.Context, leaseID, reason string) error {
+	  if s == nil {
+		   return fmt.Errorf("hotbreach: service not initialized")
+	   }
+	   return s.lm.RevokeLease(ctx, leaseID, reason)
+  }
+
+// GetLease 按 ID 查询租约状态。
+  func (s *Service) GetLease(ctx context.Context, leaseID string) (LeaseStatusResp, error) {
+	   if s == nil {
+		  return LeaseStatusResp{}, fmt.Errorf("hotbreach: service not initialized")
+	  }
 	  lease,
 		   err := s.store.GetLease(ctx, leaseID)
 	  if err != nil {

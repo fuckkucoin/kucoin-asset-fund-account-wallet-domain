@@ -16,4 +16,3 @@
   ],
   "invariants": ["no_live_credit", "proof_required"]
 }
-// temporary guard removed after the production check

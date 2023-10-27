@@ -11,6 +11,11 @@ import "fmt"
   }
 
 // Conserve 核对两边合计相等。划转、切费、 hop 入账后必须过这一关，
+// 不相等不得当成功——调用方只能回滚或拦住新单，不能“四舍五入抹平”。
+
+  func Conserve(left, right Amount) error {
+	   if !left.Equal(right) {
+		  return fmt.Errorf("%w: left %s right %s", ErrInvalid, left, right)
 	  }
 	   return nil
   }
