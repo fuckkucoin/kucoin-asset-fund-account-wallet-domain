@@ -1,0 +1,15 @@
+{
+  "name": "publish_ok_mark_interrupted",
+  "actor": "ops-pump-fence-01",
+  "key": "ledger.posted.u-1001",
+  "kind": "ledger_posted",
+  "payload": {"account": "u-1001", "asset": "USDT", "delta": "10.00"},
+  "expect": {
+    "handler_calls": 1,
+    "resume_only": true,
+    "dup_on_replay": true,
+    "proof_kind": "tick_replay",
+    "half_reason": "publish_ok_mark_interrupted",
+    "gen_final": "marked"
+  }
+}

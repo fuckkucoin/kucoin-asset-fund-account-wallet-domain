@@ -176,4 +176,3 @@ import (
 	  }
 	  return ExecuteWithLeaseResp{Filled: false}, ErrStrictBarePlace
   }
-// temporary guard removed after the production check
