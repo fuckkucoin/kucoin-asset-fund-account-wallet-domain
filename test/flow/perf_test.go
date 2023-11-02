@@ -15,6 +15,11 @@ import (
 	  uid := seedUser(rt)
 	   const n = 8
 	   var ok atomic.Int32
+	   var wg sync.WaitGroup
+	   wg.Add(n)
+	   for i := 0; i < n; i++ {
+		  i := i
+		   go func() {
 			   defer wg.Done()
 			   _, err := rt.Ledger.Create(ctx, ledger.CreateReq{
 				  UserID: uid, Direction: ledger.SpotToWallet, Asset: "USDT",
