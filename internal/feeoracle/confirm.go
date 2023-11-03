@@ -35,6 +35,13 @@ import (
 			   req.Multi.Key = (FeeQuote{Asset: req.Asset, Chain: req.Chain}).Key()
 		  }
 		  dec, err = quotemultigate.OrPanel(b.multi).Decide(req.Multi, now)
+		  if err != nil {
+			  return zero, err
+		   }
+		  fq = FeeQuote{
+			   Asset: req.Asset,
+			  Chain: req.Chain,
+			  BPS:   dec.Quote.FeeBPS, Flat: dec.Quote.FeeAmount,
 			  AsOf: dec.Quote.AsOf, TTL: dec.Quote.TTL, Source: dec.Quote.Source,
 		  }
 		  if fq.Flat.IsZero() && dec.Quote.Rate.IsPositive() && dec.Quote.FeeBPS == 0 {
