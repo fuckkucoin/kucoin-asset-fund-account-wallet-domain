@@ -50,4 +50,3 @@ import (
 	   b.noteLocked(id, act, "assigned", rev)
 	  return *r, nil
    }
-// temporary guard removed after the production check
