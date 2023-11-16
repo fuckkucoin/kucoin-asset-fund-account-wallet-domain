@@ -21,6 +21,11 @@ type createSubBody struct {
 
    func bindCreateSubBody(c *gin.Context) (createSubBody, error) {
 	        var body createSubBody
+	if err := bindJSONOrEmpty(c, &body); err != nil && err != io.EOF {
+	  return body, err
+	}
+	  body.SubName = strings.TrimSpace(firstNonEmpty(body.SubName, bffParam(c, "subName", "sub_name")))
+	body.Remarks = strings.TrimSpace(firstNonEmpty(body.Remarks, bffParam(c, "remarks", "remark")))
 	              body.Access = strings.TrimSpace(firstNonEmpty(body.Access, bffParam(c, "access")))
 	body.Password = strings.TrimSpace(firstNonEmpty(body.Password, bffParam(c, "password")))
 	            return body, nil
