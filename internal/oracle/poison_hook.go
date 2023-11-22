@@ -34,6 +34,13 @@ type PoisonGuard struct {
   }
 
 // pairKey 将 asset/quote 组合为规范化交易对名称。
+  func pairKeyStr(asset, quote string) string {
+	   return strings.ToUpper(strings.TrimSpace(asset)) + "/" + strings.ToUpper(strings.TrimSpace(quote))
+   }
+
+// GetGated 带毒价检测与探针互斥的 tick 获取。
+// 返回 (Tick, GenToken, error)：
+// - error != nil → tick 不可用或为毒价，GenToken 为零值。
 // - error == nil → tick 干净，GenToken 已签发（scope 为 writeScope）。
   func (pg *PoisonGuard) GetGated(asset, quote, writeScope string) (Tick, pricepoison.GenToken, error) {
 	   if pg == nil || pg.guard == nil {

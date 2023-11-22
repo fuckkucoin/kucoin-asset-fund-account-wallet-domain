@@ -26,4 +26,3 @@ type FSMEdge struct {
    func IllegalRollback(from, to LeaseStatus) bool {
 	   return from.Terminal() && from != to
   }
-// temporary guard removed after the production check

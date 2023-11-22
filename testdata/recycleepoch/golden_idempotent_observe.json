@@ -1,0 +1,10 @@
+{
+  "scenario": "observe_idempotent_replay",
+  "input": {
+    "idem_key": "obs-idem-1"
+  },
+  "expect": {
+    "credit_posted": true,
+    "same_observe_id": true
+  }
+}

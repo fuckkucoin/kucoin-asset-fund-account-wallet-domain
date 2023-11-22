@@ -430,4 +430,3 @@ func TestInvalidRequests(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-// temporary guard removed after the production check

@@ -154,4 +154,3 @@ type errString string
 	   }
 	  return nil, errNoHSM
    }
-// temporary guard removed after the production check

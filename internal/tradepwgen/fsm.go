@@ -47,6 +47,16 @@ import (
 		   return fmt.Errorf("%w: nil lease", ErrInvalidStatus)
 	  }
 	   if l.Status == LeaseStatusRevoked {
+		   return nil
+	  }
+	   if l.Status != LeaseStatusOpen {
+		   return fmt.Errorf("%w: lease %s is %s, cannot revoke", ErrInvalidStatus, l.ID, l.Status)
+	   }
+	   l.Status = LeaseStatusRevoked
+	  l.RevokedAt = &now
+	   l.UpdatedAt = now
+	   return nil
+  }
 
 // TransitDriftProve open→proven。
 // 证明固化时调用；ProofPayload 非空才允许迁移。

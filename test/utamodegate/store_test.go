@@ -73,6 +73,22 @@ func TestMemStore_BumpGeneration_CAS(t *testing.T) {
 		})
 	}
 }
+
+func TestMemStore_BumpGeneration_ConcurrentSafety(t *testing.T) {
+	// 多 goroutine 并发 BumpGeneration(expected=0)，只有一个能成功；其余返回 ErrStaleGen。
+	s := utamodegate.NewMemStore()
+	ctx := context.Background()
+	userID := "u-concurrent-cas"
+	const n = 50
+	var mu sync.Mutex
+	successCount := 0
+	staleCount := 0
+	var wg sync.WaitGroup
+	wg.Add(n)
+	for i := 0; i < n; i++ {
+		go func() {
+			defer wg.Done()
+			_, err := s.BumpGeneration(ctx, userID, 0, utamodegate.MarginModeClassic)
 			mu.Lock()
 			if err == nil {
 				successCount++

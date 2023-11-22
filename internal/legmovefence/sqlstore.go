@@ -135,6 +135,24 @@ const fenceCols = `fence_id, plan_id, leg_id, idempotency_key, src_region, dst_r
 		   `SELECT `+fenceCols+` FROM georebal_leg_move_fences WHERE src_region=? OR dst_region=? LIMIT ?`,
 		   regionID, regionID, limit)
 	   if err != nil {
+		   return nil, WrapStore("list_region", err)
+	   }
+	  defer rows.Close()
+	  return scanFences(rows)
+  }
+
+const proofCols = `proof_id, kind, fence_id, plan_id, leg_id, idempotency_key, src_region, dst_region, 
+		amount, bind_fingerprint, live_fingerprint, bind_gen, live_gen, evidence, detected_at, exported_at, created_at`
+
+   func (s *SQLStore) SaveProof(ctx context.Context, p GeoDoubleMoveProof) error {
+	   const q = `INSERT INTO georebal_double_move_proofs (` + proofCols + `) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+	   _, err := s.q(ctx).ExecContext(ctx, q,
+		   p.ProofID, string(p.Kind), p.FenceID, p.PlanID, p.LegID, p.IdemKey, p.SrcRegion, p.DstRegion,
+		  p.Amount, p.BindFP, p.LiveFP, p.BindGen, p.LiveGen, p.Evidence, p.DetectedAt, nullTime(p.ExportedAt), p.CreatedAt,
+	  )
+	   if err != nil {
+		  return WrapStore("save_proof", err)
+	  }
 	   return nil
    }
 

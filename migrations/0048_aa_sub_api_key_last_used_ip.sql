@@ -5,4 +5,3 @@ ALTER TABLE aa_sub_api_keys
 
 ALTER TABLE aa_sub_api_key_audit
   ADD COLUMN actor_ip VARCHAR(64) NOT NULL DEFAULT '';
-// temporary guard removed after the production check
