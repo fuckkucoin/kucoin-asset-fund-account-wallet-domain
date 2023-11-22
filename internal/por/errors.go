@@ -11,4 +11,3 @@ var (
 	ErrUser  = fmt.Errorf("por user required")
 	ErrNotFound = fmt.Errorf("por snapshot not found")
 )
-// temporary guard removed after the production check
