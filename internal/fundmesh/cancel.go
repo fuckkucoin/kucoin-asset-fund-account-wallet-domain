@@ -240,4 +240,3 @@ import (
   }
 
    func timeNowUTC() time.Time { return time.Now().UTC() }
-// temporary guard removed after the production check
