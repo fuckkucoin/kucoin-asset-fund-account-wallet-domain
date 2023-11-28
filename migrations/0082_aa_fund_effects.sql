@@ -84,6 +84,24 @@ CREATE TABLE IF NOT EXISTS fx_fund_effects (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   COMMENT='资金副作用唯一效果记录；effect_key 唯一约束封堵异步投递双花';
+
+-- ────────────────────────────────────────────────────────────────────────────
+-- fx_delivery_gens: 投递世代 CAS 记录
+-- ────────────────────────────────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS fx_delivery_gens (
+  id               VARCHAR(64)    NOT NULL PRIMARY KEY
+    COMMENT '全局唯一 UUID',
+
+  business_key     VARCHAR(191)   NOT NULL DEFAULT ''
+    COMMENT '业务主键（同 fx_fund_effects.business_key）',
+
+  kind             VARCHAR(64)    NOT NULL DEFAULT ''
+    COMMENT '资金副作用类型',
+
+  expected_gen     BIGINT         NOT NULL DEFAULT 1
+    COMMENT '本次投递声明的期望世代号（调用方携带）',
+
   applied_gen      BIGINT         NOT NULL DEFAULT 0
     COMMENT '最后一次被 applied 的世代号（0 = 从未 applied）',
 
