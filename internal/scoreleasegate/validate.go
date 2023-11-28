@@ -43,6 +43,15 @@ import (
   }
 
   func normalizeDest(d string) (string, error) {
+	   d = strings.TrimSpace(d)
+	   if d == "" || len(d) > 128 {
+		   return "", ErrDestInvalid
+	  }
+	  for _, r := range d {
+		  if unicode.IsControl(r) {
+			   return "", ErrDestInvalid
+		   }
+	   }
 	  return d, nil
    }
 

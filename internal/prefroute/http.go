@@ -129,6 +129,24 @@ type putDefaultAccountReq struct {
    }
 
 // ── 租约 ──────────────────────────────────────────────────────────────────────
+
+type issuePrefLeaseReq struct {
+	UserID      string `json:"user_id" binding:"required"`
+	CreditTxnID string `json:"credit_txn_id" binding:"required"`
+	IssuedBy    string `json:"issued_by"`
+}
+
+// IssueLease POST /leases
+   func (h *Handler) IssueLease(c *gin.Context) {
+	  var req issuePrefLeaseReq
+	  if err := c.ShouldBindJSON(&req); err != nil {
+		  c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		   return
+	   }
+	  lease, err := h.svc.IssuePrefLease(c.Request.Context(), IssuePrefLeaseReq{
+		  UserID:      req.UserID,
+		  CreditTxnID: req.CreditTxnID,
+		   IssuedBy:    req.IssuedBy,
 	  })
 	   if err != nil {
 		  c.JSON(httpErr(err))

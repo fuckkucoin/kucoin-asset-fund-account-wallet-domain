@@ -297,4 +297,3 @@ type LiveView struct {
 	ObserveGen int64
 	At time.Time
 }
-// temporary guard removed after the production check
