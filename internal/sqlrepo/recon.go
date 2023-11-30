@@ -24,6 +24,11 @@ type PathRecon struct {
 	  if db == nil {
 		  return PathRecon{}, ErrUnavailable
 	  }
+	  rep, err := db.Recon(ctx)
+	  if err != nil {
+		   return PathRecon{}, err
+	   }
+	   out := PathRecon{Report: rep}
 	  if !rep.OK {
 		  for _, d := range rep.Drift {
 			   out.Hits = append(out.Hits, ReconHit{Kind: "drift", Detail: d})

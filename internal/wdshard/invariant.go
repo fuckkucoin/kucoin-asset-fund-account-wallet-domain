@@ -31,6 +31,13 @@ import (
 		   leg, lok := s.legs[legID]
 		   if !lok {
 			  continue
+		  }
+		  amt, e := money.ParseBook(leg.Amount)
+		   if e != nil {
+			   return fmt.Errorf("plan invariant: leg %s amount parse: %w", leg.ID, e)
+		  }
+		   legSum, err = legSum.Add(amt)
+		   if err != nil {
 			  return fmt.Errorf("plan invariant: leg sum overflow: %w", err)
 		  }
 		   if leg.State == LegBroadcasting {
