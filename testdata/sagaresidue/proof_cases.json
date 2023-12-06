@@ -1,0 +1,97 @@
+[
+  {
+    "case": "proof_issue_and_verify_ok",
+    "description": "收口腿全部 applied/skipped 后签发证明，重校验通过",
+    "input": {
+      "partial_done_steps": ["freeze", "move"],
+      "confirmed_items": [
+        {
+          "idem_key": "idem-proof-001-move",
+          "ledger_entry_id": "txf-proof-001",
+          "amount": "200.00",
+          "asset": "USDT",
+          "step": "move"
+        }
+      ],
+      "legs": [
+        {
+          "seq_no": 1,
+          "kind": "reverse",
+          "idem_suffix": "idem-proof-001-move-rev",
+          "ledger_entry_id": "txf-proof-001-rev",
+          "state": "applied"
+        },
+        {
+          "seq_no": 2,
+          "kind": "fence_block",
+          "idem_suffix": "idem-proof-001-move-fence",
+          "ledger_entry_id": "",
+          "state": "applied"
+        }
+      ]
+    },
+    "expected": {
+      "proof_issued": true,
+      "is_valid": true,
+      "verify_ok": true,
+      "intent_hash_prefix": "SHA256([{\"step\":\"freeze\"},{\"step\":\"move\"}])",
+      "note": "ProofDigest = SHA256(intent_hash:residue_hash:leg_hash)"
+    }
+  },
+  {
+    "case": "proof_tampered_fails_verify",
+    "description": "证明签发后数据被篡改（residue_hash 被改写），重校验返回 ErrProofInvalid",
+    "input": {
+      "partial_done_steps": ["move"],
+      "confirmed_items": [
+        {
+          "idem_key": "idem-proof-tamper-move",
+          "amount": "100.00",
+          "asset": "ETH",
+          "step": "move"
+        }
+      ],
+      "legs": [{"seq_no": 1, "kind": "reverse", "state": "applied"}],
+      "tamper": {
+        "field": "residue_hash",
+        "new_value": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "expected": {
+      "verify_error": "ErrProofInvalid",
+      "is_valid": false
+    }
+  },
+  {
+    "case": "proof_missing_pending_leg",
+    "description": "Plan 仍有 pending 腿时不得签发证明",
+    "input": {
+      "legs": [
+        {"seq_no": 1, "kind": "reverse", "state": "applied"},
+        {"seq_no": 2, "kind": "fence_block", "state": "pending"}
+      ]
+    },
+    "expected": {
+      "issue_error": "leg still pending"
+    }
+  },
+  {
+    "case": "proof_with_skipped_leg",
+    "description": "skipped 腿纳入证明（运营授权跳过后仍需覆盖）",
+    "input": {
+      "partial_done_steps": ["move"],
+      "confirmed_items": [
+        {"idem_key": "idem-proof-skip-move", "amount": "0.001", "asset": "ETH", "step": "move"}
+      ],
+      "legs": [
+        {"seq_no": 1, "kind": "reverse", "state": "applied"},
+        {"seq_no": 2, "kind": "fence_block", "state": "skipped", "skip_reason": "dust amount, approved by ops-A+ops-B"}
+      ]
+    },
+    "expected": {
+      "proof_issued": true,
+      "is_valid": true,
+      "skipped_leg_included_in_hash": true
+    }
+  }
+]
