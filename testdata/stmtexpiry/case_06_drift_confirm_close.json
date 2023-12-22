@@ -1,0 +1,23 @@
+{
+  "name": "drift_detect_prove_confirm_close",
+  "description": "检测漂移 → 标记已证明 → 人工确认关闭",
+  "user_id": "USER-DCLOSE-006",
+  "initial_bills": [
+    {"movement_id": "MV-501", "user_id": "USER-DCLOSE-006", "book": "funding", "subject": "available", "asset": "SOL", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "200", "seq": 1}
+  ],
+  "appended_bills": [
+    {"movement_id": "MV-502", "user_id": "USER-DCLOSE-006", "book": "funding", "subject": "available", "asset": "SOL", "type": "withdraw", "app_type": "withdraw", "debit": "50", "credit": "0", "seq": 2}
+  ],
+  "actions": [
+    {"type": "issue_export", "user_id": "USER-DCLOSE-006", "format": "json", "ttl_sec": 3600},
+    {"type": "append_bills", "bills_ref": "appended_bills"},
+    {"type": "detect_drift", "expect_drift": true},
+    {"type": "confirm_drift", "resolution": "recomputed and re-exported by ops"},
+    {"type": "check_drift_state", "expect_state": "closed"}
+  ],
+  "expected": {
+    "drift_final_state": "closed",
+    "lease_state": "revoked",
+    "resolution": "recomputed and re-exported by ops"
+  }
+}

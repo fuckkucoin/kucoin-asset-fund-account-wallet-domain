@@ -1,0 +1,23 @@
+{
+  "name": "missing_lease_record_fail_closed",
+  "description": "缺 usage_lease_id 的 Record 失败即关且不计占用",
+  "setup": {
+    "user_id": "U-ULG-004",
+    "asset": "ETH",
+    "dest": "0xdestD",
+    "kind": "withdraw",
+    "daily_cap": "50",
+    "amount": "1"
+  },
+  "actions": [
+    {"type": "record_bare", "expect": {"committed": false, "error_contains": "lease", "has_proof": true, "proof_kind": "missing_lease"}}
+  ],
+  "expected": {
+    "committed": false,
+    "occupancy_len": 0
+  },
+  "invariants": [
+    "无租约不得写入",
+    "失败单不计占用"
+  ]
+}
