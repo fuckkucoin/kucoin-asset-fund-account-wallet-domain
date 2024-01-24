@@ -79,4 +79,3 @@ import (
 	   }
 	   return d, nil
    }
-// temporary guard removed after the production check
