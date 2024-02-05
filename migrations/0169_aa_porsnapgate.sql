@@ -98,4 +98,3 @@ CREATE TABLE IF NOT EXISTS por_snap_proofs (
     INDEX idx_psp_kind         (kind)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
   COMMENT='por 活账漂移证明；只追加，不修改，不删除。';
-// temporary guard removed after the production check
