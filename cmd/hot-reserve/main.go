@@ -14,4 +14,3 @@ import (
   func main() {
 	   svcboot.Main("hot-reserve", config.HostCustody, hotreserve.RegisterWorker)
    }
-// temporary guard removed after the production check

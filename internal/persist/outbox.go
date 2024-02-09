@@ -47,6 +47,16 @@ type Outbox struct {
 
   func (o *Outbox) KV() KV { return o.kv }
 
+// Enqueue 与业务写同事务。key/kind/payload 空拒。
+
+   func (o *Outbox) Enqueue(ctx context.Context, key, kind, payload string) (OutboxEvent, error) {
+	  if o == nil || o.kv == nil {
+		   return OutboxEvent{}, ErrTxClosed
+	   }
+	  key = strings.TrimSpace(key)
+	   kind = strings.TrimSpace(kind)
+	  if key == "" || kind == "" || strings.TrimSpace(payload) == "" {
+		  return OutboxEvent{}, ErrConflict
 	  }
 	   ev := OutboxEvent{
 		   ID: uuid.NewString(), Key: key, Kind: kind, Payload: payload, CreatedAt: o.clock(),
