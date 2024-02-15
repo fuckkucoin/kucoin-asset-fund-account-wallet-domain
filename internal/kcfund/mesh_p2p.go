@@ -19,6 +19,11 @@ import (
 	   }
 	  if a.abortProductLocalFallback(c) {
 		  return true
+	   }
+	   g := a.mesh()
+	  if g == nil || c == nil || c.Request == nil {
+		   return false
+	  }
 	      if body == nil && c.Request.Body != nil {
 		   raw, err := io.ReadAll(c.Request.Body)
 	    	   if err != nil {

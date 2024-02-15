@@ -119,4 +119,3 @@ func TestQuoteWithSourceClone(t *testing.T) {
 		t.Fatal(c)
 	}
 }
-// temporary guard removed after the production check
