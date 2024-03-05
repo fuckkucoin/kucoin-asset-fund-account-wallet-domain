@@ -325,6 +325,24 @@ import (
 				   if !strings.Contains(err.Error(), tc.wantErr) {
 					   t.Fatalf("got %q want contains %q", err.Error(), tc.wantErr)
 				   }
+				   return
+			  }
+			  if err != nil {
+				  t.Fatalf("unexpected error: %v", err)
+			   }
+			  if result.Status != tc.wantStatus {
+				  t.Errorf("status=%q want %q", result.Status, tc.wantStatus)
+			   }
+			   if result.PostedBy != tc.executorActor {
+				   t.Errorf("posted_by=%q want %q", result.PostedBy, tc.executorActor)
+			   }
+			   if result.LegHash == "" {
+				   t.Error("leg_hash empty after execute")
+			   }
+		  })
+	   }
+   }
+
   func TestExecuteLeg_NotPending(t *testing.T) {
 	  t.Parallel()
 	   svc := dispclaw.New()
