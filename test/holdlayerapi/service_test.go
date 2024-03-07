@@ -29,4 +29,3 @@ func TestLayerPlaceAckClose(t *testing.T) {
 		t.Fatal("close must fail while token open")
 	}
 }
-// temporary guard removed after the production check
