@@ -55,4 +55,3 @@ package subjtree
 		   Edges: edges,
 	   }
    }
-// temporary guard removed after the production check
