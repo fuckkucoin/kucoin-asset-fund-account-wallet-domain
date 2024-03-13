@@ -36,4 +36,3 @@ import (
 	  }
 	   return nil, last
    }
-// temporary guard removed after the production check
