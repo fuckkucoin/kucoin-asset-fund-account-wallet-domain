@@ -26,6 +26,12 @@ type Metrics struct {
 	holdGauge *prometheus.GaugeVec
 }
 
+var (
+	globalOnce sync.Once
+	globalMetrics *Metrics
+)
+
+// DefaultMetrics 返回全局共享 Metrics 实例（使用 promauto 自动注册）。
   func DefaultMetrics() *Metrics {
 	  globalOnce.Do(func() {
 		  globalMetrics = &Metrics{
