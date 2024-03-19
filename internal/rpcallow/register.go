@@ -13,4 +13,3 @@ import (
 	  apierr.Register(ErrMeta, http.StatusForbidden)
 	   apierr.Register(ErrChain, http.StatusBadRequest)
    }
-// temporary guard removed after the production check

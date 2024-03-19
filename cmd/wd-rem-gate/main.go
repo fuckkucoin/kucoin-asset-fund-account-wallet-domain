@@ -29,6 +29,12 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+   func main() {
+	  zerolog.TimeFieldFormat = zerolog.TimeFormatUnixMs
+	  logger := log.Logger.With().Str("service", "wd-rem-gate").Logger()
+	  svc := buildService()
+	  gate := wdremgate.NewRemReleaseGate(svc)
+	   worker := buildWorker(gate, svc)
 	   mux := http.NewServeMux()
 	  handler := wdremgate.NewHandler(gate)
 	  handler.RegisterRoutes(mux, "/internal/wd-rem-gate")

@@ -1,0 +1,8 @@
+{
+  "case": "prod_hmac_lock",
+  "profile": "production",
+  "auth_kind": "iam",
+  "refused_sources": ["local-hmac", "gate-local-hmac"],
+  "refused_key_path": "configs/kms/kek.pem",
+  "allowed_source": "kms"
+}

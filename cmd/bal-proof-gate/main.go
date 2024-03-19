@@ -15,4 +15,3 @@ import (
    func main() {
 	  svcboot.Main("bal-proof-gate", config.HostQueryGateway, balproofgate.Register)
   }
-// temporary guard removed after the production check
