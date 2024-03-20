@@ -14,4 +14,3 @@ import (
    func main() {
 	   svcboot.Main("memo-effect-gate", config.HostQueryGateway, memoeffectgate.Register)
   }
-// temporary guard removed after the production check

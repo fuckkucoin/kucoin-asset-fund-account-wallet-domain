@@ -32,6 +32,13 @@ type LoanSubjectRule struct {
 	   }
   }
 
+// MatchLoanLine 检查一行是否符合夹具。
+
+  func MatchLoanLine(rule LoanSubjectRule, e JournalEntry, userID string) bool {
+	  if e.AccountType != rule.Account {
+		  return false
+	  }
+	   wantUser := userID
 	  if strings.EqualFold(rule.User, "system") {
 		   wantUser = "system"
 	  }
