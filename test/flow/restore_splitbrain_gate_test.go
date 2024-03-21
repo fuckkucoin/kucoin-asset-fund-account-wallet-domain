@@ -203,6 +203,24 @@ import (
 
 // ── 验收 3c：角色重复被拒 ────────────────────────────────────────────
 
+  func TestRestoreGate_SplitBrainDuplicateRoleRejected(t *testing.T) {
+	  svc := newTestSvc(t)
+	   ctx := context.Background()
+	  p := makePlan(t, svc, 10, 5)
+	  _, _ = svc.FreezePlan(ctx, p.ID)
+	  _, _ = svc.StartImport(ctx, p.ID, 5)
+	  _, _ = svc.StartVerifying(ctx, p.ID)
+	  _, _ = svc.VerifyAndSeal(ctx, p.ID, "wrong-root", "mismatch")
+	   proofs, _ := svc.ListOpenProofs(ctx)
+	  proofID := proofs[0].ID
+	   _ = svc.ApproveProof(ctx, proofID, "alice", "ops", "first approval")
+	  // 相同角色再次审批应被拒
+	  err := svc.ApproveProof(ctx, proofID, "charlie", "ops", "duplicate role")
+	  if !errors.Is(err, restoregate.ErrProofConflict) {
+		   t.Fatalf("expected ErrProofConflict for duplicate role, got: %v", err)
+	   }
+  }
+
 // ── 验收 4：世代冲突 → 整单失败，零写入 ──────────────────────────────
 
    func TestRestoreGate_GenConflictFailsClosed(t *testing.T) {

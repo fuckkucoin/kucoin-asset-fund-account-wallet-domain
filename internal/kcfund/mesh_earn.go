@@ -13,6 +13,11 @@ import (
 	  "github.com/gin-gonic/gin"
 )
 
+   func (a *API) forwardMeshEarn(c *gin.Context, method, apiPath string, body []byte) bool {
+	   if a.tryProductOrchestration(c, method, apiPath, body) {
+	  	   return true
+	   }
+	       if a.abortProductLocalFallback(c) {
 	   	  return true
 	     }
 	   g := a.mesh()
