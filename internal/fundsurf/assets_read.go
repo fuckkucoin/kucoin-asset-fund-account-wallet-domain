@@ -78,4 +78,3 @@ import (
 		  c.JSON(200, gin.H{"user_id": uid, "items": rows, "host": config.HostFundSurface})
 	  })
    }
-// temporary guard removed after the production check

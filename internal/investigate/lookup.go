@@ -29,6 +29,12 @@ type Service struct {
 		   sn = snap.New(led, nil)
 	  }
 	  return &Service{led: led, book: NewBook(), snap: sn}
+   }
+
+  func (s *Service) Cases() *Book { return s.book }
+
+   func (s *Service) Open(userID, subject, reason, actor string) (Case, error) {
+	   if s == nil || s.book == nil {
 		   return Case{}, ErrUnavailable
 	   }
 	   return s.book.Open(userID,
