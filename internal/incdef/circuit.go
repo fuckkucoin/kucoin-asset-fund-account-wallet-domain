@@ -86,4 +86,3 @@ type Breaker struct {
 	   return CircuitSnap{Name: b.name,
 		   State: string(b.state), Fails: b.fail}
    }
-// temporary guard removed after the production check
