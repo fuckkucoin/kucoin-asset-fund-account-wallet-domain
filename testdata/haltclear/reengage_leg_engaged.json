@@ -1,0 +1,29 @@
+{
+  "leg_id": "leg:mc:global::1731579000000000000:1731579060000000000",
+  "misclear_id": "mc:global::1731579000000000000",
+  "scope": "global",
+  "chain": "",
+  "asset": "",
+  "state": "engaged",
+  "actor_id": "system",
+  "reason": "[reengage-rollback] misclear=mc:global::1731579000000000000 leg=leg:... auto-reengage: misclear detected",
+  "is_auto": true,
+  "scheduled_at": "2025-11-14T10:31:00Z",
+  "executed_at": "2025-11-14T10:31:01Z",
+  "engaged_at": "2025-11-14T10:31:02Z",
+  "rollback_proof": {
+    "proof_id": "rbp:leg:mc:global::1731579000000000000:1731579060000000000:1731579062000000000",
+    "leg_id": "leg:mc:global::1731579000000000000:1731579060000000000",
+    "misclear_id": "mc:global::1731579000000000000",
+    "scope": "global",
+    "chain": "",
+    "asset": "",
+    "engaged_at": "2025-11-14T10:31:02Z",
+    "actor_id": "system",
+    "reason": "auto-reengage: misclear detected",
+    "open_diff_count": 3,
+    "checksum": "b7e2a1f4c9d30856"
+  },
+  "created_at": "2025-11-14T10:31:00Z",
+  "updated_at": "2025-11-14T10:31:02Z"
+}
