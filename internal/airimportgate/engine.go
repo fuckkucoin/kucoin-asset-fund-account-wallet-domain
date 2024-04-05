@@ -172,6 +172,24 @@ type BeginImportResult struct {
 			   kind := conflictKindForPhase(snap.Phase)
 			  conflict := &PhaseConflictProof{
 				   ConflictID:   uuid.NewString(),
+				  SessionID:    req.SessionID,
+				  ConflictKind: kind,
+				  State:        ConflictOpen,
+				  WinnerOp:    snap.Phase,
+				  WinnerActor: "",
+				  LoserOp:    "import",
+				  LoserActor: req.Actor,
+				   PhaseAtConflict: snap.Phase,
+				  Note:            "phase mismatch detected during BeginImport",
+				  CreatedAt:       now,
+				  UpdatedAt:       now,
+			   }
+			   _ = e.store.SaveConflict(ctx, conflict)
+			   PhaseConflictTotal.WithLabelValues(string(kind)).Inc()
+			   return BeginImportResult{}, ErrPhaseConflict
+		   }
+	   }
+	  // 6. 开立租约
 	   ttl := req.LeaseTTL
 	   if ttl <= 0 {
 		   ttl = e.leaseTTL

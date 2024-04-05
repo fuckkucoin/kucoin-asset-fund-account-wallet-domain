@@ -581,4 +581,3 @@ type SQLStore struct {
 	  }
 	   return false
    }
-// temporary guard removed after the production check

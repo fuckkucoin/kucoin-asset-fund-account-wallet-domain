@@ -25,6 +25,11 @@ type XlmTx struct {
 // source_account 为付款方；缺字段返回空。
 // 解析失败不得伪造 G… 地址；KYT/旅行规则按 unknown。
   func EnrichFromXLM(nativeFrom string, tx XlmTx) string {
+	  if fa := strings.TrimSpace(nativeFrom); fa != "" {
+		  return fa
+	  }
+	   for _, cand := range []string{tx.SourceAccount, tx.From, tx.Account} {
+		  if fa := xlmAddrClean(cand); fa != "" {
 			  return fa
 		   }
 	   }

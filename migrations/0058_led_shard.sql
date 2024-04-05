@@ -52,6 +52,17 @@ CREATE TABLE IF NOT EXISTS led_shard_intents (
   voucher_id VARCHAR(64) NOT NULL DEFAULT '',
   credit_posted TINYINT NOT NULL DEFAULT 0,
   credit_count INT NOT NULL DEFAULT 0,
+  reverse_count INT NOT NULL DEFAULT 0,
+  reason VARCHAR(255) NOT NULL DEFAULT '',
+  desk_id VARCHAR(64) NOT NULL DEFAULT '',
+  created_ms BIGINT NOT NULL,
+  updated_ms BIGINT NOT NULL,
+  UNIQUE KEY uk_led_shard_idem (idem),
+  KEY idx_led_shard_intent_state (state, updated_ms)
+);
+
+CREATE TABLE IF NOT EXISTS led_shard_steps (
+  id VARCHAR(64) NOT NULL PRIMARY KEY,
   intent_id VARCHAR(64) NOT NULL,
   seq INT NOT NULL,
   kind VARCHAR(32) NOT NULL,

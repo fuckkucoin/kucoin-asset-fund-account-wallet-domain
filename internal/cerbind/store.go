@@ -114,6 +114,24 @@ type aliasRow struct {
 	  }
 	  return s.Copy(), true, nil
   }
+
+   func (m *Mem) LiveSessions(_ context.Context) ([]Session, error) {
+	   if m == nil {
+		   return nil, ErrUnavailable
+	  }
+	   m.mu.Lock()
+	   defer m.mu.Unlock()
+	  out := make([]Session, 0)
+	   for _, s := range m.ses {
+		  if s.State.Live() {
+			   out = append(out, s.Copy())
+		   }
+	  }
+	   sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
+	   return out, nil
+   }
+
+  func (m *Mem) ListSessions(_ context.Context, limit int) ([]Session, error) {
 	  if m == nil {
 		  return nil, ErrUnavailable
 	   }

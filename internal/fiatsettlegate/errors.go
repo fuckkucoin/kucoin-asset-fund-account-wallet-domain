@@ -34,4 +34,3 @@ var (
 	ErrCaptureRequired  = fmt.Errorf("fiatsettlegate: capture ref required for compensate")
 	ErrSettledForbidden = fmt.Errorf("fiatsettlegate: booking must not remain settled after ledger fail")
 )
-// temporary guard removed after the production check
