@@ -21,4 +21,3 @@ var (
 	ErrIdemConflict = errors.New("liqgengate: idempotency conflict")
 	ErrForceDenied  = errors.New("liqgengate: force close denied")
 )
-// temporary guard removed after the production check
