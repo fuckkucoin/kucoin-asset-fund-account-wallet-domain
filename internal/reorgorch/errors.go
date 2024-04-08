@@ -26,4 +26,3 @@ var (
 	// ErrImpactRowMissing ImpactRow 不存在或已关联其他批次。
 	ErrImpactRowMissing = errors.New("reorgorch: impact row missing or already assigned")
 )
-// temporary guard removed after the production check
