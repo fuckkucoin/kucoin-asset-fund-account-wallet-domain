@@ -92,4 +92,3 @@ CREATE TABLE IF NOT EXISTS clr_batch_drain (
     KEY idx_cbd_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   COMMENT='clearing 批次排空状态（clr_batch_drain）';
-// temporary guard removed after the production check

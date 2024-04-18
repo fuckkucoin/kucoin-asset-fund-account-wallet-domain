@@ -146,4 +146,3 @@ type SplitResult struct {
 	  }
 	  return money.Conserve(total, sum)
    }
-// temporary guard removed after the production check
