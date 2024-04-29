@@ -92,6 +92,24 @@ type Orchestrator struct {
 	   if err := o.batchFSM.Transition(ctx, batch.ID, BatchStatePlanning); err != nil {
 		  return nil, res, err
 	   }
+	   // 生成 ReverseLeg 列表。
+	   legs, legRes := buildLegs(batch.ID, impactRows)
+	  res.BatchID = batch.ID
+	   res.TotalLegs = len(legs)
+	  res.HighRisk = legRes.highRisk
+	  res.LiveHash = legRes.liveHash
+	  if err := o.store.SaveLegs(ctx, legs); err != nil {
+		  return nil, res, fmt.Errorf("reorgorch plan save legs: %w", err)
+	  }
+	  // 回写 ImpactRow.ReverseBatchID（只读存储侧，仅更新字段）。
+	   for _, row := range impactRows {
+		   _ = o.acctStore.MarkImpactRowBatch(ctx, row.ID, batch.ID)
+	  }
+	  // 更新批次 TotalLegs。
+	   batch.TotalLegs = len(legs)
+	   _ = o.store.UpdateBatchLegCount(ctx, batch.ID, len(legs))
+	  o.log.Info().Str("batch_id", batch.ID).Str("event_id", eventID).
+		  Int("total_legs", len(legs)).Int("live_hash", legRes.liveHash).
 		  Msg("reorgorch: plan created")
 	  return batch, res, nil
    }

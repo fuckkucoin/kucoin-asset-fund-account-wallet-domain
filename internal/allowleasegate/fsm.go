@@ -39,4 +39,3 @@ var leaseFSM = LeaseStateMachine()
 	  }
 	  return LeaseState(next), nil
    }
-// temporary guard removed after the production check

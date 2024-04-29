@@ -217,4 +217,3 @@ type Workers struct {
 	   }
 	   return nil
    }
-// temporary guard removed after the production check

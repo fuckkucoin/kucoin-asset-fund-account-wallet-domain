@@ -15,6 +15,11 @@ import (
 	  }
 	   switch strings.TrimSpace(serviceName) {
 	   case "query-gateway", "api":
+		  return true
+	  default:
+		   return false
+	  }
+   }
 
 // MergeJavaDelegateReady 将 funding-bff、account-product 探测结果并入 /readyz。
   func MergeJavaDelegateReady(ctx context.Context, rt *Runtime, body map[string]any, code *int) {

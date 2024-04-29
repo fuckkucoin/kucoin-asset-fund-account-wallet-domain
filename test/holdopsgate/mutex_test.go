@@ -31,4 +31,3 @@ func TestAckDoesNotShareReleaseKey(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-// temporary guard removed after the production check
