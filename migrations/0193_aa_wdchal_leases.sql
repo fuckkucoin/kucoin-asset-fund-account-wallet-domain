@@ -37,4 +37,3 @@ CREATE TABLE IF NOT EXISTS wdvc_chal_leases (
     KEY idx_wdvc_chal_leases_user (user_id, state),
     KEY idx_wdvc_chal_leases_expires (state, expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='出金多因子挑战租约';
-// temporary guard removed after the production check

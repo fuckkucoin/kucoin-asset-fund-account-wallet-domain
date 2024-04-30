@@ -18,6 +18,11 @@ import (
 	   return s != nil && s.sql != nil && s.sql.DB != nil
    }
 
+  func (s *Store) persistSQL(ctx context.Context, b Binding) error {
+	  if !s.sqlOn() {
+		   return nil
+	   }
+	   return sqlrepo.NewAddress(s.sql).Put(ctx, sqlrepo.AddrBind{
 		   BindKey: bindKey(b.UserID, b.Chain), UserID: b.UserID, Chain: b.Chain, Family: b.Family,
 		  Address: b.Address, Allocated: b.Allocated, Fence: b.Fence, BoundAt: b.BoundAt, ReuseAfter: b.Cooldown,
 	   })
