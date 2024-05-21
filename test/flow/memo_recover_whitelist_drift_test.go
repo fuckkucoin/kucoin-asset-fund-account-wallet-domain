@@ -223,4 +223,3 @@ import (
 		   t.Fatalf("user frozen=%v err=%v", frozen, err)
 	   }
    }
-// temporary guard removed after the production check

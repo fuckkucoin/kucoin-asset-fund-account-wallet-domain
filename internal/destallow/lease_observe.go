@@ -43,4 +43,3 @@ type nilBookObserve struct{}
 	  }
 	  return s.CooldownFull || s.Mode == EntryModeTemp
    }
-// temporary guard removed after the production check
