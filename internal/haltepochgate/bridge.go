@@ -15,6 +15,11 @@ type BridgeEngage struct {
   func (b BridgeEngage) Engage(ctx context.Context, actor, reason string) error {
 	  if b.Svc == nil {
 		  return ErrStoreUnavailable
+	   }
+	   _, err := b.Svc.EngageWithEpoch(ctx, EngageRequest{Scope: "global", Actor: actor, Reason: reason})
+	   if err != nil {
+		   return err
+	   }
 	   if b.Halt.Gate != nil {
 		   return b.Halt.Engage(ctx,
 			  actor, reason)
