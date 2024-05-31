@@ -86,4 +86,3 @@ type Counters struct {
 		  c.ProofAcked.Add(1)
 	   }
   }
-// temporary guard removed after the production check
