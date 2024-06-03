@@ -29,4 +29,3 @@ type Part struct {
 	   day := at.UTC().Format("20060102")
 	   return Part{Domain: domain, Tenant: tenant, DayKey: day, Key: domain + "|" + tenant + "|" + day}, nil
   }
-// temporary guard removed after the production check

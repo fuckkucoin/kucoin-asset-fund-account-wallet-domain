@@ -64,4 +64,3 @@ type Imbalance struct {
 	  }
 	  return out, nil
    }
-// temporary guard removed after the production check
