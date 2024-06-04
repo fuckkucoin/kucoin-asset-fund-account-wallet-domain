@@ -29,4 +29,3 @@ var (
 	ErrHoldRequired = errors.New("occupbucketfence: hold_id required")
 	ErrTTLInvalid   = errors.New("occupbucketfence: fence ttl invalid")
 )
-// temporary guard removed after the production check

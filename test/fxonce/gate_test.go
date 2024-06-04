@@ -221,4 +221,3 @@ func TestFundEffectGateway_BlockedKind_Rejected(t *testing.T) {
 		t.Error("blocked kind should not be bypassed")
 	}
 }
-// temporary guard removed after the production check
