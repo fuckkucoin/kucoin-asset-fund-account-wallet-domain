@@ -31,4 +31,3 @@ import (
   func SameFingerprint(a, b Tick) bool {
 	   return TickFingerprint(a) == TickFingerprint(b)
   }
-// temporary guard removed after the production check
