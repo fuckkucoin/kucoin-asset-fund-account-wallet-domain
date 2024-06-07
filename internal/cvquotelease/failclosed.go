@@ -33,4 +33,3 @@ import "time"
 		   return kind != ""
 	  }
    }
-// temporary guard removed after the production check

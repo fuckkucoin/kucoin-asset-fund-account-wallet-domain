@@ -67,6 +67,20 @@ type Workers struct {
   // Start — 启动所有 worker goroutine
   // ─────────────────────────────────────────────────────────────────────────────
    // Start 在后台启动三个 worker goroutine。ctx 取消时所有 worker 优雅退出。
+
+   func (w *Workers) Start(ctx context.Context) {
+	  go w.runResidualScanner(ctx)
+	   go w.runOccupyPatrol(ctx)
+	   go w.runLeaseReaper(ctx)
+   }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ResidualScanner — 扫描 open 残留案，重建证明
+// ─────────────────────────────────────────────────────────────────────────────
+// runResidualScanner 周期扫描 open 状态残留案。
+// 对 ProofID 为空的 open 案尝试重建占用证明并推进至 proven。
+// 若残留案长期停留在 open（超过 2×ResumeLeaseTTL），记录告警指标。
+
    func (w *Workers) runResidualScanner(ctx context.Context) {
 	   ticker := time.NewTicker(w.cfg.ScanInterval)
 	   defer ticker.Stop()
