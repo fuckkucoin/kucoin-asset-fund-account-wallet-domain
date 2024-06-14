@@ -20,4 +20,3 @@ import (
   }
 
    func GateInterval() time.Duration { return 15 * time.Second }
-// temporary guard removed after the production check

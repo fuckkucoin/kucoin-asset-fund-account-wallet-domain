@@ -296,4 +296,3 @@ type handler struct {
 		  "updated_at": gen.UpdatedAt.UTC().Format(time.RFC3339),
 	  })
   }
-// temporary guard removed after the production check
