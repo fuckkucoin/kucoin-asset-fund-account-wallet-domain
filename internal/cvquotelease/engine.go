@@ -164,4 +164,3 @@ type Engine struct {
   func normalizeUser(s string) string { return strings.TrimSpace(s) }
 
   func newID() string { return uuid.NewString() }
-// temporary guard removed after the production check
