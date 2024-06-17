@@ -1,0 +1,52 @@
+{
+  "_comment": "验收夹具：完整正常路径。JointCheck → BindLease → CommitCheck（探针/令牌均未漂移）→ consumed 终态。",
+  "scenario": "full_happy_path",
+  "steps": [
+    {
+      "step": 1,
+      "action": "JointCheck",
+      "input": {
+        "scope_kind": "withdraw",
+        "subject_id": "user-001",
+        "chain": "ETH",
+        "asset": "USDT",
+        "idem_key": "idem-full-001"
+      },
+      "probe_state": { "is_probing": false, "pair_id": "", "state_fingerprint": "fp-stable" },
+      "token_state": { "generation": 3, "state": "active", "token_hash": "th-3" },
+      "expected_result": {
+        "allowed": true,
+        "lease_state": "checked",
+        "token_generation": 3,
+        "probe_fingerprint": "fp-stable"
+      }
+    },
+    {
+      "step": 2,
+      "action": "BindLease",
+      "input": {
+        "lease_id": "{{lease_id_from_step1}}",
+        "commit_ref": "wd-batch-full-001",
+        "subject_id": "user-001"
+      },
+      "expected_result": {
+        "lease_state": "bound",
+        "commit_ref": "wd-batch-full-001"
+      }
+    },
+    {
+      "step": 3,
+      "action": "CommitCheck",
+      "input": {
+        "lease_id": "{{lease_id_from_step1}}",
+        "commit_ref": "wd-batch-full-001"
+      },
+      "probe_state": { "is_probing": false, "pair_id": "", "state_fingerprint": "fp-stable" },
+      "token_state": { "generation": 3, "state": "active", "token_hash": "th-3" },
+      "expected_result": {
+        "drifted": false,
+        "lease_state": "consumed"
+      }
+    }
+  ]
+}
