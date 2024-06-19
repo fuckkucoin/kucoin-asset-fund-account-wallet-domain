@@ -11,6 +11,11 @@
 // 作者：Cason
 // 日期：2021.10.21
 
+package main
+
+import (
+	"context"
+	"account-assets.kucoin.net/funding/internal/app"
 	"account-assets.kucoin.net/funding/internal/config"
 	"account-assets.kucoin.net/funding/internal/restoregate"
 	"account-assets.kucoin.net/funding/internal/svcboot"

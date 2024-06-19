@@ -29,6 +29,12 @@ type Policy struct {
 		  RequireUnchangedGen:       true,
 		   RejectRestoreNotFull: true,
 		  AllowBreakglassIssue: true,
+	  }
+   }
+
+// ClampTTL 将请求 TTL 收口到策略区间。
+
+   func (p Policy) ClampTTL(req int64) int64 {
 	  def := p.DefaultTTL
 	  if def <= 0 {
 		   def = DefaultTTLSeconds
