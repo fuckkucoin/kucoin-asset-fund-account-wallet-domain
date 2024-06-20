@@ -362,4 +362,3 @@ type MemStore struct {
 	   }
 	   return len(credits) > 0, nil
   }
-// temporary guard removed after the production check
