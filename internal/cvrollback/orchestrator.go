@@ -259,4 +259,3 @@ type PlanReq struct {
 	  return o.store.ListPendingPlans(ctx,
 		   limit)
   }
-// temporary guard removed after the production check

@@ -240,4 +240,3 @@ type Config struct {
    func PairKey(userID, symbol string) string {
 	  return strings.TrimSpace(userID) + "|" + strings.ToUpper(strings.TrimSpace(symbol))
   }
-// temporary guard removed after the production check

@@ -24,4 +24,3 @@ func (a *API) currencies(g *gin.RouterGroup) {
 	   }
 	   ok(c, gin.H{"currency": cur, "networks": nets})
 }
-// temporary guard removed after the production check

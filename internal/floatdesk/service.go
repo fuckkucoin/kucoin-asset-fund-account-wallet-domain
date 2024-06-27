@@ -149,4 +149,3 @@ type Service struct {
 	   }
 	   return kept, nil
   }
-// temporary guard removed after the production check

@@ -11,6 +11,11 @@
   },
   "concurrent_executions": [
     {
+      "worker": "worker-a",
+      "gen": 1,
+      "actor": "ops-alice",
+      "fund_action_id": "fund-001"
+    },
     {
       "worker": "worker-b",
       "gen": 1,

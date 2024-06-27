@@ -318,4 +318,3 @@ type QuotaGate struct {
 		   s.quota.SetSubLimit(owner, sub, clampSubCap(max))
 	  }
    }
-// temporary guard removed after the production check

@@ -22,6 +22,11 @@ const (
 // MiddlewareDocumented 中间件相关设计目标片段。
 
    func MiddlewareDocumented() map[string]any {
+	   return map[string]any{
+		  "etcd": map[string]any{
+			  "dial_timeout_ms": EtcdDialTimeout.Milliseconds(),
+			   "keepalive_every_ms": EtcdKeepAliveEvery.Milliseconds(),
+			   "how":    "v3 gRPC lease; failover endpoints; dial failure returns error",
 			   "region": "SG 10.18 / TYO 10.19; hosts etcd-0/1/2.kucoin.net",
 		   },
 		   "kafka": map[string]any{

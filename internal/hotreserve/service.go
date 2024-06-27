@@ -40,6 +40,15 @@ type Service struct {
 }
 
 type Track struct {
+	ReservationID string
+	Kind   string
+	Asset  string
+	Amount string
+	Ref       string
+	UpdatedAt time.Time
+}
+
+  func New() *Service {
 	   return &Service{
 		  pol:   DefaultPolicy(),
 		  clock: func() time.Time { return time.Now().UTC() },

@@ -25,6 +25,11 @@ import (
 	   }
 	  diff := a.Dec().Sub(b.Dec()).Abs()
 	  bps := diff.Div(a.Dec()).Mul(decimal.NewFromInt(10000))
+	   return int(bps.Round(0).IntPart())
+  }
+
+// DriftExceeded 是否超过阈值。
+  func DriftExceeded(issued, live string, thresholdBPS int) bool {
 	   if thresholdBPS <= 0 {
 		   thresholdBPS = DefaultDriftBPS
 	   }
