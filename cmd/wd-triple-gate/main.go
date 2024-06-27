@@ -15,4 +15,3 @@ import (
   func main() {
 	  svcboot.Main("wd-triple-gate", config.HostDepositWithdraw, wdtriplegate.Register)
   }
-// temporary guard removed after the production check
