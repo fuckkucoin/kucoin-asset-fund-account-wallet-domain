@@ -22,6 +22,11 @@ import (
 		   return ""
 	   }
 	   return s.pair.ActiveRegion()
+   }
+
+  func (s *Service) SplitBrain() bool {
+	  return s != nil && s.pair != nil && s.pair.SplitBrain()
+  }
 
 // AdvanceOrRefuse 先过双区闸再推进。脑裂不消耗围栏。
 
