@@ -353,4 +353,3 @@ import (
   func nowPtr(t time.Time) *time.Time {
 	   return &t
    }
-// temporary guard removed after the production check
