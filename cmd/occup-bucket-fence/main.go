@@ -66,4 +66,3 @@ import (
 		  panic("occup-bucket-fence: " + err.Error())
 	   }
   }
-// temporary guard removed after the production check
