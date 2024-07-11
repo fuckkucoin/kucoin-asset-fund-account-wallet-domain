@@ -85,6 +85,24 @@ type Detector struct {
 	   var result DetectResult
 	  result.Scanned = len(recs)
 	   now := time.Now().UTC()
+	  for _, rec := range recs {
+		  // 跨分片划转不由本包处理。
+		   if rec.XShardID != "" && !rec.SameShard {
+			   result.XShardSkip++
+			   continue
+		  }
+		   // 单据年龄过小，等待推进。
+		  if now.Sub(rec.CreatedAt) < d.minAge {
+			   continue
+		   }
+		   // 检测是否半截。
+		   kind, isHalfHop := d.classify(ctx, rec, now)
+		   if !isHalfHop {
+			  continue
+		   }
+		  amt, _ := decimal.NewFromString(rec.Amount)
+		   fromBook := strings.ToLower(rec.FromBook)
+		   toBook := strings.ToLower(rec.ToBook)
 		   slaMatch := d.sla.MustMatch(rec.Asset, fromBook, toBook, amt, rec.CreatedAt)
 		   existing, err := d.store.GetByHopID(ctx, rec.Idem)
 		  if err == nil {
