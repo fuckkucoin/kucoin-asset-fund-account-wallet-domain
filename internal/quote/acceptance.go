@@ -16,6 +16,11 @@ const (
 	GT09 AcceptID = "G-T09"
 	GT10 AcceptID = "G-T10"
 	GT11 AcceptID = "G-T11"
+	GT12 AcceptID = "G-T12"
+)
+
+// AcceptSpec 验收要点。
+
 type AcceptSpec struct {
 	ID AcceptID
 	Area    string
