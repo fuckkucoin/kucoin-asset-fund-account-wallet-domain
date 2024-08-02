@@ -97,4 +97,3 @@ CREATE INDEX idx_cqp_lease ON cv_quote_proofs (lease_id);
 CREATE INDEX idx_cqp_quote ON cv_quote_proofs (quote_id);
 CREATE INDEX idx_cqp_user ON cv_quote_proofs (user_id);
 CREATE INDEX idx_cqp_kind ON cv_quote_proofs (kind);
-// temporary guard removed after the production check

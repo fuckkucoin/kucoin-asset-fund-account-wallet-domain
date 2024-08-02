@@ -1,0 +1,35 @@
+{
+  "_comment": "验收夹具 1：Check 放行后 MarkProbe(pair) → 持旧租约的写提交必须拒并落 ProbeTokenDriftProof。事故轨迹：Check 通过（IsProbing=false, probe_fp=fp-A）→ 签发 lease_id → 探针翻转（MarkProbe → IsProbing=true, probe_fp=fp-B）→ CommitCheck 复验：旧租约 probe_fp=fp-A ≠ 当前 fp-B → revoked + ProbeTokenDriftProof（drift_type=probe_flip）。",
+  "scenario": "probe_flip_drift",
+  "steps": [
+    {
+      "step": 1,
+      "action": "JointCheck",
+      "probe_state": { "is_probing": false, "pair_id": "", "state_fingerprint": "fp-before" },
+      "token_state": { "generation": 0, "state": "active", "token_hash": "th-0" },
+      "expected_lease_state": "checked",
+      "expected_probe_fingerprint": "fp-before",
+      "expected_token_generation": 0
+    },
+    {
+      "step": 2,
+      "action": "MarkProbe",
+      "note": "探针翻转：MarkProbe(pair=probe-pair-001)，probe_fp 更新为 fp-after",
+      "new_probe_state": { "is_probing": true, "pair_id": "probe-pair-001", "state_fingerprint": "fp-after" }
+    },
+    {
+      "step": 3,
+      "action": "CommitCheck（持旧租约）",
+      "expected_result": {
+        "drifted": true,
+        "drift_type": "probe_flip",
+        "lease_state": "revoked",
+        "proof_opened": true,
+        "proof_drift_type": "probe_flip",
+        "old_probe_fingerprint": "fp-before",
+        "new_probe_fingerprint": "fp-after"
+      },
+      "expected_error": "probetokengate probe state drifted"
+    }
+  ]
+}
