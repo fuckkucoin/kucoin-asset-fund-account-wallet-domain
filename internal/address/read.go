@@ -93,6 +93,24 @@ type AllowInspect struct {
 		  } else {
 			  item.FormatOK = true
 		   }
+	  }
+	  return item
+  }
+
+  func (s *Service) decorate(ctx context.Context, e ledger.AddressBookEntry) BookItem {
+	   meta := BookMeta{}
+	   if s != nil {
+		  meta = s.bookMeta(ctx, e.UserID, e.Chain, e.Address)
+	  }
+	  item := DecorateBookEntryMeta(e, meta)
+	  if s != nil {
+		   item.LastUsedAt = s.lastUsedAt(ctx, e.UserID, e.Chain, e.Address)
+	  }
+	  return item
+   }
+
+// 按用户+链+地址取一条簿项。地址全等（大小写敏感）；EVM 族互认。空地址不得命中。
+   func (s *Service) GetBook(ctx context.Context, userID, chain, addr string) (ledger.AddressBookEntry, bool, error) {
 	  list, err := s.ListBook(ctx, userID)
 	  if err != nil {
 		  return ledger.AddressBookEntry{}, false, err

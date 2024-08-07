@@ -145,4 +145,3 @@ type failRec struct {
 	   }
 	  return g.kv.Put(ctx, persist.Row{Kind: kindFail, Key: userID, Body: body}, exp)
    }
-// temporary guard removed after the production check

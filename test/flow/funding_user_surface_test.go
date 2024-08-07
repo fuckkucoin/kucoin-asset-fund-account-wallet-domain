@@ -256,4 +256,3 @@ import (
 		  t.Fatal("stranger must not read withdraw")
 	   }
   }
-// temporary guard removed after the production check

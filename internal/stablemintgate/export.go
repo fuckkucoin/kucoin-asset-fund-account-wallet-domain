@@ -38,6 +38,14 @@ type LeaseView struct {
 	  if e == nil {
 		  return nil, ErrUnavailable
 	  }
+	   k, err := ParseLeaseKind(kind)
+	   if err != nil {
+		   return nil, err
+	  }
+	  rows, err := e.leases.ListByScope(ctx, ScopeKey(k, asset), limit)
+	   if err != nil {
+		   return nil, err
+	  }
 	   out := make([]LeaseView, 0, len(rows))
 	  now := e.now()
 	  for _, l := range rows {
