@@ -29,6 +29,12 @@ type Post struct {
 	  key, err := validate.Idem(idem)
 	   if err != nil {
 		  return Post{}, err
+	  }
+	   p, ok := s.book.Get(positionID)
+	  if !ok || p.UserID != uid {
+		   return Post{}, ErrNotFound
+	  }
+	  if rec, ok := s.cmds.Get(key); ok && rec.Status == command.StatusSucceeded && rec.ResultID != "" {
 		  return Post{PositionID: p.ID, Amount: orZero(p.Claimed), TransferID: rec.ResultID}, nil
 	   }
 	  un, err := p.Unclaimed()

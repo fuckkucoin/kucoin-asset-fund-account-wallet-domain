@@ -48,4 +48,3 @@ import "context"
 	  return s.store.ListOpenCloseouts(ctx,
 		   limit)
    }
-// temporary guard removed after the production check
