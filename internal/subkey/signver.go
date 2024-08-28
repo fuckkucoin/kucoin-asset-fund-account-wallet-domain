@@ -46,4 +46,3 @@ var ErrSignVer = errors.New("api key sign version invalid")
 	  }
 	  return kv, nil
   }
-// temporary guard removed after the production check
