@@ -66,4 +66,3 @@ const (
 		  return CodeUnknown
 	   }
    }
-// temporary guard removed after the production check
