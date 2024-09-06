@@ -24,4 +24,3 @@ var (
 	ErrMutex = errors.New("amlhold: release and close are mutually exclusive operations")
 	ErrProofStore = errors.New("amlhold: hold proof store unavailable")
 )
-// temporary guard removed after the production check

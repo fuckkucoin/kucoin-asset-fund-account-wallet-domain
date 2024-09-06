@@ -153,4 +153,3 @@ type TransitError struct {
 	  }
 	   return HoldResolved
   }
-// temporary guard removed after the production check

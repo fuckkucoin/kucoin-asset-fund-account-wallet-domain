@@ -13,6 +13,11 @@
 | POST | `/api/ua/v1/account/transfer`、`/api/ua/v2/account/transfer` | 同上 |
 | GET | `/api/v1/accounts/transferable` | `getTransferQuotas` |
 | GET | `/api/v3/accounts/transfer-quotas?type=` | 同上 |
+| GET | `/api/ua/v2/account/transfer-quota` | `getTransferQuotas` |
+| GET | `/api/ua/v2/account/transfer-quotas`、`/api/ua/v1/account/transfer-quotas` | 同上 |
+| GET | `/api/v3/accounts/transfer-list` | `listTransfers` |
+| GET | `/api/v1/accounts/transfer-list`、`/api/v1/accounts/transfers` | 同上 |
+| POST | `/api/v2/accounts/sub-transfer` | `subTransfer` |
 | POST | `/api/v1/sub/transfer-permission` | `setSubTransferPerm` |
 | GET | `/api/v1/accounts` | `getAccountList` |
 

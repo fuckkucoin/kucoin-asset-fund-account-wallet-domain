@@ -14,4 +14,3 @@ import (
   func main() {
 	   svcboot.Main("stmt-export-gate", config.HostQueryGateway, stmtexpiry.RegisterHTTP)
   }
-// temporary guard removed after the production check

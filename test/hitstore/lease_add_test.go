@@ -15,6 +15,11 @@ func (rejectGuard) AssertAdd(ctx context.Context, leaseID string, kind usage.Kin
 
 type okGuard struct{}
 
+func (okGuard) AssertAdd(ctx context.Context, leaseID string, kind usage.Kind, user, asset, dest, amount, idem string) error {
+	return nil
+}
+
+func TestAddWithLeaseFailClosed(t *testing.T) {
 	s := hitstore.NewMem()
 	if err := s.AddWithLease(context.Background(), nil, "", usage.KindWithdraw, "H1", "USDT", "d", "1", ""); err != hitstore.ErrLeaseRequired {
 		t.Fatal(err)

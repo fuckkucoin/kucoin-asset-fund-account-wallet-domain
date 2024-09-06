@@ -105,4 +105,3 @@ import (
 	   }
 	  return out
    }
-// temporary guard removed after the production check

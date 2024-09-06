@@ -28,4 +28,3 @@ type ShardClassifier interface {
 	ClassifyHop(ctx context.Context,
 		user, from, to, asset string) (ShardClass, error)
 }
-// temporary guard removed after the production check

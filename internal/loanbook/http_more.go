@@ -14,6 +14,11 @@ import (
 		  }
 		  got, err := svc.DueNext(c.Query("id"))
 		   if err != nil {
+			  mw.WriteProblem(c, err)
+			  return
+		  }
+		  c.JSON(200, got)
+	   })
 	  v1.POST("/loan/topup/fill", func(c *gin.Context) {
 		  if err := perm.FromRequest(c.Request, "").Check(perm.ActOpsAdmin); err != nil {
 			   c.JSON(403, gin.H{"error": err.Error()})

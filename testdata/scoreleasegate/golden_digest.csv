@@ -6,4 +6,3 @@ window_digest,hmac velocity and dest window
 asset_chain_dest_fp,hmac asset|chain|dest
 proof_digest,hmac expected vs observed gens
 isolation_mark,score-lease;not-riskgate-screen
-// temporary guard removed after the production check

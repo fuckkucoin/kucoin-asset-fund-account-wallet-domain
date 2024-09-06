@@ -14,6 +14,11 @@ type Service struct {
 }
 
 // invAdapter 把 regioinv.Service 的 TransferInv 接口适配到 georebal.InvTransfer。
+
+type invAdapter struct{ svc *regioinv.Service }
+
+  func (a *invAdapter) TransferInv(ctx context.Context, t regioinv.Transfer, now time.Time) (regioinv.RegionInv, regioinv.RegionInv, error) {
+	   // regioinv.Service 内部调用 Store.Transfer，守恒验证在 NextPair。
 	   return a.svc.TransferRegions(ctx, t, now)
    }
 
