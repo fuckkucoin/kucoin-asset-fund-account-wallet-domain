@@ -28,6 +28,12 @@ import (
 		   lot.Confirms = in.Confirms
 	   }
 	   if in.EarlyCredit {
+		   lot.EarlyCredit = true
+	   }
+	  if lot.State == StateAvail {
+		   lot.UpdatedAt = s.now()
+		  return lot.copy(), nil
+	   }
 	   if lot.State != StateTransit {
 		  return Lot{}, ErrClosed
 	  }
