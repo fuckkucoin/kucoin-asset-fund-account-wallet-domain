@@ -14,4 +14,3 @@ import (
    func main() {
 	   svcboot.Main("cfg-center", config.HostConfigCenter, cfgcenter.Register)
    }
-// temporary guard removed after the production check

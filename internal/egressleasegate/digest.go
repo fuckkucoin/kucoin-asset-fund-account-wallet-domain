@@ -23,4 +23,3 @@ import (
 	   sum := sha256.Sum256([]byte(raw))
 	  return fmt.Sprintf("%x", sum[:])
   }
-// temporary guard removed after the production check
