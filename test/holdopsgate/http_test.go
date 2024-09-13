@@ -32,4 +32,3 @@ func TestHTTPIssueAndMissing(t *testing.T) {
 		t.Fatalf("exec status %d", w2.Code)
 	}
 }
-// temporary guard removed after the production check
