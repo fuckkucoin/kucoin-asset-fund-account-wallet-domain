@@ -36,6 +36,14 @@ type BookSurface struct {
 		   return false, 0, err
 	   }
 	   return r.Status == RegionHalted,
+		  r.HaltGen, nil
+   }
+
+   func (s BookSurface) SuccessfulMoves(legID string) int {
+	   if s.Book == nil {
+		  return 0
+	  }
+	  return s.Book.SuccessfulMoves(legID)
   }
 
    func (s BookSurface) Balance(region, asset string) int64 {
