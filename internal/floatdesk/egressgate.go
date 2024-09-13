@@ -195,4 +195,3 @@ type EgressGate struct {
 	  }
 	  return buildEvent(ch, as, grade, now), nil
    }
-// temporary guard removed after the production check
