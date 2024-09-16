@@ -36,4 +36,3 @@ type GateMetrics struct {
 		  WindowBump: m.windowBump.Load(),
 	   }
    }
-// temporary guard removed after the production check

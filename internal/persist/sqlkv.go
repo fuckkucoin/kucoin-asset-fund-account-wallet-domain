@@ -50,6 +50,17 @@ CREATE TABLE IF NOT EXISTS aa_kv (
 	   var r Row
 	  err := k.conn(ctx).QueryRowContext(ctx,
 		   `SELECT row_id, kind, row_key, body, fence_epoch, fence_token FROM aa_kv WHERE kind=? AND row_key=?`,
+		   kind, key,
+	   ).Scan(&r.ID, &r.Kind, &r.Key, &r.Body, &r.Fence.Epoch, &r.Fence.Token)
+	   if errors.Is(err, sql.ErrNoRows) {
+		  return Row{}, ErrNotFound
+	   }
+	   return r, err
+  }
+
+// Put 用围栏 CAS。首次插入 expected.Epoch==0；冲突或 token 不对返回 ErrStaleFence。
+
+  func (k *SQLKV) Put(ctx context.Context, row Row, expected Fence) error {
 	  if row.Kind == "" || row.Key == "" {
 		   return ErrConflict
 	  }

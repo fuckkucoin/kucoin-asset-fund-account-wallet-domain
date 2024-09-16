@@ -38,6 +38,14 @@ import (
 	   }
   }
 
+// TestRequireWithdrawWithBind_ForbiddenUser RequireWithdrawWithBind 在禁提用户上应返回 ErrForbid。
+  func TestRequireWithdrawWithBind_ForbiddenUser(t *testing.T) {
+	   b := newTestBook()
+	   ctx := context.Background()
+	   userID := "fs_user_forbidden"
+	  // 切禁提（kv 层标志）。
+	  if err := b.SetForbidden(ctx, userID, true); err != nil {
+		  t.Fatalf("SetForbidden: %v", err)
 	  }
 	  _, err := b.RequireWithdrawWithBind(ctx, userID, "wd_ref_001")
 	  if err == nil {

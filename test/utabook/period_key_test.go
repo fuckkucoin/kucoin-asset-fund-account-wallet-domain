@@ -49,4 +49,3 @@ func TestParamsFromCatalogNoHardcode(t *testing.T) {
 		t.Fatal("rate")
 	}
 }
-// temporary guard removed after the production check

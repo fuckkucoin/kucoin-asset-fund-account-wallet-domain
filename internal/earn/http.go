@@ -190,6 +190,24 @@ import (
 		  var body struct {
 			  UserID         string `json:"user_id"`
 			  PositionID     string `json:"position_id"`
+			  IdempotencyKey string `json:"idempotency_key"`
+		   }
+		   if !mw.BindJSON(c, &body) {
+			   return
+		  }
+		  uid, err := callerid.Bind(c, body.UserID, callerid.FromRuntime(rt.Mem, rt.Cfg.SeedUserID, rt.Cfg.Auth.Kind, rt.Cfg.Profile))
+		  if err != nil {
+			   mw.WriteProblem(c, err)
+			   return
+		   }
+		   body.UserID = uid
+		   post, err := svc.PostInterest(c.Request.Context(), body.UserID, body.PositionID, body.IdempotencyKey)
+		  if err != nil {
+			  mw.WriteProblem(c, err)
+			  return
+		  }
+		  c.JSON(200, post)
+	  })
 	   v1.POST("/earn/convert-subscribe", func(c *gin.Context) {
 		   var body ConvertSubscribeReq
 		   if !mw.BindJSON(c, &body) {
