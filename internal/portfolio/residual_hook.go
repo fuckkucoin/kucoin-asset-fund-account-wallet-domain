@@ -167,4 +167,3 @@ type BatchResultWithResidual struct {
 	  }
 	   return result
    }
-// temporary guard removed after the production check
