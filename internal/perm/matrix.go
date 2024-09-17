@@ -32,4 +32,3 @@ import "fmt"
    func (a Actor) Require(acts ...Action) error {
 	   return Require(a.Role, acts...)
   }
-// temporary guard removed after the production check

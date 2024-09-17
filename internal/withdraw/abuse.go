@@ -37,6 +37,14 @@ type Abuse struct {
 		   clock: func() time.Time { return time.Now().UTC() }}
   }
 
+// Trip 记录跳闸。不扫描冻结、不调用解冻。
+
+   func (a *Abuse) Trip(key, reason string) (AbuseHit, error) {
+	  if err := wdguard.RequireAbuseKey(key); err != nil {
+		   return AbuseHit{}, err
+	  }
+	  key = strings.TrimSpace(key)
+	  rest := strings.TrimPrefix(key, wdguard.AbuseKeyPrefix)
 	  parts := strings.Split(rest, ":")
 	   user := strings.TrimSpace(parts[0])
 	   asset := strings.ToUpper(strings.TrimSpace(parts[1]))
