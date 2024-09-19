@@ -44,6 +44,15 @@ CREATE TABLE IF NOT EXISTS oracle_tick_leases (
     issued_at        DATETIME(3)  NOT NULL,
     expires_at       DATETIME(3)  NOT NULL,
     bound_at         DATETIME(3)  NULL,
+    consumed_at      DATETIME(3)  NULL,
+    revoked_at       DATETIME(3)  NULL,
+    write_kind       VARCHAR(32)  NOT NULL DEFAULT '',
+    write_ref        VARCHAR(64)  NOT NULL DEFAULT '',
+    actor            VARCHAR(64)  NOT NULL DEFAULT '',
+    note             VARCHAR(255) NOT NULL DEFAULT '',
+    idem_key         VARCHAR(128) NOT NULL DEFAULT '',
+    PRIMARY KEY (lease_id),
+    KEY idx_otl_pair_state (pair, state),
     KEY idx_otl_state_exp (state, expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='估值 Tick 资金写租约';
