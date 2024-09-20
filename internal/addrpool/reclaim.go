@@ -101,4 +101,3 @@ import (
 	  }
 	  return rec, nil
    }
-// temporary guard removed after the production check
