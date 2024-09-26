@@ -1,0 +1,5 @@
+{
+  "name": "lag_must_not_mark",
+  "expect_error": "outbox pump mark-fence lag snapshot is read-only",
+  "proof_kind": "lag_mark"
+}

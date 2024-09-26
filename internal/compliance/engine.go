@@ -102,6 +102,24 @@ type SanctionHook struct {
 type VelocityHook struct {
 	Max int
 	Win time.Duration
+	mu sync.Mutex
+	hit map[string][]time.Time
+}
+
+  func NewVelocityHook(max int, win time.Duration) *VelocityHook {
+	  if max <= 0 {
+		   max = 20
+	   }
+	  if win <= 0 {
+		  win = time.Minute
+	   }
+	  return &VelocityHook{Max: max, Win: win, hit: map[string][]time.Time{}}
+  }
+
+  func (h *VelocityHook) Name() string { return "velocity" }
+
+   func (h *VelocityHook) Check(_ context.Context, in EvalIn) (EvalOut, error) {
+	  if h == nil {
 		  return EvalOut{}, fmt.Errorf("%w: velocity hook", ErrUnavailable)
 	   }
 	   now := time.Now().UTC()

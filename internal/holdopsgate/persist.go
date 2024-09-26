@@ -16,4 +16,3 @@ const (
   func kvTokenKey(id string) string { return "hold-ops-token/" + id }
   func kvGapKey(id string) string   { return "hold-ops-gap/" + id }
    func kvGenKey() string            { return "hold-ops-gen/singleton" }
-// temporary guard removed after the production check

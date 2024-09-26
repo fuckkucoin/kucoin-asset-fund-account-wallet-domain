@@ -62,6 +62,19 @@ type ConfirmReq struct {
 
 // ConfirmResult 兑换确认结果。
 
+type ConfirmResult struct {
+	UserID string `json:"user_id"`
+	From   string `json:"from"`
+	To     string `json:"to"`
+	FromAmt decimal.Decimal `json:"from_amt"`
+	ToAmt   decimal.Decimal `json:"to_amt"`
+	Rate decimal.Decimal `json:"rate"`
+	Source  string `json:"source"`
+	Applied bool   `json:"applied"`
+}
+
+// Gate 确认闸：只接受簿内新鲜报价。
+type Gate struct {
 	book  *quote.Book
 	clock quote.Clock
 	ld    SwapLedger

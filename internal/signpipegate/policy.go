@@ -16,6 +16,11 @@ type Policy struct {
 	  return Policy{
 		  LeaseTTL:       DefaultLeaseTTL,
 		  MaxGenerations: MaxRetryGenerations,
+		  BlockOnFault:   true,
+		   BlockOnClose:  true,
+		   RequireFence:  false,
+		   IsolationMark: IsolationMark,
+	  }
    }
 
   func (p Policy) EffectiveTTL(reqTTL time.Duration) time.Duration {
