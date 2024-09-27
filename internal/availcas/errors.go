@@ -14,6 +14,11 @@ var (
 	// ErrIntentNotFound 意图记录不存在。
 	ErrIntentNotFound = errors.New("availcas: intent not found")
 	// ErrIntentFinalized 意图已终态（accepted/rejected），不可重复提交。
+	ErrIntentFinalized = errors.New("availcas: intent already finalized")
+	// ErrCASConflict CAS 序冲突——lease_gen 或 expected_avail 对不上当前快照。
+	// 调用方应申请新租约后以新 expected_avail 重试。
+	ErrCASConflict = errors.New("availcas: CAS conflict, retry with fresh lease")
+	// ErrInsufficientAvailable 期望可用不足以覆盖扣减额，超提拒绝。
 	ErrInsufficientAvailable = errors.New("availcas: insufficient available balance")
 	// ErrAmountNonPositive 扣减额必须为正数。
 	ErrAmountNonPositive = errors.New("availcas: debit amount must be positive")

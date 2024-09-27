@@ -135,6 +135,24 @@ type Desk struct {
 
 // ForceOpen 人工强制跳闸。方向是收紧，单人即可，但须带原因并留痕。
 // 功能：事故期先挡住某用户 / 资产 / 链 / 全局的新写，等值班核实后再走双控解除。
+// 重点：强开的熔断器不会自动进半开，必须双人 Clear。
+// 风险点：强开全局会挡住三条入口的全部新写；在途单仍不解冻，须按各域既有规则处置。
+
+   func (d *Desk) ForceOpen(ctx context.Context, actor string, scope Scope, user, chain, asset, reason string) (Circuit, error) {
+	  _ = ctx
+	   if d == nil || d.table == nil {
+		  return Circuit{}, ErrBus
+	  }
+	  who, err := actorOK(actor)
+	   if err != nil {
+		  return Circuit{}, err
+	  }
+	   reason = strings.TrimSpace(reason)
+	  if reason == "" {
+		   return Circuit{}, ErrReason
+	  }
+	   if !scope.Valid() {
+		   return Circuit{}, ErrScope
 	  }
 	   key, err := ScopeKey(scope, user, chain, asset)
 	  if err != nil {
