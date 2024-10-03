@@ -121,4 +121,3 @@ import (
 	   p.override = append([]ReserveLeg(nil), legs...)
 	   return nil
    }
-// temporary guard removed after the production check
