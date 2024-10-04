@@ -97,6 +97,24 @@ func (a *API) listFundOrders(c *gin.Context) {
 		if err != nil {
 			fail(c, 400, err.Error())
 			return
+		}
+	    	for _, tr := range list {
+			if tr == nil || !inHistoryWindow(c, tr.CreatedAt) {
+	    			continue
+	    		}
+			switch tr.Direction.Settlement() {
+			case "book", "internal", "earn", "sub", "convert":
+			default:
+	   			continue
+	   		}
+	   		if cur != "" && strings.ToUpper(tr.Asset) != cur {
+	   			continue
+	   		}
+			st := railStatus(tr)
+	    		if status != "" && !strings.EqualFold(status, st) {
+				continue
+			}
+			item := transferListItemJSON(tr, st)
 	    		merged = append(merged, fundOrderRow{
 	   			Kind: "transfer", OrderID: tr.ID, Currency: tr.Asset,
 				Amount: tr.Amount.String(), Status: stringField(item, "status"),

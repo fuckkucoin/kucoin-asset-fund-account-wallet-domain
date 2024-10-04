@@ -121,4 +121,3 @@ type ServiceWithHold struct {
 	   }
 	  return s.bookWithHold.CloseFourEyeWithHoldCheck(id, actor, decision, epoch, token, note)
   }
-// temporary guard removed after the production check
