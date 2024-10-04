@@ -166,4 +166,3 @@ type FourEyesClearReq struct {
 	Actor2 string `json:"actor_2"`
 	Note   string `json:"note,omitempty"`
 }
-// temporary guard removed after the production check

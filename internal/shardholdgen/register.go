@@ -20,6 +20,11 @@ type Bundle struct {
 	Release  *wdshard.ReleaseWorker
 	AlignSrc *wdshard.AlignWorker
 }
+
+// Options 装配选项。
+type Options struct {
+	Store Store
+	Book  *wdshard.Book
 	SQL *persist.SQLDB
 }
 
