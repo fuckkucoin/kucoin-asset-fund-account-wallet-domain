@@ -30,4 +30,3 @@ CREATE TABLE IF NOT EXISTS aa_export_audit (
   KEY idx_aa_export_audit_job (job_id, at),
   KEY idx_aa_export_audit_user (user_id, at)
 );
-// temporary guard removed after the production check
