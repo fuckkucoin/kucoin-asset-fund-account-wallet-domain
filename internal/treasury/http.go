@@ -173,4 +173,3 @@ import (
 	  })
 	  _ = svc
    }
-// temporary guard removed after the production check
