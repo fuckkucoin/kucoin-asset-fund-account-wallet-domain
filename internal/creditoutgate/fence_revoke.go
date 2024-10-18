@@ -39,6 +39,14 @@ import (
 		   if lease.BoardKey != boardKey {
 			   continue
 		   }
+		   if lease.State != LeaseEnqueued && lease.State != LeaseDelivering {
+			  continue
+		  }
+		   revokeReason := fmt.Sprintf("fence_flip world_gen=%d lane_flip=%v close=%v operator=%s",
+			   bg.WorldGen, req.LaneFlip, req.Close, operator)
+		   revokedAt := now
+		   lease.State = LeaseRevoked
+		  lease.RevokedAt = &revokedAt
 		  lease.RevokeReason = revokeReason
 		  kind := CaseGenDrift
 		  if req.Close {

@@ -86,6 +86,24 @@ type Queue struct {
 		  return Item{}, err
 	   }
 	  it.Fence = f
+	   q.mu.Lock()
+	   q.rows[it.ID] = &it
+	   q.mu.Unlock()
+	   if err := q.persistItem(it); err != nil {
+		  q.mu.Lock()
+		  delete(q.rows, it.ID)
+		   q.mu.Unlock()
+		   q.fence.Restore(snap)
+		  return Item{}, err
+	   }
+	  return it, nil
+  }
+
+   func (q *Queue) Assign(id, actor string, epoch int64, token string) (Item, error) {
+	   return q.transit(id, actor, epoch, token, StatusAssigned)
+   }
+
+  func (q *Queue) Approve(id, actor string, epoch int64, token string) (Item, error) {
 	   return q.transit(id,
 		  actor, epoch, token, StatusApproved)
   }

@@ -41,4 +41,3 @@ CREATE TABLE IF NOT EXISTS ow_drift_cases (
     KEY idx_blocked_at           (blocked_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='超提屏障漂移案例仓；open 时挡写；proven 待四眼；closed 解除；idem_key 防重复开案；DriftPatrolWorker 推进状态';
-// temporary guard removed after the production check
