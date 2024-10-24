@@ -58,6 +58,18 @@ type RestorePlan struct {
 // 每次 Import 调用创建一条，记录决策依据。失败条目保留供审计。
 type GenGate struct {
 	ID        string `json:"id"`
+	PlanID    string `json:"plan_id"`
+	TargetGen int64  `json:"target_gen"`
+	SystemGen int64  `json:"system_gen"` // 校验时系统世代
+	LiveWatermark int64     `json:"live_watermark"` // 校验时活账水位
+	Allowed       bool      `json:"allowed"`
+	DenyReason    string    `json:"deny_reason,omitempty"`
+	CreatedAt     time.Time `json:"created_at"`
+}
+
+// WriteMutexState 写互斥锁状态。
+
+type WriteMutexState string
 
 const (
 	MutexActive WriteMutexState = "active"

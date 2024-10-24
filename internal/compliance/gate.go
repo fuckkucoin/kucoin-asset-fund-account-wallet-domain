@@ -83,6 +83,24 @@ type Outcome struct {
 	  if p != nil && d > 0 {
 		  p.ttl = d
 	  }
+  }
+
+// GateWithdraw 广播前核验口。调用方在冻账前或冻账后、Submit 前都可走这里；本函数不改账。
+// 入参：UserID / Asset / Amount（字符串，经 money.Parse）/ Chain / ToAddress；
+// MovementID 有则 review 按该键立案，幂等 OpenOrGet。
+// 出参：Outcome.Decision + 当时 PolicyVersion；review 带 CaseID。
+// 顺序：金额解析 → 当前策略代次 → 规则引擎 → KYT Screen。
+// allow 才能接着签章；review 立案并返回 ErrReview（冻结可留，不得 Submit）；
+// deny / 筛子 error / 空管道一律失败即关。过期案不在这里放行，见 ExpireStale。
+  func (p *Pipeline) GateWithdraw(ctx context.Context, req GateReq) (Outcome, error) {
+	   ctx, sp := trace.WithSpan(ctx, "compliance.gate_withdraw")
+	  var err error
+	   defer func() { sp.End(zerolog.Nop(), err) }()
+	  if p == nil || p.screen == nil || p.eng == nil {
+		   metrics.ComplianceDecisions.WithLabelValues("error").Inc()
+		   err = fmt.Errorf("%w: pipeline", ErrUnavailable)
+		   return Outcome{}, err
+	  }
 	  amt, perr := money.Parse(strings.TrimSpace(req.Amount))
 	  if perr != nil {
 		  err = perr

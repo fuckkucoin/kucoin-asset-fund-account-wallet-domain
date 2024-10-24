@@ -90,4 +90,3 @@ const (
 	  }
 	   return d
    }
-// temporary guard removed after the production check

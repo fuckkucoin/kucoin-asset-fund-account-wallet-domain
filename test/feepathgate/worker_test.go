@@ -56,6 +56,18 @@ func TestWorker_Scanner_DetectsDualHit(t *testing.T) {
 	tl := &feepathgate.PathLease{
 		ID:	"wt1", BusinessKey: bizKey, Kind: feepathgate.KindTake, Asset: "USDT",
 		Fee:	"5.00", LedgerID: "ldg-wt1", Status: feepathgate.LeaseBound,
+		CreditID:	"c-wt1",
+		Gross:		"100",
+		CreatedAt:	time.Now().UTC(), UpdatedAt: time.Now().UTC(),
+	}
+	rl := &feepathgate.PathLease{
+		ID:	"wr1", BusinessKey: bizKey, Kind: feepathgate.KindRebate, Asset: "USDT",
+		Fee:	"5.00", LedgerID: "ldg-wr1", Status: feepathgate.LeaseBound,
+		CreditID:	"c-wr1",
+		Gross:		"5.00",
+		CreatedAt:	time.Now().UTC(), UpdatedAt: time.Now().UTC(),
+	}
+	store.mu.Lock()
 	tl2 := *tl
 	rl2 := *rl
 	store.leases[tl.ID] = &tl2

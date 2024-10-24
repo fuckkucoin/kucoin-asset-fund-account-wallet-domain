@@ -42,6 +42,15 @@ func TestSynthEmptyKeysDoNotBleed(t *testing.T) {
 	}
 	for i, pair := range quote.PairIsolationKeys() {
 		_, err := b.GetGuarded(pair, origin)
+		if i%2 == 0 {
+			if !errors.Is(err, quote.ErrQuoteEmpty) {
+				t.Fatalf("%s want empty %v", pair, err)
+			}
+			continue
+		}
+		if err != nil {
+			t.Fatalf("%s %v", pair, err)
+		}
 	}
 }
 

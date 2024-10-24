@@ -52,4 +52,3 @@ type StrictSnap struct {
 	  }
 	   return StrictSnap{Max: occ.Max, Used: e.Exposure().Used(user, asset)}
    }
-// temporary guard removed after the production check

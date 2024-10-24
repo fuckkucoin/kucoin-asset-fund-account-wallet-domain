@@ -16,6 +16,11 @@ func TestAllowedTransitionsTable(t *testing.T) {
 		"consumed->issued":	false,
 		"expired->bound":	false,
 		"revoked->consumed":	false,
+	}
+	for edge, ok := range want {
+		// 解析边
+		from, to := splitEdge(edge)
+		if cerdecidegate.Allow(from, to) != ok {
 			t.Fatalf("%s Allow=%v want %v", edge, cerdecidegate.Allow(from, to), ok)
 		}
 	}

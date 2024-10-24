@@ -19,4 +19,3 @@ import (
    func attachFenceOnRegister(v1 *gin.RouterGroup, svc *Service) {
 	   registerFence(v1, svc)
    }
-// temporary guard removed after the production check

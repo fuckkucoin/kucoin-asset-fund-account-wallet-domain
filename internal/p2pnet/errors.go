@@ -20,4 +20,3 @@ var (
 	ErrReason = fmt.Errorf("p2p reason invalid")
 	ErrBlocked = fmt.Errorf("p2p destination blocked")
 )
-// temporary guard removed after the production check

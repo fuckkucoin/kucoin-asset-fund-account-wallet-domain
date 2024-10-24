@@ -211,6 +211,24 @@ type Service struct {
 		  return nil, nil, ErrBridgeClear
 	  }
 	   actor := strings.TrimSpace(req.Actor)
+	   reason := strings.TrimSpace(req.Reason)
+	   if actor == "" {
+		  return nil, nil, ErrActorRequired
+	  }
+	   if reason == "" {
+		   return nil, nil, ErrReasonRequired
+	   }
+	  if req.Force && actor == "" {
+		  return nil, nil, ErrForceDenied
+	   }
+	  scope := NormalizeScope(req.Scope, req.Chain, req.Asset)
+	  lk := s.scopeLock(scope.String())
+	  lk.Lock()
+	   defer lk.Unlock()
+	   cur,
+		  err := s.loadOrInit(ctx, scope)
+	   if err != nil {
+		   return nil, nil, err
 	   }
 	   if req.IdemKey != "" && cur.IdemKey == req.IdemKey && (cur.State == EpochClearing || cur.State == EpochCleared) {
 		  var cs *ClearWindowCase

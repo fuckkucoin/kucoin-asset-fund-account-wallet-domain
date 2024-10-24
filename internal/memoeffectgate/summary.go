@@ -28,4 +28,3 @@ type GateSummary struct {
 	   s.HalfCuts = len(cuts)
 	  return s, nil
    }
-// temporary guard removed after the production check

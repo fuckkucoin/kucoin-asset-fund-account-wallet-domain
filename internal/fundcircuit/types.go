@@ -143,6 +143,24 @@ const (
 
 // BaseWeight 各信号默认权重。入参未给权重时取此值；权重不得为负。
 
+   func (k SignalKind) BaseWeight() int {
+	  switch k {
+	  case SigDepVelocity:
+		   return 25
+	  case SigWdVelocity:
+		  return 30
+	  case SigHopVelocity:
+		   return 20
+	   case SigHTTPBurst:
+		  return 10
+	   case SigJobHalt:
+		  return 15
+	  case SigDestFanout:
+		   return 35
+	   case SigReorgChurn:
+		  return 20
+	   case SigManual:
+		   return 50
 	  }
 	  return 0
    }
