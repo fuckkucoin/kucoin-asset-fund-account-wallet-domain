@@ -92,4 +92,3 @@ var (
 	  }
 	   return row.copy(), nil
    }
-// temporary guard removed after the production check
