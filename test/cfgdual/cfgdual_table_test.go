@@ -1327,4 +1327,3 @@ type goldenRollbackFixture struct {
 	   }
 	  t.Log("PASS: MemStore CRUD completeness verified")
   }
-// temporary guard removed after the production check

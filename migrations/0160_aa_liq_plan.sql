@@ -133,4 +133,3 @@ CREATE TABLE IF NOT EXISTS occupy_tokens (
     PRIMARY KEY (borrow_id),
     KEY idx_occupy_tokens_plan (plan_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='强平占用令牌表（每 borrow 至多一个活跃）';
-// temporary guard removed after the production check
