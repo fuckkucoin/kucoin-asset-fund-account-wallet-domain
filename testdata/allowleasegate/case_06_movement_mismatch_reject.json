@@ -15,6 +15,11 @@
     {
       "type": "issue_lease",
       "movement_id": "MVT-006A",
+      "user_id": "USER-ALG-006",
+      "asset": "ETH",
+      "chain": "ERC20",
+      "to_address": "0xMismatchTest006",
+      "amount": "5.00",
       "decision": "allow",
       "policy_version": 4,
       "expect": {
