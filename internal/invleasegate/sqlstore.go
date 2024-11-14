@@ -187,6 +187,24 @@ ORDER BY expires_at ASC LIMIT ?`
 	  return s.queryLeases(ctx, sqlListExpiredLeases, cutoff, limit)
   }
 
+const sqlListLeasesByAsset = `
+SELECT lease_id, asset, actor, state,
+       fp_has_active, fp_advice_hash, fp_captured_at,
+       issued_at, expires_at,
+       bound_at, commit_ref,
+       committed_at, expired_at, blocked_at, block_reason,
+       created_at, updated_at
+FROM invcheck_precheck_leases
+WHERE asset=?
+ORDER BY issued_at DESC LIMIT ?`
+
+  func (s *SQLStore) ListLeasesByAsset(ctx context.Context, asset string, limit int) ([]*InvPrecheckLease, error) {
+	  if s == nil {
+		   return nil, ErrUnavailable
+	  }
+	   if limit <= 0 {
+		  limit = 50
+	   }
 	  return s.queryLeases(ctx, sqlListLeasesByAsset, asset, limit)
    }
 

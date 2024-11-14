@@ -166,6 +166,24 @@ func TestAT06PendingNonTerminal(t *testing.T) {
 		{ID: "a", TransferID: "1", Step: withdraw.StepFrozen},
 		{ID: "c", TransferID: "2", Step: withdraw.StepConfirmed},
 		{ID: "f", TransferID: "3", Step: withdraw.StepFailed, FailSealed: true},
+		{ID: "s", TransferID: "4", Step: withdraw.StepSubmitted},
+		{ID: "q", TransferID: "5", Step: withdraw.StepRequested},
+	} {
+		b.Put(r)
+	}
+	p := b.Pending(20)
+	seen := map[withdraw.Step]int{}
+	for _, r := range p {
+		seen[r.Step]++
+		if r.Step == withdraw.StepConfirmed || r.Step == withdraw.StepFailed || r.FailSealed {
+			t.Fatalf("terminal in pending %s", r.Step)
+		}
+	}
+	if seen[withdraw.StepFrozen] != 1 || seen[withdraw.StepSubmitted] != 1 || len(p) != 2 {
+		t.Fatalf("%+v", seen)
+	}
+}
+
 func TestAT07RestartFrozenNoRedebit(t *testing.T) {
 	t.Parallel()
 	shared := map[string]sqlrepo.WDOutboundRun{}
