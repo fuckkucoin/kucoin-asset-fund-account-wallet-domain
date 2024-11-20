@@ -1,0 +1,21 @@
+{
+  "name": "manual_revoke_then_verify_rejected",
+  "description": "手动撤销后，Verify 应当拒绝；撤销记录审计可查",
+  "user_id": "USER-MANUAL-005",
+  "initial_bills": [
+    {"movement_id": "MV-401", "user_id": "USER-MANUAL-005", "book": "earn", "subject": "available", "asset": "USDT", "type": "earn_interest", "app_type": "earn", "debit": "0", "credit": "100.50", "seq": 1},
+    {"movement_id": "MV-402", "user_id": "USER-MANUAL-005", "book": "earn", "subject": "available", "asset": "USDT", "type": "earn_redeem", "app_type": "earn", "debit": "50.25", "credit": "0", "seq": 2}
+  ],
+  "actions": [
+    {"type": "issue_export", "user_id": "USER-MANUAL-005", "format": "json", "ttl_sec": 7200},
+    {"type": "verify_export", "expect_error": false},
+    {"type": "manual_revoke", "reason": "compliance review", "actor": "ops_admin"},
+    {"type": "verify_export", "expect_error": true}
+  ],
+  "expected": {
+    "final_lease_state": "revoked",
+    "revocation_kind": "manual",
+    "revocation_actor": "ops_admin",
+    "verify_rejected": true
+  }
+}

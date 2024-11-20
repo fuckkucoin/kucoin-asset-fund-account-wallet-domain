@@ -135,6 +135,24 @@ type MemStore struct {
 		  return nil, ErrNotFound
 	   }
 	  l, ok := m.leases[id]
+	   if !ok {
+		   return nil, ErrNotFound
+	  }
+	   return cloneLease(l), nil
+   }
+
+   func (m *MemStore) UpdateLease(_ context.Context, l *EgressLease) error {
+	   m.mu.Lock()
+	   defer m.mu.Unlock()
+	  if _, ok := m.leases[l.ID]; !ok {
+		   return ErrNotFound
+	   }
+	   m.leases[l.ID] = cloneLease(l)
+	  return nil
+  }
+
+   func (m *MemStore) ListExpiredLeases(_ context.Context, before time.Time, limit int) ([]*EgressLease, error) {
+	  m.mu.RLock()
 	  defer m.mu.RUnlock()
 	  var out []*EgressLease
 	  for _, l := range m.leases {

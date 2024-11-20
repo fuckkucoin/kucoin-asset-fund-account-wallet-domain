@@ -1,0 +1,25 @@
+{
+  "scenario": "mark_cool_ready_assign_late_observe_user_a",
+  "input": {
+    "chain": "ETH",
+    "address": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "prev_user": "userA",
+    "next_user": "userB",
+    "cool_sec": 1,
+    "observe_user": "userA",
+    "carried_gen": 1,
+    "asset": "USDT",
+    "amount": "10",
+    "tx_hash": "0xlateobserve01"
+  },
+  "expect": {
+    "credit_posted": false,
+    "error": "recycleepoch: late observe-credit to previous user rejected; miscredit proof opened",
+    "proof_kind": "late_observe_old_user",
+    "fail_closed": true,
+    "epoch_state": "assigned",
+    "generation": 1,
+    "bind_user": "userB",
+    "bind_state": "active"
+  }
+}

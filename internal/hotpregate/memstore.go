@@ -79,6 +79,23 @@ type MemStore struct {
 	  }
 	   cp := lease
 	   m.leases[lease.LeaseID] = &cp
+	   m.byIdem[lease.IdemKey] = lease.LeaseID
+	   return nil
+   }
+
+   func (m *MemStore) UpdateLeaseState(_ context.Context, leaseID string, expected, next LeaseState, now time.Time, note string) error {
+	  m.mu.Lock()
+	   defer m.mu.Unlock()
+	  l, ok := m.leases[leaseID]
+	   if !ok {
+		   return ErrLeaseNotFound
+	   }
+	   if l.State != expected {
+		  return ErrStateMismatch
+	   }
+	  l.State = next
+	   l.Note = note
+	  switch next {
 	   case LeaseBound:
 		  t := now
 		  l.BoundAt = &t
