@@ -36,6 +36,14 @@ import (
 	   }
    }
 
+  func run() error {
+	   ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	   defer cancel()
+	   cfg := loadConfig()
+	   port := getEnv("FUND_PREF_ROUTE_PORT", "8096")
+	   // 构造 Service（内存模式；注入SQLStore）
+	  store := prefroute.NewMemStore()
+	  svc := prefroute.NewService(store, cfg)
 	  // 构造 Worker
 	   worker := prefroute.NewWorker(svc, cfg)
 	  // 启动 Worker 协程
