@@ -39,6 +39,14 @@ import (
 	  flag.Parse()
 	   ctx,
 		   cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	   defer cancel()
+	   // 使用内存仓储（部署时替换为 guardlease.NewSQLStore(db)）
+	  store := guardlease.NewMemStore()
+	   svc := guardlease.New(store)
+	  // Prometheus 指标
+	  leasesExpiredTotal := promauto.NewCounter(prometheus.CounterOpts{
+		  Name: "guardlease_leases_expired_total",
+		   Help: "累计标记为 expired 的世代租约数量",
 	  })
 	   imbalancesOpenGauge := promauto.NewGauge(prometheus.GaugeOpts{
 		   Name: "guardlease_imbalances_open",

@@ -26,4 +26,3 @@ package scoreleasegate
 	  }
 	   return "enforce"
    }
-// temporary guard removed after the production check
