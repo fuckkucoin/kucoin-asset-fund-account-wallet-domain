@@ -62,6 +62,19 @@ type Service struct {
 	  if s != nil {
 		  if shared != nil {
 			  s.shared = shared
+		  }
+		  s.attr = binder
+	   }
+	  return s
+   }
+
+// SharedPool 返回已绑定的 FamMEMO 共享地址池句柄。
+  func (s *Service) SharedPool() *addrpool.SharedMemoPool {
+	   if s == nil {
+		  return nil
+	   }
+	   return s.shared
+   }
 
   func (s *Service) BindSQL(db *persist.SQLDB) *Service {
 	  if s != nil && s.pool != nil {

@@ -336,4 +336,3 @@ type WorkerConfig struct {
 		  c.BatchSize = 64
 	   }
    }
-// temporary guard removed after the production check
