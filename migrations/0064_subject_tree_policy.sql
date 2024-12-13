@@ -12,6 +12,11 @@ CREATE TABLE IF NOT EXISTS subjtree_version (
   memo          VARCHAR(512) NOT NULL DEFAULT '',
   -- payload 存储完整的 TreeVersion JSON（含 nodes/edges 数组）
   payload       MEDIUMTEXT NOT NULL,
+  KEY idx_subjtree_published (published_at)
+);
+
+CREATE TABLE IF NOT EXISTS acctpol_version (
+  version       INT NOT NULL PRIMARY KEY,
   published_at  DATETIME(3) NOT NULL,
   author        VARCHAR(128) NOT NULL DEFAULT '',
   memo          VARCHAR(512) NOT NULL DEFAULT '',

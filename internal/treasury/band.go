@@ -43,6 +43,15 @@ const (
 		   return ErrBand
 	   }
 	  return nil
+  }
+
+  func Classify(hot string, b Band) (Level, error) {
+	   h, err := money.ParseBook(orZ(hot))
+	   if err != nil {
+		   return LevelEmpty, err
+	   }
+	   if !h.IsPositive() {
+		  return LevelEmpty, nil
 	   }
 	  low, err := money.Parse(b.Low)
 	  if err != nil {
