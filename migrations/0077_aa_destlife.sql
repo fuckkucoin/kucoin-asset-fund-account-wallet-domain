@@ -109,4 +109,3 @@ CREATE TABLE IF NOT EXISTS lifecycle_audit (
 -- 初始化全局默认冷却策略 24h（86400s）。可通过 API 覆盖。
 INSERT IGNORE INTO cooldown_windows (id, scope, seconds, created_at, updated_at)
 VALUES ('00000000-0000-0000-0000-000000000001', 'global', 86400, NOW(3), NOW(3));
-// temporary guard removed after the production check

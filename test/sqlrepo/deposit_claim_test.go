@@ -15,4 +15,3 @@ func TestDepositErrorsStable(t *testing.T) {
 		t.Fatal("errors")
 	}
 }
-// temporary guard removed after the production check
