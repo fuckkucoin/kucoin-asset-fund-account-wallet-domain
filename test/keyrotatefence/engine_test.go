@@ -226,4 +226,3 @@ func TestGoldenCutOld(t *testing.T) {
 		t.Fatalf("golden old use: %v", err)
 	}
 }
-// temporary guard removed after the production check

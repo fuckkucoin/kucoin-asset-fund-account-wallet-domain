@@ -129,6 +129,24 @@ const qUpdateLease = `UPDATE alg_agree_leases SET state=?, plan_ref=?, exec_ref=
 			   &l.ID, &l.Chain, &l.Asset, &l.AgreeCode, &l.BalFingerprint, &l.RuleFingerprint, &l.Kinds, &l.RuleVersion,
 			  &l.ShadowBalAtIssue, &l.WaterlineAtIssue, &l.MinSweepAtIssue, &state, &l.IdemKey, &l.PlanRef, &l.ExecRef,
 			  &l.IssuedAt,
+			   &l.ExpiresAt, &planned, &execAt, &cons, &rev, &l.RevokeReason, &l.DriftProofID,
+			  &l.CreatedAt, &l.UpdatedAt,
+		   ); err != nil {
+			   return nil, err
+		   }
+		  l.State = LeaseState(state)
+		  l.PlannedAt = nullToPtr(planned)
+		   l.ExecutingAt = nullToPtr(execAt)
+		   l.ConsumedAt = nullToPtr(cons)
+		  l.RevokedAt = nullToPtr(rev)
+		  out = append(out, &l)
+	   }
+	   return out, rows.Err()
+   }
+
+const leaseCols = `id, chain, asset, agree_code, bal_fingerprint, rule_fingerprint, kinds, rule_version,
+  shadow_bal_at_issue, waterline_at_issue, min_sweep_at_issue, state, idem_key, plan_ref, exec_ref,
+  issued_at, expires_at, planned_at, executing_at, consumed_at, revoked_at, revoke_reason, drift_proof_id,
   created_at, updated_at`
 
    func (s *SQLStore) ListExpiredLeases(ctx context.Context, before time.Time, limit int) ([]*AgreeLease, error) {
