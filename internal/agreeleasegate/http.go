@@ -113,6 +113,24 @@ type execReq struct {
 		   abortForbidden(c, err)
 		  return
 	  }
+	   var req execReq
+	  if err := c.ShouldBindJSON(&req); err != nil {
+		  abortBadRequest(c, err)
+		  return
+	  }
+	   res, err := h.engine.ExecAssertLease(c.Request.Context(), ExecAssertRequest(req))
+	   writeAssert(c, res, err)
+  }
+
+   func writeAssert(c *gin.Context, res *AssertResult, err error) {
+	   if err != nil {
+		  body := gin.H{"allowed": false, "error": err.Error()}
+		   if res != nil {
+			  body["reason"] = res.RejectReason
+			  if res.DriftProof != nil {
+				  body["proof"] = res.DriftProof
+			  }
+			  if res.Lease != nil {
 				   body["lease"] = res.Lease
 			   }
 		  }
