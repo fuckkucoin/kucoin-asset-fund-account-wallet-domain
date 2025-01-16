@@ -194,6 +194,24 @@ type FreezeResult struct {
 		  return &FreezeResult{Allowed: false, Generation: g, RejectReason: string(RaceMutexHeld)}, wrapRace(ErrMutexHeld, p)
 	  }
 	  defer func() {
+		   _ = e.store.ReleaseMutex(ctx,
+			  bid, owner)
+	   }()
+	   now := e.now()
+	   next := g.Gen + 1
+	  fromPhase := g.Phase
+	  g.Gen = next
+	  g.LTVBPS = b.LTVBPS
+	  g.BorrowAmt = b.Amount
+	   g.CollateralAmt = col.Amount
+	  g.CapBPS = col.CapBPS
+	   g.Phase = PhaseFreezing
+	   g.UpdatedAt = now
+	   g.IdemKey = req.IdemKey
+	  lease := &LiqFreezeLease{
+		   ID: uuid.NewString(), BorrowID: bid, UserID: uid, CollateralID: col.ID,
+		  LiqGen: next, LTVBPS: b.LTVBPS, CapBPS: col.CapBPS, Asset: col.Asset, Amount: col.Amount,
+		  State: LeaseIssued, IdemKey: firstNonEmpty(req.IdemKey, leaseIdemKey(bid, uid, next)),
 		   IssuedAt: now, ExpiresAt: now.Add(e.cfg.LeaseTTL), CreatedAt: now, UpdatedAt: now,
 	  }
 	  if err := e.store.InsertLease(ctx, lease); err != nil {

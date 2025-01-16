@@ -16,4 +16,3 @@
   "expected_final_generation_range": [1, 2],
   "expected_user_not_blocked": true
 }
-// temporary guard removed after the production check

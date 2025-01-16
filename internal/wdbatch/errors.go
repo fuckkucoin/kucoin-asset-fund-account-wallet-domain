@@ -18,4 +18,3 @@ var (
 	ErrConserve = fmt.Errorf("withdraw batch does not conserve")
 	ErrItem     = fmt.Errorf("withdraw batch item invalid")
 )
-// temporary guard removed after the production check

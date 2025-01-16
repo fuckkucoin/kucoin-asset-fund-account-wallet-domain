@@ -1,0 +1,23 @@
+{
+  "name": "multi_asset_window_export",
+  "description": "多资产窗口导出，确保 Root 覆盖全部资产行",
+  "user_id": "USER-MULTI-007",
+  "initial_bills": [
+    {"movement_id": "MV-601", "user_id": "USER-MULTI-007", "book": "funding", "subject": "available", "asset": "USDT", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "10000", "seq": 1},
+    {"movement_id": "MV-602", "user_id": "USER-MULTI-007", "book": "funding", "subject": "available", "asset": "BTC", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "1.5", "seq": 2},
+    {"movement_id": "MV-603", "user_id": "USER-MULTI-007", "book": "funding", "subject": "available", "asset": "ETH", "type": "deposit", "app_type": "deposit", "debit": "0", "credit": "30", "seq": 3},
+    {"movement_id": "MV-604", "user_id": "USER-MULTI-007", "book": "trading", "subject": "available", "asset": "SOL", "type": "transfer", "app_type": "transfer", "debit": "0", "credit": "500", "seq": 4},
+    {"movement_id": "MV-605", "user_id": "USER-MULTI-007", "book": "funding", "subject": "available", "asset": "USDT", "type": "withdraw", "app_type": "withdraw", "debit": "3000", "credit": "0", "seq": 5}
+  ],
+  "actions": [
+    {"type": "issue_export", "user_id": "USER-MULTI-007", "format": "json", "ttl_sec": 7200},
+    {"type": "verify_export", "expect_error": false},
+    {"type": "check_high_water", "expect_high_water": 5}
+  ],
+  "expected": {
+    "lease_state": "issued",
+    "high_water": 5,
+    "bill_count": 5,
+    "verify_valid": true
+  }
+}

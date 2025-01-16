@@ -15,4 +15,3 @@ var (
 	ErrNotFound = fmt.Errorf("war room row not found")
 	ErrSystem   = fmt.Errorf("war room cannot freeze system")
 )
-// temporary guard removed after the production check

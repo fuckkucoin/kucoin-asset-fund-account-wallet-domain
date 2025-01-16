@@ -59,6 +59,19 @@ type AdvanceWorker struct {
 					   _ = w.Hook(ctx, snap)
 				   }
 			   }
+		   }
+	  }
+  }
+
+// ReleaseWorker 扫描 failed 腿释放冻结。闸在 shardholdgen.ReleaseAssert。
+type ReleaseWorker struct {
+	Book *Book
+	Interval time.Duration
+	Hook func(ctx context.Context,
+		  snap Snapshot) error
+}
+
+   func NewReleaseWorker(book *Book, interval time.Duration) *ReleaseWorker {
 	  if interval <= 0 {
 		  interval = 20 * time.Second
 	   }

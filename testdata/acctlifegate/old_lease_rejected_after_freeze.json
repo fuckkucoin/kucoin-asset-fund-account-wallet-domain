@@ -13,6 +13,11 @@
       "input": {"user_id": "user-002", "book": "trading"},
       "expected_ok": true,
       "expected_lease_state": "open",
+      "expected_lease_gen": 0,
+      "save_as": "lease_old"
+    },
+    {
+      "step": 2,
       "action": "freeze_book",
       "input": {"user_id": "user-002", "book": "trading", "frozen": true},
       "expected_ok": true,

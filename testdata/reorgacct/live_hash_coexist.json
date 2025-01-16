@@ -1,0 +1,80 @@
+{
+  "_comment": "场景：ETH 链重组，同时存在普通冻结出金和 live-hash 出金。live-hash 只开事故单，普通冻结正常回滚。",
+  "_scenario": "live_hash_coexist",
+  "ingest_req": {
+    "chain": "ETH",
+    "pivot_tx_hash": "0xdeadbeef00000000000000000000000000000000000000000000000000000001",
+    "depth_before": 12,
+    "depth_after": 3,
+    "source_kind": "orphan_observe",
+    "affected_outputs": [],
+    "affected_tracks": [
+      {
+        "withdraw_id": "wd-normal-001",
+        "broadcast_id": "bc-normal-001",
+        "tx_hash": "0xdeadbeef00000000000000000000000000000000000000000000000000000001",
+        "live_hash": false,
+        "freeze_id": "freeze-wd-001",
+        "asset": "ETH",
+        "user_id": "user-D",
+        "freeze_amount": "2.0"
+      },
+      {
+        "withdraw_id": "wd-livehash-002",
+        "broadcast_id": "bc-livehash-002",
+        "tx_hash": "0xdeadbeef00000000000000000000000000000000000000000000000000000001",
+        "live_hash": true,
+        "freeze_id": "freeze-wd-002",
+        "asset": "ETH",
+        "user_id": "user-E",
+        "freeze_amount": "1.0"
+      }
+    ],
+    "evidence": [
+      {
+        "kind": "orphan_observe",
+        "ref": "orphan:0xdeadbeef_parent",
+        "note": "orphan observed; live-hash withdraw bc-livehash-002 coexists"
+      }
+    ],
+    "note": "普通冻结 + live-hash 并存场景"
+  },
+  "expected_event": {
+    "chain": "ETH",
+    "depth_before": 12,
+    "depth_after": 3,
+    "rollback_depth": 9,
+    "state": "pending",
+    "source_kind": "orphan_observe"
+  },
+  "expected_impact_rows": [
+    {
+      "user_id": "user-D",
+      "asset": "ETH",
+      "kind": "freeze",
+      "reference_id": "freeze-wd-001",
+      "affected_amount": "2"
+    },
+    {
+      "user_id": "user-E",
+      "asset": "ETH",
+      "kind": "live_hash",
+      "reference_id": "wd-livehash-002",
+      "affected_amount": "1"
+    }
+  ],
+  "expected_summary": {
+    "total_credited": "0",
+    "total_occupied": "0",
+    "total_freeze": "2",
+    "total_hop_partial": "0",
+    "live_hash_count": 1,
+    "row_count": 2
+  },
+  "expected_legs": [
+    {"kind": "freeze_rollback", "state": "pending", "execution_order": 3, "amount": "2"},
+    {"kind": "incident",        "state": "pending", "execution_order": 5, "amount": "1"}
+  ],
+  "expected_incidents_after_execute": 1,
+  "expected_no_auto_unfreeze_for_live_hash": true
+}

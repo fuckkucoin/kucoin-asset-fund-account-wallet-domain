@@ -12,6 +12,11 @@ var (
 	// ErrImportGenExpired air_import_gen 已过期。
 	ErrImportGenExpired = fmt.Errorf("airimportgate: import gen expired")
 	// ErrImportGenInvalid air_import_gen 形态非法。
+	ErrImportGenInvalid = fmt.Errorf("airimportgate: import gen invalid")
+	// ErrConcurrentImport 同 Session 并发导入被拒（另一租约正在进行）。
+	ErrConcurrentImport = fmt.Errorf("airimportgate: concurrent import rejected")
+	// ErrPhaseConflict Import 与 Abort/Close/Export 相位冲突。
+	ErrPhaseConflict = fmt.Errorf("airimportgate: phase conflict detected")
 	// ErrBlobReplay 密封 blob 摘要已被导入过（重放攻击）。
 	ErrBlobReplay = fmt.Errorf("airimportgate: sealed blob replay rejected")
 	// ErrBlobDigestMismatch blob 摘要不匹配。

@@ -144,6 +144,24 @@ type LimitOrder struct {
 	  o.CancelTime = time.Now().UTC().UnixMilli()
 	  o.HoldID = ""
 	  if err := b.saveLimit(ctx, o); err != nil {
+		  return LimitOrder{}, err
+	  }
+	  return o, nil
+  }
+
+   func (b *Book) GetLimit(ctx context.Context, userID, orderID, clientOID string) (LimitOrder, error) {
+	  o, err := b.loadLimit(ctx, userID, orderID, clientOID)
+	   if err != nil {
+		   return LimitOrder{}, err
+	   }
+	   return b.maybeFillLimit(ctx, o)
+   }
+
+   func (b *Book) ListLimits(ctx context.Context, userID, status string, limit int) []LimitOrder {
+	   if limit <= 0 || limit > 100 {
+		  limit = 20
+	  }
+	  out := make([]LimitOrder, 0)
 	   if b == nil || b.kv == nil {
 		  return out
 	   }

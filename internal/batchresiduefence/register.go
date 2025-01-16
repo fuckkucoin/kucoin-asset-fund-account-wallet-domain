@@ -48,4 +48,3 @@ import (
 	  eng := New(Config{})
 	   RegisterRoutes(v1, eng)
   }
-// temporary guard removed after the production check

@@ -126,6 +126,24 @@ import (
 		  t.Fatal(err)
 	   }
 	  if !ev.Stale {
+		   t.Fatal("eventual must mark stale")
+	   }
+	  if len(ev.Rows) != 0 {
+		   t.Fatalf("eventual leaked unapplied row %+v", ev.Rows)
+	  }
+	  if len(ev.Watermarks) == 0 {
+		  t.Fatal("eventual missing watermark")
+	  }
+	   svc.Resume()
+	  if _, err := svc.Tick(ctx); err != nil {
+		   t.Fatal(err)
+	   }
+	   ok, err := read.Strong(ctx, fundread.Query{UserID: "u1", Asset: "USDT"})
+	  if err != nil {
+		  t.Fatal(err)
+	   }
+	   if ok.Stale || len(ok.Assets) != 1 || ok.Assets[0].Available != "80" {
+		   t.Fatalf("after resume %+v", ok)
 	   }
    }
 

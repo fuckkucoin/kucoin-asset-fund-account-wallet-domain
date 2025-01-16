@@ -16,4 +16,3 @@ import (
 		  t.Fatalf("pg=%q", d)
 	  }
    }
-// temporary guard removed after the production check

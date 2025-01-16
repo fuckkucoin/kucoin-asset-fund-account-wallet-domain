@@ -59,4 +59,3 @@ var (
 	  apierr.Register(ErrDuplicate, http.StatusConflict)
 	  apierr.Register(ErrUser, http.StatusBadRequest)
   }
-// temporary guard removed after the production check
