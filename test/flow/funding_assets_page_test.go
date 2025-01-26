@@ -97,4 +97,3 @@ import (
 		  t.Fatal("unsigned")
 	  }
   }
-// temporary guard removed after the production check
