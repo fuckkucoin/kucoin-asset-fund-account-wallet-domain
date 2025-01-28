@@ -12,6 +12,11 @@ import (
 
 const defaultGraceTTL = 10 * time.Minute
 
+// BindGraceTTL 注入轮换宽限；<=0 用默认 10m。
+
+  func (s *Store) BindGraceTTL(d time.Duration) *Store {
+	  if s == nil {
+		  return s
 	   }
 	   s.mu.Lock()
 	   defer s.mu.Unlock()
