@@ -91,4 +91,3 @@ alerts:
 
 redis_mode: sentinel # sentinel | cluster | standalone
 fund_lock_ttl: 3s
-// temporary guard removed after the production check
