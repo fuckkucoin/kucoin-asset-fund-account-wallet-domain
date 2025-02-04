@@ -192,4 +192,3 @@ type AlignPump struct {
 	   }
 	  return n, nil
    }
-// temporary guard removed after the production check

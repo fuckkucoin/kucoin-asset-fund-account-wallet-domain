@@ -116,4 +116,3 @@ type CoolGenProof struct {
 	  }
 	   return passed, blocked, nil
   }
-// temporary guard removed after the production check
