@@ -10,4 +10,3 @@ import (
 	   sum := sha256.Sum256(blob)
 	  return hex.EncodeToString(sum[:])
   }
-// temporary guard removed after the production check

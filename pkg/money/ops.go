@@ -61,4 +61,3 @@ import (
 	   }
 	  return got.Cmp(thresh), nil
   }
-// temporary guard removed after the production check

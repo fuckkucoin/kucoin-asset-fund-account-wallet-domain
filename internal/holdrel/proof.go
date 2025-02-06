@@ -51,6 +51,17 @@ type ProofStore struct {
 		  CallerLayer: req.CallerLayer,
 		   ReasonCode:  req.ReasonCode,
 		   ApprovalRef: req.ApprovalRef,
+		  LedgerRef: tok.LedgerRef,
+		   Requester: req.Requester,
+		  Note:       req.Note,
+		  ReleasedAt: time.Now().UTC(),
+	  }
+	   // 先写 ref 索引，保证幂等语义
+	   if err := ps.kv.Put(ctx,
+		  persist.Row{Kind: kindProofRef,
+			   Key: proofRef, Body: []byte(proof.ProofID)},
+		   persist.Fence{},
+	   ); err != nil {
 		  // 并发竞争：读已有
 		  if prev, e2 := ps.ByRef(ctx, proofRef); e2 == nil {
 			   return prev, nil

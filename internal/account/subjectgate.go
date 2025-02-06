@@ -32,6 +32,13 @@ import (
 			   return BookState{}, err
 		   }
 		  if on {
+			   s.writeSubjectAudit(ctx, userID, book, "subject_unfreeze_rejected", "user freeze gate still closed")
+			   return BookState{}, ErrBookFrozen
+		   }
+	  }
+	  st, err := s.Freeze(ctx, userID, book, frozen)
+	   if err != nil {
+		  return st, err
 	   }
 	  action := "subject_frozen"
 	   if !frozen {

@@ -79,6 +79,23 @@ type Service struct {
 	  return gen, nil
    }
 
+// DebitAndBump Debit 操作后调用，递增世代并重算 DebtRatio；同时废止旧租约。
+// 注意：调用方应在 Debit 期间持有 DebitLock（通过 LockDebit）。
+   func (s *Service) DebitAndBump(ctx context.Context, userID, symbol, sourceTxnID string) (PairGeneration, error) {
+	   gen, err := s.genMgr.BumpOnDebit(ctx, userID, symbol, sourceTxnID)
+	   if err != nil {
+		   return PairGeneration{}, err
+	   }
+	  _, _ = s.store.ExpireStaleLeases(ctx, userID, symbol, gen.Generation, s.clock())
+	  return gen, nil
+  }
+
+// CurrentGeneration 查询当前世代。
+
+   func (s *Service) CurrentGeneration(ctx context.Context, userID, symbol string) (PairGeneration, error) {
+	  return s.store.GetGeneration(ctx, userID, symbol)
+   }
+
 // ListGenerations 查询世代历史。
    func (s *Service) ListGenerations(ctx context.Context, userID, symbol string, limit int) ([]PairGeneration, error) {
 	  return s.store.ListGenerations(ctx, userID, symbol, limit)

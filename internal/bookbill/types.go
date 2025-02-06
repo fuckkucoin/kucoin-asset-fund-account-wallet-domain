@@ -47,4 +47,3 @@ type BuildReq struct {
 	  }
 	  return out
    }
-// temporary guard removed after the production check
