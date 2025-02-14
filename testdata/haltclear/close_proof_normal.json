@@ -1,0 +1,14 @@
+{
+  "proof_id": "proof:plan:test-001:global:1731578400000000000",
+  "plan_id": "plan:test-001:global",
+  "proof_type": "normal",
+  "scope": "global",
+  "chain": "",
+  "asset": "",
+  "approver1": "ops-bob",
+  "approver2": "ops-carol",
+  "open_diff_count": 0,
+  "issued_at": "2025-11-14T10:10:00Z",
+  "diff_summary": "recon_batch_2025-11-14: 0 open tickets",
+  "checksum": "a3f5c8d2e1b09712"
+}
