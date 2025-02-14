@@ -269,6 +269,24 @@ func TestDeliver_Idempotent(t *testing.T) {
 	}
 	// 不得产生新 CreditFenceCase。
 	cases := svc.AllCases()
+	if len(cases) != 0 {
+		t.Errorf("idempotent deliver must not produce cases, got %d", len(cases))
+	}
+}
+
+func TestDeliver_StaleToken(t *testing.T) {
+	svc := newTestService(t)
+	_, err := svc.Enqueue("ETH|USDT", "key1", 1, "tok1", "100")
+	if err != nil {
+		t.Fatalf("enqueue: %v", err)
+	}
+	// 旧 token 重放。
+	_, err = svc.Deliver("key1", 99, "tok-stale")
+	if err != creditoutgate.ErrEpochToken {
+		t.Fatalf("expected ErrEpochToken, got %v", err)
+	}
+	// 必须落 CaseStaleReplay。
+	cases := svc.CasesByKey("key1")
 	if len(cases) != 1 {
 		t.Fatalf("expected 1 case, got %d", len(cases))
 	}

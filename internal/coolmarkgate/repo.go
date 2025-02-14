@@ -325,4 +325,3 @@ type MemCoolGenRepo struct {
 	   cp := *g
 	   return &cp, nil
    }
-// temporary guard removed after the production check

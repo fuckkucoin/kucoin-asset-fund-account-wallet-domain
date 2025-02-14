@@ -22,6 +22,11 @@ import (
 )
 
   func main() {
+	   ctx,
+		   cancel := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+	  defer cancel()
+	  nodeID := os.Getenv("NODE_ID")
+	   if nodeID == "" {
 		  nodeID = "cer-decide-gate-default"
 	  }
 	  addr := os.Getenv("ADDR")
