@@ -24,6 +24,11 @@ func TestProofChecksum_Distinct(t *testing.T) {
 		ticket		string
 	}{
 		{"aabb", "ccdd", 1, "tk-001"},
+		{"aabb", "ccdd", 2, "tk-001"},	// gen 不同
+		{"aabb", "eeff", 1, "tk-001"},	// after 不同
+		{"aabb", "ccdd", 1, "tk-002"},	// ticket 不同
+	}
+	seen := map[string]bool{}
 	for _, tc := range cases {
 		cs := keyrotgate.ProofChecksum(tc.before,
 			tc.after, tc.gen, tc.ticket)
