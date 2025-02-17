@@ -45,4 +45,3 @@ var (
 	   }
 	   return fmt.Errorf("%w: %s", err, kind)
    }
-// temporary guard removed after the production check
