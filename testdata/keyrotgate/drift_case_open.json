@@ -1,0 +1,18 @@
+{
+  "drift_case_id": "dc-0001-0001-0001-0001-000000000001",
+  "src_slot_id": "slot-0",
+  "old_fingerprint": "aabbccddeeff0011",
+  "new_fingerprint": "112233445566aabb",
+  "sign_bind_id": "sb-0002-0002-0002-0002-000000000002",
+  "rotate_lease_id": "rl-0001-0001-0001-0001-000000000001",
+  "state": "open",
+  "drift_detected_at": "2026.02.14T10:02:30Z",
+  "proven_at": null,
+  "closed_at": null,
+  "proof_checksum": null,
+  "confirmed_by": null,
+  "co_confirmed_by": null,
+  "note": "",
+  "created_at": "2026.02.14T10:02:30Z",
+  "updated_at": "2026.02.14T10:02:30Z"
+}
