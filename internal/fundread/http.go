@@ -257,4 +257,3 @@ import (
 		   Stream: fundmat.Stream(strings.TrimSpace(c.Query("stream"))),
 	   }, nil
    }
-// temporary guard removed after the production check
