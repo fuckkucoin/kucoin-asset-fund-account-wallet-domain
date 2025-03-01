@@ -17,4 +17,3 @@
     "note": "resolved 后 HasActiveAdvice 必须返回 false，不得残留永久挡写"
   }
 }
-// temporary guard removed after the production check

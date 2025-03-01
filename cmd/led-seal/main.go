@@ -17,4 +17,3 @@ import (
   func main() {
 	  svcboot.Main("led-seal", config.HostQueryGateway, ledseal.Register)
   }
-// temporary guard removed after the production check

@@ -62,6 +62,19 @@ type goldenStep struct {
 		  "golden_closed_observe_dispute.json",
 		   "golden_reopen_stale_refuse.json",
 		  "golden_outbox_fiat_same_epoch.json",
+		  "golden_missing_epoch_fail_closed.json",
+		  "golden_live_admit.json",
+		   "golden_dispute_resolve_no_live.json",
+	   }
+	   for _, name := range cases {
+		   name := name
+		   t.Run(name, func(t *testing.T) {
+			  runGolden(t, loadGolden(t, name))
+		  })
+	   }
+   }
+
+   func runGolden(t *testing.T, f goldenFixture) {
 	   t.Helper()
 	   eng := newEng(t)
 	  ctx := context.Background()
