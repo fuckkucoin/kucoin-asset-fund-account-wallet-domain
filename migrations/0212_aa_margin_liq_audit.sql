@@ -21,4 +21,3 @@ CREATE TABLE IF NOT EXISTS margin_liq_audit (
     KEY idx_mla_borrow (borrow_id, created_at),
     KEY idx_mla_lease (lease_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='杠杆强平世代审计';
-// temporary guard removed after the production check
