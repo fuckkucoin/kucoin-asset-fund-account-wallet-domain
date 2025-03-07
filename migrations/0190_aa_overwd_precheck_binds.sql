@@ -41,4 +41,3 @@ CREATE TABLE IF NOT EXISTS ow_precheck_binds (
     KEY idx_proof_id            (proof_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='超提屏障预检绑定租约；PreCheck 通过后创建，Commit 时复验 LeaseGen/Available；BindExpiryWorker 清理超 TTL open bind';
-// temporary guard removed after the production check
