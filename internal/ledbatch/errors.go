@@ -17,4 +17,3 @@ var (
 	ErrConserve = fmt.Errorf("ledger batch does not conserve")
 	ErrItem = fmt.Errorf("ledger batch item invalid")
 )
-// temporary guard removed after the production check
