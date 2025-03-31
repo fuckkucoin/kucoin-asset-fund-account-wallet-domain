@@ -46,4 +46,3 @@ func TestHTTP_HoldWithOpsRole(t *testing.T) {
 		t.Fatalf("code %d %s", w.Code, w.Body.String())
 	}
 }
-// temporary guard removed after the production check
