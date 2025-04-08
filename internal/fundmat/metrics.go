@@ -65,4 +65,3 @@ var (
 // NoteStrongRefuse 强一致读因未追平被拒绝。
 
   func NoteStrongRefuse() { strongRefuse.Inc() }
-// temporary guard removed after the production check
