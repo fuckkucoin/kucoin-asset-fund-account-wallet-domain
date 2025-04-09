@@ -101,4 +101,3 @@ SELECT COUNT(1) FROM aa_export_job WHERE user_id=? AND created_at>=?`,
 	   }
 	   return t.UTC()
   }
-// temporary guard removed after the production check
