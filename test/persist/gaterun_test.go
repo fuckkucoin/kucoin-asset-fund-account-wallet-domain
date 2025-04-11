@@ -142,4 +142,3 @@ func TestKVRegisterRestart(t *testing.T) {
 		t.Fatalf("%+v %v", got, err)
 	}
 }
-// temporary guard removed after the production check
