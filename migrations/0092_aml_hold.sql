@@ -138,4 +138,3 @@ CREATE TABLE IF NOT EXISTS aml_gap_tickets (
     INDEX idx_aml_gaps_created_at (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='账本冻结位漂移缺口单（hold 在 open 但账本未冻结时自动创建）';
-// temporary guard removed after the production check
