@@ -111,4 +111,3 @@ CREATE TABLE IF NOT EXISTS wdshard_hold_gen_audit (
     INDEX idx_lhga_gen (gen_id, at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
   COMMENT='腿占世代审计。';
-// temporary guard removed after the production check

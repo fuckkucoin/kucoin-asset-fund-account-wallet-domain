@@ -77,6 +77,23 @@ type BlockExpiryConfig struct {
 		   now := cfg.Engine.clock()
 		  expired, err := cfg.Engine.store.ListExpiredLeases(ctx, now, cfg.BatchSize)
 		  if err != nil {
+			   return err
+		  }
+		  for _, lease := range expired {
+			  updated := lease
+			   updated.State = BlockLeaseExpired
+			   eNow := now
+			  updated.ExpiredAt = &eNow
+			  updated.UpdatedAt = now
+			  _, _ = cfg.Engine.store.SaveBlockLease(ctx, updated)
+			   escs, _ := cfg.Engine.store.ListEscalationsByLease(ctx, lease.ID, 100)
+			   for _, esc := range escs {
+				   if esc.State == EscalationOpen {
+					   esc.State = EscalationClosed
+					   clNow := now
+					   esc.ClosedAt = &clNow
+					  esc.Resolution = fmt.Sprintf("block_expired: gen=%d", lease.BlockGen)
+					   esc.UpdatedAt = now
 					  _, _ = cfg.Engine.store.SaveEscalation(ctx, esc)
 					  timeoutEsc := AdviceEscalation{
 						  ID:      uuid.NewString(),
