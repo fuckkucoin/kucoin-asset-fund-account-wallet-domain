@@ -44,6 +44,16 @@ type Plan struct {
 // Leg 单条再平衡腿：源区 → 目标区。
 type Leg struct {
 	LegID  string `json:"leg_id"`
+	PlanID string `json:"plan_id"`
+	SrcRegion string `json:"src_region"`
+	DstRegion string `json:"dst_region"`
+	Asset     string `json:"asset"`
+	Amount         int64    `json:"amount"`
+	State          LegState `json:"state"`
+	IdempotencyKey string   `json:"idempotency_key"`
+	IntentRef string `json:"intent_ref,omitempty"`
+	TransferRef string `json:"transfer_ref,omitempty"`
+	FenceID     string `json:"leg_move_fence_id,omitempty"`
 	FailReason string    `json:"fail_reason,omitempty"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`

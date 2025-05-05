@@ -154,6 +154,24 @@ import (
 			   "region": hub.Pair.Status(),
 			  "label":  "dual-region write fence",
 		   })
+	   })
+	   // 出金跟踪表 + 入金 desk Hydrate 健康； SQL 行数与内存。
+	  // desk 与 wd-track 同面暴露 hydrate_err，不得吞没 Attach 错误。
+	   v1.GET("/ops/admin/wd-track-health", func(c *gin.Context) {
+		   if err := perm.FromRequest(c.Request, "").Check(perm.ActOpsAdmin); err != nil {
+			   c.JSON(403, gin.H{"error": err.Error()})
+			   return
+		   }
+		  ok := true
+		  var wd map[string]any
+		   svc := withdraw.FromRuntime(rt)
+		   if svc == nil {
+			   wd = map[string]any{"ok": true, "bound": false, "hint": "withdraw service not attached"}
+		   } else {
+			  wd = svc.WDTrackHealth(c.Request.Context())
+			  if v, okk := wd["ok"].(bool); okk && !v {
+				  ok = false
+			  }
 		  }
 		   var desk any = map[string]any{"ok": true, "bound": false}
 		  if dep := deposit.FromRuntime(rt); dep != nil && dep.Desk() != nil {

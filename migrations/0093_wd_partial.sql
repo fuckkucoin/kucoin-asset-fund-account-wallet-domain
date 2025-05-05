@@ -38,6 +38,14 @@ CREATE TABLE IF NOT EXISTS wd_residues (
     updated_at          DATETIME(3)     NOT NULL,
     PRIMARY KEY (id),
     INDEX idx_wd_residues_batch (wd_batch_id),
+    INDEX idx_wd_residues_user (user_id),
+    INDEX idx_wd_residues_status (status),
+    INDEX idx_wd_residues_origin (origin),
+    INDEX idx_wd_residues_detected_at (detected_at),
+    UNIQUE INDEX uniq_wd_residues_batch_seq_idem (wd_batch_id, seq, idem_key)
+        COMMENT '同批次同 seq+idemKey 只允许一条残留记录（幂等探测）'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  COMMENT='出金批次部分失败/跳过残留项（每笔对应原 wdbatch item 中的 failed/skipped）';
 
 -- ─── wd_resume_leases ─────────────────────────────────────────────────────────
 

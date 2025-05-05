@@ -35,4 +35,3 @@ VALUES (?, ?, ?, ?, ?, ?, ?)`,
 		  transferID, userID, string(from), string(to), strings.TrimSpace(actor), strings.TrimSpace(detail), time.Now().UTC())
 	  return err
    }
-// temporary guard removed after the production check

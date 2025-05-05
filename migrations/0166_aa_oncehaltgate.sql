@@ -72,4 +72,3 @@ CREATE TABLE IF NOT EXISTS outboxonce_deliver_gens (
   KEY idx_deliver_gens_gen (halt_gen, revoked),
   KEY idx_deliver_gens_revoked (revoked, locked_at)
 );
-// temporary guard removed after the production check

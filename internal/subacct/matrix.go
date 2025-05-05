@@ -120,6 +120,24 @@ func (s *Service) ApplyGrant(req Grant) (PrivilegeRow, error) {
 	c.Privileges = next
 	c.UpdatedAt = s.now()
 	if s.mx == nil {
+		s.mx = &matrixStore{scope: map[string][]string{}, cap: map[string]string{}, used: map[string]string{}, capDay: map[string]string{}}
+	}
+	if len(assets) > 0 {
+		s.mx.scope[c.ID] = assets
+	}
+	if capAmt != "" {
+		s.mx.cap[c.ID] = capAmt
+	}
+	if err := s.persistGrantSQL(req); err != nil {
+		return PrivilegeRow{}, err
+	}
+	if err := s.persistChildSQL(c.Copy()); err != nil {
+		return PrivilegeRow{}, err
+	}
+	return s.rowLocked(c), nil
+}
+
+// normalizePrivDelta 授权增量。空切片表示不改，不得展开成全权限。
 func normalizePrivDelta(in []Privilege) ([]Privilege, error) {
 	if len(in) == 0 {
 		return nil, nil

@@ -26,6 +26,12 @@ import (
 			  mw.WriteProblem(c, err)
 			   return
 		  }
+		  c.JSON(200, gin.H{"ok": true, "id": body.ID})
+	   })
+	   v1.GET("/webhooks/endpoints", func(c *gin.Context) {
+		   if err := perm.FromRequest(c.Request, "").Check(perm.ActOpsAdmin); err != nil {
+			  c.JSON(403, gin.H{"error": err.Error()})
+			  return
 		   }
 		   c.JSON(200, gin.H{"endpoints": d.Registry().List()})
 	  })
