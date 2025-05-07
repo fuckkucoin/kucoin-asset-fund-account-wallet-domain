@@ -16,6 +16,11 @@ import "strings"
 		  return true
 	  default:
 		   return false
+	  }
+  }
+
+// SameBookPair 是否同一簿内可换算对。
+   func SameBookPair(from, to string) bool {
 	  _, _, err := NormalizePair(from, to)
 	   return err == nil
    }

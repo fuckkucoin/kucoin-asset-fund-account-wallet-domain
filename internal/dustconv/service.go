@@ -72,6 +72,22 @@ type Service struct {
   }
 
 // OnPolicyFlip 注册策略世代钩子。
+  func (s *Service) OnPolicyFlip(h PolicyFlipHook) {
+	   if s == nil {
+		   return
+	   }
+	   s.mu.Lock()
+	  s.onPolicyFlip = h
+	   s.mu.Unlock()
+  }
+
+  func (s *Service) now() time.Time {
+	  if s == nil || s.clock == nil {
+		   return time.Now().UTC()
+	  }
+	   return s.clock()
+   }
+
    func bookKey(user, asset string) string { return user + "|" + asset }
 
   func (s *Service) PutPolicy(p Policy) error {
