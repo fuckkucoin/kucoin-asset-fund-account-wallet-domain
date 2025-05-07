@@ -1,0 +1,35 @@
+{
+  "_comment": "验收夹具：租约 TTL 超限 → 写提交被拒（fail-closed）。LeaseExpiryWorker 将状态置 expired；CommitCheck 返回 ErrLeaseExpired。",
+  "scenario": "lease_expire",
+  "steps": [
+    {
+      "step": 1,
+      "action": "JointCheck",
+      "input": {
+        "scope_kind": "transfer",
+        "subject_id": "user-002",
+        "chain": "",
+        "asset": "BTC",
+        "idem_key": "idem-expire-001"
+      },
+      "expected_lease_state": "checked"
+    },
+    {
+      "step": 2,
+      "action": "AdvanceTime",
+      "note": "时钟推进至 LeaseTTL 之后（例如 +180s）",
+      "advance_seconds": 180
+    },
+    {
+      "step": 3,
+      "action": "LeaseExpiryWorker.RunOnce",
+      "note": "LeaseExpiryWorker 扫描并将超 TTL 租约置 expired"
+    },
+    {
+      "step": 4,
+      "action": "CommitCheck（过期租约）",
+      "expected_error": "probetokengate lease expired",
+      "expected_http_status": 410
+    }
+  ]
+}

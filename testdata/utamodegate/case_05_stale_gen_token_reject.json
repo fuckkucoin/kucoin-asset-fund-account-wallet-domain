@@ -23,6 +23,11 @@
         "new_generation": 1,
         "lease_status": "bound"
       }
+    },
+    {
+      "step": 3,
+      "op": "validate_token",
+      "user_id": "u-2005",
       "token_gen": 0,
       "current_gen": 1,
       "expected_error": "utamodegate: stale generation: CAS conflict, retry with latest gen",

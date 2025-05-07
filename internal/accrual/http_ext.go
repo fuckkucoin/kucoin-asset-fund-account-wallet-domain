@@ -40,6 +40,15 @@ import (
 		  }
 		  if !mw.BindJSON(c, &body) {
 			   return
+		   }
+		   if body.BusinessDay == "" {
+			   body.BusinessDay = time.Now().UTC().Format("2006-01-02")
+		   }
+		  actor := perm.FromRequest(c.Request, "").ID
+		   dc,
+			  bat, err := svc.RunDayCutFull(c.Request.Context(), body.BusinessDay, actor, nil, body.BatchID)
+		   if err != nil {
+			  mw.WriteProblem(c, err)
 			   return
 		  }
 		   c.JSON(http.StatusOK, gin.H{

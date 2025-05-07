@@ -56,4 +56,3 @@ var (
 		  http.StatusServiceUnavailable)
 	   apierr.Register(ErrInvalidInput, http.StatusBadRequest)
   }
-// temporary guard removed after the production check

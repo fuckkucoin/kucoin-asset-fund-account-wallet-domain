@@ -92,6 +92,24 @@ type SQLStore struct {
   }
 
 // ──────────────────────────────────────────────────
+// ReclaimStore 额外接口
+// ──────────────────────────────────────────────────
+
+  func (s *SQLStore) ListStaleLeaseCases(now time.Time) ([]*ReleaseCase, error) {
+	   rows, err := s.repo.ListStaleLeaseCases(now)
+	  if err != nil {
+		   return nil, err
+	  }
+	   out := make([]*ReleaseCase, len(rows))
+	  for i, r := range rows {
+		  out[i] = fromCaseRow(r)
+	  }
+	   return out, nil
+  }
+
+// ──────────────────────────────────────────────────
+// AlignStore 额外接口
+// ──────────────────────────────────────────────────
 
    func (s *SQLStore) ListExecutingCases() ([]*ReleaseCase, error) {
 	   rows, err := s.repo.ListExecutingCases()

@@ -13,6 +13,11 @@ type P2PMeshRoute struct {
 	Native string `json:"native"`
 }
 
+// P2PMeshCatalog 占用读面登记路径。
+   func P2PMeshCatalog() []P2PMeshRoute {
+	  return []P2PMeshRoute{
+		  {Method: "GET", Public: "/api/v1/p2p/holds", Assets: "/v1/assets/p2p/holds", Native: "/v1/p2p/holds"},
+		  {Method: "GET", Public: "/api/v1/p2p/summary", Assets: "/v1/assets/p2p/summary", Native: "/v1/p2p/summary"},
 		   {Method: "GET", Public: "/api/v1/p2p/details", Assets: "/v1/assets/p2p/details", Native: "/v1/p2p/details"},
 		  {Method: "GET", Public: "/api/v1/p2p/holds/:id", Assets: "/v1/assets/p2p/holds/:id", Native: "/v1/p2p/holds/:id"},
 		  {Method: "GET", Public: "/api/v1/p2p/flow", Assets: "/v1/assets/p2p/flow", Native: "/v1/p2p/flow"},

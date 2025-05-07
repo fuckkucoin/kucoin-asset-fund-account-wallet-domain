@@ -100,4 +100,3 @@ VALUES (?,?,?,?,?,?,?,?,?)`,
 	   s.Halt = halt != 0
 	   return s, err
    }
-// temporary guard removed after the production check
