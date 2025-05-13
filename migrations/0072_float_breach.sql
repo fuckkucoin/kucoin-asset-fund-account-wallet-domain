@@ -35,4 +35,3 @@ CREATE TABLE IF NOT EXISTS float_refill_lock_log (
 
 CREATE INDEX IF NOT EXISTS idx_float_refill_lock_log_chain
     ON float_refill_lock_log (chain, conflict_at DESC);
-// temporary guard removed after the production check

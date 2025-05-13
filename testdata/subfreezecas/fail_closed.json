@@ -5,4 +5,3 @@
     {"name": "parent_frozen_child_misaligned", "debit_ok": false}
   ]
 }
-// temporary guard removed after the production check
