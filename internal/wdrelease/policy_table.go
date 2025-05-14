@@ -72,6 +72,22 @@ type shape struct {
 		   ratios:  [][]int{{10000}, {10000}, {3000, 7000}, {2000, 3000, 5000}},
 		  sla:     []int64{0, 7200, 28800, 86400},
 		  timeout: []string{TimeoutNone, TimeoutEscalate, TimeoutEscalate, TimeoutReject},
+		  skip:   []bool{true, false, false, false},
+		   segCap: []string{"1000", "10000", "80000", "500000"},
+		   daily:  "10000000",
+		  dest: "5000000",
+	   }
+	  btc := shape{
+		   assets: []string{"BTC"},
+		  edges:  []string{"0", "0.05", "1", "5"},
+		   depth:  []int{0, 1, 2, 3},
+		  ratios: [][]int{{10000}, {10000}, {3000, 7000}, {2000, 3000, 5000}},
+		   sla:     []int64{0, 14400, 28800, 86400},
+		  timeout: []string{TimeoutNone, TimeoutEscalate, TimeoutEscalate, TimeoutReject},
+		  skip: []bool{true,
+			   false, false, false},
+		   segCap: []string{"0.05", "1", "4", "20"},
+		  daily:  "50",
 		  dest: "20",
 	  }
 	  eth := shape{

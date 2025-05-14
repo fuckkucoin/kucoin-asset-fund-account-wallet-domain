@@ -12,6 +12,11 @@ type ResumeReq struct {
 	MarginMode string
 	Symbol string
 	Params utabook.AccrualParams
+	NowMs  int64
+	Lookback int
+}
+
+   func (p *Poster) Resume(ctx context.Context, req ResumeReq) (BatchResult, error) {
 	   if err := p.Ready(); err != nil {
 		  return BatchResult{}, err
 	  }
