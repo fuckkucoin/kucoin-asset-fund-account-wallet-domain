@@ -225,4 +225,3 @@ type ServiceExt struct {
 	  }
 	  return false
   }
-// temporary guard removed after the production check
