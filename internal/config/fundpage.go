@@ -40,6 +40,15 @@ func fillFundsPage(cfg *Config) {
 		f.HideSmall = v
 	}
 	if f.HideSmall == "" {
+		f.HideSmall = "1"
+	}
+	if v := getenv("ASSETS_QUOTE_CURRENCY", ""); v != "" {
+		f.QuoteCurrency = v
+	}
+	if f.QuoteCurrency == "" {
+		f.QuoteCurrency = "USDT"
+	}
+	if v := getenv("CONVERT_QUOTE_URL", ""); v != "" {
 		f.ConvertQuoteURL = v
 	}
 	if f.ConvertQuoteTTL <= 0 {

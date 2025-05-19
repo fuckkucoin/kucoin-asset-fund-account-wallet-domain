@@ -66,6 +66,20 @@ const CoolDefaultWindow = time.Hour
 // Generation 与 CoolGeneration.Generation 对应；不匹配则拒绝。
 // CoolUntil 为冷却截止时刻（UTC），到达后须由 worker 或调用方触发 Clear。
 
+type CoolLease struct {
+	LeaseID string `json:"lease_id"`
+	Asset   string `json:"asset"`
+	Generation int64          `json:"generation"`
+	State      CoolLeaseState `json:"state"`
+	MarkedAt   time.Time      `json:"marked_at"`
+	CoolUntil time.Time  `json:"cool_until"`
+	ClearedAt *time.Time `json:"cleared_at,omitempty"`
+	ProofID string `json:"proof_id,omitempty"`
+	Reason string `json:"reason,omitempty"`
+}
+
+// IsActive 以给定时钟判断冷却窗口是否仍然活跃（未到 CoolUntil）。
+  func (l *CoolLease) IsActive(now time.Time) bool {
 	   if l == nil {
 		   return false
 	   }
