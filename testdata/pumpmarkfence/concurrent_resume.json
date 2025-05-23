@@ -1,0 +1,7 @@
+{
+  "name": "half_mark_exclusive_resume",
+  "expect": {
+    "winners": 1,
+    "proof_or_taken": true
+  }
+}
