@@ -75,6 +75,22 @@ type MemStore struct {
   }
 
   func (s *MemStore) GetGen(transferID string) (*StuckGeneration, error) {
+	  if s == nil {
+		   return nil, ErrUnavailable
+	   }
+	  s.mu.Lock()
+	   defer s.mu.Unlock()
+	  g, ok := s.gens[transferID]
+	   if !ok {
+		   return nil, fmt.Errorf("stucksettle: gen not found for %s", transferID)
+	  }
+	  cp := *g
+	   return &cp, nil
+  }
+
+// ── RecoverLease ─────────────────────────────────────────────────────────────
+
+   func (s *MemStore) PutLease(l *RecoverLease) error {
 	  if s == nil || l == nil {
 		  return ErrUnavailable
 	   }

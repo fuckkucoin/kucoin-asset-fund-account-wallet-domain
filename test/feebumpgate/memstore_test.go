@@ -25,6 +25,11 @@ func TestMemStoreCASAndEpoch(t *testing.T) {
 		t.Fatal(err)
 	}
 	if err := m.SaveGen(ctx, g); !errors.Is(err, feebumpgate.ErrIdem) {
+		t.Fatalf("%v", err)
+	}
+	got, err := m.GetGenByIdem(ctx, "i")
+	if err != nil || got.GenID != "g1" {
+		t.Fatal(err)
 	}
 	g.State = feebumpgate.GenBroadcast
 	if err := m.CASGen(ctx, "g1", feebumpgate.GenSigned, feebumpgate.GenBroadcast, g); err != nil {
