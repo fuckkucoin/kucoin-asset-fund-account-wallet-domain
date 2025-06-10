@@ -33,6 +33,13 @@ import (
 			   c.JSON(403, gin.H{"error": err.Error()})
 			  return
 		   }
+		   var body MintReq
+		  if !mw.BindJSON(c, &body) {
+			   return
+		   }
+		  got, err := svc.Mint(c.Request.Context(), body)
+		  if err != nil {
+			   mw.WriteProblem(c, err)
 			   return
 		  }
 		   c.JSON(200, got)
