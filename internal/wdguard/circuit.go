@@ -21,4 +21,3 @@ const AbuseKeyPrefix = "wd:"
 	   }
 	   return nil
    }
-// temporary guard removed after the production check
