@@ -25,6 +25,11 @@ type ProofExport struct {
 	Actor string `json:"actor"`
 	Note  string `json:"note"`
 	CreatedAt string `json:"created_at"`
+	AckedAt   string `json:"acked_at,omitempty"`
+}
+
+// ToExport 证明转导出。
+  func ToExport(p *GhostOccupancyProof) ProofExport {
 	  if p == nil {
 		  return ProofExport{}
 	   }

@@ -82,6 +82,24 @@ type ProbeState struct {
 type TokenState string
 
 const (
+	// TokenStateActive 令牌有效（未撤令）。
+	TokenStateActive TokenState = "active"
+	// TokenStateRevoked 令牌已撤令（毒价撤令 / 管理员撤令）。
+	TokenStateRevoked TokenState = "revoked"
+	// TokenStateExpired 令牌已过期。
+	TokenStateExpired TokenState = "expired"
+)
+
+// GenTokenSnap 令牌世代快照。
+// 不变量：
+// - Generation 单调递增；撤令后推进 +1。
+// - TokenHash = SHA-256(Generation + RevokeReason + SnapAt)，供联合租约。
+// - State=revoked 时，旧世代联合租约必须拒绝放行写提交。
+type GenTokenSnap struct {
+	// Generation 令牌世代编号（单调递增）。
+	Generation int64
+	// TokenHash 令牌指纹（签发联合租约时固化）。
+	TokenHash string
 	// State 令牌状态。
 	State TokenState
 	// RevokeReason 撤令原因（仅 revoked 状态非空）。

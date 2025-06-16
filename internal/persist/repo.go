@@ -12,6 +12,11 @@ type TxRunner interface {
 	InTx(ctx context.Context, fn func(context.Context) error) error
    }
 
+  // Fencer 行级围栏。Bump 必须在业务锁内；Check 失败一律当冲突，不得重放旧 token。
+   type Fencer interface {
+	   Bump(id,
+		token string) (Fence, error)
+	Get(id string) (Fence, bool)
 	Check(id string, epoch int64, token string) error
 }
 
