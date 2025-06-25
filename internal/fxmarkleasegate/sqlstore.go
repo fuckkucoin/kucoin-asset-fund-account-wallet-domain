@@ -414,4 +414,3 @@ ON DUPLICATE KEY UPDATE seq=VALUES(seq), last_usd=VALUES(last_usd), updated_at=V
 	  }
 	   return *t
   }
-// temporary guard removed after the production check

@@ -133,4 +133,3 @@ import (
 	   _ = ctx
 	   return nil
   }
-// temporary guard removed after the production check

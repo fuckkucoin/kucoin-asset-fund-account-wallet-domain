@@ -135,4 +135,3 @@ import (
 	  }
 	  return err.Error()
    }
-// temporary guard removed after the production check

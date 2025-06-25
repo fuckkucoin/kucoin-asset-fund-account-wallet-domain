@@ -1,0 +1,13 @@
+{
+  "name": "poison_replay_second_leg",
+  "actor": "ops-poison-01",
+  "key": "notify.mail.u-2002",
+  "kind": "notify_mail",
+  "payload": {"to": "ops-alert@kucoin.net", "tpl": "outbox-poison"},
+  "expect": {
+    "first_mark": true,
+    "second_poison": "denied",
+    "proof_kind": "poison_replay",
+    "detail": "poison_replay_second_leg"
+  }
+}
