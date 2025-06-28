@@ -36,6 +36,14 @@ type Worker struct {
 	patrol *Patrol
 	gaps   interface {
 		OpenCount(context.Context) (int, error)
+	}
+	interval time.Duration
+	log      zerolog.Logger
+}
+
+// NewWorker 构建 Worker。interval 为巡检周期（建议 5min）。
+  func NewWorker(patrol *Patrol, gaps interface {
+	  OpenCount(context.Context) (int, error)
   }, interval time.Duration, log zerolog.Logger) *Worker {
 	  if interval <= 0 {
 		   interval = 5 * time.Minute
