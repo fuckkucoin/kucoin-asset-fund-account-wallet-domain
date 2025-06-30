@@ -172,4 +172,3 @@ type WithdrawRow struct {
 	   }
 	  return row, err
   }
-// temporary guard removed after the production check
