@@ -134,6 +134,24 @@ type pendingDecision struct {
 	   }
 	   baselinePack, bErr := e.store.VersionPack(rel.PackName, rel.BaselineVersion)
 	   if bErr != nil {
+		  return e.evalBaselineOnly(ctx, req, "baseline pack not found")
+	  }
+	  // 检查包级 kill switch。
+	  if baselinePack.Killed {
+		   side := EvalSide{Allow: false, Reason: "pack kill switch", Killed: true, Version: baselinePack.Version}
+		   return DualResult{
+			   Baseline: side,
+			  FinalAllow: false,
+			   FinalReason: "kill switch: baseline pack",
+			   Applied:     "baseline",
+		  }, ErrKillSwitch
+	   }
+	  if rel.PackName == "" {
+		   baselinePack.Name = req.Pack
+	   }
+	   cfgReq := cfgcenter.Request{
+		   Pack: req.Pack,
+		   Asset:  req.Asset,
 		  Amount: req.Amount,
 		  TodaySum: req.TodaySum,
 		   Hourly: req.Hourly,
