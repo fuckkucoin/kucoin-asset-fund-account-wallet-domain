@@ -64,4 +64,3 @@ var ErrNeedRevoke = errors.New("revoke transfer/withdrawal api key before delete
 	   s.noteAuditIP(owner, subName, apiKey, "restore", "", actorIP)
 	  return out, nil
    }
-// temporary guard removed after the production check
