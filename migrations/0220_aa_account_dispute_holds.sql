@@ -29,4 +29,3 @@ CREATE TABLE IF NOT EXISTS account_dispute_holds (
     KEY idx_adh_user (user_id, updated_at),
     KEY idx_adh_state (state, updated_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='关户迟贷争议挂起仓';
-// temporary guard removed after the production check

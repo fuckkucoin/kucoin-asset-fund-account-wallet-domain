@@ -93,4 +93,3 @@ CREATE TABLE IF NOT EXISTS broker_conserve_proofs (
 CREATE INDEX IF NOT EXISTS idx_bcp_lease ON broker_conserve_proofs (lease_id, sampled_at DESC);
 
 COMMIT;
-// temporary guard removed after the production check

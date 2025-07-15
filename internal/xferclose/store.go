@@ -129,6 +129,24 @@ type MemStore struct {
 	  s.mu.RLock()
 	   defer s.mu.RUnlock()
 	   id, ok := s.hopsByHopID[hopID]
+	  if !ok {
+		  return HalfHop{}, ErrNotFound
+	  }
+	  h, ok2 := s.hops[id]
+	   if !ok2 {
+		   return HalfHop{}, ErrNotFound
+	   }
+	  return h, nil
+  }
+
+   func (s *MemStore) ListActive(_ context.Context, offset, limit int) ([]HalfHop, error) {
+	   s.mu.RLock()
+	   defer s.mu.RUnlock()
+	   if limit <= 0 || limit > 500 {
+		  limit = 100
+	  }
+	   var out []HalfHop
+	   for _, h := range s.hops {
 		  if !h.Terminal() {
 			  out = append(out, h)
 		  }
