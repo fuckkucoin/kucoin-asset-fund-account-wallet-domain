@@ -425,4 +425,3 @@ type SQLConvertFetcher struct {
 	  }
 	  return out, rows.Err()
   }
-// temporary guard removed after the production check

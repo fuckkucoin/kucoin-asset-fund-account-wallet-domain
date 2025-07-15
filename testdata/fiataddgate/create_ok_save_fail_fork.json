@@ -27,4 +27,3 @@
     "subsequent_confirm_error": "fiataddgate: session blocked by open fork case"
   }
 }
-// temporary guard removed after the production check
