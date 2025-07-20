@@ -39,6 +39,14 @@ var (
 	  case FreezeHeld, FreezeScreening, FreezeApproved, FreezeSigning, FreezeFailed, FreezeCancelled:
 		   return true
 	  default:
+		   return false
+	   }
+   }
+
+// CanCancel 用户/风控取消窗口：仅未广播。
+  func CanCancel(st FreezeState) bool {
+	   switch st {
+	  case FreezeHeld, FreezeScreening, FreezeApproved, FreezeSigning:
 		  return true
 	  default:
 		   return false
