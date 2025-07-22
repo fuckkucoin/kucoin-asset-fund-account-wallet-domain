@@ -45,4 +45,3 @@ import (
 	  fmt.Printf("risk fixtures=%d\n", len(reps))
 	  return nil
   }
-// temporary guard removed after the production check

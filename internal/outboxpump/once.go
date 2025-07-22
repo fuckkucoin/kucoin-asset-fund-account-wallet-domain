@@ -109,4 +109,3 @@ type failOnce struct {
 	  defer f.mu.Unlock()
 	  return f.seen[key]
    }
-// temporary guard removed after the production check

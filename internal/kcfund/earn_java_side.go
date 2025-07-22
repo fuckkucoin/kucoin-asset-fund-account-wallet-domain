@@ -31,4 +31,3 @@ import (
 	    	Status:     string(pos.Status),
 	       })
 }
-// temporary guard removed after the production check

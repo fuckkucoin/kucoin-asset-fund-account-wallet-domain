@@ -76,4 +76,3 @@ CREATE TABLE IF NOT EXISTS fr_terminal_binds (
   func AllDDL() []string {
 	  return []string{LeasesDDL, CasesDDL, ProofsDDL, TerminalBindsDDL}
    }
-// temporary guard removed after the production check

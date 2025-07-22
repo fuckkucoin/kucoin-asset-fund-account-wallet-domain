@@ -54,4 +54,3 @@ type ProofView struct {
 	   }
 	  return out
    }
-// temporary guard removed after the production check

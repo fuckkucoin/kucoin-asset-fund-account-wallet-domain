@@ -25,6 +25,11 @@
       "quote_bind_id": "qb-conc-001"
     },
     {
+      "goroutine": "G2_ClearPin",
+      "seq": 2,
+      "event": "GatedDowngrade",
+      "trigger_kind": "clear_pin",
+      "from_tier": "vip",
       "to_tier": "standard",
       "expected_gen": 3,
       "inflight_quote_count": 1,
