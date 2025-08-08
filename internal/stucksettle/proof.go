@@ -28,6 +28,12 @@ import (
 // BuildEffectProof 构造效果证明。
 // action 来自 withdraw.RecoverStuck 返回的 StuckAction；
 // ledgerRef 为广播记录 ID 或账本流水 ID（只读引用，不改写外部状态）。
+   func BuildEffectProof(lease *RecoverLease, action, ledgerRef, issuedBy string, now time.Time) (*EffectProof, error) {
+	  if lease == nil {
+		   return nil, ErrUnavailable
+	   }
+	   if strings.TrimSpace(action) == "" {
+		  return nil, fmt.Errorf("%w: action empty", ErrInvalidInput)
 	  }
 	   if strings.TrimSpace(issuedBy) == "" {
 		   return nil, fmt.Errorf("%w: issued_by empty", ErrInvalidInput)

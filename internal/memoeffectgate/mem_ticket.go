@@ -17,6 +17,11 @@ type MemTicketBook struct {
    }
 
   func (m *MemTicketBook) Put(t MemoTicketView) MemoTicketView {
+	  m.mu.Lock()
+	   defer m.mu.Unlock()
+	  if t.ID == "" {
+		  t.ID = uuid.NewString()
+	  }
 	   if t.Status == "" {
 		  t.Status = "pending"
 	  }

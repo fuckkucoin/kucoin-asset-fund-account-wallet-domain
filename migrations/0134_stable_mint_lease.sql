@@ -92,4 +92,3 @@ CREATE TABLE IF NOT EXISTS stable_mint_denies (
   KEY idx_smd_scope (scope_key, outcome),
   KEY idx_smd_lease (lease_id, created_at)
 );
-// temporary guard removed after the production check
