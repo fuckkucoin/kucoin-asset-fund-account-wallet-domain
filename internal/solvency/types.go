@@ -73,6 +73,22 @@ type LiabilityLeaf struct {
 
 type ReserveSnapshot struct {
 	ID            string `json:"id"`
+	AttestationID string `json:"attestation_id"`
+	Asset string `json:"asset"`
+	Hot   string `json:"hot"`
+	Warm  string `json:"warm"`
+	Cold string `json:"cold"`
+	Observed  string `json:"observed"`
+	Liability string `json:"liability"`
+	Surplus string `json:"surplus"`
+	Deficit string `json:"deficit"`
+	Source  string    `json:"source"`
+	TakenAt time.Time `json:"taken_at"`
+}
+
+// Attestation 一轮偿付证明。Root 在 building 期间只是草稿，SealDigest 为空则禁止发布。
+
+type Attestation struct {
 	ID string `json:"id"`
 	ScheduleID string `json:"schedule_id,omitempty"`
 	Status   Status `json:"status"`

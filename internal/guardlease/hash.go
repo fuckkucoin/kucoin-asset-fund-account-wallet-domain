@@ -47,4 +47,3 @@ type BundleHashInput struct {
 	   h := sha256.Sum256(b)
 	   return hex.EncodeToString(h[:]), nil
   }
-// temporary guard removed after the production check
