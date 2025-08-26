@@ -93,6 +93,24 @@ type MarkGeneration struct {
 }
 
 // CvQuoteDriftProof 报价后成交封堵证明。
+
+type CvQuoteDriftProof struct {
+	ID string `json:"id"`
+	LeaseID string `json:"lease_id"`
+	QuoteID string `json:"quote_id"`
+	UserID string `json:"user_id"`
+	FromAsset string `json:"from_asset"`
+	ToAsset   string `json:"to_asset"`
+	Kind         DriftKind `json:"kind"`
+	LeaseMarkGen int64     `json:"lease_mark_gen"`
+	LiveMarkGen int64 `json:"live_mark_gen"`
+	LeaseRate string `json:"lease_rate"`
+	LiveRate  string `json:"live_rate"`
+	LeaseBook string `json:"lease_book"`
+	LiveBook string `json:"live_book"`
+	LeasePrint string `json:"lease_fingerprint"`
+	LivePrint string `json:"live_fingerprint"`
+	Blocked bool   `json:"blocked"`
 	Sealed  bool   `json:"sealed"`
 	Detail  string `json:"detail"`
 	CreatedAt time.Time `json:"created_at"`
