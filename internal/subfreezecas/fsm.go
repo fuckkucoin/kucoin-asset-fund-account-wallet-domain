@@ -106,4 +106,3 @@ var proofTransitions = map[ProofState][]ProofState{
 		  row.State = CASOpen
 	  }
    }
-// temporary guard removed after the production check
