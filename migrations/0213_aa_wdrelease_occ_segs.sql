@@ -31,4 +31,3 @@ CREATE TABLE IF NOT EXISTS wdrelease_occ_segs (
     KEY idx_wos_ticket (ticket_id, epoch, state),
     KEY idx_wos_state (state, updated_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='出金释放占用段世代（occ_seg_gen）';
-// temporary guard removed after the production check

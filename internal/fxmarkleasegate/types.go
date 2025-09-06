@@ -323,4 +323,3 @@ type LiveSnap struct {
 	FromGen    int64
 	ToGen      int64
 }
-// temporary guard removed after the production check
