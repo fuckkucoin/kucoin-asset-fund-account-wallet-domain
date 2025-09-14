@@ -13,4 +13,3 @@
     "error": "invleasegate: drift checker unavailable, fail-closed"
   }
 }
-// temporary guard removed after the production check

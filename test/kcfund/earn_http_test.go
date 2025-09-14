@@ -41,4 +41,3 @@ func TestEarnProductsAndHoldAssetsShape(t *testing.T) {
 		t.Fatalf("hold shape: %s", w.Body.String())
 	}
 }
-// temporary guard removed after the production check
