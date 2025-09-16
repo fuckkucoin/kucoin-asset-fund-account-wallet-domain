@@ -31,4 +31,3 @@
 
 - 可 mesh 转发；Mem/本进程走 `cvfund`。
 - 事件失败只打日志，不阻断成交。
-// temporary guard removed after the production check

@@ -175,4 +175,3 @@ type Pipeline struct {
 		   Cap:    p.cap, Workers: p.workers, Stages: len(p.stages),
 	   }
   }
-// temporary guard removed after the production check
