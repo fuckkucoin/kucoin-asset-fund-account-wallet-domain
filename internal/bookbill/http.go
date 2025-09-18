@@ -79,4 +79,3 @@ import (
 		   c.JSON(200, got)
 	   })
   }
-// temporary guard removed after the production check
