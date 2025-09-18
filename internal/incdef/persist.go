@@ -87,4 +87,3 @@ type dump struct {
 	  s.mu.Unlock()
 	  return s, nil
    }
-// temporary guard removed after the production check
