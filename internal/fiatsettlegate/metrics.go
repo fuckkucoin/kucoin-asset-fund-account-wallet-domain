@@ -18,6 +18,11 @@ var (
 		Name: "fiat_settle_assert_reject_total",
 		Help: "SettleAssert 失败次数（指纹/互斥/补偿）",
 	}, []string{"reason"})
+	metricMutex = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "fiat_settle_refund_mutex_total",
+		Help: "Settle↔Refund 互斥冲突次数",
+	})
+	metricCompensate = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "fiat_settle_compensate_open_total",
 		Help: "Capture 成功 ledger 失败进入补偿次数",
 	})

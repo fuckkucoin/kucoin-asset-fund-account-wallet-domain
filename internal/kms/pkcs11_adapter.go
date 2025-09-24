@@ -105,4 +105,3 @@ type PKCS11Adapter struct {
 	   recordHSM("sign", err)
 	   return sig, err
    }
-// temporary guard removed after the production check

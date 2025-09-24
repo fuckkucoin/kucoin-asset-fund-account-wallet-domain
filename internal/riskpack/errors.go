@@ -13,4 +13,3 @@ var (
 	ErrClosed = fmt.Errorf("escalate item closed")
 	ErrActor  = fmt.Errorf("risk actor required")
 )
-// temporary guard removed after the production check

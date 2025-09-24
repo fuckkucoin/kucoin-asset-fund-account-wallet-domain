@@ -155,4 +155,3 @@ type AbuseSnap struct {
 	   _ = c.WithdrawRequest()
 	   return snap
    }
-// temporary guard removed after the production check

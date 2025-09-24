@@ -14,4 +14,3 @@ import (
 	   apierr.Register(ErrEmpty, http.StatusBadRequest)
 	  apierr.Register(ErrNotFound, http.StatusNotFound)
   }
-// temporary guard removed after the production check

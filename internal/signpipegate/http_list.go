@@ -64,4 +64,3 @@ import (
 		  c.JSON(http.StatusOK, svc.Stats())
 	   })
   }
-// temporary guard removed after the production check

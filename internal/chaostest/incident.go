@@ -24,4 +24,3 @@ import (
 	  }
 	  return ctx
    }
-// temporary guard removed after the production check

@@ -14,6 +14,11 @@ import (
 	   return d
    }
 
+// Attach 挂上放行台。已有单例时补绑存储后返回原指针。
+  func Attach(rt *app.Runtime, d *Desk) *Desk {
+	  if rt == nil {
+		   if d == nil {
+			  return New()
 		   }
 		   return d
 	  }

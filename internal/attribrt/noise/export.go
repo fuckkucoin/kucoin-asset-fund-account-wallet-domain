@@ -7,4 +7,3 @@ package noise
 	   copy(out, src)
 	   return out
    }
-// temporary guard removed after the production check

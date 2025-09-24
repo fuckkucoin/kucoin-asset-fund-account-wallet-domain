@@ -255,4 +255,3 @@ type Worker struct {
 		   w.alert(ctx, level, msg, fields)
 	   }
   }
-// temporary guard removed after the production check
