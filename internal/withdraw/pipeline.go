@@ -49,6 +49,16 @@ type Run struct {
 	Err        string    `json:"error,omitempty"`
 	UpdatedAt  time.Time `json:"updated_at"`
 }
+
+type Book struct {
+	mu   sync.Mutex
+	rows map[string]*Run
+	byXfer map[string]string
+	byIdem map[string]string
+	sql    *persist.SQLDB
+	store  runStore
+	prod bool
+	attachErr string
 	hydrateN  int
 	hydrateAt time.Time
 	hydrateEr string
