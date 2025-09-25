@@ -37,4 +37,3 @@ CREATE TABLE IF NOT EXISTS fi_misroute_cases (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='站内转账串户（误路由）案例仓；open→proven→closed；缺失不得放行资金';
 
-// temporary guard removed after the production check

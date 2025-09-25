@@ -14,4 +14,3 @@ import (
    func main() {
 	   svcboot.Main("led-diff", config.HostQueryGateway, leddiff.Register)
    }
-// temporary guard removed after the production check
