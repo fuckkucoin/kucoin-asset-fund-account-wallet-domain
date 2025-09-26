@@ -281,4 +281,3 @@ import (
 		   c.JSON(200, gin.H{"can_close": ok, "reason": reason})
 	  })
    }
-// temporary guard removed after the production check

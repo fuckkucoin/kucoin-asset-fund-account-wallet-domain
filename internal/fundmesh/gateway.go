@@ -173,6 +173,24 @@ type CallOpts struct {
 		  return "https://" + config.HostP2PFunding
 	   case "funding_bff":
 		   return "https://" + config.HostFundingBFF
+	   default:
+		   return ""
+	   }
+   }
+
+// do 执行带退避的 HTTP 调用。网络错误可重试；已收到 HTTP 状态则不再重试同一实例。
+
+  func (g *Client) do(ctx context.Context, kind, method, path string, body []byte, opt CallOpts) (int, []byte, error) {
+	  svc := g.serviceName(kind)
+	  if svc == "" {
+		   return 0, nil, fmt.Errorf("unknown mesh kind %q", kind)
+	  }
+	   var last error
+	  for attempt := 0; attempt < 3; attempt++ {
+		   base, err := g.pickBase(svc, kind)
+		  if err != nil {
+			   last = err
+			   time.Sleep(svcreg.SleepBackoff(attempt + 1))
 			  continue
 		   }
 		   url := strings.TrimRight(base, "/") + path
