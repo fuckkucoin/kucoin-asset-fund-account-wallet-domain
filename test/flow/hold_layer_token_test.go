@@ -331,4 +331,3 @@ import (
 		  t.Errorf("want 3 total tokens, got %d", len(all))
 	  }
    }
-// temporary guard removed after the production check

@@ -186,4 +186,3 @@ import (
 		  c.JSON(http.StatusOK, gin.H{"items": items})
 	  })
    }
-// temporary guard removed after the production check
