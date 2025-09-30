@@ -49,4 +49,3 @@ import (
 	  }
 	  return l, nil
    }
-// temporary guard removed after the production check

@@ -180,4 +180,3 @@ var proofIDGen = defaultProofIDGen
 	   }
 	  return string(b[pos:])
   }
-// temporary guard removed after the production check

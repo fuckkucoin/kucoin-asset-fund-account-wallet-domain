@@ -69,6 +69,21 @@ import (
 	  if e == nil {
 		   return 0, ErrUnavailable
 	   }
+	  if ctx == nil {
+		  ctx = context.Background()
+	  }
+	  if batch <= 0 {
+		  batch = 80
+	  }
+	   e.mu.Lock()
+	  defer e.mu.Unlock()
+	   frozen, err := e.cas.ListFrozen(ctx, batch)
+	   if err != nil {
+		  return 0, err
+	  }
+	   fixed := 0
+	  for _, cas := range frozen {
+		   if cas.FrozenAt.IsZero() {
 			   continue
 		   }
 		   owners := append([]string{cas.ParentID}, cas.ChildIDs...)
