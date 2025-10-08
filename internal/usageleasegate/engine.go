@@ -63,6 +63,20 @@ type Engine struct {
 		  store:  cfg.Store,
 		  usage:  cfg.Usage,
 		  hits:   cfg.Hits,
+		  src:    src,
+		   commit: cfg.Commit,
+		  clock:  cfg.Clock,
+		  ttl: cfg.TTL,
+		   autoRes: cfg.AutoResv,
+		   keys: newKeyLock(),
+		   fsm: LeaseStateMachine(),
+	   }
+   }
+
+   func defaultCommit(us *usage.Store, hs *hitstore.Store) CommitHook {
+	  return func(ctx context.Context, l UsageLease) (string, error) {
+		   if us != nil {
+			   if err := us.Record(l.Kind, l.UserID, l.Asset, l.Dest, l.Amount); err != nil {
 				   return "", err
 			  }
 		   }

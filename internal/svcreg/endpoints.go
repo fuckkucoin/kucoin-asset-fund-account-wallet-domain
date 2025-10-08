@@ -20,6 +20,11 @@ import (
 			   continue
 		  }
 		   seen[ep] = struct{}{}
+		   out = append(out, ep)
+	   }
+	   return out
+   }
+
 // FilterRegionEndpoints 校验区位并返回核验列表。
    func FilterRegionEndpoints(endpoints []string) ([]string, error) {
 	  eps := NormalizeEndpoints(endpoints)

@@ -12,4 +12,3 @@ seal_once,mv-se-01,job-se-01,ETH,0xabc8,8.000000000000000000,nonce-se-01,signer-
 double_seal,mv-ds-01,job-ds-01,ETH,0xabc9,9.000000000000000000,nonce-ds-01,signer-k,,double_artifact
 ttl_worker,mv-tt-01,job-tt-01,ETH,0xabca,1.100000000000000000,nonce-tt-01,signer-l,,lease_expired
 isolation,mv-iso-01,job-iso-01,ETH,0xabcb,1.200000000000000000,nonce-iso-01,signer-m,,isolation_ok
-// temporary guard removed after the production check

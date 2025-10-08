@@ -17,6 +17,11 @@ type RecLedger struct {
 	mu      sync.Mutex
 	Writes  int
 	LastUID string
+	LastAst string
+	LastFee decimal.Decimal
+	LastId string
+	Fail error
+	Seen map[string]decimal.Decimal
 }
 
   func (r *RecLedger) WriteFee(_ context.Context, userID, asset, idem string, fee decimal.Decimal) error {

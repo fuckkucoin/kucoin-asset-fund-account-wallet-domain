@@ -37,4 +37,3 @@ var ErrSecond = errors.New("deposit output second credit refused")
 	  }
 	  return got, nil
    }
-// temporary guard removed after the production check
