@@ -186,4 +186,3 @@ type ExecBook struct {
 	  }
 	  return e.Record(plan)
    }
-// temporary guard removed after the production check

@@ -174,6 +174,24 @@ type KVStore struct {
 	  }
 	  return out, nil
   }
+
+   func (s *KVStore) SaveLeg(ctx context.Context, leg *OccLeg) error {
+	  if s == nil || s.kv == nil {
+		   return ErrOccStore
+	   }
+	  leg.UpdatedAt = time.Now().UTC()
+	   body, err := json.Marshal(leg)
+	  if err != nil {
+		  return err
+	  }
+	  exp := persist.Fence{}
+	   if cur, err := s.kv.Get(ctx, kindOccLeg, leg.ID); err == nil {
+		  exp = cur.Fence
+	   }
+	  return s.kv.Put(ctx, persist.Row{Kind: kindOccLeg, Key: leg.ID, Body: body}, exp)
+   }
+
+  func (s *KVStore) SaveBreach(ctx context.Context, evt *BreachEvent) error {
 	   if s == nil || s.kv == nil {
 		  return ErrOccStore
 	   }

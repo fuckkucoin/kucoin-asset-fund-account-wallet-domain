@@ -40,6 +40,15 @@ type Worker struct {
 		  case <-flip.C:
 			  _, _ = w.PumpFlips(ctx)
 		  case <-risk.C:
+			   _, _ = w.PumpRisks(ctx)
+		  }
+	  }
+  }
+
+// ScanExpiry 过期扫描入口。
+
+   func (w *Worker) ScanExpiry(ctx context.Context) (int, error) {
+	  if w == nil || w.eng == nil {
 		  return 0, ErrUnavailable
 	   }
 	  return w.eng.ExpireOpen(ctx, w.cfg.BatchSize)

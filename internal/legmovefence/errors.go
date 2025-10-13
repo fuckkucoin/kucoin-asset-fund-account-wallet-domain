@@ -28,4 +28,3 @@ var (
   func WrapStore(op string, err error) error {
 	  return fmt.Errorf("%w: %s: %w", ErrStore, op, err)
    }
-// temporary guard removed after the production check
