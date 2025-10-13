@@ -17,6 +17,11 @@ type Store interface {
 	GetGen(ctx context.Context,
 		genID string) (*LendGen, error)
 	// ConsumeGen CAS 消费：将 Consumed=false 的 gen 原子设为 Consumed=true。
+	// 已消费返回 ErrGenConsumed；未找到返回 ErrGenNotFound。
+	ConsumeGen(ctx context.Context, genID string, consumedBy string, at time.Time) error
+	// ── LendOccupyLease ──────────────────────────────────────────────────────
+	// SaveLease 新建占用租约（insert-only）。
+	// 同 OrderID 已存在则返回 ErrGenAlreadyExists（防止重复 Place）。
 	SaveLease(ctx context.Context, l *LendOccupyLease) error
 	// GetLeaseByOrder 按 OrderID 查询租约；未找到返回 ErrLeaseNotFound。
 	GetLeaseByOrder(ctx context.Context,

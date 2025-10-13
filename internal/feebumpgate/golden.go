@@ -23,6 +23,11 @@ type GoldenCase struct {
 	Actor            string `json:"actor"`
 	InjectRetireFail bool   `json:"inject_retire_fail"`
 	Expected         struct {
+		SecondError       string `json:"second_error"`
+		OldBroadcastError string `json:"old_broadcast_error"`
+		HeldAfterSecond   int    `json:"held_after_second"`
+		ProofKind         string `json:"proof_kind"`
+		LatestBroadcastOK bool   `json:"latest_broadcast_ok"`
 		BlocksFurtherSign bool `json:"blocks_further_sign"`
 	} `json:"expected"`
 	Invariants []string `json:"invariants"`

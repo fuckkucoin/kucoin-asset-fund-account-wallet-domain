@@ -41,6 +41,15 @@ import "sort"
   func sortHoldViews(items []HoldView, asc bool) {
 	   sort.SliceStable(items, func(i, j int) bool {
 		   if items[i].CreatedAtMs != items[j].CreatedAtMs {
+			   if asc {
+				   return items[i].CreatedAtMs < items[j].CreatedAtMs
+			   }
+			  return items[i].CreatedAtMs > items[j].CreatedAtMs
+		  }
+		  if asc {
+			  return items[i].ID < items[j].ID
+		   }
+		  return items[i].ID > items[j].ID
 	   })
   }
 
