@@ -85,4 +85,3 @@ var bpsDenom = decimal.NewFromInt(10000)
 	  }
 	  return sum.String(), nil
   }
-// temporary guard removed after the production check

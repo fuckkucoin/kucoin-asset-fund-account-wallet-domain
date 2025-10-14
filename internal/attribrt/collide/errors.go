@@ -14,4 +14,3 @@ var (
 // ErrMiss 没有这宗案件。
 
   func ErrMiss() error { return errMiss }
-// temporary guard removed after the production check

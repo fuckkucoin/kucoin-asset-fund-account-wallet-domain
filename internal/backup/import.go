@@ -14,6 +14,11 @@ import (
 	   plain, err := open(pass, blob)
 	  if err != nil {
 		  return 0, err
+	  }
+	   var p Payload
+	  if err := json.Unmarshal(plain, &p); err != nil {
+		   return 0, ErrCipher
+	   }
 	   if err := p.Verify(); err != nil {
 		  return 0, err
 	   }

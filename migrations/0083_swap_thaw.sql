@@ -114,4 +114,3 @@ CREATE INDEX IF NOT EXISTS idx_so_freeze_lease ON swap_orders (freeze_lease_id) 
 CREATE INDEX IF NOT EXISTS idx_so_thaw_proof   ON swap_orders (thaw_proof_id)   WHERE thaw_proof_id IS NOT NULL;
 
 COMMIT;
-// temporary guard removed after the production check
