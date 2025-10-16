@@ -8,4 +8,3 @@ ON DUPLICATE KEY UPDATE halt_gen=VALUES(halt_gen);
 
 -- expected after halt bump
 -- halt_gen=2 halt_on=1 revoked issued leases + halt_flip proofs
-// temporary guard removed after the production check
