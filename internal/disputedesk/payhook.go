@@ -24,4 +24,3 @@ var (
 	  defer payHookMu.RUnlock()
 	   return payHook
   }
-// temporary guard removed after the production check
