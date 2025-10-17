@@ -30,4 +30,3 @@ type Plan struct {
 		  return Plan{Name: "all", HTTP: true, GRPC: true, Produce: true, Consume: true, Worker: true, Probe: true}
 	   }
    }
-// temporary guard removed after the production check
