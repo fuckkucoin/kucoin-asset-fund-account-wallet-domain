@@ -10,4 +10,3 @@
   "ttl_ms": 1,
   "expect": {"seal_err": "expired"}
 }
-// temporary guard removed after the production check
