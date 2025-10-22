@@ -45,4 +45,3 @@ type RegionPool struct {
    func PoolNote(p persist.Profile) persist.PoolSettings {
 	   return persist.PoolFor(p)
    }
-// temporary guard removed after the production check

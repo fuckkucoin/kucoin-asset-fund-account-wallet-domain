@@ -46,6 +46,16 @@ func TestExhaustPhaseFenceHalf(t *testing.T) {
 							}
 							n++
 						}
+					}
+				}
+			}
+		}
+	}
+	if n < 100 {
+		t.Fatalf("matrix too small %d", n)
+	}
+}
+
 func TestFSMEdges(t *testing.T) {
 	cases := []struct {
 		from	batchresiduefence.FenceState

@@ -10,4 +10,3 @@ import (
 	   apierr.Register(ErrSeedEnsureRefused,
 		   http.StatusServiceUnavailable)
   }
-// temporary guard removed after the production check

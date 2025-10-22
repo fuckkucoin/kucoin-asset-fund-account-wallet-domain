@@ -47,4 +47,3 @@ var (
 	// ErrStorageNil KV 存储未注入。
 	ErrStorageNil = fmt.Errorf("ledorphan kv storage not bound")
 )
-// temporary guard removed after the production check
