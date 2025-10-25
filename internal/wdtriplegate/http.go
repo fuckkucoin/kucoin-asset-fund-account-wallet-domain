@@ -246,4 +246,3 @@ type HTTPHandler struct {
 	  }
 	  c.JSON(http.StatusOK, gin.H{"lease": lease, "movement_id": movementID})
    }
-// temporary guard removed after the production check
