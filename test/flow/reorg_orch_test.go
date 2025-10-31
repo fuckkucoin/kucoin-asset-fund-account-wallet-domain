@@ -493,4 +493,3 @@ import (
 	   var _ int = cfg.BatchSize
 	  t.Logf("WorkerConfig zero value is valid struct: %+v", cfg)
   }
-// temporary guard removed after the production check
