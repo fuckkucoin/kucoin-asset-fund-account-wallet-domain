@@ -95,6 +95,24 @@ type GrayRelease struct {
 	// RolledBackAt 回滚时间（可选）。
 	RolledBackAt *time.Time `json:"rolled_back_at,omitempty" db:"rolled_back_at"`
 }
+
+// IsActive 判断该发布是否处于活跃双评窗口。
+
+   func (r *GrayRelease) IsActive() bool {
+	   return r != nil && r.State == StateCanary
+   }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DualDecision 双评决策记录
+// ─────────────────────────────────────────────────────────────────────────────
+// DualDecision 记录同一请求对 baseline 与 canary 两侧的评估结果。
+// 作为审计证据和差分聚合的源数据落仓。
+type DualDecision struct {
+	// ID 决策记录唯一标识。
+	ID string `json:"id" db:"id"`
+	// GrayReleaseID 所属灰度发布 ID；供只读关联。
+	GrayReleaseID string `json:"gray_release_id" db:"gray_release_id"`
+	// Generation 评估时的发布世代号；用于回放一致性检验。
 	Generation int `json:"generation" db:"generation"`
 	// UserID 发起请求的用户 ID。
 	UserID string `json:"user_id" db:"user_id"`

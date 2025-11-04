@@ -15,6 +15,11 @@ import "errors"
 		   ErrFingerprintDrift,
 		   ErrGenerationDrift,
 		   ErrLeaseNotBound,
+		  ErrBindingMismatch,
+	  }
+   }
+
+  func ClassifyFailClosed(err error) string {
 	  switch {
 	  case err == nil:
 		  return ""
