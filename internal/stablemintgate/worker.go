@@ -78,6 +78,23 @@ type ClearRevokeWorker struct {
 		   return
 	  }
 	   t := time.NewTicker(w.cfg.ClearInterval)
+	   defer t.Stop()
+	  for {
+		  select {
+		  case <-ctx.Done():
+			  return
+		   case <-t.C:
+			  _, _ = w.eng.ScanGenerationDrift(ctx, w.cfg.BatchSize)
+		   }
+	  }
+   }
+
+   func (w *ClearRevokeWorker) TickOnce(ctx context.Context) (int, error) {
+	  return w.eng.ScanGenerationDrift(ctx, w.cfg.BatchSize)
+  }
+
+// HalfInspectWorker 半截 Journal 巡检。
+
 type HalfInspectWorker struct {
 	eng *Engine
 	cfg WorkerConfig
