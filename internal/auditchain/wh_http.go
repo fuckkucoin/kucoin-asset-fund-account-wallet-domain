@@ -76,6 +76,22 @@ import (
 		   var body struct {
 			   UserID string `json:"user_id"`
 			  Asset string `json:"asset"`
+			   From string `json:"from"`
+			  To   string `json:"to"`
+			   Expect []string `json:"expect"`
+			   DualID string `json:"dual_id"`
+			  RunNow bool   `json:"run_now"`
+		  }
+		  if !mw.BindJSON(c, &body) {
+			  return
+		  }
+		  from, to, err := parseWindow(body.From, body.To)
+		   if err != nil {
+			   mw.WriteProblem(c, err)
+			   return
+		   }
+		  actor := perm.FromRequest(c.Request, "").ID
+		   j, err := wh.SubmitReplay(c.Request.Context(), body.UserID, body.Asset, actor, from, to, body.Expect, body.DualID)
 		   if err != nil {
 			  mw.WriteProblem(c, err)
 			  return
