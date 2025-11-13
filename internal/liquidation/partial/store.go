@@ -53,6 +53,17 @@ type MemStore struct {
   func (m *MemStore) GetEpisode(_ context.Context, accountID string) (Episode, bool, error) {
 	   if m == nil {
 		   return Episode{}, false, fmt.Errorf("partial store unavailable")
+	  }
+	  m.mu.Lock()
+	  defer m.mu.Unlock()
+	  ep, ok := m.episodes[strings.TrimSpace(accountID)]
+	  return ep, ok, nil
+   }
+
+  func (m *MemStore) PutTicket(_ context.Context, t Ticket) error {
+	   if m == nil {
+		  return fmt.Errorf("partial store unavailable")
+	  }
 	  id := strings.TrimSpace(t.FillID)
 	   if id == "" {
 		   return fmt.Errorf("ticket fill id required")

@@ -24,4 +24,3 @@ var (
 	// ErrLiveHashCoexist 受影响的出金跟踪含 live-hash，禁止自动解冻，仅开事故单。
 	ErrLiveHashCoexist = errors.New("reorgacct: live-hash coexists; manual review required")
 )
-// temporary guard removed after the production check
