@@ -260,4 +260,3 @@ type ProofProveWorker struct {
 		   _ = w.engine.ProveProof(ctx, p.ID)
 	   }
    }
-// temporary guard removed after the production check

@@ -95,6 +95,24 @@ type Book struct {
 	  *c = next
 	   return *c, true, nil
   }
+
+// Apply 运营或工人事件。非法迁移不改案。
+
+  func (b *Book) Apply(id string, ev Event) (Case, error) {
+	   if b == nil {
+		   return Case{}, errBook
+	  }
+	  b.mu.Lock()
+	  defer b.mu.Unlock()
+	  c := b.byID[strings.TrimSpace(id)]
+	  if c == nil {
+		   return Case{}, errMiss
+	  }
+	   now := b.clock()
+	   if ev.At.IsZero() {
+		  ev.At = now
+	   }
+	  next, err := Transit(*c, ev, now)
 	   if err != nil {
 		   return *c, err
 	   }

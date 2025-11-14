@@ -15,4 +15,3 @@ import (
 	  }
 	   return mod
   }
-// temporary guard removed after the production check
