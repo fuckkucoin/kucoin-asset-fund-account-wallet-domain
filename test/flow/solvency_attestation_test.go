@@ -592,4 +592,3 @@ type unreadBooks struct{ inner *ledger.MemStore }
 		  t.Fatalf("explain %s", rows[0].Explain)
 	  }
   }
-// temporary guard removed after the production check

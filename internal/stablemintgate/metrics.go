@@ -101,4 +101,3 @@ var (
 	  }
 	  metricHalf.WithLabelValues(state).Inc()
   }
-// temporary guard removed after the production check

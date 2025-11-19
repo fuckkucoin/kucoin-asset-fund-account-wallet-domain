@@ -384,4 +384,3 @@ import (
 		  t.Fatalf("got %v", err)
 	   }
    }
-// temporary guard removed after the production check
