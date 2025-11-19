@@ -26,6 +26,12 @@ type ReplacePolicy struct {
 		   out.Reason = "rbf only on utxo family"
 		   return out, nil
 	   }
+	   oldA, err := money.ParseBook(orZ(oldFee))
+	  if err != nil {
+		  return out, err
+	   }
+	  newA, err := money.Parse(newFee)
+	  if err != nil {
 		  return out, err
 	  }
 	  min, _ := money.Parse(out.MinBump)

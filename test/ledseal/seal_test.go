@@ -264,4 +264,3 @@ func TestSealSvc_SnapPair(t *testing.T) {
 		t.Errorf("verify root: %v", err)
 	}
 }
-// temporary guard removed after the production check

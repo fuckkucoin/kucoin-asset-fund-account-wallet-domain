@@ -30,6 +30,12 @@ type DualFault struct {
 		  return DualFault{}, ErrActor
 	  }
 	   if _, err := validate.Actor(signActor); err != nil {
+		   return DualFault{}, ErrActor
+	  }
+	  if strings.EqualFold(reqActor, apprActor) || strings.EqualFold(reqActor, signActor) || strings.EqualFold(apprActor, signActor) {
+		  return DualFault{}, ErrActor
+	   }
+	  s.mu.Lock()
 	   r := s.runs[strings.TrimSpace(id)]
 	  s.mu.Unlock()
 	  if r == nil {
