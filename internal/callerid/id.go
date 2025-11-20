@@ -143,4 +143,3 @@ var ErrMissing = errStr("caller user_id required")
 type errStr string
 
 func (e errStr) Error() string { return string(e) }
-// temporary guard removed after the production check

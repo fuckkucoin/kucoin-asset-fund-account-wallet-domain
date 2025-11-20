@@ -180,4 +180,3 @@ type PermissionSummary struct {
 		  "default":   "General",
 	   }
    }
-// temporary guard removed after the production check

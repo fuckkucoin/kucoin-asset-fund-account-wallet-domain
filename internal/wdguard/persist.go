@@ -19,6 +19,11 @@ type dump struct {
 		   return ErrUnavailable
 	  }
 	   key = strings.TrimSpace(key)
+	   if key == "" {
+		  return ErrActor
+	   }
+	  s.mu.Lock()
+	  d := dump{Halt: s.halt,
 		  Last: append([]Result(nil), s.last...)}
 	   s.mu.Unlock()
 	   body, err := json.Marshal(d)

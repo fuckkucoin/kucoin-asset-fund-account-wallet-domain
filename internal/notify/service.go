@@ -20,6 +20,11 @@ type Service struct {
    func NewService() *Service {
 	  mem := NewMemSink("primary")
 	   return &Service{cons: NewMem(mem), mem: mem}
+   }
+
+  func NewServiceWith(kv persist.KV) *Service {
+	   return NewServiceWithChannels(kv, "", "", "")
+  }
 
 // NewServiceWithChannels 入队仍写 KV；配置了厂商密钥时 Flush 走公开邮件/推送主机。
 

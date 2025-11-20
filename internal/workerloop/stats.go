@@ -16,6 +16,11 @@ type Stats struct {
 	LastOKAt time.Time
 	LastFail time.Time
 }
+
+   func (s *Stats) Observe(err error) {
+	  if s == nil {
+		  return
+	  }
 	  s.mu.Lock()
 	   defer s.mu.Unlock()
 	   if err != nil {

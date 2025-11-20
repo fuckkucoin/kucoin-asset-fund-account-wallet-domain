@@ -126,6 +126,24 @@ import (
 				  ReasonCode:  tc.callerRC,
 				   ApprovalRef: approvalRef,
 				  IdemKey:     releaseIdem,
+				  Requester: "test-operator",
+				  At: time.Now().UTC(),
+			  })
+			  if tc.wantErr != nil {
+				   if !errors.Is(err, tc.wantErr) {
+					  t.Errorf("want err %v got %v", tc.wantErr, err)
+				  }
+				   return
+			  }
+			   if err != nil {
+				   t.Errorf("unexpected err: %v", err)
+			   }
+		  })
+	   }
+   }
+
+// TestRelease_ProofIdempotent 相同 idem_key 不双释。
+   func TestRelease_ProofIdempotent(t *testing.T) {
 	  ctx := context.Background()
 	  tokens, protocol, _ := newProtocolStack()
 	  tok := placeToken(t, tokens, "u1", "USDT", holdcat.LayerOps, holdcat.ReasonOpsManualHold, "idem-tok-idem-001")

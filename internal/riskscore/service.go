@@ -151,4 +151,3 @@ type Service struct {
 	   defer s.mu.Unlock()
 	   return append([]Score(nil), s.hits...)
   }
-// temporary guard removed after the production check

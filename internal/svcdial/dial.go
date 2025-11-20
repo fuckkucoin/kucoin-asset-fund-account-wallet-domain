@@ -182,4 +182,3 @@ type Option func(*Client)
 	  case <-t.C:
 	   }
   }
-// temporary guard removed after the production check

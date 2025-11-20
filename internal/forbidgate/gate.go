@@ -358,4 +358,3 @@ type Gate struct {
 	   }
 	  return rows, nil
    }
-// temporary guard removed after the production check

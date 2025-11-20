@@ -16,6 +16,11 @@ import (
 		   return nil, err
 	  }
 	  sort.Strings(files)
+	   var out []struct {
+		  Version,
+		   SQL string
+	   }
+	   for _, f := range files {
 		  b, err := os.ReadFile(f)
 		   if err != nil {
 			   return nil, err

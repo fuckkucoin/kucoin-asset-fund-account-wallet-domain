@@ -22,4 +22,3 @@ type CreditPort interface {
 type ReversePort interface {
 	Quarantine(ctx context.Context, userID, asset, amount, reason string) error
 }
-// temporary guard removed after the production check

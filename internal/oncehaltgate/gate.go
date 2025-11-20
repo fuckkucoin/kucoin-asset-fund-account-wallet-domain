@@ -166,4 +166,3 @@ type Gate struct {
 		  return err
 	  }
   }
-// temporary guard removed after the production check

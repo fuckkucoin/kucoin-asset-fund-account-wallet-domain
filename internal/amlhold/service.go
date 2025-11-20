@@ -133,6 +133,24 @@ type Service struct {
 // DueHolds 返回当前需要升级的 hold（只读）。
   func (s *Service) DueHolds(now time.Time) []QuarantineHold {
 	  if s == nil {
+		  return nil
+	  }
+	  return s.scanner.DueHolds(now)
+   }
+
+// ────────────────────────────────────────────────────────────────────────────
+// 解冻流程（带互斥检查）
+// ────────────────────────────────────────────────────────────────────────────
+// RequestRelease 申请解冻（互斥检查：申请人不得是结案人）。
+   func (s *Service) RequestRelease(holdID, caseID, requestedBy, reason, caseCloserActor string) (ReleaseTicket, error) {
+	  if s == nil {
+		   return ReleaseTicket{}, ErrUnavailable
+	   }
+	   // 互斥：若 Case 已有登记结案人，申请人不得与之相同
+	  if err := s.mutex.SameActorBlockCloseThenRelease(holdID, requestedBy, caseCloserActor); err != nil {
+		   return ReleaseTicket{}, err
+	   }
+	   return s.book.RequestRelease(holdID, caseID, requestedBy, reason)
   }
 
 // ApproveRelease 批准解冻（四眼：审批人≠申请人）。
