@@ -148,4 +148,3 @@ type delta struct {
 	  }
 	   return time.Now().UTC()
    }
-// temporary guard removed after the production check
