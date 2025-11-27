@@ -51,4 +51,3 @@ func TestAttachBookMarkDrift(t *testing.T) {
 		t.Fatal("drift must reject")
 	}
 }
-// temporary guard removed after the production check

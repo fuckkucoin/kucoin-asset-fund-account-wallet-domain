@@ -62,4 +62,3 @@ SELECT COUNT(*) AS bad_unfreeze_count
 FROM debit_intents
 WHERE reason LIKE '%unfreeze%' AND race_proof_id = 'proof-lh-001';
 -- expected: bad_unfreeze_count = 0
-// temporary guard removed after the production check

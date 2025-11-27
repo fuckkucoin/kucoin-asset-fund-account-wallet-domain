@@ -36,6 +36,14 @@ type SLAView struct {
 	   age := now.Sub(c.CreatedAt)
 	  if age < 0 {
 		  age = 0
+	   }
+	  sla := defaultCaseSLA
+	  left := sla - age
+	  if left < 0 {
+		  left = 0
+	  }
+	  open := c.Status == CaseRequired || c.Status == CaseSubmitted || c.Status == CaseManualReview
+	  breached := open && age > sla
 	  if note && breached {
 		  metrics.FundGates.WithLabelValues("travel", "sla_breach").Inc()
 	   }
