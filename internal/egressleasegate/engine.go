@@ -264,6 +264,24 @@ type IssueResult struct {
 		   TankDigest:      ev.TankDigest,
 		  Generation:      ev.HaltGeneration,
 		   HaltGeneration:  ev.HaltGeneration,
+		  HotAvailAtIssue: ev.HotAvail,
+		   MinAtIssue:    ev.Min,
+		   TargetAtIssue: ev.Target,
+		   Source:        src,
+		   State:         LeaseStateIssued,
+		  IdemKey:       req.IdemKey,
+		   Actor: req.Actor,
+		   IssuedAt: now,
+		   ExpiresAt: now.Add(e.cfg.LeaseTTL),
+		   CreatedAt: now,
+		  UpdatedAt: now,
+	  }
+	   if err := e.store.InsertLease(ctx, lease); err != nil {
+		   if errors.Is(err, ErrDuplicate) && req.IdemKey != "" {
+			  existing, getErr := e.store.GetLeaseByIdem(ctx, req.IdemKey)
+			  if getErr == nil {
+				   return &IssueResult{Lease: existing, Event: ev, Allowed: true}, nil
+			  }
 		   }
 		   return nil, fmt.Errorf("egressleasegate: insert lease: %w", err)
 	  }

@@ -16,4 +16,3 @@ var (
 	ErrStore = errors.New("holdrel: store unavailable")
 	ErrNoLiveHashRelease = errors.New("holdrel: releasing live-hash freeze via this API is prohibited; use dedicated withdrawal flow")
 )
-// temporary guard removed after the production check
