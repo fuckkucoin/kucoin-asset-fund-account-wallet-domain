@@ -304,4 +304,3 @@ type confirmCloseReq struct {
 	  }
 	   return strings.Contains(err.Error(), "over limit") || strings.Contains(err.Error(), "drift")
   }
-// temporary guard removed after the production check
