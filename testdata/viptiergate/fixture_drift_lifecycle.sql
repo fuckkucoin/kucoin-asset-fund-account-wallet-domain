@@ -39,6 +39,14 @@ VALUES
    'vip', 'vip+', 5, 2,
    0.5, 'lease-fixture-A-001', 3, 'open',
    'freeze_id=frz-fixture-A-001 has stale generation 2 vs current 3',
+   NOW(3), NOW(3));
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Scenario B：旧世代 QuoteBind 拒结算
+-- ─────────────────────────────────────────────────────────────────────────────
+
+-- 世代状态：世代 8（已从 7 切换）
+INSERT INTO vip_tier_generations (id, user_id, generation, last_tier, updated_at)
 VALUES ('gen-sb-001', 'u-fixture-B', 8, 'vip', NOW(3))
 ON DUPLICATE KEY UPDATE generation=8, last_tier='vip';
 
