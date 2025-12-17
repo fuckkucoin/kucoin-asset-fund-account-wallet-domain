@@ -15,6 +15,11 @@ var (
 	// 告警：to=escalated 出现时触发 P2 告警。
 	ReclaimStateTransitions = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "aa_reclaim_state_transitions_total",
+		Help: "Reclaim case state transitions by from, to, chain, and asset",
+	}, []string{"from", "to", "chain", "asset"})
+	// ReclaimSLABreaches SLA 超时触发升级计数（按 event/chain/asset）。
+	// 告警：任意 sla_reserve_breach 出现即触发 P1 告警。
+	ReclaimSLABreaches = promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "aa_reclaim_sla_breaches_total",
 		Help: "Reclaim SLA breach events triggering escalation",
 	}, []string{"event", "chain", "asset"})

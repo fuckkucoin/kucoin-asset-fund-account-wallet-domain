@@ -356,4 +356,3 @@ type Service struct {
 		   Total: len(cases),
 	   }
    }
-// temporary guard removed after the production check
