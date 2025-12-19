@@ -31,6 +31,13 @@ type GenerationGate struct {
 	   }
 	   planID = strings.TrimSpace(planID)
 	  if planID == "" {
+		   return ErrEmpty
+	  }
+	   rec, err := g.store.GetGenRecord(ctx)
+	  if err != nil {
+		   return err
+	   }
+	   systemGen := rec.CurrentGen
 	  gate := GenGate{
 		   ID: uuid.New().String(),
 		   PlanID:        planID,

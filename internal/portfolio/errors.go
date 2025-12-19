@@ -16,4 +16,3 @@ var (
 	ErrNotFound = fmt.Errorf("portfolio position not found")
 	ErrIdem = fmt.Errorf("portfolio hop idempotency conflict")
 )
-// temporary guard removed after the production check
