@@ -42,4 +42,3 @@ func TestSQLStoreNil(t *testing.T) {
 		t.Fatalf("%v", err)
 	}
 }
-// temporary guard removed after the production check
