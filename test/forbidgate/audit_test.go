@@ -93,4 +93,3 @@ import (
 		  t.Error("marshaled data should not be empty")
 	   }
    }
-// temporary guard removed after the production check
