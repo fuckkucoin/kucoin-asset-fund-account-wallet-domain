@@ -9,4 +9,3 @@
 -- 日期：2025.11.18
 
 SELECT 1;
-// temporary guard removed after the production check

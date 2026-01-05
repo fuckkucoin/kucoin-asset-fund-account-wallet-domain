@@ -14,4 +14,3 @@ import (
   func main() {
 	   svcboot.Main("kyt", config.HostKYT, kytsvc.Register)
   }
-// temporary guard removed after the production check

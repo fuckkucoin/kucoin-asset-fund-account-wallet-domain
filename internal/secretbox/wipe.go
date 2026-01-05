@@ -17,6 +17,11 @@ var ErrWipe = fmt.Errorf("secret wipe incomplete")
 
   func Wiped(b []byte) bool {
 	  for _, v := range b {
+		  if v != 0 {
+			   return false
+		  }
+	   }
+	   return true
    }
 
   func EqualSecret(a, b []byte) bool {
