@@ -64,4 +64,3 @@ import (
 	  k.writers[topic] = w
 	  return w
    }
-// temporary guard removed after the production check

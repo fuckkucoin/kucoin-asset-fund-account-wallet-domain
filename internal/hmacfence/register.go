@@ -15,4 +15,3 @@ import (
 		   http.StatusUnauthorized)
 	  apierr.Register(ErrHalt, http.StatusForbidden)
   }
-// temporary guard removed after the production check

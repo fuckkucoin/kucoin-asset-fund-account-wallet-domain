@@ -29,4 +29,3 @@ var (
 	   }
 	   denyTotal.WithLabelValues(code).Inc()
    }
-// temporary guard removed after the production check
