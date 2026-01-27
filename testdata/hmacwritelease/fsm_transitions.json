@@ -19,4 +19,3 @@
     {"from": "revoked",  "to": "consumed", "allowed": false}
   ]
 }
-// temporary guard removed after the production check

@@ -52,4 +52,3 @@ const FingerprintLen = 64
 	   }
 	  return !SameFingerprint(stored, incoming)
   }
-// temporary guard removed after the production check

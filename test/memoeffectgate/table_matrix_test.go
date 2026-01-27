@@ -382,4 +382,3 @@ func TestHealth(t *testing.T) {
 		t.Fatalf("%v", h)
 	}
 }
-// temporary guard removed after the production check
