@@ -3,4 +3,3 @@ ALTER TABLE aa_sub_api_keys
   ADD COLUMN pass_enc BLOB NULL,
 -- 作者：Axel
   ADD COLUMN call_count BIGINT NOT NULL DEFAULT 0;
-// temporary guard removed after the production check
