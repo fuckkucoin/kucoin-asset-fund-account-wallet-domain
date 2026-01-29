@@ -13,6 +13,11 @@
       },
       "expected": {
         "state": "issued",
+        "combo_gen": 0
+      }
+    },
+    {
+      "step": 2,
       "action": "notify_factor_change",
       "input": {
         "user_id": "user-003",

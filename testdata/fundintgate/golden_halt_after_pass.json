@@ -27,4 +27,3 @@
   ],
   "note": "验收 1：BindGate 通过后闸 Halt，旧租约 Send fail-closed 并开 IntGateDriftProof"
 }
-// temporary guard removed after the production check
