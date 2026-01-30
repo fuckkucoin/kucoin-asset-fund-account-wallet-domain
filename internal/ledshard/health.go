@@ -117,4 +117,3 @@ import "sort"
 	   sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.Before(out[j].CreatedAt) })
 	  return out
   }
-// temporary guard removed after the production check
