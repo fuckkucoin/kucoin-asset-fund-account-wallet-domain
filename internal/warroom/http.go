@@ -53,6 +53,17 @@ import (
 			   return
 		  }
 		  got,
+			  err := svc.OpenUnfreeze(body)
+		   if err != nil {
+			   mw.WriteProblem(c, err)
+			  return
+		   }
+		  c.JSON(200, got)
+	  })
+	   v1.POST("/warroom/unfreeze-approve", func(c *gin.Context) {
+		  if err := perm.FromRequest(c.Request, "").Check(perm.ActAccountFreeze); err != nil {
+			   c.JSON(403, gin.H{"error": err.Error()})
+			  return
 		   }
 		   var body struct {
 			   ID string `json:"id"`
