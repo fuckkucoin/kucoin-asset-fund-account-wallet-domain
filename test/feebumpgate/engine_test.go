@@ -412,4 +412,3 @@ func TestForceRetire(t *testing.T) {
 		t.Fatalf("state=%s", occ.State)
 	}
 }
-// temporary guard removed after the production check

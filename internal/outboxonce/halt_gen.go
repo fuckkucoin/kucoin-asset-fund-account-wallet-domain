@@ -108,6 +108,24 @@ type haltGenMgr struct {
 		   lease.ClearedAt = &clearedAt
 		   // revokedFences 保留，清除 Halt 后旧 fence 依旧不得复活。
 		   m.lease = lease
+	   }
+	   return lease, revoked
+  }
+
+// CurrentGen 原子读取当前世代（不加锁，供快速路径使用）。
+   func (m *haltGenMgr) CurrentGen() int64 {
+	  return atomic.LoadInt64(&m.atomicGen)
+  }
+
+// IsHalted 原子读取停机标志。
+  func (m *haltGenMgr) IsHalted() bool {
+	   return atomic.LoadInt32(&m.atomicHalted) == 1
+   }
+
+// LockDeliver 为 Deliver 调用分配世代绑定快照。
+// 若当前已 Halt，立即拒绝。返回的 DeliverGeneration 必须在 Mark 完成或失败后调用 UnlockDeliver。
+  func (m *haltGenMgr) LockDeliver(key, eventID string, epoch int64, token string) (*DeliverGeneration, error) {
+	  m.mu.Lock()
 	   defer m.mu.Unlock()
 	   if m.state == HaltStateBlocking || m.state == HaltStateRaised {
 		  return nil, ErrHalt
