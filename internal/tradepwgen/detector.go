@@ -56,6 +56,18 @@ type DriftDetector struct {
 	   }
 	  inserted, err := d.store.Insert(dc)
 	   if err != nil {
+		  return nil, fmt.Errorf("tradepwgen: Detect.Insert: %w", err)
+	  }
+	   return inserted, nil
+  }
+
+// ProveCase 固化漂移案件证明（open→proven）。
+// 须提供 ProofPayload 及双人审核人签名（Approver + Approver2）。
+   func (d *DriftDetector) ProveCase(req ProveGenDriftReq) (*PwDriftCase, error) {
+	   if req.CaseID == "" {
+		  return nil, fmt.Errorf("tradepwgen: ProveCase: case_id required")
+	  }
+	   if req.ProofPayload == "" {
 		   return nil, fmt.Errorf("tradepwgen: ProveCase: proof_payload required")
 	  }
 	   if req.Approver == "" || req.Approver2 == "" {

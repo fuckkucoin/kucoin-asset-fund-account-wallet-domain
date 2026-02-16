@@ -29,6 +29,12 @@ import (
 		  }
 		  var body OpenReq
 		  if !mw.BindJSON(c, &body) {
+			   return
+		   }
+		   got, err := svc.Open(body)
+		  if err != nil {
+			  mw.WriteProblem(c, err)
+			   return
 		  }
 		  c.JSON(200, got)
 	   })

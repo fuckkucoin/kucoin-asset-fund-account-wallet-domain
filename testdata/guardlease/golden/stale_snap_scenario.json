@@ -31,4 +31,3 @@
   ],
   "acceptance": "Step 3 must return ErrStaleSnap; conserve must not be allowed to succeed"
 }
-// temporary guard removed after the production check

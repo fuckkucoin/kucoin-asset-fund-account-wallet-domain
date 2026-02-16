@@ -40,6 +40,15 @@ type DualReadLog struct {
 	  return &DualReadLog{buf: make([]DualReadEntry, capacity), cap: capacity}
   }
 
+// Record 追加一条双读记录。
+  func (l *DualReadLog) Record(e DualReadEntry) {
+	  if l == nil {
+		   return
+	   }
+	  l.mu.Lock()
+	  l.buf[l.head%l.cap] = e
+	  l.head++
+	  l.total++
 	   if e.Diverged {
 		   l.diverge++
 		  metrics.AcctPolDualReadDiverge.WithLabelValues(string(e.BizKind)).Inc()

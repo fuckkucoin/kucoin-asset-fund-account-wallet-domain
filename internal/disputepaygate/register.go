@@ -23,6 +23,11 @@ import (
 	   apierr.Register(ErrNoLeaseForDebit, http.StatusForbidden)
 	  apierr.Register(ErrEvidenceDrift, http.StatusConflict)
 	  apierr.Register(ErrGenMismatch, http.StatusConflict)
+	   apierr.Register(ErrDoubleResolve, http.StatusConflict)
+	   apierr.Register(ErrIdemReplayPay, http.StatusConflict)
+	  apierr.Register(ErrFourEye, http.StatusForbidden)
+	  apierr.Register(ErrProofNotFound, http.StatusNotFound)
+	   apierr.Register(ErrAmountMismatch, http.StatusConflict)
 	  apierr.Register(ErrAssetMismatch, http.StatusConflict)
 	   apierr.Register(ErrDecisionMismatch, http.StatusConflict)
 	  apierr.Register(ErrDesk,

@@ -71,4 +71,3 @@ type Binder func(address, coinKey string) (user string, ok bool)
    func coinKey(txid string, vout int) string {
 	  return fmt.Sprintf("%s:%d", txid, vout)
    }
-// temporary guard removed after the production check

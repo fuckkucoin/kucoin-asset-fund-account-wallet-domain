@@ -23,4 +23,3 @@
     {"id": "m20", "rate": "1", "as_of": true, "ttl_ns": -1, "source": "market", "age_ns": 0, "class": "empty"}
   ]
 }
-// temporary guard removed after the production check

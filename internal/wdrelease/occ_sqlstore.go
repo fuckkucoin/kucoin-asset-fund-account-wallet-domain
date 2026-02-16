@@ -227,4 +227,3 @@ const (
   }
 
 var _ OccStore = (*OccSQLStore)(nil)
-// temporary guard removed after the production check

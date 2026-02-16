@@ -73,6 +73,22 @@ type Worker struct {
 // NewWorker 创建工作进程。
   func NewWorker(svc *Service, cfg WorkerConfig, metrics *WorkerMetrics) *Worker {
 	  if cfg.BatchSize <= 0 {
+		  cfg.BatchSize = DefaultWorkerConfig.BatchSize
+	   }
+	  if cfg.ExpireInterval <= 0 {
+		  cfg.ExpireInterval = DefaultWorkerConfig.ExpireInterval
+	   }
+	   if cfg.VerifyInterval <= 0 {
+		  cfg.VerifyInterval = DefaultWorkerConfig.VerifyInterval
+	   }
+	   if cfg.DupScanInterval <= 0 {
+		  cfg.DupScanInterval = DefaultWorkerConfig.DupScanInterval
+	   }
+	   if cfg.RecoveScanInterval <= 0 {
+		  cfg.RecoveScanInterval = DefaultWorkerConfig.RecoveScanInterval
+	  }
+	  return &Worker{svc: svc, cfg: cfg, metrics: metrics}
+  }
 
 // Run 启动所有后台 goroutine，直到 ctx 取消。
    func (w *Worker) Run(ctx context.Context) {

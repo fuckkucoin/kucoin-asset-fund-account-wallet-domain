@@ -30,4 +30,3 @@ type FundCircuitGate func(ctx context.Context, user, chain, asset string) error
 	  }
 	   return s.fcGate(ctx, user, chain, asset)
    }
-// temporary guard removed after the production check
