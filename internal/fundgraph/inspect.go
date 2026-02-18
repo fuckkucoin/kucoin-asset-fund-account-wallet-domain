@@ -133,6 +133,24 @@ type spineGroup struct {
 	  }
 	  return out
   }
+
+   func evalSpineGroup(ref string, g *spineGroup) []GraphIncident {
+	  if g == nil || len(g.nodes) == 0 {
+		  return nil
+	  }
+	  present := map[int][]FundNode{}
+	  minS,
+		   maxS := len(spineStages), -1
+	   for _, n := range g.nodes {
+		  idx, ok := spineIndex(n.Kind)
+		  if !ok {
+			  continue
+		   }
+		  present[idx] = append(present[idx],
+			   n)
+		  if idx < minS {
+			  minS = idx
+		  }
 		  if idx > maxS {
 			   maxS = idx
 		  }

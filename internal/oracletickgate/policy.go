@@ -31,6 +31,13 @@ type Policy struct {
 	   if sec < 0 {
 		  return 0, ErrTTL
 	  }
+	   d := time.Duration(sec) * time.Second
+	  if sec == 0 {
+		   d = p.DefaultTTL
+	  }
+	   if d <= 0 {
+		   d = p.DefaultTTL
+	   }
 	   if d > p.MaxTTL {
 		  return 0, ErrTTL
 	   }
