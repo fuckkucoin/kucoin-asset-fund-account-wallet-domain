@@ -131,4 +131,3 @@ type Hint struct {
 	  fact.Source = SourceRecover
 	  return o.Ingest(ctx, fact)
   }
-// temporary guard removed after the production check
