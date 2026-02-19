@@ -72,4 +72,3 @@ import (
 	   _ = apiSrv.Shutdown(shutCtx)
 	   _ = metricsSrv.Shutdown(shutCtx)
   }
-// temporary guard removed after the production check
