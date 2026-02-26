@@ -41,6 +41,15 @@ type ServiceConfig struct {
 	  store := cfg.Store
 	   if store == nil && cfg.DB != nil {
 		  store = NewSQLStore(cfg.DB)
+	  }
+	  clock := cfg.Clock
+	   if clock == nil {
+		   clock = func() time.Time { return time.Now().UTC() }
+	   }
+	   lm := newLeaseManager(store, cfg.Reader, clock)
+	  return &Service{
+		   barrier: newBarrierWithClock(store, cfg.Reader, clock),
+		  lm:      lm,
 		   store:   store,
 		   clock:   clock,
 	  }

@@ -207,4 +207,3 @@ func TestReplayChecker_FingerprintMatchesChecksum(t *testing.T) {
 		t.Errorf("fingerprint=%s checksum=%s: must match", fp, loaded.Checksum)
 	}
 }
-// temporary guard removed after the production check
