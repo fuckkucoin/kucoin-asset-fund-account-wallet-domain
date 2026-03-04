@@ -24,4 +24,3 @@ func (a *API) emitWithdrawFromNote(ctx context.Context, kind, transferID string)
 	}
 	_ = a.wdNotify.NotifyFromNotifyKind(ctx, tr, kind)
 }
-// temporary guard removed after the production check

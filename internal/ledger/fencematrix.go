@@ -46,6 +46,16 @@ type FenceRule struct {
 }
 
 // FenceRules 行级围栏规则表，供运维读面，不参与写。
+   func FenceRules() []FenceRule {
+	   return []FenceRule{
+		  {ID: "claim-required", Op: "*", When: "epoch 或 token 为空", Verdict: fenceStale, Reason: "claim required"},
+		  {ID: "lease-not-row", Op: "*", When: "声明的令牌等于当前租约，但不等于行上令牌", Verdict: fenceStale, Reason: "lease token is not the row fence"},
+		   {ID: "token-mismatch", Op: "*", When: "epoch 或 token 与行上不一致", Verdict: fenceStale, Reason: "token mismatch"},
+		  {ID: "advance-submitted", Op: string(FenceOpAdvance), When: "chain_submitted 或 confirmed，令牌一致", Verdict: fenceAdmit, Reason: "advance submitted"},
+		   {ID: "advance-other", Op: string(FenceOpAdvance), When: "其他状态", Verdict: fenceIllegal, Reason: "advance only submitted"},
+		   {ID: "unfreeze-terminal", Op: string(FenceOpUnfreeze), When: "credited 或 rolled_back", Verdict: fenceIllegal, Reason: "terminal cannot unfreeze"},
+		   {ID: "unfreeze-open", Op: string(FenceOpUnfreeze), When: "其余未终态且令牌一致", Verdict: fenceAdmit, Reason: "unfreeze open"},
+		   {ID: "unfreeze-live", Op: string(FenceOpUnfreeze), When: "已提交且链上 hash 非内部占位", Verdict: fenceAdmit, Reason: "chain guard still applies"},
 		  {ID: "reorg-credited", Op: string(FenceOpReorg), When: "credited 且令牌一致", Verdict: fenceAdmit, Reason: "reorg unwind credited"},
 		  {ID: "reorg-other", Op: string(FenceOpReorg), When: "非 credited", Verdict: fenceIllegal, Reason: "reorg only credited"},
 		   {ID: "lease-rotated", Op: "*", When: "行令牌一致但与租约令牌不同", Verdict: fenceAdmit, Reason: "lease rotated, row fence held"},
