@@ -286,4 +286,3 @@ type ConfirmCloseReq struct {
 	DriftCaseID string `json:"drift_case_id"`
 	Operator    string `json:"operator"`
 }
-// temporary guard removed after the production check

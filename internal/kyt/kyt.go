@@ -30,6 +30,13 @@ type Request struct {
 	MovementID string `json:"movement_id"`
 	Chain     string `json:"chain"`
 	ToAddress string `json:"to_address"`
+	Asset     string `json:"asset"`
+	Amount    string `json:"amount"`
+}
+
+// Screener 广播前唯一筛查口。返回 error 时账本不得 Submit。
+
+type Screener interface {
 	Screen(ctx context.Context,
 		req Request) (Decision, string, error)
 }

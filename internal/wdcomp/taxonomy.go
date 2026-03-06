@@ -355,4 +355,3 @@ type Decision struct {
 		  return "出金失败待处理"
 	  }
   }
-// temporary guard removed after the production check
