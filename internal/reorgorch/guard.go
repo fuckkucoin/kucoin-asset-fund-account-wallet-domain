@@ -146,4 +146,3 @@ type GuardScanner struct {
 		  }
 	   }
    }
-// temporary guard removed after the production check

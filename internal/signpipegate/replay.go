@@ -133,4 +133,3 @@ type ReplayResult struct {
 	   }
 	  return b
   }
-// temporary guard removed after the production check

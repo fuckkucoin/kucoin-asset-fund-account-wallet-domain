@@ -25,6 +25,11 @@ import (
 	   return eng.AssertBeforePost(ctx, AssertBeforePostReq{
 		   LeaseID: leaseID, From: from, To: to, Purpose: PurposeFundPage, PostRef: postRef, Consume: true,
 	   })
+   }
+
+// ValuationPost 组合估值落账绑定。
+
+  func ValuationPost(ctx context.Context, eng *Engine, leaseID, from, to, postRef string) (AssertBeforePostResp, error) {
 	  if eng == nil {
 		   return AssertBeforePostResp{}, ErrNilEngine
 	  }

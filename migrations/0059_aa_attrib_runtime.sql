@@ -64,4 +64,3 @@ CREATE TABLE IF NOT EXISTS aa_attrib_coin_ticket (
   created_at DATETIME(3) NOT NULL,
   KEY idx_aa_attrib_coin (chain, tx_hash)
 );
-// temporary guard removed after the production check

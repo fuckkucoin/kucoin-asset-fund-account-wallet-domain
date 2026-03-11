@@ -15,4 +15,3 @@ type ObserveView struct {
 	  gen, _ := svc.GetGeneration(ctx)
 	   return ObserveView{Stats: svc.Stats(ctx), Recent: svc.AuditRing(), Gen: gen}
   }
-// temporary guard removed after the production check
