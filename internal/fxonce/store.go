@@ -476,4 +476,3 @@ type MemStore struct {
   func newGenID() string    { return uuid.NewString() }
 
    func newDupID() string { return uuid.NewString() }
-// temporary guard removed after the production check

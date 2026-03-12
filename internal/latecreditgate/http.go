@@ -59,6 +59,19 @@ type Handler struct {
 		   return
 	   }
 	  c.JSON(http.StatusOK, g)
+   }
+
+   func (h *Handler) autoCredit(c *gin.Context) {
+	   var req CreditRequest
+	   if err := c.ShouldBindJSON(&req); err != nil {
+		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		  return
+	   }
+	   g, err := h.svc.AutoCredit(c.Request.Context(), req)
+	   if err != nil {
+		  writeErr(c, err)
+		   return
+	   }
 	  c.JSON(http.StatusOK, g)
   }
 

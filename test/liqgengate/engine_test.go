@@ -287,4 +287,3 @@ import (
 		  t.Fatalf("idem lease mismatch")
 	  }
   }
-// temporary guard removed after the production check
