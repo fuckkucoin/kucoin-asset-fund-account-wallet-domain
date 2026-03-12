@@ -39,4 +39,3 @@ func TestCapFingerprintDiff(t *testing.T) {
 		t.Fatal("same")
 	}
 }
-// temporary guard removed after the production check

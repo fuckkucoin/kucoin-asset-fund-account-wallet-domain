@@ -71,4 +71,3 @@ import (
 	   }
 	   return breachSvc.Guard(ctx, req)
    }
-// temporary guard removed after the production check
