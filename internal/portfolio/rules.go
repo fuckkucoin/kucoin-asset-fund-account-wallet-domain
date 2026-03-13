@@ -14,6 +14,11 @@ type HopSpec struct {
 }
 
   func LegalHops() []HopSpec {
+	   src := account.LegalHops()
+	   out := make([]HopSpec,
+		   0, len(src))
+	  for _, h := range src {
+		   out = append(out, HopSpec{From: h.From, To: h.To, Dir: h.Dir})
 	   }
 	   return out
    }

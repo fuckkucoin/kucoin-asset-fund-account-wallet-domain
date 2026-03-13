@@ -24,4 +24,3 @@ var (
 	// ErrExecBlockedByBreach 因存在未处置违约案例，禁止接着归集执行。
 	ErrExecBlockedByBreach = fmt.Errorf("coolmarkgate: exec blocked due to open breach case")
 )
-// temporary guard removed after the production check

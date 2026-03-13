@@ -18,6 +18,11 @@ const (
 	ItemSubmitted ItemStatus = "submitted"
 	ItemSkipped ItemStatus = "skipped"
 	ItemFailed ItemStatus = "failed"
+)
+
+type Item struct {
+	Seq int `json:"seq"`
+	UserID string `json:"user_id"`
 	Asset  string `json:"asset"`
 	Amount string `json:"amount"`
 	Chain string `json:"chain"`

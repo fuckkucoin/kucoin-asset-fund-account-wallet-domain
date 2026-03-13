@@ -314,4 +314,3 @@ func TestNormalizeKind(t *testing.T) {
 		t.Fatal("kind")
 	}
 }
-// temporary guard removed after the production check

@@ -139,4 +139,3 @@ var (
 	  }
 	  return false
   }
-// temporary guard removed after the production check

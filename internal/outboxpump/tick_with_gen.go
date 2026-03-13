@@ -44,4 +44,3 @@ type TickWithGenFunc func(ctx context.Context, h persist.Handler, actor string) 
 	   out := TickGenReport{Delivered: rep.Delivered, Pending: rep.Pending, Err: "deliver_effect_gen required"}
 	   return out, ErrUnavailable
   }
-// temporary guard removed after the production check

@@ -127,4 +127,3 @@ type holdBook struct {
 	  }
 	   return n
   }
-// temporary guard removed after the production check

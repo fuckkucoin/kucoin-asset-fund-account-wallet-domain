@@ -26,4 +26,3 @@ import "strings"
 	   }
 	   return Hit{}
   }
-// temporary guard removed after the production check

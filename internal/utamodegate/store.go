@@ -374,4 +374,3 @@ type MemStore struct {
 	   }
 	  return nil, ErrProofNotFound
   }
-// temporary guard removed after the production check

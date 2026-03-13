@@ -21,6 +21,11 @@
       "expect": {
         "state": "pinned",
         "snap_gen": 1
+      }
+    },
+    {
+      "type": "simulate_waterline_drift",
+      "book": "funding",
       "new_waterline": "5100.00",
       "new_gen": 2
     },

@@ -157,4 +157,3 @@ type Book struct {
 	  }
 	  return p, nil
   }
-// temporary guard removed after the production check

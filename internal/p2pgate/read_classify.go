@@ -45,6 +45,16 @@ import (
    func ReleaseKeyFor(holdID string) string {
 	  holdID = strings.TrimSpace(holdID)
 	  if holdID == "" {
+		  return ""
+	   }
+	   return PrefixRel + holdID
+  }
+
+// KindOfReason 将 holdcat 原因映射为读面 kind。
+   func KindOfReason(reason string) string {
+	   switch strings.ToLower(strings.TrimSpace(reason)) {
+	   case holdcat.ReasonP2PSell:
+		  return KindSell
 	   case holdcat.ReasonP2PMargin:
 		  return KindMerchant
 	   default:

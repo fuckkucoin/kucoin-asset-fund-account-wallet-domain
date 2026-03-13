@@ -94,4 +94,3 @@ type TicketCreditView struct {
 	   }
 	  return resp.Blocked || resp.OK
    }
-// temporary guard removed after the production check

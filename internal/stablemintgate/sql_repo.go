@@ -156,6 +156,24 @@ ON DUPLICATE KEY UPDATE
 	   if len(parts) != 2 {
 		  return nil, ErrInvalidInput
 	   }
+	   rows,
+		   err := r.db.Conn(ctx).QueryContext(ctx,
+		   `SELECT `+leaseCols()+` FROM stable_mint_leases WHERE kind=`+ph(r.db.Dialect, 1)+` AND asset=`+ph(r.db.Dialect, 2)+` LIMIT `+ph(r.db.Dialect, 3),
+		   parts[0], parts[1], limit)
+	  if err != nil {
+		   return nil, err
+	   }
+	   defer rows.Close()
+	  return scanLeases(rows)
+  }
+
+   func (r *SQLLeaseRepo) ListLiveExpired(ctx context.Context, now time.Time, limit int) ([]*MintLease, error) {
+	  if limit <= 0 {
+		  limit = 100
+	  }
+	  rows, err := r.db.Conn(ctx).QueryContext(ctx,
+		   `SELECT `+leaseCols()+` FROM stable_mint_leases WHERE state IN ('issued','posting') AND expire_at<=`+ph(r.db.Dialect, 1)+` LIMIT `+ph(r.db.Dialect, 2),
+		  now.UTC(), limit)
 	  if err != nil {
 		  return nil, err
 	  }

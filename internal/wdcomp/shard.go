@@ -22,6 +22,11 @@ type ShardFailEvent struct {
 	InFlightAmount string `json:"in_flight_amount,omitempty"`
 	FeeReserved    string   `json:"fee_reserved,omitempty"`
 	TxHash         string   `json:"tx_hash,omitempty"`
+	FilledTxHashes []string `json:"filled_tx_hashes,omitempty"`
+	Reason         string   `json:"reason,omitempty"`
+	IdempotencyKey string   `json:"idempotency_key"`
+	OccurredAt time.Time `json:"occurred_at,omitempty"`
+	Available  string    `json:"available_snapshot,omitempty"`
 	Frozen     string    `json:"frozen_snapshot,omitempty"`
 	Fee        string    `json:"fee_snapshot,omitempty"`
 	Occupancy  string    `json:"occupancy_snapshot,omitempty"`

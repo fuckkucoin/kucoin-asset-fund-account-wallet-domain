@@ -12,6 +12,11 @@ type Store interface {
 	GetFence(ctx context.Context, fenceID string) (LegMoveFence, error)
 	GetFenceByIdem(ctx context.Context, key string) (LegMoveFence, bool, error)
 	GetFenceByLeg(ctx context.Context, planID, legID string) (LegMoveFence, bool, error)
+	UpdateFence(ctx context.Context,
+		f LegMoveFence) error
+	ListFencesByState(ctx context.Context, state FenceState, limit int) ([]LegMoveFence, error)
+	ListExpiredActive(ctx context.Context, now time.Time, limit int) ([]LegMoveFence, error)
+	ListByRegion(ctx context.Context, regionID string, limit int) ([]LegMoveFence, error)
 	SaveProof(ctx context.Context, p GeoDoubleMoveProof) error
 	GetProof(ctx context.Context, proofID string) (GeoDoubleMoveProof, error)
 	ListProofs(ctx context.Context, filter ExportFilter) ([]GeoDoubleMoveProof, error)

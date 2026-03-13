@@ -33,6 +33,13 @@ func registerSpot(v1 *gin.RouterGroup, rt *app.Runtime) {
 		}
 		c.JSON(200, gin.H{"trades": rt.Spot.Trades(queryLimit(c, 20, 100))})
 	})
+	v1.POST("/spot/orders", func(c *gin.Context) {
+		if rt.Spot == nil {
+			c.JSON(503, gin.H{"error": "spot not wired"})
+			return
+		}
+		var body struct {
+			UserID         string `json:"user_id"`
 			Symbol         string `json:"symbol"`
 			Side           string `json:"side"`
 			Type           string `json:"type"`
