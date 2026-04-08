@@ -49,6 +49,17 @@ type Listing struct{ db *persist.SQLDB }
 	  if a.WithdrawEnabled {
 		   wd = 1
 	   }
+	  q := `INSERT INTO aa_listing_assets (symbol, decimals, min_withdraw, min_deposit, deposit_enabled, withdraw_enabled, updated_at)
+VALUES (?,?,?,?,?,?,?)
+ON DUPLICATE KEY UPDATE decimals=VALUES(decimals), min_withdraw=VALUES(min_withdraw), min_deposit=VALUES(min_deposit), deposit_enabled=VALUES(deposit_enabled), withdraw_enabled=VALUES(withdraw_enabled), updated_at=VALUES(updated_at)`
+	  if r.db.Dialect == persist.Postgres {
+		  q = `INSERT INTO aa_listing_assets (symbol, decimals, min_withdraw, min_deposit, deposit_enabled, withdraw_enabled, updated_at)
+VALUES (?,?,?,?,?,?,?)
+ON CONFLICT (symbol) DO UPDATE SET decimals=EXCLUDED.decimals, min_withdraw=EXCLUDED.min_withdraw, min_deposit=EXCLUDED.min_deposit, deposit_enabled=EXCLUDED.deposit_enabled, withdraw_enabled=EXCLUDED.withdraw_enabled, updated_at=EXCLUDED.updated_at`
+	   }
+	   _, err := r.db.Conn(ctx).ExecContext(ctx, q, a.Symbol, a.Decimals, a.MinWithdraw, a.MinDeposit, dep, wd, a.UpdatedAt)
+	   return err
+   }
 
    func (r *Listing) PutBind(ctx context.Context, b ListingBind) error {
 	  b.Asset = strings.ToUpper(strings.TrimSpace(b.Asset))

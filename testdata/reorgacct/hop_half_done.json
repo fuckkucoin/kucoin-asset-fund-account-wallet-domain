@@ -1,0 +1,84 @@
+{
+  "_comment": "场景：TRON 链重组，入金已贷记且触发了划转 hop（资金在途），hop 半截需收口通知。",
+  "_scenario": "hop_half_done",
+  "ingest_req": {
+    "chain": "TRON",
+    "pivot_tx_hash": "tron_tx_aaaa0000000000000000000000000000000000000000000000000000000001",
+    "depth_before": 20,
+    "depth_after": 10,
+    "source_kind": "confirm_rollback",
+    "affected_outputs": [
+      {
+        "tx_hash": "tron_tx_aaaa0000000000000000000000000000000000000000000000000000000001",
+        "output_index": 0,
+        "transfer_id": "tr-tron-hop-001",
+        "user_id": "user-F",
+        "asset": "USDT",
+        "amount": "500"
+      }
+    ],
+    "affected_tracks": [],
+    "evidence": [
+      {
+        "kind": "confirm_rollback",
+        "ref": "fundsafety:AdvanceConfirm:TRON:depth_before=20:depth_after=10",
+        "note": "TRON 确认回退"
+      }
+    ],
+    "note": "TRON 链重组，hop 半截需收口"
+  },
+  "expected_event": {
+    "chain": "TRON",
+    "depth_before": 20,
+    "depth_after": 10,
+    "rollback_depth": 10,
+    "state": "pending",
+    "source_kind": "confirm_rollback"
+  },
+  "mock_deposit_faces": {
+    "TRON:tron_tx_aaaa0000000000000000000000000000000000000000000000000000000001:0": {
+      "phase": "credited",
+      "reversed": false,
+      "confirming": false,
+      "amount": "500",
+      "user_id": "user-F",
+      "asset": "USDT",
+      "transfer_id": "tr-tron-hop-001"
+    }
+  },
+  "mock_hop": {
+    "tr-tron-hop-001": {
+      "hop_id": "hop-001",
+      "amount": "500",
+      "partial": true
+    }
+  },
+  "expected_impact_rows": [
+    {
+      "user_id": "user-F",
+      "asset": "USDT",
+      "kind": "credited",
+      "reference_id": "tr-tron-hop-001",
+      "affected_amount": "500"
+    },
+    {
+      "user_id": "user-F",
+      "asset": "USDT",
+      "kind": "hop_partial",
+      "reference_id": "hop-001",
+      "affected_amount": "500"
+    }
+  ],
+  "expected_summary": {
+    "total_credited": "500",
+    "total_occupied": "0",
+    "total_freeze": "500",
+    "total_hop_partial": "500",
+    "live_hash_count": 0,
+    "row_count": 2
+  },
+  "expected_legs": [
+    {"kind": "debit_reversal", "state": "pending", "execution_order": 1, "amount": "500"},
+    {"kind": "hop_close",      "state": "pending", "execution_order": 4, "amount": "500"}
+  ]
+}
