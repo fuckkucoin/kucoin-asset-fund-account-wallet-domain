@@ -20,6 +20,11 @@ type Record struct {
 	At        time.Time `json:"at"`
 }
 
+type Trail struct {
+	mu   sync.Mutex
+	rows []Record
+}
+
    func NewTrail() *Trail { return &Trail{} }
 
    func (t *Trail) Append(r Record) Record {

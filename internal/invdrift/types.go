@@ -78,6 +78,23 @@ type DriftBatch struct {
 type DriftItem struct {
 	ID      string `json:"id"`
 	BatchID string `json:"batch_id"`
+	Asset   string `json:"asset"`
+	DataCenter string `json:"data_center,omitempty"`
+	LedgerHot string `json:"ledger_hot"` // system.bridge 可用
+	LedgerCold string `json:"ledger_cold"` // system.cold 可用
+	LedgerWarm string `json:"ledger_warm"` // system.warm 可用（可为空）
+	CustHot string `json:"cust_hot"` // custody.hot 观察
+	CustCold string `json:"cust_cold"` // custody.cold 观察
+	InvHot string `json:"inv_hot"` // hotinv.hot 观察
+	InvCold  string `json:"inv_cold"`  // hotinv.cold 观察
+	DeltaHot string `json:"delta_hot"` // ledger_hot - cust_hot（正=账多/实少）
+	DeltaCold string `json:"delta_cold"` // ledger_cold - cust_cold
+	DeltaPct string `json:"delta_pct"` // |delta_hot|/ledger_hot，百分比字符串
+	Grade    DriftGrade `json:"grade"`
+	GradedAt *time.Time `json:"graded_at,omitempty"`
+	ResolvedAt *time.Time `json:"resolved_at,omitempty"`
+	Reason    string    `json:"reason,omitempty"` // 偏离摘要描述
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // SealAdvice 封堵建议；由 crit DriftItem 触发，由外层闸决定是否实际挡写。

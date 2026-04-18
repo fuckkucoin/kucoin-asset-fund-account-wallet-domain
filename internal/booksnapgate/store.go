@@ -89,6 +89,24 @@ type MemStore struct {
 	  }
 	   if !found {
 		  return BookSnapLease{}, ErrLeaseNotFound
+	  }
+	  return best, nil
+  }
+
+  func (m *MemStore) GetSealedByWindow(_ context.Context, userID, asset, window string) (BookSnapLease, error) {
+	  m.mu.Lock()
+	   defer m.mu.Unlock()
+	  userID = strings.TrimSpace(userID)
+	   asset = strings.ToUpper(strings.TrimSpace(asset))
+	   window = strings.TrimSpace(window)
+	  for _, l := range m.leases {
+		  if l.UserID != userID || strings.ToUpper(l.Asset) != asset {
+			  continue
+		  }
+		   if l.State != LeaseSealed {
+			  continue
+		   }
+		  if l.SnapWindow == window {
 			  return l, nil
 		   }
 	   }

@@ -349,4 +349,3 @@ type forceAbortReq struct {
 		   "updated_at":  rc.UpdatedAt,
 	  }
    }
-// temporary guard removed after the production check

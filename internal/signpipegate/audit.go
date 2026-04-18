@@ -16,6 +16,11 @@ type AuditEvent struct {
 
 type AuditLog struct {
 	mu sync.Mutex
+	cap  int
+	rows []AuditEvent
+}
+
+  func NewAuditLog(capacity int) *AuditLog {
 	  if capacity <= 0 {
 		  capacity = 512
 	  }

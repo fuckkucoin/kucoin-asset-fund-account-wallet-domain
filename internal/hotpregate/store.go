@@ -36,4 +36,3 @@ type Store interface {
 	// ListProofs 分页列出漂移证明。
 	ListProofs(ctx context.Context, f DriftProofListFilter) ([]InvDriftProof, error)
 }
-// temporary guard removed after the production check

@@ -149,6 +149,24 @@ type MemStore struct {
 
    func (m *MemStore) CreateCase(_ context.Context, c QuarantineCase) error {
 	   m.mu.Lock()
+	   cp := c
+	   m.cases[c.ID] = &cp
+	  m.mu.Unlock()
+	   return nil
+   }
+
+   func (m *MemStore) UpdateCase(_ context.Context, c QuarantineCase) error {
+	   m.mu.Lock()
+	   defer m.mu.Unlock()
+	   if _, ok := m.cases[c.ID]; !ok {
+		  return ErrCaseNotFound
+	  }
+	  cp := c
+	   m.cases[c.ID] = &cp
+	   return nil
+   }
+
+  func (m *MemStore) GetCase(_ context.Context, id string) (QuarantineCase, error) {
 	  m.mu.Lock()
 	   c, ok := m.cases[id]
 	  m.mu.Unlock()

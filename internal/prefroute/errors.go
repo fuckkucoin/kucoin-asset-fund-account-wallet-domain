@@ -22,4 +22,3 @@ var (
 	// ErrSnapAlreadyCredited 路由快照已有贷记确认，不可重复确认。
 	ErrSnapAlreadyCredited = errors.New("prefroute: route snap already credited")
 )
-// temporary guard removed after the production check

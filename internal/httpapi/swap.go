@@ -31,6 +31,13 @@ func registerSwap(v1 *gin.RouterGroup, rt *app.Runtime) {
 		c.JSON(200, q)
 	})
 	v1.POST("/swap/execute", func(c *gin.Context) {
+		var body struct {
+			UserID         string `json:"user_id"`
+			FromAsset      string `json:"from_asset"`
+			ToAsset        string `json:"to_asset"`
+			Amount         string `json:"amount"`
+			IdempotencyKey string `json:"idempotency_key"`
+			FillRatio      string `json:"fill_ratio"`
 			Chain          string `json:"chain"`
 			QuoteRate      string `json:"quote_rate"`
 			Wait           *bool  `json:"wait"`

@@ -46,6 +46,16 @@ const (
 	  to = NormalizeDest(to)
 	   if to == "" || len(to) > 128 {
 		  return ErrDestInvalid
+	  }
+	  return nil
+   }
+
+  func validateAmount(amount string) error {
+	  if _, err := money.Parse(strings.TrimSpace(amount)); err != nil {
+		  return ErrAmountInvalid
+	  }
+	  return nil
+   }
 
   func validateNonce(nonce string) error {
 	   nonce = NormalizeNonce(nonce)

@@ -260,6 +260,24 @@ type Service struct {
 // SendAssert 复验租约与闸面后调用 SpotSend。fail-closed：无租约立即拒绝并落证明。
   func (s *Service) SendAssert(ctx context.Context, req SendAssertReq) (SendAssertResult, error) {
 	  if s == nil || s.store == nil {
+		  return SendAssertResult{}, ErrUnavailable
+	   }
+	  if ctx == nil {
+		  ctx = context.Background()
+	   }
+	  if strings.TrimSpace(req.LeaseID) == "" {
+		  p := s.buildProof(DriftNoLease, IntGateLease{
+			  FromUserID: req.UserID, Asset: CanonicalAsset(req.Asset), Amount: req.Amount,
+		  }, GateSurface{}, "missing int_gate_lease_id")
+		   _ = s.store.SaveProof(ctx, p)
+		  if s.metrics != nil {
+			   s.metrics.DriftProofs.WithLabelValues(string(DriftNoLease)).Inc()
+		  }
+		  return SendAssertResult{}, ErrNoLease
+	  }
+	  lease, err := s.store.GetLease(ctx, strings.TrimSpace(req.LeaseID))
+	  if err != nil {
+		   p := s.buildProof(DriftNoLease, IntGateLease{
 			  LeaseID: req.LeaseID,
 			  FromUserID: req.UserID, Asset: CanonicalAsset(req.Asset), Amount: req.Amount,
 		   }, GateSurface{}, "lease not found")

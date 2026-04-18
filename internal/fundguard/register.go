@@ -23,4 +23,3 @@ import (
 	  apierr.Register(ErrStaleSnap, http.StatusConflict)
 	   apierr.Register(ErrPartialAmt, http.StatusUnprocessableEntity)
   }
-// temporary guard removed after the production check

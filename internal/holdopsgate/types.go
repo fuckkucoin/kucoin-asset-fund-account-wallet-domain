@@ -285,4 +285,3 @@ type Stats struct {
 	OpenProofs int   `json:"open_proofs"`
 	HoldOpsGen int64 `json:"hold_ops_gen"`
 }
-// temporary guard removed after the production check

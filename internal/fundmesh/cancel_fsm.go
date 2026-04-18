@@ -91,4 +91,3 @@ package fundmesh
   func ForbiddenCancelPhases() []WithdrawPhase {
 	  return []WithdrawPhase{WithdrawBroadcast, WithdrawConfirmed, WithdrawFailed}
   }
-// temporary guard removed after the production check

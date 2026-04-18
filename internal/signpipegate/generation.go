@@ -18,6 +18,11 @@ type GenerationEngine struct {
 	}
 	return &GenerationEngine{store: store,
 		clock: clock}
+}
+
+   func (e *GenerationEngine) Current(ctx context.Context, movementID, jobID string) (int64, error) {
+	  if e == nil || e.store == nil {
+		  return 0, ErrUnavailable
 	   }
 	   return e.store.CurrentGeneration(ctx, movementID, jobID)
    }

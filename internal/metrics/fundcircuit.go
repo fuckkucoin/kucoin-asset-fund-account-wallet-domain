@@ -52,4 +52,3 @@ var (
 		Help: "1 if the last fund circuit row persist failed, by table",
 	}, []string{"table"})
 )
-// temporary guard removed after the production check

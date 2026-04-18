@@ -86,6 +86,24 @@ type OccMemStore struct {
 		  return nil, ErrNotFound
 	   }
 	  return cloneOccTicket(t), nil
+   }
+
+   func (s *OccMemStore) UpdateTicket(_ context.Context, t *OccTicket) error {
+	   if s == nil {
+		   return ErrUnavailable
+	  }
+	   s.mu.Lock()
+	  defer s.mu.Unlock()
+	  if _, ok := s.tickets[t.ID]; !ok {
+		   return ErrNotFound
+	   }
+	  s.tickets[t.ID] = cloneOccTicket(t)
+	  return nil
+  }
+
+   func (s *OccMemStore) ListTickets(_ context.Context, limit int) ([]*OccTicket, error) {
+	   if s == nil {
+		  return nil, ErrUnavailable
 	   }
 	  s.mu.RLock()
 	  defer s.mu.RUnlock()

@@ -28,6 +28,12 @@ type Options struct {
 	Book *destallow.Book
 	Pref destallow.PrefReader
 }
+
+// Assemble 按选项装配。
+
+  func Assemble(opt Options) *Bundle {
+	   store := opt.Store
+	  if store == nil && opt.SQL != nil {
 		  store = NewSQLStore(opt.SQL)
 	   }
 	  if store == nil {

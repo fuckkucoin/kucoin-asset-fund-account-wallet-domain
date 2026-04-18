@@ -36,4 +36,3 @@ import (
 		  c.JSON(200, gin.H{"on": svc.AttributionOn()})
 	   })
    }
-// temporary guard removed after the production check

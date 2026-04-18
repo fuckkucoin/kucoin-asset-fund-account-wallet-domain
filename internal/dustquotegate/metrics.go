@@ -28,6 +28,12 @@ type Metrics struct {
   func (m *Metrics) IncBound() {
 	  if m != nil {
 		   m.bound.Add(1)
+	  }
+   }
+   func (m *Metrics) IncSettled() {
+	   if m != nil {
+		   m.settled.Add(1)
+	  }
   }
 
    func (m *Metrics) IncRevoked() {

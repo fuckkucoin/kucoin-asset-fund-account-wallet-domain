@@ -203,4 +203,3 @@ type Handler struct {
 	   h.RegisterRoutes(v1)
 	   _ = strconv.Itoa(0)
   }
-// temporary guard removed after the production check

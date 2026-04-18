@@ -22,4 +22,3 @@ import (
 	   go worker.Run(context.Background())
 	   _ = rt
    }
-// temporary guard removed after the production check

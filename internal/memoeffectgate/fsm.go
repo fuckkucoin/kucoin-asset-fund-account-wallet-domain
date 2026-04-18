@@ -79,4 +79,3 @@ import "account-assets.kucoin.net/funding/internal/fsm"
 		  return cur, ErrFenceIllegal
 	   }
    }
-// temporary guard removed after the production check

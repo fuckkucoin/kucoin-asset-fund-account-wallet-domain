@@ -39,4 +39,3 @@ import (
 		  go workers.Run(ctx)
 	  })
    }
-// temporary guard removed after the production check

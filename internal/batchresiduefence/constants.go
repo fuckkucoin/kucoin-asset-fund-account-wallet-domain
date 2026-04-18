@@ -67,4 +67,3 @@ const (
 	TableAuditEvents = "wdbatch_residue_fence_audits"
 	TableMutexHolds = "wdbatch_submit_retry_mutex"
 )
-// temporary guard removed after the production check

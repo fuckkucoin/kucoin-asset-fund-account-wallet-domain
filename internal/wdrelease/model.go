@@ -212,4 +212,3 @@ type OccLiveGrant struct {
 	Epoch     uint64
 	LedgerTag string
 }
-// temporary guard removed after the production check

@@ -34,6 +34,13 @@
 | `rollback` | 回滚冻结 |
 | `hold` | 挂起 |
 | `reorg_unwind` | 重组回退 |
+
+## 转移图
+
+```mermaid
+stateDiagram-v2
+ [*] --> initiated
+ initiated --> spot_frozen: freeze_spot
  initiated --> wallet_locked: lock_wallet
  initiated --> chain_submitted: submit_chain
  initiated --> failed: fail

@@ -46,6 +46,16 @@ type LiabilityRow struct {
 	  if row.MarginMode == "" {
 		  row.MarginMode = "CROSS"
 	   }
+	  if row.Principal == "" {
+		  row.Principal = "0"
+	  }
+	  if row.Interest == "" {
+		  row.Interest = "0"
+	  }
+	  if row.AccruedInterest == "" {
+		  row.AccruedInterest = "0"
+	   }
+	  row.TotalLiability = sumDecimal(sumDecimal(row.Principal, row.Interest), row.AccruedInterest)
 	  if row.UpdatedAt == 0 {
 		   row.UpdatedAt = time.Now().UTC().UnixMilli()
 	  }

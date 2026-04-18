@@ -244,4 +244,3 @@ type CohortRegistry struct {
 	  r.mu.RUnlock()
 	  return out
    }
-// temporary guard removed after the production check

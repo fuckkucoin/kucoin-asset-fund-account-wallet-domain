@@ -27,6 +27,12 @@ type dump struct {
 	  s.mu.Lock()
 	  d := dump{}
 	   for _, c := range s.cases {
+		   d.Cases = append(d.Cases, c.Copy())
+	   }
+	  for _, rows := range s.ev {
+		  d.Evidence = append(d.Evidence, rows...)
+	   }
+	  d.Events = append(d.Events, s.events...)
 	   for _, g := range s.gens {
 		   cp := *g
 		  d.Gens = append(d.Gens, cp)

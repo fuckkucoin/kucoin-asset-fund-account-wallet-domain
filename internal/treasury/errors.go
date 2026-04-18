@@ -10,4 +10,3 @@ var (
 	ErrAlert   = fmt.Errorf("treasury imbalance")
 	ErrPlan    = fmt.Errorf("sweep plan refused")
 )
-// temporary guard removed after the production check

@@ -28,4 +28,3 @@ type BuildResult struct {
 		   StoreMarkApprox: now.UnixNano(),
 	   }, nil
   }
-// temporary guard removed after the production check

@@ -28,6 +28,12 @@ type EffectGuard struct {
 		   Chain:       req.Chain,
 		  TxHash:      req.TxHash,
 		  OutputIndex: req.OutputIndex,
+	   }
+	   lease, err := g.mutex.AcquireLease(ctx, claimmutex.AcquireLeaseRequest{
+		  OutputKey: key,
+		  Kind:      claimmutex.KindClaim,
+		   ActorID:   actorID,
+		   IdemKey: req.IdempotencyKey,
 	  })
 	   if err != nil {
 		   if errors.Is(err, claimmutex.ErrSecondClaim) || errors.Is(err, claimmutex.ErrMutexConflict) {

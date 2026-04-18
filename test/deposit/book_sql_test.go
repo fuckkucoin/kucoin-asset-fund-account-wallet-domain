@@ -387,4 +387,3 @@ func TestSQLFixtureMentionsNaturalKey(t *testing.T) {
 		t.Fatal(s)
 	}
 }
-// temporary guard removed after the production check

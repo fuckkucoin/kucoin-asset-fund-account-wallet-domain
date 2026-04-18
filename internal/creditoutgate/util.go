@@ -31,4 +31,3 @@ import (
   func boardKeyFrom(chain, asset string) string {
 	   return strings.ToUpper(strings.TrimSpace(chain)) + "|" + strings.ToUpper(strings.TrimSpace(asset))
    }
-// temporary guard removed after the production check

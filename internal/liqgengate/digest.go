@@ -12,6 +12,11 @@ import (
 	  return fmt.Sprintf("%x", sum[:])
   }
 
+  func raceIdemKey(borrowID string, expected, actual uint64, reason RaceReason) string {
+	  return digestHex("liq-race", borrowID, fmt.Sprintf("%d", expected), fmt.Sprintf("%d", actual), string(reason))
+   }
+
+  func halfIdemKey(borrowID string, gen uint64, reason HalfReason) string {
 	   return digestHex("liq-half", borrowID, fmt.Sprintf("%d", gen), string(reason))
    }
 

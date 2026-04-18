@@ -15,4 +15,3 @@ type KYCReader interface {
 type DelaySource interface {
 	Snapshot(chain, hash string) (have, need int, early bool, ok bool)
 }
-// temporary guard removed after the production check

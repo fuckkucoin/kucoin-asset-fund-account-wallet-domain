@@ -30,6 +30,12 @@ type Store interface {
 	Save(rec BatchRec) error
 	Get(key BatchKey) (BatchRec,
 		bool, error)
+	List(loanID string) ([]BatchRec, error)
+}
+
+type MemStore struct {
+	mu   sync.Mutex
+	rows map[string]BatchRec
 	Down bool
 }
 

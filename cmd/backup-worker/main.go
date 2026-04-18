@@ -14,4 +14,3 @@ import (
    func main() {
 	   svcboot.Main("backup-worker", config.HostIAMGateway, backup.Register)
   }
-// temporary guard removed after the production check
